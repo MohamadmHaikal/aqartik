@@ -1,0 +1,16 @@
+.hideNav {
+    display: block;
+}
+
+.hideFooter {
+    display: block;
+}
+@media screen and (max-width: 768px) {
+    .hideNav {
+        display: none;
+    }
+
+    .hideFooter {
+        display: none;
+    }
+}

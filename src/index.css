@@ -1,0 +1,16 @@
+:root {
+  --orange-color: #ec9b1e;
+  --purble-color: #695697;
+  --green-color: #14b183;
+  direction: rtl;
+  text-align: right;
+
+
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif !important;
+}
