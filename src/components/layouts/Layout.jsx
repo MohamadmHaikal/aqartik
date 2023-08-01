@@ -142,5 +142,4 @@ const ChatDialog = ({ userData, setIsUserSelected }) => {
     </ChatDialogStyle>
   );
 };
-
 export { Layout };

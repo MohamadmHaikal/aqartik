@@ -164,7 +164,7 @@ const Addads = () => {
         sx={{
           display: { xs: "none", lg: "block" },
           backgroundColor: "var(--green-color)",
-          height: "100vh",
+          height: { xs: "calc(100vh - 125px)", md: "100vh" },
           position: "fixed",
           right: "0",
           top: " 0",

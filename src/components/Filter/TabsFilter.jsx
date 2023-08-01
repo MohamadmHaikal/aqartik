@@ -127,8 +127,9 @@ const TabsFilter = () => {
               
                 width:"100%",
                 display:"flex",
+                justifyContent:"space-around !important",
                 "& .css-heg063-MuiTabs-flexContainer": {
-                 justifyContent:"space-around"
+                 justifyContent:"space-around !important"
                 },
             
                 "& .MuiTabs-indicator": {

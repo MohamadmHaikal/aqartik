@@ -56,16 +56,16 @@ const theme = createTheme({
 const DetailsXsTabs = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [showMore, setShowMore] = useState(false);
-  const [openModal, setModalOpen] = useState(false);
+  // const [openModal, setModalOpen] = useState(false);
 
 
-  const handleModalOpen = () => {
-    setModalOpen(true);
-  };
+  // const handleModalOpen = () => {
+  //   setModalOpen(true);
+  // };
 
-  const handleModalClose = () => {
-    setModalOpen(false);
-  };
+  // const handleModalClose = () => {
+  //   setModalOpen(false);
+  // };
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -277,16 +277,17 @@ const DetailsXsTabs = () => {
                 <Typography sx={{ marginTop: "2rem" }}>
                   الموقع فى مدينة الرياض ،حي الملقا
                 </Typography>
-                <Button
+                {/* <Button
                   sx={{ marginTop: "1rem", color: "black", fontWeight: "500" }}
-                  onClick={handleModalOpen}
+                  // onClick={handleModalOpen}
                 >
                   اضغط هنا لمعرفة الموقع التقريبي
-                </Button>
+                </Button> */}
                 <Button sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "16px" }}>
                   تظهر معلومات الموقع الدقيقة بعد تأكيد الحجز.
                 </Button>
                 <Box sx={{ marginTop: "1rem" }}>
+                <Link href="https://www.google.com/maps/dir/My+Location/24.8099167,46.6088413/@24.8100367,46.5387048,12z/data=!3m1!4b1?entry=ttu">
                   <img
                     src={Map}
                     alt="map"
@@ -296,6 +297,7 @@ const DetailsXsTabs = () => {
                       borderRadius: "20px",
                     }}
                   />
+                  </Link>
                 </Box>
               </Box>
             )}
@@ -320,7 +322,7 @@ const DetailsXsTabs = () => {
       </ThemeProvider>
 
       {/* this Modal for Location */}
-      <Modal
+      {/* <Modal
         open={openModal}
         onClose={handleModalClose}
         aria-labelledby="modal-title"
@@ -411,7 +413,7 @@ const DetailsXsTabs = () => {
             </Link>
           </Box>
         </Box>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

@@ -61,7 +61,7 @@ const DetailsXsScreens = () => {
           <Box
             sx={{
               position: "absolute",
-              top: "30px",
+              top: "15px",
 
               width: "100%",
               zIndex: "2",

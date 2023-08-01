@@ -1,17 +1,29 @@
 import React, { useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import CloseIcon from "@mui/icons-material/Close";
 import { Button, Typography } from "@mui/material";
 import LogInModal from "./LogInModal";
+import SmallNavLoginMenu from "../layouts/SmallNavLoginMenu";
+import Collapse from "@mui/material/Collapse";
 
 const LoginButton = () => {
   const [openModal, setOpenModal] = useState(false);
+  const [islogIN, setIsLogIN] = useState(false);
 
   const handleOpenModal = () => {
     setOpenModal(true);
   };
 
   const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+  const handlShowLogMenu = () => {
+    setIsLogIN(true);
+    setOpenModal(false);
+  };
+  const handleCLoseLogMenu = () => {
+    setIsLogIN(false);
     setOpenModal(false);
   };
   return (
@@ -21,7 +33,7 @@ const LoginButton = () => {
           backgroundColor: { xs: "transparent", md: "var( --green-color)" },
           color: { xs: "var(--green-color)", md: "white" },
           border: { xs: "none", md: "1px solid var( --green-color)" },
-          minWidth:"0",
+          minWidth: "0",
           borderRadius: "25px",
           height: "3rem",
           "&:hover": {
@@ -29,11 +41,17 @@ const LoginButton = () => {
             color: "var( --green-color)",
           },
         }}
-        onClick={handleOpenModal}
+        onClick={islogIN ? handleCLoseLogMenu : handleOpenModal}
       >
-        <AccountCircleIcon
-          sx={{ width: { xs: "30px" }, height: { xs: "30px" } }}
-        />
+        {islogIN ? (
+          <CloseIcon sx={{ zIndex: "1000", display: { md: "none" } }} />
+        ) : (
+          <AccountCircleIcon
+            sx={{ width: { xs: "30px" }, height: { xs: "30px" } }}
+            onClick={handlShowLogMenu}
+          />
+        )}
+
         <Typography
           sx={{
             fontSize: "1rem",
@@ -45,7 +63,7 @@ const LoginButton = () => {
             },
           }}
         >
-          تسجيل الدخول
+          {islogIN ? "تسجيل الدخول" : " Rama"}
         </Typography>
         <KeyboardArrowDownIcon
           sx={{
@@ -56,7 +74,10 @@ const LoginButton = () => {
           }}
         />
       </Button>
-      <LogInModal open={openModal} onClose={handleCloseModal} />
+      <Collapse in={islogIN} orientation="vertical">
+        <SmallNavLoginMenu />
+      </Collapse>
+      {!islogIN && <LogInModal open={openModal} onClose={handleCloseModal} />}
     </>
   );
 };

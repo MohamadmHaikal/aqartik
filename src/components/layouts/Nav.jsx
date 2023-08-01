@@ -26,6 +26,8 @@ import { Logo, SearchFrameMoblie } from "../../assets";
 import Searchframe from "../../assets/searchframe.png";
 import { createTheme } from "@mui/material/styles";
 import SmallNavLoginMenu from "./SmallNavLoginMenu";
+import SideNavXsScreens from "./SideNavXsScreens";
+import CloseIcon from "@mui/icons-material/Close";
 
 // import Link from "next/link";
 import { Link } from "@mui/material";
@@ -63,11 +65,15 @@ export default function Nav({
   const location = useLocation();
   const isHome = location.pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
-
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isSideNavOpen, setIsSideNavOpen] = useState(false);
+  const sideNavRef = useRef(null);
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+    setIsDrawerOpen((prevState) => !prevState);
+    setIsSideNavOpen((prevState) => !prevState);
   };
-
+  
   const isDetailsPage = location.pathname === "/details";
   const isAboutPage = location.pathname === "/about";
 
@@ -127,6 +133,10 @@ export default function Nav({
     setIsPriceOpen((prevValue) => !prevValue);
   };
   const handleOutsideClick = (event) => {
+    if (sideNavRef.current && !sideNavRef.current.contains(event.target) && isDrawerOpen) {
+      setMobileOpen(false);
+      setIsDrawerOpen(false);
+    }
     if (cityRef.current && !cityRef.current.contains(event.target)) {
       setCityIsOpen(false);
     }
@@ -142,6 +152,7 @@ export default function Nav({
     ) {
       setIsSelectRealEstateOpen(false);
     }
+    // event.stopPropagation(); 
   };
   useEffect(() => {
     document.addEventListener("click", handleOutsideClick);
@@ -193,7 +204,11 @@ export default function Nav({
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { md: "none" } }}
           >
-            <MenuIcon />
+            {isDrawerOpen ? (
+              <CloseIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
+            ) : (
+              <MenuIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
+            )}
           </IconButton>
 
           <img src={Logo} alt="logo" style={{ width: "120px" }} />
@@ -288,7 +303,8 @@ export default function Nav({
             <LanguageButton />
           </Box>
         </Toolbar>
-        <SmallNavLoginMenu />
+        {mobileOpen && <SideNavXsScreens ref={sideNavRef} />}
+        {/* <SmallNavLoginMenu /> */}
 
         {/* this next section in nav for search in houses */}
         {!isDetailsPage && !isAboutPage && (
@@ -544,7 +560,7 @@ export default function Nav({
 
       <Box></Box>
       <Box component="nav">
-        <Drawer
+        {/* <Drawer
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
@@ -560,7 +576,7 @@ export default function Nav({
           }}
         >
           {drawer}
-        </Drawer>
+        </Drawer> */}
       </Box>
     </Box>
   );
