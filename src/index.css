@@ -4,13 +4,31 @@
   --green-color: #14b183;
   direction: rtl;
   text-align: right;
-
-
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* Apply styles to the scrollbar thumb (the draggable handle) */
+::-webkit-scrollbar-thumb {
+  background-color: #999 !important; /* color of the scrollbar handle */
+  border-radius: 4px !important; /* border radius of the scrollbar handle */
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+/* Apply styles to the scrollbar track when the thumb is being hovered over */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555 !important;
+}
+
+/* Apply styles to the scrollbar track when the thumb is being dragged */
+::-webkit-scrollbar-thumb:active {
+  background-color: #333 !important;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap");
 
 body {
   margin: 0;
-  font-family: 'Tajawal', sans-serif !important;
+  font-family: "Tajawal", sans-serif !important;
 }

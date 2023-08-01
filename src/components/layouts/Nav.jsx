@@ -15,6 +15,7 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -40,6 +41,8 @@ import {
 } from "../../components";
 
 import SearchIcon from "@mui/icons-material/Search";
+import { ChatsHeader } from "../chat/ChatsHeader";
+import { Header } from "../../styledComponents/MainPageStyles";
 const drawerWidth = 240;
 const navItems = [
   { label: "رئيسية", url: "/" },
@@ -50,7 +53,13 @@ const navItems = [
 ];
 
 const theme = createTheme();
-export default function Nav() {
+export default function Nav({
+  showMessages,
+  setShowMessages,
+  isUserSelected,
+  setIsUserSelected,
+  setUserData,
+}) {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -222,6 +231,7 @@ export default function Nav() {
               justifyContent: "space-between",
               display: "flex",
               alignItems: "center",
+              gap: "8px",
             }}
           >
             <Button
@@ -229,6 +239,20 @@ export default function Nav() {
             >
               <Notification />
             </Button>
+            <Header>
+              <div className="messages-container">
+                <ChatRoundedIcon
+                  onClick={() => setShowMessages((prev) => !prev)}
+                  className="message-icon"
+                />
+                {showMessages && (
+                  <ChatsHeader
+                    setIsUserSelected={setIsUserSelected}
+                    setUserData={setUserData}
+                  />
+                )}
+              </div>
+            </Header>
             <Link href="/addads" sx={{ display: { xs: "none", md: "block" } }}>
               <Button
                 sx={{
@@ -260,9 +284,7 @@ export default function Nav() {
                 </Typography>
               </Button>
             </Link>
-
             <LoginButton />
-
             <LanguageButton />
           </Box>
         </Toolbar>

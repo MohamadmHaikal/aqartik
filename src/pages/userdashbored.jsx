@@ -53,10 +53,7 @@ const UserDashbored = () => {
       }
       break;
     case 3:
-      content = (
-        <UserDashboradSpeacialAds />
-     
-      );
+      content = <UserDashboradSpeacialAds />;
       break;
     default:
       content = null;
