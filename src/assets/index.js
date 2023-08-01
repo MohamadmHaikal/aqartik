@@ -29,10 +29,20 @@ import Famiy from "./family.svg";
 import SearchFrameMoblie from "./search_frame_mobile.svg";
 import Profile from "./profile.svg";
 import Favorite from "./favorite.svg";
-import Aqar from "./aqar.svg" 
-import Call from "./call.svg"
-import Logout from "./logout.svg"
+import Aqar from "./aqar.svg";
+import Call from "./call.svg";
+import Logout from "./logout.svg";
+import Chalets from "./chalets.svg";
+import Camps from "./camps.svg";
+import Chair from "./chair.svg";
+import Farms from "./farms.svg";
+import Special from "./special.svg"
 export {
+  Special,
+  Camps,
+  Chair,
+  Farms,
+  Chalets,
   Logout,
   Call,
   Aqar,

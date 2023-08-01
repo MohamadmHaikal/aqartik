@@ -17,7 +17,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
-
+import { Mail as MailIcon, LocationOn as LocationOnIcon } from "@mui/icons-material"; 
 const phoneNumber = "000000000000";
 
 const FooterTwo = () => {
@@ -90,6 +90,17 @@ const FooterTwo = () => {
                     position: "absolute",
                   }}
                 />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                < Box sx={{ display: "flex", alignItems: "center" , marginBottom:"10px" }}><LocationOnIcon sx={{marginLeft:"5px"}} />المملكة العربية السعودية / الرياض</Box>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <MailIcon sx={{marginLeft:"5px"}}/> <Typography>tsf@gmail.com</Typography>
+                </Box>
               </Box>
 
               {/* <Box

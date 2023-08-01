@@ -18,9 +18,9 @@ const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
     <div>
       {showNavFooter && (!hideNavAndFooter || !isMediumScreen) && <Nav />}
       <main style={contentStyles}>{children}</main>
-      {showNavFooter && !hideFooter && (!hideNavAndFooter || !isMediumScreen) && (
-        <FooterTwo />
-      )}
+      {showNavFooter &&
+        !hideFooter &&
+        (!hideNavAndFooter || !isMediumScreen) && <FooterTwo />}
     </div>
   );
 };

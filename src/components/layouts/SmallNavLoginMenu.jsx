@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Typography, List, ListItem, ListItemText } from "@mui/material";
+import {
+  Box,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Link,
+} from "@mui/material";
 import { Profile, Favorite, Aqar, Call, Logout } from "../../assets";
 
 import Avatar from "@mui/material/Avatar";
@@ -74,88 +81,103 @@ const SmallNavLoginMenu = () => {
                 flexDirection: "row",
               }}
             >
-              <Avatar sx={{ width: "80px", height: "80px", marginLeft: "5px" }}>
+              <Avatar sx={{ width: "60px", height: "60px", marginLeft: "5px" }}>
                 ر
               </Avatar>
               <Box sx={{ marginRight: "16px" }}>
                 <Typography sx={{ fontSize: "20px", fontWeight: "700" }}>
-                  وائل الديري
+                  وائل
                 </Typography>
                 <Typography sx={{ fontSize: "14px" }}>
-                  support.comp@diriw.com
+                  support.comp@gmail.com
                 </Typography>
               </Box>
             </Box>
             <List sx={{ width: "100%", paddingY: "8px" }}>
-              <ListItem
-                sx={{
-                  width: "auto",
-
-                  minHeight: "48px",
-
-                  paddingTop: "6px",
-                  whiteSpace: "nowrap",
-                  paddingBottom: "6px",
-                }}
+              <Link
+                href="/userdashbored"
+                sx={{ textDecoration: "none", color: "black" }}
               >
-                <Box
+                <ListItem
                   sx={{
-                    color: "rgba(0, 0, 0, 0.54)",
-                    display: "inline-flex",
-                    minWidth: "56px",
-                    flexShrink: "0",
+                    width: "auto",
+
+                    minHeight: "48px",
+
+                    paddingTop: "6px",
+                    whiteSpace: "nowrap",
+                    paddingBottom: "6px",
                   }}
                 >
-                  <img src={Profile} alt="profile" />
-                </Box>
-                <Typography>الملف الشخصي</Typography>
-              </ListItem>
-              <ListItem
-                sx={{
-                  width: "auto",
-
-                  minHeight: "48px",
-
-                  paddingTop: "6px",
-                  whiteSpace: "nowrap",
-                  paddingBottom: "6px",
-                }}
+                  <Box
+                    sx={{
+                      color: "rgba(0, 0, 0, 0.54)",
+                      display: "inline-flex",
+                      minWidth: "56px",
+                      flexShrink: "0",
+                    }}
+                  >
+                    <img src={Profile} alt="profile" />
+                  </Box>
+                  <Typography>الملف الشخصي</Typography>
+                </ListItem>
+              </Link>
+              <Link
+                href="/userdashbored"
+                sx={{ textDecoration: "none", color: "black" }}
               >
-                <Box
+                <ListItem
                   sx={{
-                    color: "rgba(0, 0, 0, 0.54)",
-                    display: "inline-flex",
-                    minWidth: "56px",
-                    flexShrink: "0",
+                    width: "auto",
+
+                    minHeight: "48px",
+
+                    paddingTop: "6px",
+                    whiteSpace: "nowrap",
+                    paddingBottom: "6px",
                   }}
                 >
-                  <img src={Favorite} alt="profile" />
-                </Box>
-                <Typography> مفضلتي</Typography>
-              </ListItem>
-              <ListItem
-                sx={{
-                  width: "auto",
-
-                  minHeight: "48px",
-
-                  paddingTop: "6px",
-                  whiteSpace: "nowrap",
-                  paddingBottom: "6px",
-                }}
+                  <Box
+                    sx={{
+                      color: "rgba(0, 0, 0, 0.54)",
+                      display: "inline-flex",
+                      minWidth: "56px",
+                      flexShrink: "0",
+                    }}
+                  >
+                    <img src={Favorite} alt="profile" />
+                  </Box>
+                  <Typography> مفضلتي</Typography>
+                </ListItem>
+              </Link>
+              <Link
+                href="/addads"
+                sx={{ textDecoration: "none", color: "black" }}
               >
-                <Box
+                <ListItem
                   sx={{
-                    color: "rgba(0, 0, 0, 0.54)",
-                    display: "inline-flex",
-                    minWidth: "56px",
-                    flexShrink: "0",
+                    width: "auto",
+
+                    minHeight: "48px",
+
+                    paddingTop: "6px",
+                    whiteSpace: "nowrap",
+                    paddingBottom: "6px",
                   }}
                 >
-                  <img src={Aqar} alt="aqar" />
-                </Box>
-                <Typography> أضف عقارك</Typography>
-              </ListItem>
+                  <Box
+                    sx={{
+                      color: "rgba(0, 0, 0, 0.54)",
+                      display: "inline-flex",
+                      minWidth: "56px",
+                      flexShrink: "0",
+                    }}
+                  >
+                    <img src={Aqar} alt="aqar" />
+                  </Box>
+                  <Typography> أضف عقارك</Typography>
+                </ListItem>
+              </Link>
               <ListItem
                 sx={{
                   width: "auto",

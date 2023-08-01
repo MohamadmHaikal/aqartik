@@ -105,7 +105,7 @@ const NewRequests = () => {
     <Paper
       sx={{
         position: "relative",
-        height: "calc(-40px + 100vh)",
+        height: {xs:"calc(-219px + 100vh)" , md:"calc(-40px + 100vh)"},
         margin: "auto",
         marginTop:{xs:"-3rem" , sm:"auto"},
         maxWidth: "500px",
@@ -215,7 +215,7 @@ const NewRequests = () => {
             sx={{
               display: "flex",
               flexWrap: "wrap-reverse",
-              gap: "1rem 70px",
+              gap: "1rem 40px",
               justifyContent: "center",
             }}
           >
