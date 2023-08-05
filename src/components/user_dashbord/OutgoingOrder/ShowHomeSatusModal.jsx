@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Button, Modal, Box, Backdrop, Typography } from "@mui/material";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import { useTranslation } from "react-i18next";
 
 const ShowHomeSatusModal = ({ onClose }) => {
   const [open, setOpen] = useState(false);
+
+  const { t } = useTranslation();
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -40,17 +44,16 @@ const ShowHomeSatusModal = ({ onClose }) => {
             sx={{ color: "var(--green-color)", marginInlineEnd: "0.5rem" }}
           />
           <Typography sx={{ fontSize: "1.25rem", lineHeight: "1.1" }}>
-            تأكيد
+            {t("user_dashboard.outgoing_requests.change_status_title")}
           </Typography>
         </Box>
         <Typography sx={{ marginY: "1.5rem" }}>
-          الرجاء مراجعة البيانات التالية للعقار قبل عرضه (الأسعار، التوافر،
-          الصور، الموقع، المرافق، شروط الحجز) حيث أن صحة هذه المعلومات تقع تحت
-          مسؤوليتك بشكل كامل، وستكون ظاهرة للعملاء .لإجراء الحجوزات وسيعتمد
-          عليها
+          {t("user_dashboard.outgoing_requests.change_status_desc")}
         </Typography>
 
-        <Typography>هل أنت متأكد من عرض العقار ؟</Typography>
+        <Typography>
+          {t("user_dashboard.outgoing_requests.change_status_confirm_msg")}
+        </Typography>
         <Box
           sx={{
             height: "min-content",
@@ -72,7 +75,7 @@ const ShowHomeSatusModal = ({ onClose }) => {
               },
             }}
           >
-            أعرض العقار
+            {t("user_dashboard.outgoing_requests.change_status_confirm_btn")}
           </Button>
           <Button
             sx={{
@@ -84,7 +87,7 @@ const ShowHomeSatusModal = ({ onClose }) => {
             }}
             onClick={onClose}
           >
-            راجع البيانات أولا
+            {t("user_dashboard.outgoing_requests.change_status_cancel_btn")}
           </Button>
         </Box>
       </Box>

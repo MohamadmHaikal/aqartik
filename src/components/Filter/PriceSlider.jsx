@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Slider from "@mui/material/Slider";
 import { styled } from "@mui/system";
+import { useTranslation } from "react-i18next";
 
 // Custom styles for the range slider
 const CustomSlider = styled(Slider)(({ theme }) => ({
-  direction: "rtl !important",
   color: "#3f51b5", // Change the color of the track
   height: 8, // Adjust the height of the track
   "& .MuiSlider-thumb": {
@@ -46,9 +46,7 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
     border: "1px solid gray",
     borderRadius: "1rem",
     fontWeight: "bold",
-    "& .MuiSlider-valueLabelLabel::after": {
-      content: `' ر.س'`,
-    },
+
     "&::before": {
       borderBottom: "1px solid gray",
       borderRight: "1px solid gray",
@@ -70,21 +68,30 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
 }));
 
 function PriceSlider() {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const [range, setRange] = useState([20, 80]);
 
   const handleChange = (event, newValue) => {
     setRange(newValue);
   };
+
   const formatLabel = (value) => {
-    return `${value} ر.س`;
+    return lang === "ar" ? `${value} ر.س` : ` ${value} SAR`;
+  };
+  const valueLabelFormat = (value) => {
+    return lang === "ar" ? `${value} ر.س` : ` ${value} SAR`;
   };
 
   return (
     <div>
       <CustomSlider
+        $currency={lang}
         value={range}
         onChange={handleChange}
         valueLabelDisplay="auto"
+        valueLabelFormat={valueLabelFormat}
         min={0}
         max={4000}
         marks={[

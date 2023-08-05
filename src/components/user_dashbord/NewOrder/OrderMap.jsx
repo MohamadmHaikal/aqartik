@@ -7,12 +7,15 @@ import {
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
+import { useTranslation } from "react-i18next";
 
 const OrderMap = () => {
+  const { t } = useTranslation();
+
   const containerStyle = {
     width: "100%",
     height: "400px",
-    borderRadius:"12px",
+    borderRadius: "12px",
   };
 
   const mapCenter = { lat: 23.8859, lng: 45.0792 };
@@ -26,14 +29,14 @@ const OrderMap = () => {
   ];
   return (
     <Box>
-      <OrderTitles title="عنوان العقار" />
+      <OrderTitles title={t("user_dashboard.property_location_map.title")} />
       <Typography
         sx={{
           color: "rgb(118, 118, 118)",
           marginBottom: "2rem",
         }}
       >
-        أضف وصف مميز لعقارك و ايش يتوقع الضيف أن يجد فيه
+        {t("user_dashboard.property_location_map.desc")}{" "}
       </Typography>
       <LoadScript googleMapsApiKey="AIzaSyDH04vPsEUMOgZT_yMXKQXptu01oSQnV-E">
         <GoogleMap

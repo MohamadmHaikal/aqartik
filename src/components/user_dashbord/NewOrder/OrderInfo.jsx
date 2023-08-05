@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import { OrderTitles } from ".";
+import { useTranslation } from "react-i18next";
 
 const OrderInfo = ({ selectedCategoryId, onUpdate, onSelect }) => {
+  const { t } = useTranslation();
   const categoriess = [
     { id: 1, name: "استراحة" },
     { id: 2, name: "شقة" },
@@ -34,10 +36,16 @@ const OrderInfo = ({ selectedCategoryId, onUpdate, onSelect }) => {
   };
   return (
     <>
-      <OrderTitles title="معلومات العقار" />
+      <OrderTitles
+        title={t("user_dashboard.new_order.order_info.main_title")}
+      />
       <Box>
-        <Typography sx={{ fontWeight: "600" }}>تصنيف عقارك</Typography>
-        <Typography sx={{ color: "gray" }}>حدد التصنيف المناسب</Typography>
+        <Typography sx={{ fontWeight: "600" }}>
+          {t("user_dashboard.new_order.order_info.title")}
+        </Typography>
+        <Typography sx={{ color: "gray" }}>
+          {t("user_dashboard.new_order.order_info.desc")}
+        </Typography>
       </Box>
       <Box
         sx={{

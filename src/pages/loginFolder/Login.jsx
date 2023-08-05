@@ -10,10 +10,11 @@ import {
   Link,
 } from "@mui/material";
 import { Logo } from "../../assets";
-
-
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+  const { t } = useTranslation();
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCounterActive, setIsCounterActive] = useState(true);
@@ -122,19 +123,19 @@ const Login = () => {
               </Box>
               <form onSubmit={handleSubmit}>
                 <Typography sx={{ marginY: "2rem", textAlign: "center" }}>
-                  أدخل رقم هاتفك المحمول للوصول إلى لوحة القيادة.
+                  {t("login.title")}
                 </Typography>
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <label
                     htmlFor="phoneNumberInput"
                     style={{ color: "gray", marginBottom: "1rem" }}
                   >
-                    أدخل رقم الهاتف المحمول
+                    {t("login.label")}
                   </label>
                   <TextField
                     id="phoneNumberInput"
                     type="text"
-                    placeholder="الهاتف مطلوب"
+                    placeholder={t("login.placeholder")}
                     required
                     value={phoneNumber}
                     onChange={handlePhoneNumberChange}
@@ -158,7 +159,7 @@ const Login = () => {
                     },
                   }}
                 >
-                  تسجيل الدخول
+                  {t("login.btn")}
                 </Button>
               </form>
             </Box>
@@ -171,10 +172,10 @@ const Login = () => {
               }}
             >
               <Typography sx={{ color: "rgba(255,255,255,.5)" }}>
-                ارجع الى
+                {t("login.back_btn")}{" "}
               </Typography>
-              <Link href="/" sx={{ color: "white", marginRight: "0.3rem" }}>
-                الرئيسية
+              <Link href="/" sx={{ color: "white", marginRight: "0.2rem" }}>
+                {t("login.back_btn2")}
               </Link>
             </Box>
           </Grid>
@@ -208,7 +209,7 @@ const Login = () => {
                 paddingBottom: "1rem",
               }}
             >
-              ادخل الكود المرسل الى رقم جوالك
+              {t("login.modal_title")}
             </Typography>
             <Box
               sx={{
@@ -220,7 +221,8 @@ const Login = () => {
               }}
             >
               <Typography>
-                لقد ارسلنا رسالة الى الرقم
+                {t("login.hint")}
+
                 <span>{enteredPhoneNumber}</span>
               </Typography>
             </Box>
@@ -322,7 +324,7 @@ const Login = () => {
                   }}
                   onClick={handleVerifyOtp}
                 >
-                  التحقق
+                  {t("login.modal_btn")}
                 </Button>
               </Link>
               <Box
@@ -333,7 +335,8 @@ const Login = () => {
                   marginBottom: "1rem",
                 }}
               >
-                في حال لم يصلك كود التحقق يمكنك
+                {t("login.modal_msg")}
+
                 {isCounterActive && (
                   <Typography sx={{ textAlign: "center", color: "red" }}>
                     {formattedTime}
@@ -349,7 +352,7 @@ const Login = () => {
                     }}
                     onClick={() => setIsCounterActive(true)}
                   >
-                    إعادة إرسال الرمز
+                    {t("login.re_btn")}
                   </Button>
                 )}
               </Box>

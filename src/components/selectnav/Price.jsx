@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CheckIcon from "@mui/icons-material/Check";
+import { useTranslation } from "react-i18next";
 
 const Price = ({ isOpen, onClose, onPriceSelect, selectedPrice }) => {
   const prices = ["from 100 to 100000", "Price 2", "Price 3", "Price 4"];
 
   const [selectedOptionPrice, setSelectedOptionPrice] = useState(selectedPrice);
+
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
 
   const handlePriceSelection = (price) => {
     setSelectedOptionPrice(price);
@@ -51,7 +55,8 @@ const Price = ({ isOpen, onClose, onPriceSelect, selectedPrice }) => {
             <CheckIcon
               sx={{
                 position: "absolute",
-                left: "20px",
+                left: lang === "ar" && "20px",
+                right: lang === "en" && "20px",
                 top: "50%",
                 transform: "translateY(-50%)",
                 color: "var( --green-color)",

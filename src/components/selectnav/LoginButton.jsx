@@ -6,10 +6,12 @@ import { Button, Typography } from "@mui/material";
 import LogInModal from "./LogInModal";
 import SmallNavLoginMenu from "../layouts/SmallNavLoginMenu";
 import Collapse from "@mui/material/Collapse";
+import { useTranslation } from "react-i18next";
 
 const LoginButton = () => {
   const [openModal, setOpenModal] = useState(false);
   const [islogIN, setIsLogIN] = useState(false);
+  const { t } = useTranslation();
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -63,7 +65,7 @@ const LoginButton = () => {
             },
           }}
         >
-          {islogIN ? "تسجيل الدخول" : " Rama"}
+          {!islogIN ? t("nav.buttons.login_btn") : " Rama"}
         </Typography>
         <KeyboardArrowDownIcon
           sx={{

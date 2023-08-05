@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -8,17 +8,39 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Login } from "./components";
-
+import { I18nextProvider, useTranslation } from "react-i18next";
+import i18n from "./i18n";
+import { ChatProvider } from "./context/chatContext";
 const MainApp = () => {
   const theme = createTheme({
     typography: {
       fontFamily: "Tajawal, Arial, sans-serif",
     },
   });
+  const { i18n } = useTranslation();
+  const language = i18n.language;
+
+  useEffect(() => {
+    // Update CSS variables based on language
+    document.documentElement.style.setProperty(
+      "direction",
+      language === "ar" ? "rtl" : "ltr"
+    );
+
+    document.documentElement.style.setProperty(
+      "text-align",
+      language === "ar" ? "right" : "left"
+    );
+  }, [language]);
+
   return (
     <>
       <ThemeProvider theme={theme}>
-        <App />
+        <I18nextProvider i18n={i18n}>
+          <ChatProvider>
+            <App />
+          </ChatProvider>
+        </I18nextProvider>
       </ThemeProvider>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Nav from "./Nav";
 import FooterTwo from "./FooterTwo";
 import { useLocation } from "react-router-dom";
@@ -8,21 +8,24 @@ import { ChatDialogStyle } from "../../styledComponents/MainPageStyles";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import SendIcon from "@mui/icons-material/Send";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
+import ChatContext from "../../context/chatContext";
+import { useTranslation } from "react-i18next";
 
 const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
   const location = useLocation();
   const { pathname } = location;
   const hideFooter = pathname === "/mappage" || pathname === "/Mappage";
   const hideNavAndFooter = pathname === "/details";
+  const { isUserSelected, setIsUserSelected } = useContext(ChatContext);
 
   const theme = useTheme();
   // Use Mui useMediaQuery to check if screen size is medium (md) and below
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
+  // for socket states
   const [showMessages, setShowMessages] = useState(false);
-
-  const [isUserSelected, setIsUserSelected] = useState(false);
   const [userData, setUserData] = useState();
+  // for socket states
 
   return (
     <div>
@@ -47,10 +50,13 @@ const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
   );
 };
 
-const ChatDialog = ({ userData, setIsUserSelected }) => {
+const ChatDialog = ({ userData }) => {
   const [socket, setSocket] = useState(null);
   const [message, setMessage] = useState();
   const [messages, setMessages] = useState([]);
+  const { i18n } = useTranslation();
+  const { setIsUserSelected } = useContext(ChatContext);
+  const lang = i18n.language;
 
   useEffect(() => {
     const newSocket = io("http://localhost:3001");
@@ -74,7 +80,7 @@ const ChatDialog = ({ userData, setIsUserSelected }) => {
   };
 
   return (
-    <ChatDialogStyle>
+    <ChatDialogStyle $dir={lang}>
       <header>
         <div className="header-data">
           <img src={userData?.img} alt="" />
@@ -136,7 +142,11 @@ const ChatDialog = ({ userData, setIsUserSelected }) => {
           <AttachFileIcon />
         </button>
         <button onClick={handleSend}>
-          <SendIcon />
+          <SendIcon
+            sx={{
+              transform: lang === "ar" ? "rotate(180deg)" : "",
+            }}
+          />
         </button>
       </footer>
     </ChatDialogStyle>

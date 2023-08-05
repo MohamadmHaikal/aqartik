@@ -24,23 +24,8 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
 import FacebookIcon from "@mui/icons-material/Facebook";
 
-const tabDataXs = [
-  { label: "افتراضي", content: "Content 1" },
-  { label: "الأقرب لموقعي", content: "Content 2" },
-  { label: "الأعلى تقييما", content: "Content 3" },
-  { label: "الأعلى مشاهدة", content: "Content 4" },
-  { label: "الأقل سعرا", content: "Content 5" },
-  { label: "الأعلى سعرا", content: "Content 6" },
-];
+import { useTranslation } from "react-i18next";
 
-const tabDataLg = [
-  { label: "الافتراضي", content: "Content 1" },
-  { label: "الاقرب الى موقعي", content: "Content 2" },
-  { label: "الاعلى مشاهدة", content: "Content 3" },
-  { label: "الاعلى سعرا", content: "Content 3" },
-  { label: " الاقل سعرا", content: "Content 3" },
-  { label: "الاعلى تقييما", content: "Content 3" },
-];
 const icons = [
   {
     icon: <FavoriteIcons />,
@@ -76,6 +61,17 @@ const TabsFilter = () => {
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [value, setValue] = React.useState(0);
 
+  const { t } = useTranslation();
+
+  const tabData = [
+    { label: t("filtersTab.default_btn"), content: "Content 1" },
+    { label: t("filtersTab.Closest_btn"), content: "Content 2" },
+    { label: t("filtersTab.top_rated"), content: "Content 3" },
+    { label: t("filtersTab.top_viewings"), content: "Content 4" },
+    { label: t("filtersTab.lowest_price"), content: "Content 5" },
+    { label: t("filtersTab.highest_price"), content: "Content 6" },
+  ];
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -85,7 +81,6 @@ const TabsFilter = () => {
   const toggleBox = () => {
     setBoxShown(!isBoxShown);
   };
-  const tabData = isMdScreen ? tabDataXs : tabDataLg;
 
   return (
     <>
@@ -213,7 +208,7 @@ const TabsFilter = () => {
                 fontFamily: "Tajawal,Arial,sans-serif",
               }}
             >
-              {tabDataXs.map((tab, index) => (
+              {tabData.map((tab, index) => (
                 <li
                   key={index}
                   style={{

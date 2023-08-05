@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, TextField } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import SearchIcon from "@mui/icons-material/Search";
+import { useTranslation } from "react-i18next";
 // import { styled } from "@mui/system";
 
 // const StyledBox = styled(Box)(({ theme }) => ({
@@ -13,6 +14,9 @@ import SearchIcon from "@mui/icons-material/Search";
 // }));
 
 const SelectStreet = ({ isOpen, onClose, onStreetSelect, selectedStreet }) => {
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
+
   const streets = [
     "حي اول",
     "شارع اول",
@@ -136,7 +140,8 @@ const SelectStreet = ({ isOpen, onClose, onStreetSelect, selectedStreet }) => {
             <CheckIcon
               sx={{
                 position: "absolute",
-                left: "20px",
+                left: lang === "ar" && "20px",
+                right: lang === "en" && "20px",
                 top: "50%",
                 transform: "translateY(-50%)",
                 color: "var( --green-color)",

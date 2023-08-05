@@ -2,8 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { Box, Button, Typography, Paper } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Avatar from "@mui/material/Avatar";
+import { useTranslation } from "react-i18next";
 
 const TopNav = () => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const [showLoginList, setShowLoginList] = useState(false);
   const loginListRef = useRef(null);
 
@@ -36,13 +39,12 @@ const TopNav = () => {
         backgroundColor: "white",
         boxShadow: "rgba(0, 0, 0, 0.1) 0px 0px 8px 0px",
         display: "flex",
-        justifyContent: "left",
+        justifyContent: lang === "ar" ? "left" : "right",
         alignItems: "center",
-      
       }}
     >
       <Button
-        sx={{ color: "var(--green-color)" , }}
+        sx={{ color: "var(--green-color)" }}
         onClick={toggleShowLoginList}
       >
         <Avatar
@@ -70,7 +72,8 @@ const TopNav = () => {
               display: "block",
               position: "absolute",
               top: "0px",
-              left: "14px",
+              left: lang === "ar" && "14px",
+              right: lang === "en" && "14px",
               width: "10px",
               height: "10px",
               backgroundColor: "rgb(255, 255, 255)",
@@ -93,18 +96,18 @@ const TopNav = () => {
               listStyle: "none",
               minWidth: "200px",
               margin: "0",
-              padding: "1rem 0rem",
+              padding: "1rem .5rem",
               cursor: "pointer",
             }}
           >
-            <li>لوحة التحكم</li>
+            <li>{t("user_dashboard.top_nav.title1")}</li>
             <li
               style={{
                 borderBottom: "none",
                 padding: "0.3rem 1rem 0rem 0rem",
               }}
             >
-              تسجيل الخروج
+              {t("user_dashboard.top_nav.title2")}
             </li>
           </ul>
         </Paper>

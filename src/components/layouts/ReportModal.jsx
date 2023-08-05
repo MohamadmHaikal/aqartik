@@ -10,6 +10,7 @@ import {
   styled,
   TextField,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const StyledSelect = styled(Select)({
   "& .MuiSvgIcon-root": {
@@ -26,6 +27,9 @@ const SelectPlaceholder = styled(MenuItem)`
 `;
 
 const ReportModal = ({ open, onClose }) => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const [selectedOption, setSelectedOption] = React.useState("");
   const [report, setReport] = useState("");
 
@@ -56,7 +60,8 @@ const ReportModal = ({ open, onClose }) => {
         </Typography>
         <FormControl sx={{ width: "80%", margin: "auto", display: "block" }}>
           <StyledSelect
-          sx={{width:"100%"}}
+            lang={lang}
+            sx={{ width: "100%" }}
             value={selectedOption}
             onChange={handleSelectChange}
             displayEmpty

@@ -6,6 +6,7 @@ import TabsFilter from "./TabsFilter";
 import AccordinFilters from "./AccordinFilters";
 import PaginationAds from "./PaginationAds";
 import { styled } from "@mui/system";
+import { useTranslation } from "react-i18next";
 
 // Create a custom styled component
 const StyledContainer = styled(Container)(({ theme }) => ({
@@ -19,6 +20,9 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 }));
 
 const HomeFilter = () => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   return (
     <StyledContainer>
       <Grid container spacing={2}>
@@ -71,7 +75,7 @@ const HomeFilter = () => {
               <Box>
                 <LocationOnIcon />
               </Box>
-              انتقل للخريطة
+              {t("advertisements_page.sec1.map_button")}
             </Link>
           </Box>
         </Grid>
@@ -88,7 +92,8 @@ const HomeFilter = () => {
                   margin: "0 0.5rem",
                 }}
               />
-              فلتر <Typography>(1)</Typography>
+              {t("advertisements_page.filter_sec.title")}
+              <Typography>(1)</Typography>
             </Box>
             <Typography sx={{ marginX: "0.5rem" }}>|</Typography>
             <Button
@@ -99,7 +104,7 @@ const HomeFilter = () => {
                 fontSize: "inherit",
               }}
             >
-              مسح الكل
+              {t("advertisements_page.filter_sec.delete_button")}
             </Button>
           </Box>
           <Box>

@@ -17,24 +17,8 @@ import CheckIcon from "@mui/icons-material/Check";
 import NorthIcon from "@mui/icons-material/North";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
+import { useTranslation } from "react-i18next";
 
-const tabDataXs = [
-  { label: "افتراضي", content: "Content 1" },
-  { label: "الأقرب لموقعي", content: "Content 2" },
-  { label: "الأعلى تقييما", content: "Content 3" },
-  { label: "الأعلى مشاهدة", content: "Content 4" },
-  { label: "الأقل سعرا", content: "Content 5" },
-  { label: "الأعلى سعرا", content: "Content 6" },
-];
-
-const tabDataLg = [
-  { label: "الافتراضي", content: "Content 1" },
-  { label: "الاقرب الى موقعي", content: "Content 2" },
-  { label: "الاعلى مشاهدة", content: "Content 3" },
-  { label: "الاعلى سعرا", content: "Content 3" },
-  { label: " الاقل سعرا", content: "Content 3" },
-  { label: "الاعلى تقييما", content: "Content 3" },
-];
 const icons = [
   {
     icon: <FavoriteIcons />,
@@ -70,6 +54,17 @@ const TabsFilter = () => {
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [value, setValue] = React.useState(0);
 
+  const { t } = useTranslation();
+
+  const tabData = [
+    { label: t("filtersTab.default_btn"), content: "Content 1" },
+    { label: t("filtersTab.Closest_btn"), content: "Content 2" },
+    { label: t("filtersTab.top_rated"), content: "Content 3" },
+    { label: t("filtersTab.top_viewings"), content: "Content 4" },
+    { label: t("filtersTab.lowest_price"), content: "Content 5" },
+    { label: t("filtersTab.highest_price"), content: "Content 6" },
+  ];
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -79,7 +74,6 @@ const TabsFilter = () => {
   const toggleBox = () => {
     setBoxShown(!isBoxShown);
   };
-  const tabData = isMdScreen ? tabDataXs : tabDataLg;
 
   return (
     <>
@@ -117,21 +111,19 @@ const TabsFilter = () => {
               width: "100%",
               justifyContent: "center",
               // maxWidth: "47rem",
-             
             }}
           >
             <Tabs
               value={value}
               onChange={handleChange}
               sx={{
-              
-                width:"100%",
-                display:"flex",
-                justifyContent:"space-around !important",
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-around !important",
                 "& .css-heg063-MuiTabs-flexContainer": {
-                 justifyContent:"space-around !important"
+                  justifyContent: "space-around !important",
                 },
-            
+
                 "& .MuiTabs-indicator": {
                   display: "none",
                 },
@@ -148,8 +140,7 @@ const TabsFilter = () => {
                     // Customize the tab button styles
                     color: "black",
                     fontSize: { md: "0.88rem", lg: "1rem" },
-                    justifyContent:"space-between",
-                
+                    justifyContent: "space-between",
 
                     "&.Mui-selected": {
                       backgroundColor: "var( --green-color)",
@@ -218,7 +209,7 @@ const TabsFilter = () => {
                 fontFamily: "Tajawal,Arial,sans-serif",
               }}
             >
-              {tabDataXs.map((tab, index) => (
+              {tabData.map((tab, index) => (
                 <li
                   key={index}
                   style={{

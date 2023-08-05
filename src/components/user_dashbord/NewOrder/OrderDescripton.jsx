@@ -2,26 +2,28 @@ import React, { useState } from "react";
 import { Box, Typography, TextField, Button, Tooltip } from "@mui/material";
 import styles from "../../addadsolder/confirmLocation.module.css";
 import { OrderTitles } from ".";
+import { useTranslation } from "react-i18next";
 
 const OrderDescripton = ({ onChange, description }) => {
+  const { t } = useTranslation();
+
   const handleDescriptionChange = (event) => {
     const value = event.target.value;
     onChange(value);
   };
   return (
     <Box>
-      <OrderTitles title="وصف العقار" />
+      <OrderTitles title={t("user_dashboard.property_desc.title")} />
       <Typography
         sx={{
           color: "rgb(118, 118, 118)",
           marginBottom: "2rem",
         }}
       >
-        أضف وصف مميز لعقارك و ايش يتوقع الضيف أن يجد فيه
+        {t("user_dashboard.property_desc.hint")}
       </Typography>
       <Typography sx={{ color: "rgb(118, 118, 118)" }}>
-        73% من المضيفين المميزين (الذين لديهم حجوزات ومبيعات عالية) يكتبوا وصف
-        مميز و واضح
+        {t("user_dashboard.property_desc.desc")}
       </Typography>
       <Box sx={{ position: "relative" }}>
         <Box
@@ -40,7 +42,7 @@ const OrderDescripton = ({ onChange, description }) => {
               fontWeight: "bold",
             }}
           >
-            أكتب وصف مميز لعقارك
+            {t("user_dashboard.property_desc.label")}
           </Typography>
           <Tooltip
             title={
@@ -65,13 +67,10 @@ const OrderDescripton = ({ onChange, description }) => {
                     fontWeight: "bold",
                   }}
                 >
-                  وصف مميز لعقارك
+                  {t("user_dashboard.property_desc.ex_title")}
                 </p>
                 <p style={{ color: "rgb(118, 118, 118)" }}>
-                  تقع في شمال الرياض مطلة على بوليفارد الرياض قريبة من شارع تركي
-                  الأول. صُممت بألوان مريحة مؤثثة بأثاث مودرن. يوجد شاشة 85 بوصة
-                  واشتراك بين سبورت لمتابعة المباريات. تتميز بمساحتها الواسعة
-                  وخصوصية تامة بدخول ذكي. أتمنى لك إقامة سعيدة و حياك الله ضيفي.
+                  {t("user_dashboard.property_desc.ex_desc")}
                 </p>
               </div>
             }
@@ -85,7 +84,7 @@ const OrderDescripton = ({ onChange, description }) => {
             }}
           >
             <Button sx={{ color: "var(--green-color)", fontSize: "17px" }}>
-              مثال
+              {t("user_dashboard.property_desc.ex_btn")}
             </Button>
           </Tooltip>
         </Box>
@@ -94,7 +93,7 @@ const OrderDescripton = ({ onChange, description }) => {
         fullWidth
         multiline
         rows={9}
-        placeholder=" اكتب هنا"
+        placeholder={t("user_dashboard.property_desc.placeholder")}
         required
         value={description}
         onChange={handleDescriptionChange}

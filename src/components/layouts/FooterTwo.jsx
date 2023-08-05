@@ -17,10 +17,16 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import { Mail as MailIcon, LocationOn as LocationOnIcon } from "@mui/icons-material"; 
+import {
+  Mail as MailIcon,
+  LocationOn as LocationOnIcon,
+} from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 const phoneNumber = "000000000000";
 
 const FooterTwo = () => {
+  const { t } = useTranslation();
+
   const downloadLinks = [
     { label: "app store", image: Appstore },
     { label: "google play", image: Googleplay },
@@ -97,9 +103,19 @@ const FooterTwo = () => {
                   flexDirection: "column",
                 }}
               >
-                < Box sx={{ display: "flex", alignItems: "center" , marginBottom:"10px" }}><LocationOnIcon sx={{marginLeft:"5px"}} />المملكة العربية السعودية / الرياض</Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <LocationOnIcon sx={{ marginLeft: "5px" }} />
+                  المملكة العربية السعودية / الرياض
+                </Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <MailIcon sx={{marginLeft:"5px"}}/> <Typography>tsf@gmail.com</Typography>
+                  <MailIcon sx={{ marginLeft: "5px" }} />{" "}
+                  <Typography>tsf@gmail.com</Typography>
                 </Box>
               </Box>
 
@@ -134,14 +150,14 @@ const FooterTwo = () => {
                       fontSize: "18px",
                     }}
                   >
-                    عقار تك
+                    {t("footer.first_list.brand_name")}
                   </li>
                   <li className={styles.aboutus}>
                     <Link
                       href="#"
                       sx={{ textDecoration: "none", color: "gray" }}
                     >
-                      من نحن
+                      {t("footer.first_list.about")}
                     </Link>
                   </li>
                 </ul>
@@ -153,14 +169,14 @@ const FooterTwo = () => {
                       fontSize: "18px",
                     }}
                   >
-                    الدعم
+                    {t("footer.second_list.support")}
                   </li>
                   <li style={{ marginBottom: "10px" }}>
                     <Link
                       href="#"
                       sx={{ textDecoration: "none", color: "gray" }}
                     >
-                      تواصل معنا
+                      {t("footer.second_list.contact_us")}
                     </Link>
                   </li>
                   <li style={{ marginBottom: "10px" }}>
@@ -168,7 +184,7 @@ const FooterTwo = () => {
                       href="#"
                       sx={{ textDecoration: "none", color: "gray" }}
                     >
-                      الاسئلة الشائعة
+                      {t("footer.second_list.frequently_asked_questions")}
                     </Link>
                   </li>
                 </ul>
@@ -181,14 +197,14 @@ const FooterTwo = () => {
                       fontSize: "18px",
                     }}
                   >
-                    الأمور القانونية
+                    {t("footer.third_list.legal_matters")}
                   </li>
                   <li style={{ marginBottom: "10px" }}>
                     <Link
                       href="#"
                       sx={{ textDecoration: "none", color: "gray" }}
                     >
-                      الشروط والأحكام
+                      {t("footer.third_list.terms_and_conditions")}
                     </Link>
                   </li>
                   <li style={{ marginBottom: "10px" }}>
@@ -196,7 +212,7 @@ const FooterTwo = () => {
                       href="#"
                       sx={{ textDecoration: "none", color: "gray" }}
                     >
-                      الشروط الخصوصية
+                      {t("footer.third_list.privacy_policy")}
                     </Link>
                   </li>
                 </ul>
@@ -206,7 +222,7 @@ const FooterTwo = () => {
                     className={styles.footer_list}
                     style={{ marginBottom: "10px" }}
                   >
-                    Download
+                    {t("footer.download_btn")}
                   </li>
                   {downloadLinks.map((link, index) => (
                     <li key={index}>
@@ -247,7 +263,9 @@ const FooterTwo = () => {
                 justifyContent: { xs: "right", md: "start" },
               }}
             >
-              <Typography sx={{ marginLeft: "5px" }}>اتصل بنا</Typography>
+              <Typography sx={{ marginLeft: "5px" }}>
+                {t("footer.contact_phone")}
+              </Typography>
               <Link
                 href={`tel:${phoneNumber}`}
                 sx={{ textDecoration: "none", color: "black" }}
@@ -269,7 +287,7 @@ const FooterTwo = () => {
                 fontSize: { xs: "14px" },
               }}
             >
-              جميع الحقوق محفوظة لموقع عقار تك2023Ⓒ
+              &#9400; {t("footer.copy_right")} 2023
             </Grid>
             <Grid item xs={12} md={3} sx={{ order: { xs: "1", md: "2" } }}>
               <Box
@@ -357,10 +375,16 @@ const FooterTwo = () => {
                     paddingY: "8px",
                   }}
                 >
-                  <li className={styles.footer_xs_list}>شروط الإستخدام</li>
-                  <li className={styles.footer_xs_list}>الاسئلة المتكررة</li>
+                  <li className={styles.footer_xs_list}>
+                    {t("footer.third_list.terms_and_conditions")}
+                  </li>
+                  <li className={styles.footer_xs_list}>
+                    {t("footer.second_list.frequently_asked_questions")}
+                  </li>
                   <li className={styles.footer_xs_list}>العروض</li>
-                  <li className={styles.footer_xs_list}>تواصل معنا</li>
+                  <li className={styles.footer_xs_list}>
+                    {t("footer.second_list.contact_us")}
+                  </li>
                 </ul>
               </Box>
             </Box>
@@ -397,20 +421,19 @@ const FooterTwo = () => {
                 >
                   <PhoneIcon sx={{ marginLeft: "8px" }} />
                   <Typography sx={{ fontWeight: "500" }}>
-                    خدمة العملاء
+                    {t("footer.customer_service")}
                   </Typography>
                 </Box>
                 <Link href="#" sx={{ textDecoration: "none", color: "black" }}>
                   {phoneNumber}
                 </Link>
               </Box>
-              <Typography>من ٩:٣٠ صباحاً إلى ١:٠٠ ليلاً</Typography>
+              <Typography>{t("footer.time")}</Typography>
             </Box>
           </Box>
           <Box
             sx={{
               display: "flex",
-
               alignItems: "center",
               flexDirection: "row",
               justifyContent: "center",
@@ -434,7 +457,7 @@ const FooterTwo = () => {
               marginTop: "25px",
             }}
           >
-            جميع الحقوق محفوظة©2023 عقار تك
+            &#9400; {t("footer.copy_right")} 2023
           </Typography>
         </Box>
       </Box>

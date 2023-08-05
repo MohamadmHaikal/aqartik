@@ -8,53 +8,56 @@ import { EffectFade, Autoplay, Pagination } from "swiper";
 import { boat, exciting_experience, house } from "../../assets";
 
 import { Box, Typography, Button, useMediaQuery } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const MainSection = () => {
   const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const csstransitionRef = useRef(null);
+
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const images = [
     {
       src: boat,
       alt: "Img Boat",
-      title: "صيف بدون حر",
-
-      description:
-        "بحث وتصفح اكثر من 26 الف وحدة في اكثر من 180 مدينة ومحافظة وعش تجربة السكن ",
-      buttonTitle: "تصفح بيوت العطلات في مكة",
+      title: t("homepage.hero_section.sec1.title"),
+      description: t("homepage.hero_section.sec1.desc"),
+      buttonTitle: t("homepage.hero_section.sec1.button"),
     },
     {
       src: exciting_experience,
       alt: "Image Exciting Experience Image",
-      title: "عيش التجربة في جاذران",
-
-      description:
-        "نوفر لك العديد من الخيارات للحصول على حجوزات يومية او أسبوعية او شهرية تغطي جميع المناطق لتعيش تجربة فريدة",
-      buttonTitle: "تصفح بيوت العطلات في السوده",
+      title: t("homepage.hero_section.sec2.title"),
+      description: t("homepage.hero_section.sec2.desc"),
+      buttonTitle: t("homepage.hero_section.sec2.button"),
     },
     {
       src: house,
       alt: "House Image ",
-      title: "Image 3 content",
-      description:
-        "نوفر لك العديد من الخيارات للحصول على حجوزات يومية او أسبوعية او شهرية تغطي جميع المناطق لتعيش تجربة فري",
-      buttonTitle: "تصفح بيوت العطلات في الرياض",
+      title: t("homepage.hero_section.sec3.title"),
+      description: t("homepage.hero_section.sec3.desc"),
+      buttonTitle: t("homepage.hero_section.sec3.button"),
     },
   ];
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [showBox, setShowBox] = useState(true);
+
   const handleSlideChange = (swiper) => {
     setActiveSlideIndex(swiper.realIndex);
     setShowBox(true);
   };
 
+  // Unnecessary //
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setShowBox(false);
-    }, 5000);
+      setShowBox(true);
+    }, 10000);
 
     return () => clearTimeout(timeout);
   }, [activeSlideIndex]);
+
   const getBoxTransform = (index) => {
     if (isXsScreen) {
       // For xs screens, show the box on the current slide without any translation
@@ -64,22 +67,23 @@ const MainSection = () => {
       return "translateX(0)";
     } else if (index === activeSlideIndex - 1 && showBox) {
       // Slide the box to the right
-      return "translateX(-100%)";
+      return "translateX(-400px)";
     } else if (index === activeSlideIndex + 1 && showBox) {
       // Slide the box to the left
-      return "translateX(100%)";
+      return "translateX(400px)";
     } else {
       // Hide the box off to the left for all other slides
-      return "translateX(100%)";
+      return "translateX(400px)";
     }
   };
+
   return (
     <Box sx={{ position: "relative" }}>
       <Swiper
         className="mySwiper"
         effect={"fade"}
         autoplay={{
-          delay: 1000,
+          delay: 2000,
           // disableOnInteraction: false,
         }}
         modules={[EffectFade, Autoplay, Pagination]}
@@ -118,20 +122,24 @@ const MainSection = () => {
                   position: "absolute",
                   // top: "5rem",
                   top: { xs: "9rem", md: "8rem" },
-                  textAlign: { xs: " center", md: "right" },
+                  textAlign: {
+                    xs: " center",
+                    md: lang === "ar" ? "right" : "left",
+                  },
                   // transform: {
                   //   xs: "translate(-50%,-50%)",
                   // },
                   width: { xs: "100%", md: "50%" },
 
                   // right: { md: "5rem" },
-                  right: { md: "3rem" },
+                  right: { md: lang === "ar" ? "3rem" : "" },
+                  left: { md: lang === "ar" ? "" : "3rem" },
 
                   // left: { xs: "50%" },
 
                   zIndex: "1000",
                   color: "white",
-                  transform: getBoxTransform(index), // Apply the transform based on the slide index
+                  transform: () => getBoxTransform(index), // Apply the transform based on the slide index
                   transition: "transform 1s ease-out",
                 }}
               >

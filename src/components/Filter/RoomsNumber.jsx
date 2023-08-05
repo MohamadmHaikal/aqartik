@@ -1,11 +1,11 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 import { Box } from "@mui/material";
-
-
-
+import { useTranslation } from "react-i18next";
 
 const RoomsNumber = () => {
+  const { t, i18n } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -16,31 +16,27 @@ const RoomsNumber = () => {
       }}
     >
       <TextField
-        placeholder="غرف النوم"
+        placeholder={t("advertisements_page.filter_sec.rooms_filter.label1")}
         variant="outlined"
         type="number"
-        dir="rtl"
         className="custom-textfield"
       />
       <TextField
-        placeholder="غرف الجلوس"
+        placeholder={t("advertisements_page.filter_sec.rooms_filter.label2")}
         variant="outlined"
         type="number"
-        dir="rtl"
         className="custom-textfield"
       />
       <TextField
-        placeholder="عدد المطابخ"
+        placeholder={t("advertisements_page.filter_sec.rooms_filter.label3")}
         variant="outlined"
         type="number"
-        dir="rtl"
         className="custom-textfield"
       />
       <TextField
-        placeholder=" عدد الحمامات"
+        placeholder={t("advertisements_page.filter_sec.rooms_filter.label4")}
         variant="outlined"
         type="number"
-        dir="rtl"
         className="custom-textfield"
       />
     </Box>

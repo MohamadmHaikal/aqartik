@@ -9,8 +9,11 @@ import {
 } from "@mui/material";
 
 import { KSA } from "../../assets";
+import { useTranslation } from "react-i18next";
 
 const LogInModal = ({ open, onClose }) => {
+  const { t } = useTranslation();
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [step, setStep] = useState(1); // Step 1: Phone number input, Step 2: OTP verification
@@ -103,16 +106,14 @@ const LogInModal = ({ open, onClose }) => {
       >
         {step === 2 && (
           <Button onClick={handleBack} sx={{ color: "black" }}>
-            رجوع
+            {t("loginmodal.back_btn")}
           </Button>
         )}
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          {step === 1 ? "أهلا بك!" : "الرجاء إدخال الكود للمتابعة"}
+          {step === 1 ? t("loginmodal.title") : t("loginmodal.title_two")}
         </Typography>
         <Typography sx={{ marginY: "1rem" }}>
-          {step === 1
-            ? "أدخل رقم هاتفك الجوال لإنشاء حساب أو تسجيل الدخول."
-            : ""}
+          {step === 1 ? t("loginmodal.desc") : ""}
         </Typography>
 
         <form onSubmit={handleSubmit} style={{ textAlign: "center" }}>
@@ -135,12 +136,19 @@ const LogInModal = ({ open, onClose }) => {
                 },
               }}
             >
-              <Box sx={{ position: "relative", zIndex: "1", padding: "24px" , textAlign:"right"}}>
+              <Box
+                sx={{
+                  position: "relative",
+                  zIndex: "1",
+                  padding: "24px",
+                  textAlign: "right",
+                }}
+              >
                 <label
                   htmlFor="phoneNumber"
                   style={{ color: "rgba(0, 0, 0, 0.54)", display: "block" }}
                 >
-                  رقم هاتفك الجوال
+                  {t("loginmodal.input_label")}
                 </label>
                 <img
                   src={KSA}
@@ -199,11 +207,11 @@ const LogInModal = ({ open, onClose }) => {
               }}
             >
               <Typography>
-                {`لقد أرسلنا الكود برسالة إلى الرقم ${phoneNumber}`}
+                {t("loginmodal.sended_message") + ` ` + phoneNumber}
               </Typography>
               {isOTPInvalid && (
                 <Typography color="error">
-                  رمز التحقق غير صحيح. يرجى المحاولة مرة أخرى.
+                  {t("loginmodal.error_message")}
                 </Typography>
               )}
             </Box>
@@ -309,24 +317,28 @@ const LogInModal = ({ open, onClose }) => {
                 },
               }}
             >
-              {step === 1 ? "متابعة" : "التحقق"}
+              {step === 1
+                ? t("loginmodal.submit_btn")
+                : t("loginmodal.submit_btn_2")}
             </Button>
           </Box>
 
           {step === 1 && (
             <Typography>
-              سنقوم بإرسال رسالة إلى الرقم المدخل تحتوي على كود للمتابعة..
-              <b> تأكد من إدخال رقمك بشكل صحيح.</b>
+              {t("loginmodal.hint")}
+              <b> {t("loginmodal.bold_hint")}</b>
             </Typography>
           )}
 
           {step === 2 && (
             <Box>
               {resendCountdown > 0 ? (
-                <Typography>({resendCountdown} ثانية)</Typography>
+                <Typography>
+                  ({resendCountdown} {t("loginmodal.seconds")})
+                </Typography>
               ) : (
                 <Button onClick={handleResendOTP} sx={{ color: "black" }}>
-                  قم بإرسال رمز التحقق من جديد
+                  {t("loginmodal.message")}
                 </Button>
               )}
             </Box>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { ListItemDiv } from "../../styledComponents/MainPageStyles";
 
 const data = [
@@ -40,9 +41,11 @@ const data = [
 ];
 
 export const ChatsHeader = ({ setIsUserSelected, setUserData }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="messages-wrapper">
-      <h3>messages</h3>
+      <h3>{t("messages_header.title")}</h3>
       {data.map((ele) => (
         <ListItemDiv
           onClick={() => {

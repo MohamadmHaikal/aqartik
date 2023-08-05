@@ -6,8 +6,11 @@ import "lightgallery/css/lg-thumbnail.css";
 import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
 import "../../styles/detailsimages.css";
 import { Button, useMediaQuery, Box } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 export default function DetailsImages() {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const galleryRef = useRef(null);
   const [showMore, setShowMore] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
@@ -57,12 +60,14 @@ export default function DetailsImages() {
     5: "2fr 2fr  4fr ",
   };
   const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
+
   const displayImages = isXsScreen
     ? images.slice(0, 1)
     : showMore
     ? images
     : images.slice(0, 5);
   const totalImages = displayImages.length;
+
   const handleShowMore = () => {
     setShowMore((prevShowMore) => !prevShowMore);
   };
@@ -114,60 +119,66 @@ export default function DetailsImages() {
             />
           </a>
         ))}
-        {!showVideo && (
-          <button
-            style={{
-              marginTop: "10px",
-              position: "absolute",
-              bottom: "16px",
-              right: "175px",
-              zIndex: "9",
-              backgroundColor: "rgba(0, 0, 0, 0.45)",
-              backdropFilter: "blur(15px)",
-              color: "rgb(255, 255, 255)",
-              borderRadius: "12px",
-              height: "48px",
-              fontSize: "15px",
-              boxShadow:
-                "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
-              border: "none",
-              padding: "0rem 1rem ",
-              alignItems: "center",
-              display: "flex",
-              pointerEvents: "none",
-            }}
-          >
-            عرض الفيديو
-          </button>
-        )}
-        {!showMore && images.length > 4 && (
-          <button
-            onClick={handleShowMore}
-            style={{
-              marginTop: "10px",
-              position: "absolute",
-              bottom: "16px",
-              right: "16px",
-              zIndex: "9",
-              backgroundColor: "rgba(0, 0, 0, 0.45)",
-              backdropFilter: "blur(15px)",
-              color: "rgb(255, 255, 255)",
-              borderRadius: "12px",
-              height: "48px",
-              fontSize: "15px",
-              boxShadow:
-                "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
-              border: "none",
-              padding: "0rem 1rem ",
-              alignItems: "center",
-              display: "flex",
-              pointerEvents: "none",
-            }}
-          >
-            <PhotoLibraryOutlinedIcon sx={{ marginX: "0.2rem" }} />
-            عرض كل الصور
-          </button>
-        )}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "16px",
+            right: lang === "ar" && "40px",
+            left: lang === "en" && "40px",
+            zIndex: "9",
+            display: "flex",
+            gap: "16px",
+            alignItems: "center",
+            flexDirection: lang === "en" && "row-reverse",
+          }}
+        >
+          {!showVideo && (
+            <button
+              style={{
+                marginTop: "10px",
+                backgroundColor: "rgba(0, 0, 0, 0.45)",
+                backdropFilter: "blur(15px)",
+                color: "rgb(255, 255, 255)",
+                borderRadius: "12px",
+                height: "48px",
+                fontSize: "15px",
+                boxShadow:
+                  "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
+                border: "none",
+                padding: "0rem 1rem ",
+                alignItems: "center",
+                display: "flex",
+                pointerEvents: "none",
+              }}
+            >
+              {t("details_page.images_btns.show_vids")}
+            </button>
+          )}
+          {!showMore && images.length > 4 && (
+            <button
+              onClick={handleShowMore}
+              style={{
+                marginTop: "10px",
+                backgroundColor: "rgba(0, 0, 0, 0.45)",
+                backdropFilter: "blur(15px)",
+                color: "rgb(255, 255, 255)",
+                borderRadius: "12px",
+                height: "48px",
+                fontSize: "15px",
+                boxShadow:
+                  "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
+                border: "none",
+                padding: "0rem 1rem ",
+                alignItems: "center",
+                display: "flex",
+                pointerEvents: "none",
+              }}
+            >
+              <PhotoLibraryOutlinedIcon sx={{ marginX: "0.2rem" }} />
+              {t("details_page.images_btns.show_more")}
+            </button>
+          )}
+        </div>
       </Box>
     </div>
   );

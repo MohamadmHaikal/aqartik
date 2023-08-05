@@ -18,8 +18,11 @@ import Map from "../../assets/map.jpg";
 import HomeRooms from "./HomeRooms";
 
 import { DetailsFeaturesBox, FiveStars } from "../Detailsfolder";
+import { useTranslation } from "react-i18next";
 
 const DetailsTabs = () => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const [selectedTab, setSelectedTab] = useState(0);
   const [showCommentForm, setShowCommentForm] = useState(false);
   const handleTabChange = (event, newValue) => {
@@ -76,20 +79,35 @@ const DetailsTabs = () => {
           }}
           sx={{ width: "100%" }}
         >
-          <Tab label="المواصفات والميزات" sx={tabStyles} />
-          <Tab label="الموقع والخريطة" sx={tabStyles} />
-          <Tab label="تقييمات  المعلن" sx={tabStyles} />
+          <Tab
+            label={t("details_page.details_tabs.specifications_and_features")}
+            sx={tabStyles}
+          />
+          <Tab
+            label={t("details_page.details_tabs.location_and_map")}
+            sx={tabStyles}
+          />
+          <Tab
+            label={t("details_page.details_tabs.guest_reviews")}
+            sx={tabStyles}
+          />
         </Tabs>
       </Box>
       <Box hidden={selectedTab !== 0}>
-        <DetailsTabContent title="المواصفات والميزات " />
+        <DetailsTabContent
+          title={t("details_page.details_tabs.specifications_and_features")}
+        />
         <DetailsFeaturesBox />
       </Box>
       <Box hidden={selectedTab !== 1}>
-        <DetailsTabContent title=" الموقع والخريطة " />
+        <DetailsTabContent
+          title={t("details_page.details_tabs.location_and_map")}
+        />
         <Box sx={{ display: "flex", color: "gray" }}>
           <ErrorOutlineIcon sx={{ marginX: "0.3rem" }} />
-          <Typography>تظهر معلومات الموقع الدقيقة بعد تأكيد الحجز.</Typography>
+          <Typography>
+            {t("details_page.details_tabs.location_and_map_tab.desc")}.
+          </Typography>
         </Box>
         <Box
           sx={{
@@ -103,7 +121,9 @@ const DetailsTabs = () => {
         </Box>
       </Box>
       <Box hidden={selectedTab !== 2}>
-        <DetailsTabContent title=" تقييمات الضيوف" />
+        <DetailsTabContent
+          title={t("details_page.details_tabs.guest_reviews")}
+        />
         {showCommentForm && ( // Render the box conditionally based on the showCommentForm variable
           <Box
             sx={{
@@ -113,16 +133,18 @@ const DetailsTabs = () => {
             }}
           >
             <Typography sx={{ fontWeight: "bold", marginBottom: "1rem" }}>
-              اترك تعليق
+              {t("details_page.details_tabs.guest_reviews_tab.comment_title")}
             </Typography>
             <Typography sx={{ color: "gray" }}>
-              *لن يتم نشر البريد الالكتروني الحقول المطلوبة محددة
+              {t("details_page.details_tabs.guest_reviews_tab.comment_desc")}
             </Typography>
             <Box sx={{ display: "flex", marginY: "1rem" }}>
               <Box sx={{ width: "50%" }}>
                 <TextField
                   fullWidth
-                  placeholder="عنوان تعليق*"
+                  placeholder={t(
+                    "details_page.details_tabs.guest_reviews_tab.placeholder1"
+                  )}
                   required
                   InputProps={{
                     sx: {
@@ -138,7 +160,9 @@ const DetailsTabs = () => {
                 fullWidth
                 multiline
                 rows={4} // Specify the number of rows for the multiline input
-                placeholder=" تعليق*"
+                placeholder={t(
+                  "details_page.details_tabs.guest_reviews_tab.placeholder2"
+                )}
                 required
                 InputProps={{
                   sx: {
@@ -162,7 +186,7 @@ const DetailsTabs = () => {
                 },
               }}
             >
-              ارسال تعليق
+              {t("details_page.details_tabs.guest_reviews_tab.comment_btn")}
             </Button>
           </Box>
         )}
@@ -176,7 +200,7 @@ const DetailsTabs = () => {
             }}
           >
             <Typography sx={{ fontWeight: "bold", color: "gray" }}>
-              ماهو تقييمك..
+              {t("details_page.details_tabs.guest_reviews_tab.review_title")}..
             </Typography>
             <FiveStars />
           </Box>

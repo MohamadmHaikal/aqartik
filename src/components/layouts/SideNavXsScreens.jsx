@@ -7,6 +7,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import LanguageButton from "../selectnav/LanguageButton";
 const socialMediaLinksSmall = [
   {
     icon: <FacebookIcon sx={{ fontSize: "2.3rem", marginX: "7px" }} />,
@@ -27,7 +28,6 @@ const socialMediaLinksSmall = [
   },
 ];
 const SideNavXsScreens = forwardRef((props, ref) => {
-  
   return (
     <Box
       ref={ref}
@@ -152,43 +152,8 @@ const SideNavXsScreens = forwardRef((props, ref) => {
               }}
             >
               <LanguageIcon sx={{ color: "gray" }} />
-              <Button
-                sx={{ marginLeft: "20px", height: "48px", padding: "6px 8px" }}
-              >
-                <Typography
-                  sx={{
-                    display: "flex",
-
-                    alignItems: "center",
-
-                    justifyContent: "center",
-                    flexDirection: "column",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: "11px",
-                      color: "rgb(120, 120, 131)",
-                      lineHeight: "11px",
-                      textTransform: "initial",
-                    }}
-                  >
-                    Browse in
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "15px",
-                      lineHeight: "15px",
-                      textDecoration: "underline",
-                      color: "black",
-                      marginTop: "5px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    English
-                  </span>
-                </Typography>
-              </Button>
+              {/* added language button comonent and give it a prop to let the component show on small screens  */}
+              <LanguageButton isMenuButton={true} />
             </Box>
           </Box>
           <Box

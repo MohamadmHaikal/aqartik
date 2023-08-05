@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, TextField } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import SearchIcon from "@mui/icons-material/Search";
+import { useTranslation } from "react-i18next";
 // import { styled } from "@mui/system";
 
 // const StyledBox = styled(Box)(({ theme }) => ({
@@ -15,7 +16,8 @@ import SearchIcon from "@mui/icons-material/Search";
 const SelectCity = ({ isOpen, onClose, onCitySelect, selectedCity }) => {
   const cities = ["الرياض", "جدة", "مكة", "المدينة المنورة", "رياض", "أبها"];
   const [searchText, setSearchText] = useState("");
-
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
   const handleCitySelection = (city) => {
     onCitySelect(city);
     onClose(); // Close the SelectCity component when a city is selected
@@ -128,10 +130,11 @@ const SelectCity = ({ isOpen, onClose, onCitySelect, selectedCity }) => {
             <CheckIcon
               sx={{
                 position: "absolute",
-                left: "20px",
+                left: lang === "ar" && "20px",
+                right: lang === "en" && "20px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: "var( --green-color))",
+                color: "var( --green-color)",
               }}
             />
           )}
