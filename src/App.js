@@ -9,6 +9,7 @@ import Details from "./pages/details";
 import About from "./pages/about";
 import Mappage from "./pages/mappage";
 import Cards from "./pages/Cards";
+import EditAds from "./pages/EditAds";
 
 import { useMediaQuery } from "@mui/material";
 
@@ -59,10 +60,7 @@ function App() {
         <Route
           path="/ads"
           element={
-            <Layout
-              showNavFooter={true}
-              contentStyles={{ marginTop: "15rem " }}
-            >
+            <Layout showNavFooter={true}>
               <Ads />
             </Layout>
           }
@@ -145,6 +143,14 @@ function App() {
               contentStyles={{ marginTop: "12rem !important" }}
             >
               <Cards />
+            </Layout>
+          }
+        />
+        <Route
+          path="/EditAds"
+          element={
+            <Layout showNavFooter={false}>
+              <EditAds />
             </Layout>
           }
         />

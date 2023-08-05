@@ -15,7 +15,7 @@ const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
   const location = useLocation();
   const { pathname } = location;
   const hideFooter = pathname === "/mappage" || pathname === "/Mappage";
-  const hideNavAndFooter = pathname === "/details";
+  const hideNavAndFooter = pathname === "/details" || pathname === "/ads";
   const { isUserSelected, setIsUserSelected } = useContext(ChatContext);
 
   const theme = useTheme();
