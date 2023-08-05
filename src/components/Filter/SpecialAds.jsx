@@ -37,7 +37,7 @@ const SpecialAds = ({
       >
         <Box
           sx={{
-            width: { xs: "95%", md: "100%" },
+            width: { xs: "100%", md: "100%" },
             display: "flex",
             flexDirection: {
               xs: "column",
@@ -168,9 +168,11 @@ const SpecialAds = ({
                 justifyContent: "space-between",
               }}
             >
-              <Box sx={{ display: "flex" }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 <StarOutlinedIcon sx={{ color: "var(--green-color)" }} />
-                <Typography sx={{ color: "rgb(132, 132, 132)" }}>
+                <Typography
+                  sx={{ color: "rgb(132, 132, 132)", marginTop: "2px" }}
+                >
                   ({ratings})
                 </Typography>
               </Box>

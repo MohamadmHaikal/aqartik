@@ -17,7 +17,10 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import { Mail as MailIcon, LocationOn as LocationOnIcon } from "@mui/icons-material"; 
+import {
+  Mail as MailIcon,
+  LocationOn as LocationOnIcon,
+} from "@mui/icons-material";
 const phoneNumber = "000000000000";
 
 const FooterTwo = () => {
@@ -97,9 +100,19 @@ const FooterTwo = () => {
                   flexDirection: "column",
                 }}
               >
-                < Box sx={{ display: "flex", alignItems: "center" , marginBottom:"10px" }}><LocationOnIcon sx={{marginLeft:"5px"}} />المملكة العربية السعودية / الرياض</Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <LocationOnIcon sx={{ marginLeft: "5px" }} />
+                  المملكة العربية السعودية / الرياض
+                </Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <MailIcon sx={{marginLeft:"5px"}}/> <Typography>tsf@gmail.com</Typography>
+                  <MailIcon sx={{ marginLeft: "5px" }} />{" "}
+                  <Typography>tsf@gmail.com</Typography>
                 </Box>
               </Box>
 
@@ -310,7 +323,7 @@ const FooterTwo = () => {
           >
             <Box sx={{ width: "100%", maxWidth: "none" }}>
               <Box sx={{ marginBottom: "20px" }}>
-                <Link href="#">
+                <Link href="/">
                   <img src={Logo} alt="logo" style={{ width: "140px" }} />
                 </Link>
               </Box>
@@ -400,7 +413,14 @@ const FooterTwo = () => {
                     خدمة العملاء
                   </Typography>
                 </Box>
-                <Link href="#" sx={{ textDecoration: "none", color: "black" }}>
+                <Link
+                  href="#"
+                  sx={{
+                    textDecoration: "none",
+                    color: "black",
+                    marginRight: "25px",
+                  }}
+                >
                   {phoneNumber}
                 </Link>
               </Box>

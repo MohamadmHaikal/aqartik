@@ -30,9 +30,9 @@ const LoginButton = () => {
     <>
       <Button
         sx={{
-          backgroundColor: { xs: "transparent", md: "var( --green-color)" },
-          color: { xs: "var(--green-color)", md: "white" },
-          border: { xs: "none", md: "1px solid var( --green-color)" },
+          backgroundColor: { xs: "transparent", lg: "var( --green-color)" },
+          color: { xs: "var(--green-color)", lg: "white" },
+          border: { xs: "none", lg: "1px solid var( --green-color)" },
           minWidth: "0",
           borderRadius: "25px",
           height: "3rem",
@@ -47,16 +47,19 @@ const LoginButton = () => {
           <CloseIcon sx={{ zIndex: "1000", display: { md: "none" } }} />
         ) : (
           <AccountCircleIcon
-            sx={{ width: { xs: "30px" }, height: { xs: "30px" } }}
+            sx={{
+              width: { xs: "30px", md: "55px", lg: "30px" },
+              height: { xs: "30px", md: "55px", lg: "30px" },
+            }}
             onClick={handlShowLogMenu}
           />
         )}
 
         <Typography
           sx={{
-            fontSize: "1rem",
+            fontSize: { lg: "15px", xl: "1rem" },
             fontWeight: "500",
-            marginX: "0.8rem",
+            marginX: { lg: "0.3rem", xl: "0.8rem" },
             display: {
               xs: "none",
               lg: "block",

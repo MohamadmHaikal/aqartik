@@ -16,6 +16,7 @@ import {
   Button,
 } from "@mui/material";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
+import { Link } from "react-router-dom";
 
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -28,9 +29,10 @@ import { createTheme } from "@mui/material/styles";
 import SmallNavLoginMenu from "./SmallNavLoginMenu";
 import SideNavXsScreens from "./SideNavXsScreens";
 import CloseIcon from "@mui/icons-material/Close";
+import styles from "./layout.module.css";
 
 // import Link from "next/link";
-import { Link } from "@mui/material";
+// import { Link } from "@mui/material";
 
 import {
   SelectCity,
@@ -73,37 +75,37 @@ export default function Nav({
     setIsDrawerOpen((prevState) => !prevState);
     setIsSideNavOpen((prevState) => !prevState);
   };
-  
+
   const isDetailsPage = location.pathname === "/details";
   const isAboutPage = location.pathname === "/about";
 
   // Hide the <Box> component on the home page and special ads page
-  const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Divider />
-      <List>
-        {navItems.map((item) => (
-          <Link
-            key={item.id}
-            href={item.url}
-            underline="none"
-            sx={{
-              color: "black",
-              "&:hover": {
-                color: "var(--green-color)",
-              },
-            }}
-          >
-            <ListItem disablePadding>
-              <ListItemButton sx={{ textAlign: "center" }}>
-                <ListItemText primary={item.label} />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-        ))}
-      </List>
-    </Box>
-  );
+  // const drawer = (
+  //   <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+  //     <Divider />
+  //     <List>
+  //       {navItems.map((item) => (
+  //         <Link
+  //           key={item.id}
+  //           href={item.url}
+  //           underline="none"
+  //           sx={{
+  //             color: "black",
+  //             "&:hover": {
+  //               color: "var(--green-color)",
+  //             },
+  //           }}
+  //         >
+  //           <ListItem disablePadding>
+  //             <ListItemButton sx={{ textAlign: "center" }}>
+  //               <ListItemText primary={item.label} />
+  //             </ListItemButton>
+  //           </ListItem>
+  //         </Link>
+  //       ))}
+  //     </List>
+  //   </Box>
+  // );
 
   // this for selectCities
   const [cityIsOpen, setCityIsOpen] = useState(false);
@@ -133,7 +135,11 @@ export default function Nav({
     setIsPriceOpen((prevValue) => !prevValue);
   };
   const handleOutsideClick = (event) => {
-    if (sideNavRef.current && !sideNavRef.current.contains(event.target) && isDrawerOpen) {
+    if (
+      sideNavRef.current &&
+      !sideNavRef.current.contains(event.target) &&
+      isDrawerOpen
+    ) {
       setMobileOpen(false);
       setIsDrawerOpen(false);
     }
@@ -152,7 +158,7 @@ export default function Nav({
     ) {
       setIsSelectRealEstateOpen(false);
     }
-    // event.stopPropagation(); 
+    // event.stopPropagation();
   };
   useEffect(() => {
     document.addEventListener("click", handleOutsideClick);
@@ -210,19 +216,20 @@ export default function Nav({
               <MenuIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
             )}
           </IconButton>
-
-          <img src={Logo} alt="logo" style={{ width: "120px" }} />
+          <Link to="/">
+            <img src={Logo} alt="logo" style={{ width: "120px" }} />
+          </Link>
           <Box
             sx={{
               display: { xs: "none", md: "flex", marginLeft: { lg: "10%" } },
             }}
           >
             {navItems.map((item) => (
-              <Link key={item.label} href={item.url} underline="none">
+              <Link key={item.label} to={item.url} underline="none">
                 <Button
                   sx={{
                     color: "black",
-                    fontSize: "1rem",
+                    fontSize: "15px",
                     marginX: "0.5rem",
                     [theme.breakpoints.down("lg")]: {
                       fontSize: "1rem",
@@ -259,6 +266,7 @@ export default function Nav({
                 <ChatRoundedIcon
                   onClick={() => setShowMessages((prev) => !prev)}
                   className="message-icon"
+                  sx={{ display: "flex", justifyContent: "center" }}
                 />
                 {showMessages && (
                   <ChatsHeader
@@ -268,7 +276,7 @@ export default function Nav({
                 )}
               </div>
             </Header>
-            <Link href="/addads" sx={{ display: { xs: "none", md: "block" } }}>
+            <Link to="/addads" sx={{ display: { xs: "none", md: "block" } }}>
               <Button
                 sx={{
                   border: "1px solid var(--green-color)",
@@ -309,6 +317,7 @@ export default function Nav({
         {/* this next section in nav for search in houses */}
         {!isDetailsPage && !isAboutPage && (
           <Box
+            className={styles.changeBackroundColor}
             sx={{
               // height: "100px",
               // backgroundColor: "transparent",
@@ -522,7 +531,7 @@ export default function Nav({
               </Box>
               {/* this box only on small screen */}
               <Box sx={{ display: { xs: "bock", lg: "none" }, height: "100%" }}>
-                <Link href="/ads">
+                <Link to="/ads">
                   <Button
                     sx={{
                       width: "100%",

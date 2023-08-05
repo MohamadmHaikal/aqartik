@@ -24,6 +24,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
 import FacebookIcon from "@mui/icons-material/Facebook";
 
+
 const tabDataXs = [
   { label: "افتراضي", content: "Content 1" },
   { label: "الأقرب لموقعي", content: "Content 2" },

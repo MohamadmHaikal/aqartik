@@ -148,18 +148,6 @@ const Addads = () => {
 
   return (
     <>
-      <Link
-        href="/"
-        sx={{
-          position: "absolute",
-          top: "3rem",
-          left: "2rem",
-          textDecoration: "none",
-          color: "var(--green-color)",
-        }}
-      >
-        الرئيسية{" >>"}
-      </Link>
       <Box
         sx={{
           display: { xs: "none", lg: "block" },
@@ -185,7 +173,7 @@ const Addads = () => {
             position: "relative",
             marginInline: "auto",
             marginBlockStart: { xs: "0px", sm: "40px" },
-            maxWidth: "590px",
+            maxWidth: "500px",
 
             marginLeft: { lg: "1%" },
           }}
@@ -204,6 +192,20 @@ const Addads = () => {
                 height: { xs: "100vh", sm: "calc(-40px + 100vh)" },
               }}
             >
+              <Link
+                href="/"
+                sx={{
+                  // position: "absolute",
+                  // top: "3rem",
+                  // left: "2rem",
+                  textAlign: "left",
+                  textDecoration: "none",
+                  marginBottom: { xs: "-28px", md: "-2rem" },
+                  color: "var(--green-color)",
+                }}
+              >
+                الرئيسية{" >>"}
+              </Link>
               {/* Render the current step */}
               {renderStep()}
             </Box>

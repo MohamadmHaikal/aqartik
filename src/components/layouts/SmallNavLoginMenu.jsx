@@ -5,8 +5,9 @@ import {
   List,
   ListItem,
   ListItemText,
-  Link,
+  // Link,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import { Profile, Favorite, Aqar, Call, Logout } from "../../assets";
 
 import Avatar from "@mui/material/Avatar";
@@ -73,15 +74,14 @@ const SmallNavLoginMenu = () => {
           >
             <Box
               sx={{
+                width: "100%",
+                justifyContent: "right",
                 display: "flex",
-
                 alignItems: "center",
-
-                justifyContent: "center",
                 flexDirection: "row",
               }}
             >
-              <Avatar sx={{ width: "60px", height: "60px", marginLeft: "5px" }}>
+              <Avatar sx={{ width: "40px", height: "40px", marginLeft: "5px" }}>
                 ر
               </Avatar>
               <Box sx={{ marginRight: "16px" }}>
@@ -95,8 +95,8 @@ const SmallNavLoginMenu = () => {
             </Box>
             <List sx={{ width: "100%", paddingY: "8px" }}>
               <Link
-                href="/userdashbored"
-                sx={{ textDecoration: "none", color: "black" }}
+                to="/userdashbored"
+                style={{ textDecoration: "none", color: "black" }}
               >
                 <ListItem
                   sx={{
@@ -123,8 +123,8 @@ const SmallNavLoginMenu = () => {
                 </ListItem>
               </Link>
               <Link
-                href="/userdashbored"
-                sx={{ textDecoration: "none", color: "black" }}
+                to="/userdashbored"
+                style={{ textDecoration: "none", color: "black" }}
               >
                 <ListItem
                   sx={{
@@ -151,8 +151,8 @@ const SmallNavLoginMenu = () => {
                 </ListItem>
               </Link>
               <Link
-                href="/addads"
-                sx={{ textDecoration: "none", color: "black" }}
+                to="/addads"
+                style={{ textDecoration: "none", color: "black" }}
               >
                 <ListItem
                   sx={{

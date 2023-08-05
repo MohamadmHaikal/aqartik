@@ -10,6 +10,11 @@ import {
   RadioGroup,
   FormControlLabel,
 } from "@mui/material";
+const customFormControlClass = {
+  flexFlow: "row",
+  display: "flex",
+  width: "100%",
+};
 
 const HomeInformation = ({
   formData,
@@ -176,11 +181,19 @@ const HomeInformation = ({
           sx={{
             marginTop: "0.5rem",
             width: "100%",
+            flexDirection: "row",
             justifyContent: "space-between",
+            flexFlow: "row",
             ".css-17pr1ty-MuiFormGroup-root": {
               display: "row",
               flexDirection: "row",
+              flexFlow: "row",
               width: "100%",
+            },
+            "&.css-3oog02": customFormControlClass,
+            "& .MuiFormGroup-root": {
+              width: "100%",
+              flexFlow: "row",
             },
           }}
         >

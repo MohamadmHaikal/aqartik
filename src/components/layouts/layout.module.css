@@ -5,6 +5,9 @@
 .hideFooter {
     display: block;
 }
+
+
+
 @media screen and (max-width: 768px) {
     .hideNav {
         display: none;
@@ -12,5 +15,11 @@
 
     .hideFooter {
         display: none;
+    }
+}
+
+@media only screen and (max-width: 600px) and (min-width: 430px) {
+    .changeBackroundColor {
+        background-color: white !important;
     }
 }

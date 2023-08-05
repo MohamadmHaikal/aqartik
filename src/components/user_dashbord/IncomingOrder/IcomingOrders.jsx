@@ -7,12 +7,16 @@ import {
   Typography,
   IconButton,
   styled,
+  Link,
 } from "@mui/material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { OrderTitles } from "../NewOrder";
 import OrderCard from "../OrderConstant/OrderCard";
-import { Map } from "../../../assets";
+import { Map, Logo } from "../../../assets";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import Star from "../Star";
 // import './Incoming.module.css'
 
 const CircleIconButton = styled(IconButton)({
@@ -151,25 +155,6 @@ const IcomingOrders = ({ title }) => {
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography>رابط العقار</Typography>
-                      <Typography
-                        sx={{
-                          color: "var(--green-color)",
-                          fontWeight: "600",
-                          marginBottom: "1rem",
-                        }}
-                      >
-                        نسخ
-                      </Typography>
-                    </Box>
-                  </OrderCard>
-                  <OrderCard title="عنوان العقار ">
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
                         marginBottom: "1rem",
                       }}
                     >
@@ -197,6 +182,12 @@ const IcomingOrders = ({ title }) => {
                       <Typography>شمال</Typography>
                     </Box>
                   </OrderCard>
+                  <OrderCard title="وصف العقار ">
+                    <Typography>
+                      تيبا سنيبت سيمنبمكثسي ثسنيبمنسيلاب سيبتمنسيىب ينبستمنسيىب
+                      نيسبمنسيلاب سنيبىمنسيلاب
+                    </Typography>
+                  </OrderCard>
                 </Box>
                 <Box>
                   <OrderCard title="حالة عرض العقار  ">
@@ -218,7 +209,7 @@ const IcomingOrders = ({ title }) => {
                       </Typography>
                     </Box>
                   </OrderCard>
-                  <OrderCard title="  الموقع على الخريطة ">
+                  <OrderCard title="الموقع على الخريطة ">
                     <Box
                       sx={{
                         display: "flex",
@@ -257,6 +248,71 @@ const IcomingOrders = ({ title }) => {
                     </Box>
                   </OrderCard>
                 </Box>
+              </Box>
+              <OrderCard title="وحدات هذا العقار ">
+                <a
+                  href="#"
+                  style={{
+                    textDecoration: "none",
+                    color: "black",
+                    "&:hover": {
+                      backgroundColor: "rgba(56, 31, 118, 0.04)",
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingY: "2rem",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <img
+                        src={Logo}
+                        alt=""
+                        style={{ width: "80px", objectFit: "cover" }}
+                      />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          marginInlineStart: "1rem",
+                          alignItems: "start",
+                        }}
+                      >
+                        <Typography>fkfjg</Typography>
+                        <Typography sx={{ color: "red" }}>
+                          {" "}
+                          غير معروض (أوف لابن)
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <ChevronLeftIcon sx={{ color: "gray" }} />
+                  </Box>
+                </a>
+              </OrderCard>
+              <Box sx={{ display: "flex", justifyContent: "left" }}>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Typography>تحديث</Typography>
+                  <RefreshIcon
+                    sx={{
+                      cursor: "pointer",
+                      marginX: "10px",
+                      fontSize: "2rem",
+                    }}
+                  />
+                </Box>
+
+                <Star />
               </Box>
             </CustomAccordionDetails>
           </CustomAccordion>

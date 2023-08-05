@@ -105,7 +105,7 @@ const NewRequests = () => {
     <Paper
       sx={{
         position: "relative",
-        height: {xs:"calc(-219px + 100vh)" , md:"calc(-40px + 100vh)"},
+        height: {xs:"calc(-40px + 100vh)" , md:"calc(-40px + 100vh)"},
         margin: "auto",
         marginTop:{xs:"-3rem" , sm:"auto"},
         maxWidth: "500px",

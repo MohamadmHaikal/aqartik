@@ -10,6 +10,7 @@ import { FavoriteIcons } from "../components";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
+import ImagesTest from "../components/Detailsfolder/detailspagexs/ImagesTest";
 
 import {
   DetailsCard,
@@ -303,6 +304,7 @@ const Details = () => {
               </Button>
             </Box>
           </Box>
+          {/* <ImagesTest /> */}
           <DetailsImages />
           <Grid container spacing={2}>
             <Grid item xs={12} md={8}>

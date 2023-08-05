@@ -8,6 +8,8 @@ import {
   OutgoingOrder,
   IcomingOrders,
   SpecialAds,
+  Usersmangament,
+  SubscribeDetails,
 } from "../components/user_dashbord";
 import { UserDashboradSpeacialAds } from "../components";
 const UserDashbored = () => {
@@ -54,6 +56,12 @@ const UserDashbored = () => {
       break;
     case 3:
       content = <UserDashboradSpeacialAds />;
+      break;
+    case 4:
+      content = <Usersmangament />;
+      break;
+    case 5:
+      content = <SubscribeDetails />;
       break;
     default:
       content = null;

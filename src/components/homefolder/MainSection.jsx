@@ -48,13 +48,13 @@ const MainSection = () => {
     setShowBox(true);
   };
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShowBox(false);
-    }, 5000);
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     setShowBox(false);
+  //   }, 5000);
 
-    return () => clearTimeout(timeout);
-  }, [activeSlideIndex]);
+  //   return () => clearTimeout(timeout);
+  // }, [activeSlideIndex]);
   const getBoxTransform = (index) => {
     if (isXsScreen) {
       // For xs screens, show the box on the current slide without any translation

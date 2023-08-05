@@ -13,7 +13,6 @@ import {
   useMediaQuery,
   useTheme,
   styled,
-
 } from "@mui/material";
 import styles from "./custom_sidebar.module.css";
 
@@ -118,7 +117,7 @@ const SideBar = ({
               />
             </Link>
           </ListItem>
-          <ListItem sx={{ height: "65px", marginBottom: "2rem" }}>
+          <ListItem sx={{ height: "65px", marginY: "1rem" }}>
             <Link href="/addads" sx={{ height: "100%", width: "100%" }}>
               <Button
                 sx={{
@@ -134,95 +133,100 @@ const SideBar = ({
               </Button>
             </Link>
           </ListItem>
-          {["ملف شخصي", "إعلاناتي", "طلبات", "إعلانات مفضلة"].map(
-            (text, index) => (
-              <React.Fragment key={text}>
-                <ListItem
-                  onClick={() => handleItemClick(index)}
-                  sx={{
-                    height: 65,
-                    padding: "8px 36px",
-                    color: "var(--green-color)",
-                    cursor: "pointer",
-                    textAlign: "right",
-                    fontWeight: "700",
-                    backgroundColor:
-                      selectedItem === index ? "#cffecf" : "inherit",
-                    "&.no-hover:hover": {
-                      backgroundColor: "inherit",
-                    },
-                    "&:hover": {
-                      backgroundColor: "rgba(0, 0, 0, 0.04)",
-                    },
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    position: "relative",
-                  }}
-                >
-                  {selectedItem === index && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        insetInlineStart: 0,
-                        width: "4px",
-                        height: "100%",
-                        borderRadius: "12px",
-                        backgroundColor: "var(--green-color)",
-                        zIndex: 2,
-                      }}
-                    />
-                  )}
-                  <ListItemText
-                    primary={
-                      <Typography variant="body1" fontWeight={700}>
-                        {text}
-                      </Typography>
-                    }
+          {[
+            "ملف شخصي",
+            "إعلاناتي",
+            "طلبات",
+            "إعلانات مفضلة",
+            "إدارة المستخدمين",
+            "تفاصيل الاشتراك",
+          ].map((text, index) => (
+            <React.Fragment key={text}>
+              <ListItem
+                onClick={() => handleItemClick(index)}
+                sx={{
+                  height: 65,
+                  padding: "8px 36px",
+                  color: "var(--green-color)",
+                  cursor: "pointer",
+                  textAlign: "right",
+                  fontWeight: "700",
+                  backgroundColor:
+                    selectedItem === index ? "#cffecf" : "inherit",
+                  "&.no-hover:hover": {
+                    backgroundColor: "inherit",
+                  },
+                  "&:hover": {
+                    backgroundColor: "rgba(0, 0, 0, 0.04)",
+                  },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  position: "relative",
+                }}
+              >
+                {selectedItem === index && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      insetInlineStart: 0,
+                      width: "4px",
+                      height: "100%",
+                      borderRadius: "12px",
+                      backgroundColor: "var(--green-color)",
+                      zIndex: 2,
+                    }}
                   />
-                  {index === 2 &&
-                    (isSublistOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />)}
-                </ListItem>
-
-                {index === 2 && (
-                  <>
-                    {isSublistOpen && (
-                      <Collapse in={isSublistOpen} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding>
-                          {["طلبات جديدة", "طلبات صادرة", "طلبات واردة"].map(
-                            (subtext, subindex) => (
-                              <ListItem
-                                key={subindex}
-                                onClick={() => handleSubitemClick(subindex)}
-                                sx={{
-                                  height: 65,
-                                  padding: "8px 36px",
-                                  color: "var(--green-color)",
-                                  cursor: "pointer",
-                                  textAlign: "right",
-                                  backgroundColor:
-                                    selectedSubitemIndex === subindex
-                                      ? "#cffecf"
-                                      : "inherit",
-                                  "&:hover": {
-                                    backgroundColor: "rgba(0, 0, 0, 0.04)",
-                                  },
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <ListItemText primary={subtext} />
-                              </ListItem>
-                            )
-                          )}
-                        </List>
-                      </Collapse>
-                    )}
-                  </>
                 )}
-              </React.Fragment>
-            )
-          )}
+                <ListItemText
+                  primary={
+                    <Typography variant="body1" fontWeight={700}>
+                      {text}
+                    </Typography>
+                  }
+                />
+                {index === 2 &&
+                  (isSublistOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />)}
+              </ListItem>
+
+              {index === 2 && (
+                <>
+                  {isSublistOpen && (
+                    <Collapse in={isSublistOpen} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
+                        {["طلبات جديدة", "طلبات صادرة", "طلبات واردة"].map(
+                          (subtext, subindex) => (
+                            <ListItem
+                              key={subindex}
+                              onClick={() => handleSubitemClick(subindex)}
+                              sx={{
+                                height: 65,
+                                padding: "8px 36px",
+                                color: "var(--green-color)",
+                                cursor: "pointer",
+                                textAlign: "right",
+                                backgroundColor:
+                                  selectedSubitemIndex === subindex
+                                    ? "#cffecf"
+                                    : "inherit",
+                                "&:hover": {
+                                  backgroundColor: "rgba(0, 0, 0, 0.04)",
+                                },
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                            >
+                              <ListItemText primary={subtext} />
+                            </ListItem>
+                          )
+                        )}
+                      </List>
+                    </Collapse>
+                  )}
+                </>
+              )}
+            </React.Fragment>
+          ))}
         </List>
       </StyledDrawer>
     </>

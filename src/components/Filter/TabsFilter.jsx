@@ -17,6 +17,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import NorthIcon from "@mui/icons-material/North";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
+import "./tabs.module.css";
 
 const tabDataXs = [
   { label: "افتراضي", content: "Content 1" },
@@ -117,21 +118,37 @@ const TabsFilter = () => {
               width: "100%",
               justifyContent: "center",
               // maxWidth: "47rem",
-             
             }}
           >
             <Tabs
               value={value}
               onChange={handleChange}
+              className="custom-tabs"
               sx={{
-              
-                width:"100%",
-                display:"flex",
-                justifyContent:"space-around !important",
-                "& .css-heg063-MuiTabs-flexContainer": {
-                 justifyContent:"space-around !important"
+                width: "100%",
+                display: "flex",
+                // backgroundColor: "red",
+                justifyContent: "space-around ",
+                "& .MuiTabs-flexContainer": {
+                  width: "100%",
+                  justifyContent: "space-around !important",
+                  // backgroundColor:"red"
                 },
-            
+                "& .custom-tabs .css-heg063-MuiTabs-flexContainer ": {
+                  width: "100%",
+                  justifyContent: "space-around !important",
+                },
+                "& .css-heg063-MuiTabs-flexContainer": {
+                  width: "100%",
+                  justifyContent: "space-around ",
+
+                  // backgroundColor: "blue",
+                },
+                "& .css-k008qs": {
+                  display: "flex",
+                  justifyContent: "space-around",
+                  width: "100%",
+                },
                 "& .MuiTabs-indicator": {
                   display: "none",
                 },
@@ -148,8 +165,7 @@ const TabsFilter = () => {
                     // Customize the tab button styles
                     color: "black",
                     fontSize: { md: "0.88rem", lg: "1rem" },
-                    justifyContent:"space-between",
-                
+                    justifyContent: "space-between",
 
                     "&.Mui-selected": {
                       backgroundColor: "var( --green-color)",

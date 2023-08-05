@@ -25,27 +25,27 @@ export default function DetailsImages() {
   const images = [
     {
       src: "/pool.jpg",
-      alt: "boat image",
     },
     {
       src: "/baranda.jpg",
-      alt: "baranda",
     },
     {
       src: "/bedroom.jpg",
-      alt: "bed room",
     },
     {
       src: "/childrenjpg.jpg",
-      alt: "children",
     },
     {
       src: "/living.jpg",
-      alt: "living",
     },
     {
       src: "/abha.jpg",
-      alt: "abha",
+    },
+    {
+      src: "/parking.jpg",
+    },
+    {
+      src: "/house.jpg",
     },
   ];
 
@@ -66,8 +66,26 @@ export default function DetailsImages() {
   const handleShowMore = () => {
     setShowMore((prevShowMore) => !prevShowMore);
   };
+  const openLightGallery = (index) => {
+    const lg = document.getElementById("lightgallery");
+    if (lg) {
+      // Add your lightgallery configurations here, if needed
+      lg.style.display = "block"; // Show the lightgallery container
+      lg.innerHTML = ""; // Clear previous content if any
+      const items = images.map((image) => ({
+        src: image.src,
+        thumb: image.src,
+      }));
+      lightGallery(lg, {
+        dynamic: true,
+        dynamicEl: items,
+        index,
+      });
+    }
+  };
+
   return (
-    <div style={{ marginBottom: "2rem" }}>
+    <div style={{ marginBottom: "2rem", position: "relative" }}>
       <Box
         ref={galleryRef}
         sx={{
@@ -109,66 +127,65 @@ export default function DetailsImages() {
           >
             <img
               src={image.src}
-              alt={image.alt}
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           </a>
         ))}
-        {!showVideo && (
-          <button
-            style={{
-              marginTop: "10px",
-              position: "absolute",
-              bottom: "16px",
-              right: "175px",
-              zIndex: "9",
-              backgroundColor: "rgba(0, 0, 0, 0.45)",
-              backdropFilter: "blur(15px)",
-              color: "rgb(255, 255, 255)",
-              borderRadius: "12px",
-              height: "48px",
-              fontSize: "15px",
-              boxShadow:
-                "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
-              border: "none",
-              padding: "0rem 1rem ",
-              alignItems: "center",
-              display: "flex",
-              pointerEvents: "none",
-            }}
-          >
-            عرض الفيديو
-          </button>
-        )}
-        {!showMore && images.length > 4 && (
-          <button
-            onClick={handleShowMore}
-            style={{
-              marginTop: "10px",
-              position: "absolute",
-              bottom: "16px",
-              right: "16px",
-              zIndex: "9",
-              backgroundColor: "rgba(0, 0, 0, 0.45)",
-              backdropFilter: "blur(15px)",
-              color: "rgb(255, 255, 255)",
-              borderRadius: "12px",
-              height: "48px",
-              fontSize: "15px",
-              boxShadow:
-                "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
-              border: "none",
-              padding: "0rem 1rem ",
-              alignItems: "center",
-              display: "flex",
-              pointerEvents: "none",
-            }}
-          >
-            <PhotoLibraryOutlinedIcon sx={{ marginX: "0.2rem" }} />
-            عرض كل الصور
-          </button>
-        )}
       </Box>
+      {!showVideo && (
+        <Button
+          style={{
+            marginTop: "10px",
+            position: "absolute",
+            bottom: "16px",
+            right: "175px",
+            zIndex: "9",
+            backgroundColor: "rgba(0, 0, 0, 0.45)",
+            backdropFilter: "blur(15px)",
+            color: "rgb(255, 255, 255)",
+            borderRadius: "12px",
+            height: "48px",
+            fontSize: "15px",
+            boxShadow:
+              "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
+            border: "none",
+            padding: "0rem 1rem ",
+            alignItems: "center",
+            display: "flex",
+            pointerEvents: "none",
+          }}
+        >
+          عرض الفيديو
+        </Button>
+      )}
+      {!showMore && images.length > 4 && (
+        <Button
+          onClick={handleShowMore}
+          style={{
+            marginTop: "10px",
+            position: "absolute",
+            bottom: "16px",
+            right: "16px",
+            zIndex: "9",
+            backgroundColor: "rgba(0, 0, 0, 0.45)",
+            backdropFilter: "blur(15px)",
+            color: "rgb(255, 255, 255)",
+            borderRadius: "12px",
+            height: "48px",
+            fontSize: "15px",
+            boxShadow:
+              "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
+            border: "none",
+            padding: "0rem 1rem ",
+            alignItems: "center",
+            display: "flex",
+            pointerEvents: "none",
+          }}
+        >
+          <PhotoLibraryOutlinedIcon sx={{ marginX: "0.2rem" }} />
+          عرض كل الصور
+        </Button>
+      )}
     </div>
   );
 }

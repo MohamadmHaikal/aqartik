@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 
 const UserDashboradSpeacialAds = () => {
   return (
-    <Box sx={{ maxWidth: "90%" }}>
+    <Box sx={{ maxWidth: "90%" , margin:"auto" }}>
       <SpecialAds
         title="شقة شقة شقة شقة"
         location="الرياض"

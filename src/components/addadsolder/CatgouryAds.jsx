@@ -68,7 +68,14 @@ const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
 
   return (
     <Box>
-      <Typography variant="h4" sx={{ fontWeight: "600", marginBottom: "2rem" , fontSize:{xs:"1.5rem" , md:"2.25rem"} }}>
+      <Typography
+        variant="h4"
+        sx={{
+          fontWeight: "600",
+          marginBottom: "2rem",
+          fontSize: { xs: "1.5rem", md: "2.25rem" },
+        }}
+      >
         معلومات العقار
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -98,7 +105,7 @@ const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: {xs:"space-evenly" , md:"space-between"},
+          justifyContent: { xs: "space-evenly", md: "space-between" },
           flexWrap: "wrap",
           height: { xs: "26rem", sm: "20rem" },
           overflowY: "scroll",
@@ -112,7 +119,7 @@ const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
               display: "flex",
               alignItems: "center",
               marginBottom: "0.5rem",
-              padding: "0.5rem",
+           
               borderRadius: "5px",
               minWidth: "6rem",
               height: "2rem",
@@ -128,7 +135,7 @@ const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
               border:
                 formData.category && formData.category.id === category.id
                   ? ""
-                  : "1px solid black",
+                  : "1px solid gray",
             }}
             onClick={() => handleCategoryChange(category.name)}
           >

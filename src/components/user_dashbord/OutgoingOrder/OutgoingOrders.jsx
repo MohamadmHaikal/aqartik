@@ -18,6 +18,7 @@ import {
   EditLocation,
   ShowHomeSatusModal,
   EditMap,
+  EditDescription,
 } from "./index";
 
 import { Map } from "../../../assets";
@@ -53,6 +54,7 @@ const CustomAccordionDetails = styled(AccordionDetails)({
 const OutGoingOrders = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [edditInfo, setEditInfo] = useState(false);
+  const [descriptionEdit, setDescriptionEdit] = useState(false);
   const [edditLoc, setEditLoc] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [MapEdit, setMapEdit] = useState(false);
@@ -212,37 +214,23 @@ const OutGoingOrders = () => {
                             <Typography>التصنيف</Typography>
                             <Typography>شقة</Typography>
                           </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <Typography>رابط العقار</Typography>
-                            <Typography
-                              sx={{
-                                color: "var(--green-color)",
-                                fontWeight: "600",
-                                marginBottom: "1rem",
-                              }}
-                            >
-                              نسخ
-                            </Typography>
-                          </Box>
                         </Box>
                       </Fade>
                     )}
-                  </OrderCard>
-                  <OrderCard>
                     <Box
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",
-                        marginBottom: "1rem",
+                        alignItems: "center",
+                        marginY: "1rem",
                       }}
                     >
                       <Typography
-                        sx={{ fontWeight: "600", fontSize: "1.2rem" }}
+                        sx={{
+                          fontWeight: "600",
+                          fontSize: "1.2rem",
+                          marginTop: "1rem",
+                        }}
                       >
                         عنوان العقار
                       </Typography>
@@ -298,6 +286,52 @@ const OutGoingOrders = () => {
                             <Typography>الاتجاه </Typography>
                             <Typography>شمال</Typography>
                           </Box>
+                        </Box>
+                      </Fade>
+                    )}
+                  </OrderCard>
+                  <OrderCard>
+                    {descriptionEdit && (
+                      <Fade in={descriptionEdit}>
+                        <Box>
+                          <EditDescription
+                            onCancel={() => {
+                              setDescriptionEdit(false);
+                            }}
+                          />
+                        </Box>
+                      </Fade>
+                    )}
+                    {!descriptionEdit && (
+                      <Fade in={!descriptionEdit}>
+                        <Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            marginBottom: "1rem",
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontWeight: "600", fontSize: "1.2rem" }}
+                          >
+                            وصف العقار
+                          </Typography>
+
+                          <Typography
+                            sx={{
+                              color: "var(--green-color)",
+                              fontWeight: "600",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              setDescriptionEdit(true);
+                            }}
+                          >
+                            {!descriptionEdit && " تعديل"}
+                          </Typography>
+                        </Box>
+                        <Typography>jsdfnjsd lskdnfsd klsdnf,m sflksslkd</Typography>
                         </Box>
                       </Fade>
                     )}
