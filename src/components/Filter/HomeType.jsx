@@ -13,13 +13,13 @@ import { useTranslation } from "react-i18next";
 //   },
 // }));
 
-const SelectCity = ({ isOpen, onClose, onCitySelect, selectedCity }) => {
-  const cities = ["الرياض", "جدة", "مكة", "المدينة المنورة", "رياض", "أبها"];
+const HomeType = ({ isOpen, onClose, onHomeSelect, selectedHome }) => {
+  const homes = ["استراحة", "عطلة", "فيلا", "مزرعة "];
   const [searchText, setSearchText] = useState("");
   const { i18n } = useTranslation();
   const lang = i18n.language;
-  const handleCitySelection = (city) => {
-    onCitySelect(city);
+  const handleHomeSelection = (home) => {
+    onHomeSelect(home);
     onClose(); // Close the SelectCity component when a city is selected
   };
 
@@ -27,8 +27,8 @@ const SelectCity = ({ isOpen, onClose, onCitySelect, selectedCity }) => {
     setSearchText(event.target.value);
   };
 
-  const filteredCities = cities.filter((city) =>
-    city.includes(searchText.trim())
+  const filteredCities = homes.filter((home) =>
+    home.includes(searchText.trim())
   );
 
   return (
@@ -37,6 +37,7 @@ const SelectCity = ({ isOpen, onClose, onCitySelect, selectedCity }) => {
         backgroundColor: "#fff",
         width: "290px",
         position: "absolute",
+        top: "11rem",
         right: { xs: "auto", md: "-3rem" },
         minHeight: "16px",
         height: "23rem",
@@ -110,9 +111,9 @@ const SelectCity = ({ isOpen, onClose, onCitySelect, selectedCity }) => {
           fullWidth
         />
       </Box>
-      {filteredCities.map((city) => (
+      {filteredCities.map((home) => (
         <Typography
-          key={city}
+          key={home}
           sx={{
             position: "relative",
             padding: "15px 28px",
@@ -121,12 +122,12 @@ const SelectCity = ({ isOpen, onClose, onCitySelect, selectedCity }) => {
             "&:hover": {
               backgroundColor: "rgb(243, 244, 251)",
             },
-            backgroundColor: selectedCity === city ? "rgb(243, 244, 251)" : "",
+            backgroundColor: selectedHome === home ? "rgb(243, 244, 251)" : "",
           }}
-          onClick={() => handleCitySelection(city)}
+          onClick={() => handleHomeSelection(home)}
         >
-          {city}
-          {selectedCity === city && (
+          {home}
+          {selectedHome === home && (
             <CheckIcon
               sx={{
                 position: "absolute",
@@ -144,4 +145,4 @@ const SelectCity = ({ isOpen, onClose, onCitySelect, selectedCity }) => {
   );
 };
 
-export default SelectCity;
+export default HomeType;

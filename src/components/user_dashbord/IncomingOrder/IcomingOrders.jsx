@@ -7,7 +7,6 @@ import {
   Typography,
   IconButton,
   styled,
-  Link,
 } from "@mui/material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -18,7 +17,7 @@ import { Map, Logo } from "../../../assets";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Star from "../Star";
-
+import { Link } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
 
@@ -167,7 +166,6 @@ const IcomingOrders = ({ title }) => {
                       </Typography>
                       <Typography>شقة</Typography>
                     </Box>
-                   
                   </OrderCard>
                   <OrderCard
                     title={t("user_dashboard.incoming_orders.card2.title")}
@@ -243,11 +241,9 @@ const IcomingOrders = ({ title }) => {
                     </Box>
                   </OrderCard>
 
-               
                   <OrderCard
                     title={t("user_dashboard.incoming_orders.card4.title")}
                   >
-
                     <Box
                       sx={{
                         display: "flex",
@@ -288,8 +284,8 @@ const IcomingOrders = ({ title }) => {
                 </Box>
               </Box>
               <OrderCard title="وحدات هذا العقار ">
-                <a
-                  href="#"
+                <Link
+                  to="/EditAds"
                   style={{
                     textDecoration: "none",
                     color: "black",
@@ -309,7 +305,7 @@ const IcomingOrders = ({ title }) => {
                   >
                     <Box
                       sx={{
-                        display: "flex",
+                        display: { xs: "block", md: "flex" },
                         alignItems: "center",
                         justifyContent: "space-between",
                       }}
@@ -336,7 +332,7 @@ const IcomingOrders = ({ title }) => {
                     </Box>
                     <ChevronLeftIcon sx={{ color: "gray" }} />
                   </Box>
-                </a>
+                </Link>
               </OrderCard>
               <Box sx={{ display: "flex", justifyContent: "left" }}>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
