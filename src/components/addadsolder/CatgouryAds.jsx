@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
+  const { t } = useTranslation();
+
   const categories = [
     { id: 1, name: "استراحة" },
     { id: 2, name: "شقة" },
@@ -68,15 +71,22 @@ const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
 
   return (
     <Box>
-      <Typography variant="h4" sx={{ fontWeight: "600", marginBottom: "2rem" , fontSize:{xs:"1.5rem" , md:"2.25rem"} }}>
-        معلومات العقار
+      <Typography
+        variant="h4"
+        sx={{
+          fontWeight: "600",
+          marginBottom: "2rem",
+          fontSize: { xs: "1.5rem", md: "2.25rem" },
+        }}
+      >
+        {t("user_dashboard.new_order.order_info.main_title")}
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <label
           htmlFor="my-text-field"
           style={{ fontWeight: "600", marginBottom: "1rem" }}
         >
-          اسم عقارك
+          {t("user_dashboard.new_order.order_info.label1")}
         </label>
         <TextField
           id="my-text-field"
@@ -85,20 +95,20 @@ const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
           onChange={handleNameChange}
           error={error}
           helperText={error ? "الرجاء ادخال اسم عقار صحيح" : ""}
-          placeholder="ادخل اسم عقارك الذي سيظهر للضيوف"
+          placeholder={t("user_dashboard.new_order.order_info.placeholder1")}
           sx={{ borderRadius: "12px" }}
         />
       </Box>
       <Typography sx={{ fontWeight: "600", marginTop: "2rem" }}>
-        تصنيف عقارك
+        {t("user_dashboard.new_order.order_info.title")}
       </Typography>
       <Typography sx={{ color: "gray", marginTop: "0.5rem" }}>
-        حدد التصنيف المناسب
+        {t("user_dashboard.new_order.order_info.desc")}
       </Typography>
       <Box
         sx={{
           display: "flex",
-          justifyContent: {xs:"space-evenly" , md:"space-between"},
+          justifyContent: { xs: "space-evenly", md: "space-between" },
           flexWrap: "wrap",
           height: { xs: "26rem", sm: "20rem" },
           overflowY: "scroll",
@@ -112,7 +122,7 @@ const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
               display: "flex",
               alignItems: "center",
               marginBottom: "0.5rem",
-              padding: "0.5rem",
+
               borderRadius: "5px",
               minWidth: "6rem",
               height: "2rem",
@@ -128,7 +138,7 @@ const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
               border:
                 formData.category && formData.category.id === category.id
                   ? ""
-                  : "1px solid black",
+                  : "1px solid gray",
             }}
             onClick={() => handleCategoryChange(category.name)}
           >

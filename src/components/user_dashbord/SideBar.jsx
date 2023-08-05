@@ -121,7 +121,7 @@ const SideBar = ({
               />
             </Link>
           </ListItem>
-          <ListItem sx={{ height: "65px", marginBottom: "2rem" }}>
+          <ListItem sx={{ height: "65px", marginY: "1rem" }}>
             <Link href="/addads" sx={{ height: "100%", width: "100%" }}>
               <Button
                 sx={{
@@ -144,6 +144,8 @@ const SideBar = ({
             t("user_dashboard.sidebar.ul_button2"),
             t("user_dashboard.sidebar.ul_button3"),
             t("user_dashboard.sidebar.ul_button4"),
+            t("user_dashboard.sidebar.ul_button5"),
+            t("user_dashboard.sidebar.ul_button6"),
           ].map((text, index) => (
             <React.Fragment key={text}>
               <ListItem
@@ -153,7 +155,9 @@ const SideBar = ({
                   padding: "8px 36px",
                   color: "var(--green-color)",
                   cursor: "pointer",
+
                   textAlign: lang === "ar" ? "right" : "left",
+
                   fontWeight: "700",
                   backgroundColor:
                     selectedItem === index ? "#cffecf" : "inherit",

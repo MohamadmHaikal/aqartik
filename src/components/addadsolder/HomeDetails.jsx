@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Button, TextField } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const HomeDetails = ({ formData, setFormData }) => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const [activeIndex, setActiveIndex] = useState(null);
   const [selectedPropertyIds, setSelectedPropertyIds] = useState(
     formData.selectedPropertyIds || []
@@ -23,7 +27,12 @@ const HomeDetails = ({ formData, setFormData }) => {
   useEffect(() => {
     setInputValues(userInputValues);
   }, [userInputValues]);
-  const labels = ["عدد الصالات", "عدد الغرف", "عدد الحمامات", "عدد المطابخ"];
+  const labels = [
+    t("user_dashboard.property_features.label1"),
+    t("user_dashboard.property_features.label2"),
+    t("user_dashboard.property_features.label3"),
+    t("user_dashboard.property_features.label4"),
+  ];
   const showFirstBox = true;
   const proprties = [
     { id: 1, name: "اصنصير مصعد" },
@@ -91,7 +100,7 @@ const HomeDetails = ({ formData, setFormData }) => {
               fontSize: { xs: "1.5rem", md: "2.25rem" },
             }}
           >
-            تفاصيل العقار
+            {t("user_dashboard.property_features.title")}
           </Typography>
 
           <Typography
@@ -101,7 +110,7 @@ const HomeDetails = ({ formData, setFormData }) => {
               marginBottom: "1rem",
             }}
           >
-            اختر كل المرافق الموجودة في عقارك
+            {t("user_dashboard.property_features.title2")}
           </Typography>
 
           {inputValues.map((value, index) => (
@@ -120,8 +129,8 @@ const HomeDetails = ({ formData, setFormData }) => {
                 sx={{
                   fontSize: "18px",
                   display: "block",
-                  marginLeft: "auto",
-
+                  marginLeft: lang === "ar" ? "auto" : "",
+                  marginRight: lang === "en" ? "auto" : "",
                   color:
                     activeIndex === index ? "var(--green-color)" : undefined,
                 }}

@@ -6,6 +6,7 @@ import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
 import CropIcon from "@mui/icons-material/Crop";
 import styles from "./cropperImage.module.css";
 import "cropperjs/dist/cropper.css";
+import { useTranslation } from "react-i18next";
 
 const CropeerImage = ({
   onCrop,
@@ -16,6 +17,8 @@ const CropeerImage = ({
   formData,
   setFormData,
 }) => {
+  const { t } = useTranslation();
+
   // Added hasBackground prop with default value
   const cropperRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(
@@ -136,7 +139,9 @@ const CropeerImage = ({
                   marginRight: "0.5rem",
                 }}
               />
-              <Typography>تعديل صورة العرض الرئيسية</Typography>
+              <Typography>
+                {t("user_dashboard.property_images.edit_btn")}
+              </Typography>
             </Box>
           </>
         ) : (
@@ -164,7 +169,7 @@ const CropeerImage = ({
                 color: "rgb(118, 118, 118)",
               }}
             >
-              أضف الصور
+              {t("user_dashboard.property_images.btn3")}
             </Typography>
           </Box>
         )}
@@ -218,7 +223,7 @@ const CropeerImage = ({
                 onClick={handleCrop}
               >
                 <CropIcon sx={{ marginX: "0.3rem" }} />
-                قص وحفظ المحدد
+                {t("user_dashboard.property_images.cut_btn")}
               </Button>
             </>
           )}

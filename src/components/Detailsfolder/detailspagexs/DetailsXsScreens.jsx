@@ -19,8 +19,12 @@ import FavoriteButton from "./FavoriteButton";
 import { Share } from "../../../assets";
 import DetailsImagesXs from "./DetailsImagesXs";
 import DetailsXsTabs from "./DetailsXsTabs";
+import { useTranslation } from "react-i18next";
 
 const DetailsXsScreens = () => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const [ShareListOpen, setShareListOpen] = useState(false);
   const handleCopyLink = () => {
     const linkToCopy = "your_link_url";
@@ -70,16 +74,19 @@ const DetailsXsScreens = () => {
             <Box
               sx={{
                 display: "flex",
-
                 alignItems: "center",
-
                 justifyContent: "space-between",
                 flexDirection: "row",
               }}
             >
               <IconButton>
                 <Link href="/ads">
-                  <ChevronRightIcon sx={{ fontSize: "2rem", color: "white" }} />
+                  <ChevronRightIcon
+                    sx={{
+                      fontSize: "2rem",
+                      color: "white",
+                    }}
+                  />
                 </Link>
               </IconButton>
               <Box
@@ -101,7 +108,8 @@ const DetailsXsScreens = () => {
                         zIndex: "1",
                         position: "absolute",
                         top: "0",
-                        left: "10px",
+                        left: lang === "ar" && "10px",
+                        right: lang === "en" && "10px",
                         backgroundColor: "white",
                         width: "14rem",
                         boxShadow:
@@ -127,7 +135,9 @@ const DetailsXsScreens = () => {
                           rel="noopener noreferrer"
                         >
                           <FacebookIcon sx={{ color: "gray" }} />
-                          <ListItemText primary="مشاركة على الفيسبوك" />
+                          <ListItemText
+                            primary={t("details_page.facebook_share")}
+                          />
                         </a>
                       </ListItem>
 
@@ -150,7 +160,9 @@ const DetailsXsScreens = () => {
                           rel="noopener noreferrer"
                         >
                           <TwitterIcon sx={{ color: "gray" }} />
-                          <ListItemText primary="مشاركة على تويتر" />
+                          <ListItemText
+                            primary={t("details_page.twitter_share")}
+                          />
                         </a>
                       </ListItem>
 
@@ -163,7 +175,7 @@ const DetailsXsScreens = () => {
                         onClick={handleCopyLink}
                       >
                         <LinkIcon sx={{ color: "gray" }} />
-                        <ListItemText primary="نسخ الرابط" />
+                        <ListItemText primary={t("details_page.copy_url")} />
                       </ListItem>
                     </List>
                   )}
@@ -209,7 +221,7 @@ const DetailsXsScreens = () => {
             fontSize: "18px",
           }}
         >
-          مكالمة
+          {t("details_page.details_card.phone_button")}
         </Link>
 
         <Box sx={{ display: "flex" }}>
@@ -223,7 +235,7 @@ const DetailsXsScreens = () => {
             2500
           </Typography>
           <Typography sx={{ color: "orange", fontSize: "35px" }}>
-            ر.س
+            {t("currency")}
           </Typography>
         </Box>
       </Box>

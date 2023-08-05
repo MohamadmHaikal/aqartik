@@ -18,6 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { Map } from "../../../assets";
 import FiveStars from "../FiveStars";
+import { useTranslation } from "react-i18next";
 
 // Define your custom theme
 const theme = createTheme({
@@ -54,10 +55,12 @@ const theme = createTheme({
 });
 
 const DetailsXsTabs = () => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const [activeTab, setActiveTab] = useState(0);
   const [showMore, setShowMore] = useState(false);
   // const [openModal, setModalOpen] = useState(false);
-
 
   // const handleModalOpen = () => {
   //   setModalOpen(true);
@@ -102,9 +105,11 @@ const DetailsXsTabs = () => {
               },
             }}
           >
-            <Tab label="المواصفات " />
-            <Tab label="الموقع الخريطة" />
-            <Tab label="تقييمات " />
+            <Tab
+              label={t("details_page.details_tabs.specifications_and_features")}
+            />
+            <Tab label={t("details_page.details_tabs.location_and_map")} />
+            <Tab label={t("details_page.details_tabs.guest_reviews")} />
           </Tabs>
           <Box>
             {activeTab === 0 && (
@@ -224,7 +229,7 @@ const DetailsXsTabs = () => {
                     marginTop: "25px",
                   }}
                 >
-                  الوصف
+                  {t("details_page.details_title")}
                 </Typography>
                 <Typography
                   sx={{
@@ -239,7 +244,9 @@ const DetailsXsTabs = () => {
                   تقع في شمال الرياض بالقرب من طريق أنس بن مالك ،
                   {showMore ? "قريبه من جميع الخدمات" : " ..."}
                   <Button onClick={toggleShowMore} sx={{ color: "black" }}>
-                    {showMore ? "أقل" : "المزيد"}
+                    {showMore
+                      ? t("details_page.xs_less")
+                      : t("details_page.xs_more")}
                   </Button>
                 </Typography>
                 <Box
@@ -267,7 +274,7 @@ const DetailsXsTabs = () => {
                     marginBottom: "15px",
                   }}
                 >
-                  الميزات
+                  {t("details_page.details_tabs.specifications_and_features")}
                 </Typography>
                 <DetailsFeaturesBox />
               </Box>
@@ -284,19 +291,19 @@ const DetailsXsTabs = () => {
                   اضغط هنا لمعرفة الموقع التقريبي
                 </Button> */}
                 <Button sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "16px" }}>
-                  تظهر معلومات الموقع الدقيقة بعد تأكيد الحجز.
+                  {t("details_page.details_tabs.location_and_map_tab.desc")}
                 </Button>
                 <Box sx={{ marginTop: "1rem" }}>
-                <Link href="https://www.google.com/maps/dir/My+Location/24.8099167,46.6088413/@24.8100367,46.5387048,12z/data=!3m1!4b1?entry=ttu">
-                  <img
-                    src={Map}
-                    alt="map"
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                      borderRadius: "20px",
-                    }}
-                  />
+                  <Link href="https://www.google.com/maps/dir/My+Location/24.8099167,46.6088413/@24.8100367,46.5387048,12z/data=!3m1!4b1?entry=ttu">
+                    <img
+                      src={Map}
+                      alt="map"
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                        borderRadius: "20px",
+                      }}
+                    />
                   </Link>
                 </Box>
               </Box>
@@ -312,7 +319,10 @@ const DetailsXsTabs = () => {
                 }}
               >
                 <Typography sx={{ fontWeight: "bold", color: "gray" }}>
-                  ماهو تقييمك..
+                  {t(
+                    "details_page.details_tabs.guest_reviews_tab.review_title"
+                  )}
+                  ..
                 </Typography>
                 <FiveStars />
               </Box>

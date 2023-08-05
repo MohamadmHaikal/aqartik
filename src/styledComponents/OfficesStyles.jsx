@@ -21,11 +21,11 @@ export const OfficesContainer = styled.div`
       button {
         border: none;
         outline: none;
-        background-color: #049ca2;
+        background-color: #14b183;
         cursor: pointer;
         color: white;
-        padding: 4px 4px;
-        border-radius: 18px;
+        padding: 8px 4px;
+        border-radius: 12px;
         font-size: 16px;
         min-width: 45px;
       }
@@ -58,7 +58,7 @@ export const OfficesContainer = styled.div`
         width: 100%;
 
         & > span:first-child {
-          color: #049ca2;
+          color: #14b183;
         }
 
         & > span:last-child {
@@ -88,7 +88,7 @@ export const OfficesContainer = styled.div`
       }
 
       button {
-        background-color: #049ca2;
+        background-color: #14b183;
         border: none;
         outline: none;
         display: flex;
@@ -117,7 +117,7 @@ export const OfficesContainer = styled.div`
           }
         }
         & span:last-child {
-          color: #049ca2;
+          color: #14b183;
           font-weight: 600;
         }
       }

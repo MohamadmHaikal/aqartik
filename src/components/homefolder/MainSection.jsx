@@ -49,14 +49,15 @@ const MainSection = () => {
     setShowBox(true);
   };
 
-  // Unnecessary //
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShowBox(true);
-    }, 10000);
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     setShowBox(false);
+  //   }, 5000);
 
-    return () => clearTimeout(timeout);
-  }, [activeSlideIndex]);
+  //   return () => clearTimeout(timeout);
+  // }, [activeSlideIndex]);
+
+  // Unnecessary //
 
   const getBoxTransform = (index) => {
     if (isXsScreen) {

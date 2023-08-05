@@ -22,7 +22,11 @@
     .aboutus {
         margin-top: "2rem",
     }
+
+
 }
+
+
 
 .footer_xs_list {
     width: auto;
@@ -38,4 +42,9 @@
     padding-bottom: 6px;
     color: "black !important";
     padding-left: 16px;
+}
+@media (max-width: 700px) {
+    .footer_xs_list {
+        font-size: 14px;
+    }
 }

@@ -8,6 +8,8 @@ import Login from "./pages/loginFolder/Login";
 import Details from "./pages/details";
 import About from "./pages/about";
 import Mappage from "./pages/mappage";
+import Cards from "./pages/Cards";
+
 import { useMediaQuery } from "@mui/material";
 
 import { Layout } from "./components/layouts/Layout";
@@ -132,6 +134,17 @@ function App() {
               contentStyles={{ marginTop: "9rem !important" }}
             >
               <Mappage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/Cards"
+          element={
+            <Layout
+              showNavFooter={true}
+              contentStyles={{ marginTop: "12rem !important" }}
+            >
+              <Cards />
             </Layout>
           }
         />

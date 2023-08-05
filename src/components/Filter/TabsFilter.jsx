@@ -17,6 +17,9 @@ import CheckIcon from "@mui/icons-material/Check";
 import NorthIcon from "@mui/icons-material/North";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
+
+import "./tabs.module.css";
+
 import { useTranslation } from "react-i18next";
 
 const icons = [
@@ -116,9 +119,34 @@ const TabsFilter = () => {
             <Tabs
               value={value}
               onChange={handleChange}
+              className="custom-tabs"
               sx={{
                 width: "100%",
                 display: "flex",
+
+                // backgroundColor: "red",
+                justifyContent: "space-around ",
+                "& .MuiTabs-flexContainer": {
+                  width: "100%",
+                  justifyContent: "space-around !important",
+                  // backgroundColor:"red"
+                },
+                "& .custom-tabs .css-heg063-MuiTabs-flexContainer ": {
+                  width: "100%",
+                  justifyContent: "space-around !important",
+                },
+                "& .css-heg063-MuiTabs-flexContainer": {
+                  width: "100%",
+                  justifyContent: "space-around ",
+
+                  // backgroundColor: "blue",
+                },
+                "& .css-k008qs": {
+                  display: "flex",
+                  justifyContent: "space-around",
+                  width: "100%",
+                },
+
                 justifyContent: "space-around !important",
                 "& .css-heg063-MuiTabs-flexContainer": {
                   justifyContent: "space-around !important",

@@ -90,7 +90,7 @@
 
 .custom_prev_button {
   position: absolute !important;
-  top: 46% !important;
+  top: 50% !important;
   transform: translateY(-50%) !important;
   display: flex !important;
   align-items: center !important;
@@ -113,7 +113,7 @@
 
 .custom_next_button {
   position: absolute !important;
-  top: 46% !important;
+  top: 50% !important;
   transform: translateY(-50%) !important;
   display: flex !important;
   align-items: center !important;
@@ -131,13 +131,13 @@
 }
 
 @media (max-width: 767px) {
-  .custom_prev_button {
+  /* .custom_prev_button {
     top: 40% !important;
   }
 
   .custom_next_button {
     top: 40% !important;
-  }
+  } */
 }
 
 .custom_next_button:hover {

@@ -6,6 +6,8 @@ import IcomingOrders from "./IncomingOrder/IcomingOrders";
 import TopNav from "./TopNav";
 import SideBar from "./SideBar";
 import SpecialAds from "../Filter/SpecialAds";
+import Usersmangament from "./Usersmangament";
+import SubscribeDetails from "./SubscribeDetails";
 
 export {
   PersonalInfo,
@@ -15,5 +17,7 @@ export {
   IcomingOrders,
   TopNav,
   SideBar,
-  SpecialAds
+  SpecialAds,
+  Usersmangament,
+  SubscribeDetails,
 };

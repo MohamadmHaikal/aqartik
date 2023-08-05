@@ -21,7 +21,9 @@ import {
   Mail as MailIcon,
   LocationOn as LocationOnIcon,
 } from "@mui/icons-material";
+
 import { useTranslation } from "react-i18next";
+
 const phoneNumber = "000000000000";
 
 const FooterTwo = () => {
@@ -328,7 +330,7 @@ const FooterTwo = () => {
           >
             <Box sx={{ width: "100%", maxWidth: "none" }}>
               <Box sx={{ marginBottom: "20px" }}>
-                <Link href="#">
+                <Link href="/">
                   <img src={Logo} alt="logo" style={{ width: "140px" }} />
                 </Link>
               </Box>
@@ -424,7 +426,14 @@ const FooterTwo = () => {
                     {t("footer.customer_service")}
                   </Typography>
                 </Box>
-                <Link href="#" sx={{ textDecoration: "none", color: "black" }}>
+                <Link
+                  href="#"
+                  sx={{
+                    textDecoration: "none",
+                    color: "black",
+                    marginRight: "25px",
+                  }}
+                >
                   {phoneNumber}
                 </Link>
               </Box>

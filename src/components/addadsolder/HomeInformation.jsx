@@ -10,6 +10,12 @@ import {
   RadioGroup,
   FormControlLabel,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
+const customFormControlClass = {
+  flexFlow: "row",
+  display: "flex",
+  width: "100%",
+};
 
 const HomeInformation = ({
   formData,
@@ -17,6 +23,8 @@ const HomeInformation = ({
   inputErrors,
   setInputErrors,
 }) => {
+  const { t } = useTranslation();
+
   const [inputValues, setInputValues] = useState(formData.inputValues || {});
 
   const [radioSelected, setRadioSelected] = useState(
@@ -31,17 +39,25 @@ const HomeInformation = ({
 
   const homedata = [
     {
-      title: "السعر",
-      subtitle: "ريال سعودي",
-      placeholder: "الرجاء كتابة السعر...",
+      title: t("user_dashboard.order_details.label1"),
+      subtitle: t("user_dashboard.order_details.hint1"),
+      placeholder: t("user_dashboard.order_details.placeholder1"),
     },
     {
-      title: "المساحة",
-      subtitle: "متر مربع",
-      placeholder: "الرجاء كتابة المساحة...",
+      title: t("user_dashboard.order_details.label2"),
+      subtitle: t("user_dashboard.order_details.hint2"),
+      placeholder: t("user_dashboard.order_details.placeholder2"),
     },
-    { title: "العرض", subtitle: "متر", placeholder: "الرجاء كتابة العرض..." },
-    { title: "طول", subtitle: "متر", placeholder: "الرجاء كتابة طول..." },
+    {
+      title: t("user_dashboard.order_details.label3"),
+      subtitle: t("user_dashboard.order_details.hint3"),
+      placeholder: t("user_dashboard.order_details.placeholder3"),
+    },
+    {
+      title: t("user_dashboard.order_details.label4"),
+      subtitle: t("user_dashboard.order_details.hint4"),
+      placeholder: t("user_dashboard.order_details.placeholder4"),
+    },
   ];
   useEffect(() => {
     setFormData((prevFormData) => ({
@@ -121,7 +137,7 @@ const HomeInformation = ({
             fontSize: { xs: "1.5rem", md: "2.25rem" },
           }}
         >
-          معلومات العقار
+          {t("user_dashboard.new_order.order_info.main_title")}
         </Typography>
         {homedata.map((item, index) => (
           <Box
@@ -170,17 +186,27 @@ const HomeInformation = ({
         ))}
       </Box>
       <Box>
-        <Typography sx={{ fontWeight: "600" }}>علاقة المعلن</Typography>
+        <Typography sx={{ fontWeight: "600" }}>
+          {t("user_dashboard.order_details.title2")}
+        </Typography>
         <FormControl
           component="fieldset"
           sx={{
             marginTop: "0.5rem",
             width: "100%",
+            flexDirection: "row",
             justifyContent: "space-between",
+            flexFlow: "row",
             ".css-17pr1ty-MuiFormGroup-root": {
               display: "row",
               flexDirection: "row",
+              flexFlow: "row",
               width: "100%",
+            },
+            "&.css-3oog02": customFormControlClass,
+            "& .MuiFormGroup-root": {
+              width: "100%",
+              flexFlow: "row",
             },
           }}
         >
@@ -197,10 +223,10 @@ const HomeInformation = ({
                 control={<Radio sx={{ opacity: "0" }} />}
                 label={
                   value === "option1"
-                    ? "مالك"
+                    ? t("user_dashboard.order_details.option1")
                     : value === "option2"
-                    ? "وكيل"
-                    : "مسوق"
+                    ? t("user_dashboard.order_details.option2")
+                    : t("user_dashboard.order_details.option3")
                 }
                 sx={{
                   backgroundColor:
@@ -238,8 +264,14 @@ const HomeInformation = ({
               }}
             >
               {[
-                { value: "exclusive", label: "حصري" },
-                { value: "non-exclusive", label: "غير حصري" },
+                {
+                  value: "exclusive",
+                  label: t("user_dashboard.order_details.option3_opt1"),
+                },
+                {
+                  value: "non-exclusive",
+                  label: t("user_dashboard.order_details.option3_opt2"),
+                },
               ].map((option, index) => (
                 <FormControlLabel
                   key={option.value}
@@ -264,6 +296,8 @@ const HomeInformation = ({
                     position: "relative",
                     "& .MuiFormControlLabel-label": {
                       position: "absolute",
+                      width: "100%",
+                      textAlign: "center",
                       top: "50%",
                       left: "50%",
                       transform: "translate(-50%, -50%)",

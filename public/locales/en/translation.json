@@ -1,4 +1,5 @@
 {
+    "currency": "SAR",
     "login": {
         "title": "Enter your mobile number to access the dashboard",
         "label": "Enter the mobile phone number",
@@ -11,6 +12,13 @@
         "re_btn": "Resend the code",
         "back_btn": "back to",
         "back_btn2": "home page"
+    },
+    "report": {
+        "title": "Submit a complaint",
+        "label": "Reason for complaint",
+        "placeholder": "Enter the complaint",
+        "btn": "Submission",
+        "bt2": "cancel"
     },
     "nav": {
         "navlinks": {
@@ -158,8 +166,10 @@
         },
         "details_title": "Description",
         "similer_sec_title": "similer advertisements",
+        "xs_more": "show more",
+        "xs_less": "show less",
         "details_tabs": {
-            "specifications_and_features": "specifications and features",
+            "specifications_and_features": " features",
             "location_and_map": "location and map",
             "guest_reviews": "guest reviews",
             "specifications_and_features_tab": {
@@ -204,6 +214,8 @@
             "ul_button2": "my advertisement",
             "ul_button3": "requests",
             "ul_button4": "special advertisement",
+            "ul_button5": "users manage",
+            "ul_button6": "Subscription details",
             "button3_btn1": "new requests",
             "button3_btn2": "Outgoing requests",
             "button3_btn3": "Incoming requests"
@@ -254,6 +266,9 @@
             },
             "card4": {
                 "title": "Location on the map"
+            },
+            "card5": {
+                "title": "Property description"
             }
         },
         "new_order": {
@@ -261,9 +276,11 @@
             "main_btn2": "Previous",
             "main_btn3": "done",
             "order_info": {
-                "main_title": "property information",
+                "main_title": " information",
                 "title": "Property classification",
-                "desc": "Select the appropriate classification"
+                "desc": "Select the appropriate classification",
+                "label1": "property name",
+                "placeholder1": "Enter the name of your property, which will be shown to guests"
             }
         },
         "order_details": {
@@ -279,13 +296,25 @@
             "placeholder3": "Please write the width ",
             "label4": "height ",
             "hint4": "in meters",
-            "placeholder4": "Please write the height "
+            "placeholder4": "Please write the height ",
+            "title2": "Advertiser relationship",
+            "option1": "owner",
+            "option2": "Agent",
+            "option3": "Marketer",
+            "option3_opt1": "Exclusive",
+            "option3_opt2": "not Exclusive"
         },
         "property_features": {
-            "title": "Property features"
+            "title": "Property features",
+            "title2": "Choose all the facilities in your property",
+            "label1": "lounges numbers",
+            "label2": "rooms numbers",
+            "label3": "bathrooms numbers",
+            "label4": "kitchens numbers"
         },
         "property_location": {
             "title": "Confirm the property address",
+            "hint": "Choose the direction of the neighborhood in the city",
             "label1": "city",
             "label2": "neighborhood",
             "label3": "direction"
@@ -304,6 +333,22 @@
             "title": "Property address",
             "desc": "please make sure to select the correct location of your property"
         },
+        "property_images": {
+            "title": "Property photos",
+            "desc1": "So you can successfully display your property",
+            "desc2": "Add at least 4 clear and attractive photos to the unit",
+            "desc3": "It is forbidden to put a logo or words on the photo",
+            "label1": "video",
+            "label2": "Main display image",
+            "hint1": "A photo is required",
+            "label3": "Property photos",
+            "hint2": "8 photos are required",
+            "btn1": "add video",
+            "btn2": "add image",
+            "btn3": "add images",
+            "edit_btn": "edit main display image",
+            "cut_btn": "cut and save"
+        },
         "outgoing_requests": {
             "title": "outgoing requests",
             "submit_btn": "Save edits",
@@ -316,6 +361,42 @@
             "change_status_confirm_btn": "View the property",
             "change_status_cancel_btn": "Review the data first",
             "units": "Units of this property"
+        },
+        "users_manage": {
+            "title": "users management",
+            "label": "search by phone number",
+            "button": "Check",
+            "title2": "user information",
+            "title3": "users",
+            "user_info": {
+                "name": "username",
+                "phonenumber": "phone number"
+            },
+            "cancel_btn": "cancel",
+            "add_btn": "add",
+            "yes_btn": "yes",
+            "delete_btn": "delete",
+            "add_confirm_title": "Are you sure about adding the user?",
+            "delete_confirm_title": "Are you sure about deleting the user?"
+        },
+        "sub_page": {
+            "title": "Subscription details",
+            "label1": "Invoice number",
+            "label2": "Name of membership",
+            "label3": "Number of ads",
+            "label4": "Number of temporary upgrade times",
+            "label5": "Subscription start date",
+            "label6": "Subscription end date",
+            "label7": "Print subscription details"
         }
+    },
+    "offices": {
+        "title": "all offices",
+        "label": "search by cities",
+        "placeholder": "enter city name",
+        "btn": "search",
+        "office": "office",
+        "review": "reviews",
+        "main_btn": "show office"
     }
 }

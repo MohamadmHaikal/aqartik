@@ -7,19 +7,23 @@ import NoteAddOutlinedIcon from "@mui/icons-material/NoteAddOutlined";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Offices = () => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const [rating, setRating] = useState(700);
   const nav = useNavigate();
 
   return (
-    <OfficesContainer dir="rtl">
-      <h2>حميع المكاتب</h2>
+    <OfficesContainer>
+      <h2>{t("offices.title")}</h2>
       <header>
-        <span>البحث بحسب المدينة</span>
+        <span>{t("offices.label")}</span>
         <form>
-          <input type="text" placeholder="ادخل اسم المدينة" />
-          <button>بحث</button>
+          <input type="text" placeholder={t("offices.placeholder")} />
+          <button>{t("offices.btn")}</button>
         </form>
       </header>
 
@@ -27,9 +31,9 @@ const Offices = () => {
         <article>
           <div>
             <div className="office-header">
-              <span>المكتب:</span>
+              <span>{t("offices.office")}:</span>
               <span>
-                التقييم:
+                {t("offices.review")}:
                 <span>
                   <StarIcon />
                   <StarIcon />
@@ -43,7 +47,7 @@ const Offices = () => {
           </div>
           <img className="office-img" src="logo.png" alt="" />
           <button onClick={() => nav("1")}>
-            <NoteAddOutlinedIcon /> عرض الاعلانات
+            <NoteAddOutlinedIcon /> {t("offices.main_btn")}
           </button>
           <div className="office-footer">
             <span>
@@ -56,9 +60,9 @@ const Offices = () => {
         <article>
           <div>
             <div className="office-header">
-              <span>المكتب:</span>
+              <span>{t("offices.office")}:</span>
               <span>
-                التقييم:
+                {t("offices.review")}:
                 <span>
                   <StarIcon />
                   <StarIcon />
@@ -72,7 +76,7 @@ const Offices = () => {
           </div>
           <img className="office-img" src="logo.png" alt="" />
           <button onClick={() => nav("1")}>
-            <NoteAddOutlinedIcon /> عرض الاعلانات
+            <NoteAddOutlinedIcon /> {t("offices.main_btn")}
           </button>
           <div className="office-footer">
             <span>
@@ -85,9 +89,9 @@ const Offices = () => {
         <article>
           <div>
             <div className="office-header">
-              <span>المكتب:</span>
+              <span>{t("offices.office")}:</span>
               <span>
-                التقييم:
+                {t("offices.review")}:
                 <span>
                   <StarIcon />
                   <StarIcon />
@@ -101,7 +105,7 @@ const Offices = () => {
           </div>
           <img className="office-img" src="logo.png" alt="" />
           <button onClick={() => nav("1")}>
-            <NoteAddOutlinedIcon /> عرض الاعلانات
+            <NoteAddOutlinedIcon /> {t("offices.main_btn")}
           </button>
           <div className="office-footer">
             <span>
@@ -114,9 +118,9 @@ const Offices = () => {
         <article>
           <div>
             <div className="office-header">
-              <span>المكتب:</span>
+              <span>{t("offices.office")}:</span>
               <span>
-                التقييم:
+                {t("offices.review")}:
                 <span>
                   <StarIcon />
                   <StarIcon />
@@ -130,7 +134,7 @@ const Offices = () => {
           </div>
           <img className="office-img" src="logo.png" alt="" />
           <button onClick={() => nav("1")}>
-            <NoteAddOutlinedIcon /> عرض الاعلانات
+            <NoteAddOutlinedIcon /> {t("offices.main_btn")}
           </button>
           <div className="office-footer">
             <span>
@@ -143,9 +147,9 @@ const Offices = () => {
         <article>
           <div>
             <div className="office-header">
-              <span>المكتب:</span>
+              <span>{t("offices.office")}:</span>
               <span>
-                التقييم:
+                {t("offices.review")}:
                 <span>
                   <StarIcon />
                   <StarIcon />
@@ -159,7 +163,7 @@ const Offices = () => {
           </div>
           <img className="office-img" src="logo.png" alt="" />
           <button onClick={() => nav("1")}>
-            <NoteAddOutlinedIcon /> عرض الاعلانات
+            <NoteAddOutlinedIcon /> {t("offices.main_btn")}
           </button>
           <div className="office-footer">
             <span>

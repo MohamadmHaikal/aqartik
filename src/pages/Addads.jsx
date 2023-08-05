@@ -10,9 +10,13 @@ import {
   HomeInformation,
   LicenseModal,
 } from "../components";
+import { useTranslation } from "react-i18next";
 // import LicenseModal from "./LicenseModal";
 
 const Addads = () => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -148,18 +152,6 @@ const Addads = () => {
 
   return (
     <>
-      <Link
-        href="/"
-        sx={{
-          position: "absolute",
-          top: "3rem",
-          left: "2rem",
-          textDecoration: "none",
-          color: "var(--green-color)",
-        }}
-      >
-        الرئيسية{" >>"}
-      </Link>
       <Box
         sx={{
           display: { xs: "none", lg: "block" },
@@ -185,8 +177,7 @@ const Addads = () => {
             position: "relative",
             marginInline: "auto",
             marginBlockStart: { xs: "0px", sm: "40px" },
-            maxWidth: "590px",
-
+            maxWidth: "500px",
             marginLeft: { lg: "1%" },
           }}
         >
@@ -194,7 +185,7 @@ const Addads = () => {
             <Box
               sx={{
                 borderRadius: { xs: "0", sm: "12px 12px 0px 0px" },
-                paddingInline: { xs: "15px", md: "11.35%" },
+                paddingInline: { xs: "15px", md: "5%" },
                 paddingBlock: "40px 112px",
                 border: "1px solid rgb(220, 220, 220)",
                 boxShadow: "rgba(0, 0, 0, 0.1) 0px 0px 8px 0px",
@@ -204,6 +195,17 @@ const Addads = () => {
                 height: { xs: "100vh", sm: "calc(-40px + 100vh)" },
               }}
             >
+              <Link
+                href="/"
+                sx={{
+                  textAlign: lang === "ar" ? "left" : "right",
+                  textDecoration: "none",
+                  marginBottom: { xs: "-28px", md: "-2rem" },
+                  color: "var(--green-color)",
+                }}
+              >
+                الرئيسية{" >>"}
+              </Link>
               {/* Render the current step */}
               {renderStep()}
             </Box>
@@ -299,7 +301,7 @@ const Addads = () => {
                         },
                       }}
                     >
-                      السابق
+                      {t("user_dashboard.new_order.main_btn2")}
                     </Button>
                   )}
                   {step <= 6 && !isLastStep && (
@@ -326,7 +328,7 @@ const Addads = () => {
                         },
                       }}
                     >
-                      التالي
+                      {t("user_dashboard.new_order.main_btn1")}
                     </Button>
                   )}
                   {isLastStep && (
@@ -347,7 +349,9 @@ const Addads = () => {
                         },
                       }}
                     >
-                      {loading ? "Loading..." : "انتهينا"}
+                      {loading
+                        ? "Loading..."
+                        : t("user_dashboard.new_order.main_btn3")}
                     </Button>
                   )}
                 </Box>

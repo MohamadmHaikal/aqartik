@@ -15,8 +15,8 @@ import { useTranslation } from "react-i18next";
 const StyledSelect = styled(Select)({
   "& .MuiSvgIcon-root": {
     marginRight: "auto",
-    marginLeft: 0,
-    left: "5px",
+    marginLeft: "0",
+    left: `${(prop) => (prop.$lang === "ar" ? "5px" : "")}`,
   },
 });
 
@@ -56,25 +56,25 @@ const ReportModal = ({ open, onClose }) => {
         }}
       >
         <Typography variant="h6" component="div" sx={{ mb: 2 }}>
-          تقديم شكوى
+          {t("report.title")}
         </Typography>
         <FormControl sx={{ width: "80%", margin: "auto", display: "block" }}>
           <StyledSelect
-            lang={lang}
+            $lang={lang}
             sx={{ width: "100%" }}
             value={selectedOption}
             onChange={handleSelectChange}
             displayEmpty
           >
             <SelectPlaceholder value="" disabled>
-              سبب الشكوى
+              {t("report.label")}
             </SelectPlaceholder>
             <MenuItem value="option1">Option 1</MenuItem>
             <MenuItem value="option2">Option 2</MenuItem>
             <MenuItem value="option3">Option 3</MenuItem>
           </StyledSelect>
           <TextField
-            placeholder="ادخل الشكوى"
+            placeholder={t("report.placeholder")}
             multiline
             rows={4}
             value={report}
@@ -99,7 +99,7 @@ const ReportModal = ({ open, onClose }) => {
               },
             }}
           >
-            تقديم
+            {t("report.btn")}
           </Button>
 
           <Button
@@ -119,7 +119,7 @@ const ReportModal = ({ open, onClose }) => {
               },
             }}
           >
-            إلغاء
+            {t("report.bt2")}
           </Button>
         </Box>
       </Box>

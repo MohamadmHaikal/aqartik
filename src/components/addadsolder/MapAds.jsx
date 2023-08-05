@@ -1,7 +1,9 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import Map from "./Map";
+import { useTranslation } from "react-i18next";
 const MapAds = ({ formData, setFormData }) => {
+  const { t } = useTranslation();
   const handleMapChange = (mapData) => {
     setFormData({ ...formData, mapData });
   };
@@ -15,9 +17,11 @@ const MapAds = ({ formData, setFormData }) => {
           fontSize: { xs: "1.5rem", md: "2.25rem" },
         }}
       >
-        عنوان العقار
+        {t("user_dashboard.property_location_map.title")}
       </Typography>
-      <Typography sx={{ fontWeight: "600" }}>الموقع على الخريطة</Typography>
+      <Typography sx={{ fontWeight: "600" }}>
+        {t("user_dashboard.property_location_map.desc")}
+      </Typography>
       <Box
         sx={{
           maxWidth: "430px",

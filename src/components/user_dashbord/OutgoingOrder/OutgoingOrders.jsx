@@ -18,6 +18,7 @@ import {
   EditLocation,
   ShowHomeSatusModal,
   EditMap,
+  EditDescription,
 } from "./index";
 
 import { Map } from "../../../assets";
@@ -56,6 +57,7 @@ const OutGoingOrders = () => {
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [edditInfo, setEditInfo] = useState(false);
+  const [descriptionEdit, setDescriptionEdit] = useState(false);
   const [edditLoc, setEditLoc] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [MapEdit, setMapEdit] = useState(false);
@@ -222,39 +224,23 @@ const OutGoingOrders = () => {
                             </Typography>
                             <Typography>شقة</Typography>
                           </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <Typography>
-                              {t("user_dashboard.incoming_orders.card1.label3")}
-                            </Typography>
-                            <Typography
-                              sx={{
-                                color: "var(--green-color)",
-                                fontWeight: "600",
-                                marginBottom: "1rem",
-                              }}
-                            >
-                              نسخ
-                            </Typography>
-                          </Box>
                         </Box>
                       </Fade>
                     )}
-                  </OrderCard>
-                  <OrderCard>
                     <Box
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",
-                        marginBottom: "1rem",
+                        alignItems: "center",
+                        marginY: "1rem",
                       }}
                     >
                       <Typography
-                        sx={{ fontWeight: "600", fontSize: "1.2rem" }}
+                        sx={{
+                          fontWeight: "600",
+                          fontSize: "1.2rem",
+                          marginTop: "1rem",
+                        }}
                       >
                         {t("user_dashboard.incoming_orders.card2.title")}
                       </Typography>
@@ -321,6 +307,55 @@ const OutGoingOrders = () => {
                             </Typography>
                             <Typography>شمال</Typography>
                           </Box>
+                        </Box>
+                      </Fade>
+                    )}
+                  </OrderCard>
+                  <OrderCard>
+                    {descriptionEdit && (
+                      <Fade in={descriptionEdit}>
+                        <Box>
+                          <EditDescription
+                            onCancel={() => {
+                              setDescriptionEdit(false);
+                            }}
+                          />
+                        </Box>
+                      </Fade>
+                    )}
+                    {!descriptionEdit && (
+                      <Fade in={!descriptionEdit}>
+                        <Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              marginBottom: "1rem",
+                            }}
+                          >
+                            <Typography
+                              sx={{ fontWeight: "600", fontSize: "1.2rem" }}
+                            >
+                              {t("user_dashboard.incoming_orders.card5.title")}
+                            </Typography>
+
+                            <Typography
+                              sx={{
+                                color: "var(--green-color)",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                setDescriptionEdit(true);
+                              }}
+                            >
+                              {!descriptionEdit &&
+                                t("user_dashboard.outgoing_requests.edit_btn")}
+                            </Typography>
+                          </Box>
+                          <Typography>
+                            jsdfnjsd lskdnfsd klsdnf,m sflksslkd
+                          </Typography>
                         </Box>
                       </Fade>
                     )}

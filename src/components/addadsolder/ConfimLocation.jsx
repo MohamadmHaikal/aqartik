@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { Box, Typography, Select, MenuItem, InputLabel } from "@mui/material";
 import styles from "./confirmLocation.module.css";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { useTranslation } from "react-i18next";
 
 const ConfimLocation = ({ formData, setFormData }) => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const [selectedCity, setSelectedCity] = useState(
     formData.selectedCity || "option1"
   );
@@ -48,11 +51,14 @@ const ConfimLocation = ({ formData, setFormData }) => {
 
   return (
     <Box>
-      <Typography variant="h4" sx={{ fontWeight: "600" ,  fontSize:{xs:"1.5rem" , md:"2.25rem"}}}>
-        تأكيد عنوان العقار
+      <Typography
+        variant="h4"
+        sx={{ fontWeight: "600", fontSize: { xs: "1.5rem", md: "2.25rem" } }}
+      >
+        {t("user_dashboard.property_location.title")}
       </Typography>
       <InputLabel sx={{ color: "black", fontWeight: "600", marginTop: "3rem" }}>
-        المدينة
+        {t("user_dashboard.property_location.label1")}
       </InputLabel>
       <Select
         value={selectedCity}
@@ -61,7 +67,7 @@ const ConfimLocation = ({ formData, setFormData }) => {
         required
         IconComponent={ArrowDropDownIcon}
         className={`${styles.select} select`}
-        classes={{ icon: styles.selectIcon }}
+        classes={lang === "ar" && { icon: styles.selectIcon }}
         sx={{
           borderRadius: "12px !important",
           boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
@@ -105,7 +111,7 @@ const ConfimLocation = ({ formData, setFormData }) => {
           fontWeight: "600",
         }}
       >
-        الحي
+        {t("user_dashboard.property_location.label2")}
       </InputLabel>
       <Select
         value={selectedDistrict}
@@ -114,7 +120,7 @@ const ConfimLocation = ({ formData, setFormData }) => {
         required
         IconComponent={ArrowDropDownIcon}
         className={`${styles.select} select`}
-        classes={{ icon: styles.selectIcon }}
+        classes={lang === "ar" && { icon: styles.selectIcon }}
         sx={{
           borderRadius: "12px !important",
           boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
@@ -164,9 +170,11 @@ const ConfimLocation = ({ formData, setFormData }) => {
           fontWeight: "600",
         }}
       >
-        الاتجاه
+        {t("user_dashboard.property_location.label3")}
       </InputLabel>
-      <Typography sx={{ color: "gray" }}>اختر اتجاه الحي في المدينة</Typography>
+      <Typography sx={{ color: "gray" }}>
+        {t("user_dashboard.property_location.hint")}
+      </Typography>
       <Select
         value={selectedStreet}
         onChange={handleStreetChange}
@@ -174,7 +182,7 @@ const ConfimLocation = ({ formData, setFormData }) => {
         required
         IconComponent={ArrowDropDownIcon}
         className={`${styles.select} select`}
-        classes={{ icon: styles.selectIcon }}
+        classes={lang === "ar" && { icon: styles.selectIcon }}
         sx={{
           borderRadius: "12px !important",
           boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",

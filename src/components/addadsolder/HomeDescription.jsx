@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Box, Typography, TextField, Button, Tooltip } from "@mui/material";
 import styles from "./confirmLocation.module.css";
+import { useTranslation } from "react-i18next";
+import { OrderTitles } from "../user_dashbord/NewOrder";
 
 const HomeDescription = ({ formData, setFormData }) => {
   const [description, setDescription] = useState(formData.description || "");
-
+  const { t } = useTranslation();
   const handleDescriptionChange = (event) => {
     const inputValue = event.target.value;
     setDescription(inputValue);
@@ -13,28 +15,20 @@ const HomeDescription = ({ formData, setFormData }) => {
       description: inputValue,
     }));
   };
-  const tooltipStyles = {
-    tooltip: {
-      backgroundColor: "transparent",
-      boxShadow: "none",
-    },
-  };
+
   return (
     <Box>
-      <Typography variant="h4" sx={{ fontWeight: "600", marginBottom: "3rem" ,  fontSize:{xs:"1.5rem" , md:"2.25rem"}}}>
-        وصف العقار
-      </Typography>
+      <OrderTitles title={t("user_dashboard.property_desc.title")} />
       <Typography
         sx={{
           color: "rgb(118, 118, 118)",
           marginBottom: "2rem",
         }}
       >
-        أضف وصف مميز لعقارك و ايش يتوقع الضيف أن يجد فيه
+        {t("user_dashboard.property_desc.hint")}
       </Typography>
       <Typography sx={{ color: "rgb(118, 118, 118)" }}>
-        73% من المضيفين المميزين (الذين لديهم حجوزات ومبيعات عالية) يكتبوا وصف
-        مميز و واضح
+        {t("user_dashboard.property_desc.desc")}
       </Typography>
       <Box sx={{ position: "relative" }}>
         <Box
@@ -53,7 +47,7 @@ const HomeDescription = ({ formData, setFormData }) => {
               fontWeight: "bold",
             }}
           >
-            أكتب وصف مميز لعقارك
+            {t("user_dashboard.property_desc.label")}
           </Typography>
           <Tooltip
             title={
@@ -78,13 +72,10 @@ const HomeDescription = ({ formData, setFormData }) => {
                     fontWeight: "bold",
                   }}
                 >
-                  وصف مميز لعقارك
+                  {t("user_dashboard.property_desc.ex_title")}
                 </p>
                 <p style={{ color: "rgb(118, 118, 118)" }}>
-                  تقع في شمال الرياض مطلة على بوليفارد الرياض قريبة من شارع تركي
-                  الأول. صُممت بألوان مريحة مؤثثة بأثاث مودرن. يوجد شاشة 85 بوصة
-                  واشتراك بين سبورت لمتابعة المباريات. تتميز بمساحتها الواسعة
-                  وخصوصية تامة بدخول ذكي. أتمنى لك إقامة سعيدة و حياك الله ضيفي.
+                  {t("user_dashboard.property_desc.ex_desc")}
                 </p>
               </div>
             }
@@ -98,7 +89,7 @@ const HomeDescription = ({ formData, setFormData }) => {
             }}
           >
             <Button sx={{ color: "var(--green-color)", fontSize: "17px" }}>
-              مثال
+              {t("user_dashboard.property_desc.ex_btn")}
             </Button>
           </Tooltip>
         </Box>
@@ -107,7 +98,7 @@ const HomeDescription = ({ formData, setFormData }) => {
         fullWidth
         multiline
         rows={9}
-        placeholder=" اكتب هنا"
+        placeholder={t("user_dashboard.property_desc.placeholder")}
         required
         value={description}
         onChange={handleDescriptionChange}

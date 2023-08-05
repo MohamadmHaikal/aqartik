@@ -40,7 +40,7 @@ const Responsive = {
     margin: 10,
   },
   1024: {
-    items: 3.5,
+    items: 3,
     margin: 20,
   },
 };
@@ -91,7 +91,8 @@ const CarsouelCity = () => {
         autoplay={true}
         autoplayTimeout={7000}
         autoplayHoverPause={true}
-        nav={true}
+        dots={false}
+        nav={false}
         navText={customNavText}
         className={styles.city_carsouel}
       >

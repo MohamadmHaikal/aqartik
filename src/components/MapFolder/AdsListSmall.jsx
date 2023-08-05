@@ -28,7 +28,7 @@ const AdsListSmall = () => {
         bottom: "0px",
         borderRadius: "20px 20px 0px 0px",
         boxShadow: "rgba(0, 0, 0, 0.51) 0px 6px 10px",
-        height: "218px",
+        height: "280px",
         display: { md: "none" },
       }}
     >

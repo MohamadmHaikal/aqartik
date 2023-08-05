@@ -35,7 +35,7 @@ const OrderInfo = ({ selectedCategoryId, onUpdate, onSelect }) => {
     console.log("Selected Category:", categoryId, categoryName);
   };
   return (
-    <>
+    <div>
       <OrderTitles
         title={t("user_dashboard.new_order.order_info.main_title")}
       />
@@ -52,7 +52,7 @@ const OrderInfo = ({ selectedCategoryId, onUpdate, onSelect }) => {
           display: "flex",
           justifyContent: { xs: "space-evenly", md: "space-between" },
           flexWrap: "wrap",
-          height: { xs: "26rem", sm: "30rem" },
+          height: { xs: "26rem", sm: "21rem" },
           overflowY: "scroll",
           marginTop: "2rem",
         }}
@@ -64,7 +64,7 @@ const OrderInfo = ({ selectedCategoryId, onUpdate, onSelect }) => {
               display: "flex",
               alignItems: "center",
               marginBottom: "0.5rem",
-              padding: "0.5rem",
+              // padding: "0.5rem",
               borderRadius: "5px",
               minWidth: "6rem",
               height: "2rem",
@@ -76,7 +76,7 @@ const OrderInfo = ({ selectedCategoryId, onUpdate, onSelect }) => {
                   : "transparent",
               color: selectedCategoryId === category.id ? "white" : "black",
               border:
-                selectedCategoryId === category.id ? "" : "1px solid black",
+                selectedCategoryId === category.id ? "" : "1px solid gray",
             }}
             onClick={() => handleCategoryChange(category.id)}
           >
@@ -85,7 +85,7 @@ const OrderInfo = ({ selectedCategoryId, onUpdate, onSelect }) => {
           </Box>
         ))}
       </Box>
-    </>
+    </div>
   );
 };
 

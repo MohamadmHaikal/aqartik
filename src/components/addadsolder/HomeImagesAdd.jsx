@@ -4,11 +4,14 @@ import CropeerImage from "./CropeerImage";
 import DeleteIcon from "@mui/icons-material/Delete";
 // import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
+import { useTranslation } from "react-i18next";
 // import Image from "next/image";
 
 // import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const HomeImagesAdd = ({ formData, setFormData }) => {
+  const { t } = useTranslation();
+
   // const dragItem = useRef();
   // const dragOverItem = useRef();
   const [croppedImage, setCroppedImage] = useState(
@@ -74,20 +77,30 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
 
   return (
     <Box>
-      <Typography variant="h4" sx={{ fontWeight: "600", marginBottom: "3rem" , fontSize:{xs:"1.5rem" , md:"2.25rem"} }}>
-        صور العقار
+      <Typography
+        variant="h4"
+        sx={{
+          fontWeight: "600",
+          marginBottom: "3rem",
+          fontSize: { xs: "1.5rem", md: "2.25rem" },
+        }}
+      >
+        {t("user_dashboard.property_images.title")}
       </Typography>
       <Box sx={{ color: "rgb(118, 118, 118)" }}>
         <Typography sx={{ fontWeight: "700", fontSize: "18px" }}>
-          حتى تعرض عقارك بنجاح
+          {t("user_dashboard.property_images.desc1")}
         </Typography>
         <Typography sx={{ marginY: "1rem" }}>
-          أضف ما لا يقل عن 4 صور واضحة و جذابة للوحدة
+          {t("user_dashboard.property_images.desc2")}
         </Typography>
-        <Typography>يمنع وضع شعار أو كلمات على الصورة</Typography>
+        <Typography> {t("user_dashboard.property_images.desc3")}</Typography>
       </Box>
       <Box sx={{ marginY: "1rem", fontSize: "18px", fontWeight: "600" }}>
-        <Typography variant="label"> فيديو</Typography>
+        <Typography variant="label">
+          {" "}
+          {t("user_dashboard.property_images.label1")}
+        </Typography>
         <Box>
           <input
             id="video-input"
@@ -129,15 +142,21 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
                     margin: "auto",
                   }}
                 />
-                <Typography> أضف فيديو </Typography>
+                <Typography>
+                  {" "}
+                  {t("user_dashboard.property_images.btn1")}{" "}
+                </Typography>
               </Box>
             )}
           </Button>
         </Box>
 
-        <Typography variant="label">صورة العرض الرئيسية</Typography>
+        <Typography variant="label">
+          {" "}
+          {t("user_dashboard.property_images.label2")}
+        </Typography>
         <Typography sx={{ color: "rgb(118, 118, 118)", marginY: "1rem" }}>
-          مطلوب صورة
+          {t("user_dashboard.property_images.hint1")}
         </Typography>
         <CropeerImage
           onCrop={handleCroppedImage}
@@ -146,9 +165,11 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
           setFormData={setFormData}
         />
 
-        <Typography variant="label">صور العقار</Typography>
+        <Typography variant="label">
+          {t("user_dashboard.property_images.label3")}
+        </Typography>
         <Typography sx={{ color: "rgb(118, 118, 118)", marginY: "1rem" }}>
-          مطلوب 8 صور
+          {t("user_dashboard.property_images.hint2")}
         </Typography>
         <Box
           sx={{
@@ -165,7 +186,6 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
             hasBackground={false} // Set hasBackground prop to false
             formData={formData}
             setFormData={setFormData}
-          
           />
 
           {selectedImages.map((image, index) => (
