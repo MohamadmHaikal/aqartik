@@ -20,6 +20,7 @@ import BedIcon from "@mui/icons-material/Bed";
 import PriceSlider from "./PriceSlider";
 import CheckBoxHome from "./CheckBoxHome";
 import RoomsNumber from "./RoomsNumber";
+import { useTranslation } from "react-i18next";
 // import styles from "../../styles/Accordinfilter.module.css";
 
 const checkboxeshome = [
@@ -35,6 +36,9 @@ const checkboxesextra = [
   { id: 3, label: "Choice C" },
 ];
 const SearchBoxHome = () => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const [selectedValue1, setSelectedValue1] = useState("");
   const [selectedValue2, setSelectedValue2] = useState("");
   const [selectedValue3, setSelectedValue3] = useState("");
@@ -52,8 +56,15 @@ const SearchBoxHome = () => {
   return (
     <>
       <Box>
-        <InputLabel sx={{ color: "black" }}>ابحث بأسم العقار</InputLabel>
-        <Input placeholder="مثال: شاليهات السعادة" sx={{ width: "100%" }} />
+        <InputLabel sx={{ color: "black" }}>
+          {t("advertisements_page.filter_sec.filter1_info.input1")}
+        </InputLabel>
+        <Input
+          placeholder={t(
+            "advertisements_page.filter_sec.filter1_info.placeholder1"
+          )}
+          sx={{ width: "100%" }}
+        />
       </Box>
       <Box
         sx={{
@@ -63,11 +74,17 @@ const SearchBoxHome = () => {
         }}
       >
         <Box sx={{ marginX: "0.2rem" }}>
-          <InputLabel sx={{ color: "black" }}> مساحة</InputLabel>
+          <InputLabel sx={{ color: "black" }}>
+            {" "}
+            {t("advertisements_page.filter_sec.filter1_info.input2")}
+          </InputLabel>
           <Input placeholder="400" sx={{ width: "100%" }} />
         </Box>
         <Box sx={{ marginX: "0.2rem" }}>
-          <InputLabel sx={{ color: "black" }}> طابق</InputLabel>
+          <InputLabel sx={{ color: "black" }}>
+            {" "}
+            {t("advertisements_page.filter_sec.filter1_info.input3")}
+          </InputLabel>
           <Input placeholder="2" sx={{ width: "100%", marginX: "0.2rem" }} />
         </Box>
       </Box>
@@ -76,7 +93,7 @@ const SearchBoxHome = () => {
           display: "flex",
           justifyContent: "space-between",
           marginTop: "1rem",
-          direction: "rtl !important",
+          direction: lang === "ar" && "rtl !important",
         }}
       >
         <Box>
@@ -85,7 +102,7 @@ const SearchBoxHome = () => {
             shrink={false}
           >
             {" "}
-            المدينة
+            {t("advertisements_page.filter_sec.filter1_info.input4")}
           </InputLabel>
           <Select
             value={selectedValue1}
@@ -105,7 +122,9 @@ const SearchBoxHome = () => {
             }}
           >
             <MenuItem value="" disabled>
-              <em>مثال: الرمال</em>
+              <em>
+                {t("advertisements_page.filter_sec.filter1_info.placeholder4")}
+              </em>
             </MenuItem>
             <MenuItem value="Option 1">Option 1</MenuItem>
             <MenuItem value="Option 2">Option 2</MenuItem>
@@ -118,7 +137,7 @@ const SearchBoxHome = () => {
             sx={{ color: "black", marginBottom: "0.5rem" }}
             shrink={false}
           >
-            الحي
+            {t("advertisements_page.filter_sec.filter1_info.input5")}
           </InputLabel>
           <Select
             value={selectedValue2}
@@ -139,7 +158,9 @@ const SearchBoxHome = () => {
             }}
           >
             <MenuItem value="" disabled>
-              <em>مثال: الرياض</em>
+              <em>
+                {t("advertisements_page.filter_sec.filter1_info.placeholder5")}
+              </em>
             </MenuItem>
             <MenuItem value="Option A">Option A</MenuItem>
             <MenuItem value="Option B">Option B</MenuItem>
@@ -153,7 +174,7 @@ const SearchBoxHome = () => {
           display: "flex",
           justifyContent: "space-between",
           marginTop: "1rem",
-          direction: "rtl !important",
+          direction: lang === "ar" && "rtl !important",
         }}
       >
         <Box>
@@ -162,7 +183,7 @@ const SearchBoxHome = () => {
             shrink={false}
           >
             {" "}
-            الاتجاهات
+            {t("advertisements_page.filter_sec.filter1_info.input6")}
           </InputLabel>
           <Select
             value={selectedValue3}
@@ -182,7 +203,9 @@ const SearchBoxHome = () => {
             }}
           >
             <MenuItem value="" disabled>
-              <em>مثال: غربي</em>
+              <em>
+                {t("advertisements_page.filter_sec.filter1_info.placeholder6")}
+              </em>
             </MenuItem>
             <MenuItem value="Option 1">Option 1</MenuItem>
             <MenuItem value="Option 2">Option 2</MenuItem>
@@ -195,44 +218,47 @@ const SearchBoxHome = () => {
   );
 };
 
-const accordionData = [
-  {
-    id: 1,
-    icon: <SearchIcon />,
-    title: "بحث المتقدم",
-    content: <SearchBoxHome />,
-  },
-  {
-    id: 2,
-    icon: <PaymentIcon />,
-    title: "السعر",
-    content: <PriceSlider />,
-  },
-  {
-    id: 3,
-    icon: <ApartmentIcon />,
-    title: "نوع العقار",
-    content: <CheckBoxHome checkboxes={checkboxeshome} />,
-  },
-  {
-    id: 4,
-    icon: <WifiIcon />,
-    title: "المرافق والإضافات",
-    content: <CheckBoxHome checkboxes={checkboxesextra} />,
-  },
-  {
-    id: 5,
-    icon: <BedIcon />,
-    title: " تفاصيل العقار",
-    content: <RoomsNumber />,
-  },
-];
-
 const AccordinFilters = () => {
   const [expanded, setExpanded] = useState(false);
   const handleAccordionChange = (accordionId) => {
     setExpanded(accordionId === expanded ? null : accordionId);
   };
+
+  const { t, i18n } = useTranslation();
+
+  const accordionData = [
+    {
+      id: 1,
+      icon: <SearchIcon />,
+      title: t("advertisements_page.filter_sec.filter1"),
+      content: <SearchBoxHome />,
+    },
+    {
+      id: 2,
+      icon: <PaymentIcon />,
+      title: t("advertisements_page.filter_sec.filter2"),
+      content: <PriceSlider />,
+    },
+    {
+      id: 3,
+      icon: <ApartmentIcon />,
+      title: t("advertisements_page.filter_sec.filter3"),
+      content: <CheckBoxHome checkboxes={checkboxeshome} />,
+    },
+    {
+      id: 4,
+      icon: <WifiIcon />,
+      title: t("advertisements_page.filter_sec.filter4"),
+      content: <CheckBoxHome checkboxes={checkboxesextra} />,
+    },
+    {
+      id: 5,
+      icon: <BedIcon />,
+      title: t("advertisements_page.filter_sec.filter5"),
+      content: <RoomsNumber />,
+    },
+  ];
+
   return (
     <Box
       sx={{

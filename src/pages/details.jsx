@@ -21,8 +21,12 @@ import {
 import { SpecialAds, PaginationAds } from "../components";
 
 import { List, ListItem, ListItemText, useMediaQuery } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const Details = () => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const isNewHome = true;
   const [isListOpen, setListOpen] = useState(false);
   const listRef = useRef(null);
@@ -91,7 +95,7 @@ const Details = () => {
               }}
             >
               <Typography sx={{ fontWeight: "bold", fontSize: "12px" }}>
-                رقم الأعلان:
+                {t("details_page.ad_num")}:
               </Typography>{" "}
               <Typography sx={{ marginX: "0.5rem", fontSize: "12px" }}>
                 0989
@@ -108,7 +112,7 @@ const Details = () => {
               }}
             >
               <Typography sx={{ fontWeight: "bold", fontSize: "12px" }}>
-                تاريخ الإعلان:
+                {t("details_page.ad_date")}:
               </Typography>
               <Typography sx={{ marginX: "0.5rem", fontSize: "12px" }}>
                 0989
@@ -178,7 +182,7 @@ const Details = () => {
                     fomtSize: "1.2rem",
                   }}
                 />
-                مساحة الوحدة 100 م²
+                {t("details_page.unit_area")} 100 م²
               </Typography>
               <Typography
                 sx={{
@@ -216,7 +220,7 @@ const Details = () => {
                 }}
               >
                 <FavoriteIcons></FavoriteIcons>
-                المفضلة
+                {t("details_page.fav_button")}
               </Box>
               <Button
                 sx={{
@@ -228,7 +232,7 @@ const Details = () => {
                 onClick={() => setListOpen(!isListOpen)}
               >
                 <IosShareIcon sx={{ marginLeft: "3px" }} />
-                مشاركة
+                {t("details_page.share_button")}
                 {isListOpen && (
                   <List
                     sx={{
@@ -261,7 +265,9 @@ const Details = () => {
                         rel="noopener noreferrer"
                       >
                         <FacebookIcon />
-                        <ListItemText primary="مشاركة على الفيسبوك" />
+                        <ListItemText
+                          primary={t("details_page.facebook_share")}
+                        />
                       </a>
                     </ListItem>
 
@@ -284,7 +290,9 @@ const Details = () => {
                         rel="noopener noreferrer"
                       >
                         <TwitterIcon />
-                        <ListItemText primary="مشاركة على تويتر" />
+                        <ListItemText
+                          primary={t("details_page.twitter_share")}
+                        />
                       </a>
                     </ListItem>
 
@@ -297,7 +305,7 @@ const Details = () => {
                       onClick={handleCopyLink}
                     >
                       <LinkIcon />
-                      <ListItemText primary="نسخ الرابط" />
+                      <ListItemText primary={t("details_page.copy_url")} />
                     </ListItem>
                   </List>
                 )}
@@ -315,7 +323,7 @@ const Details = () => {
                   fontSize: { xs: "1.5rem", md: "2.25rem" },
                 }}
               >
-                الوصف
+                {t("details_page.details_title")}
               </Typography>
               <Typography sx={{ fontSize: { xs: "15px", md: "18px" } }}>
                 تقع في شمال الرياض بالقرب من طريق أنس بن مالك ، قريبه من جميع
@@ -358,7 +366,7 @@ const Details = () => {
                   </Box>
                 </Box>
               )}
-              <DetailsTabs></DetailsTabs>
+              <DetailsTabs />
             </Grid>
             <Grid item xs={12} md={4}>
               <DetailsCard />
@@ -375,7 +383,7 @@ const Details = () => {
                 fontSize: { xs: "1.5rem", md: "2rem" },
               }}
             >
-              الإعلانات المشابهة
+              {t("details_page.similer_sec_title")}
             </Typography>
             <Box>
               <SpecialAds

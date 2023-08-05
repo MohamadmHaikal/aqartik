@@ -3,12 +3,25 @@ import { Box, Select, MenuItem, InputLabel } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import styles from "../../addadsolder/confirmLocation.module.css";
 import { OrderTitles } from ".";
+import { useTranslation } from "react-i18next";
 
 const OrderLocation = ({ onChange, selectedValues }) => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const selectData = [
-    { label: "المدينة", options: ["Option 1", "Option 2", "Option 3"] },
-    { label: "الحي", options: ["Option A", "Option B", "Option C"] },
-    { label: "الاتجاه", options: ["Option X", "Option Y", "Option Z"] },
+    {
+      label: t("user_dashboard.property_location.label1"),
+      options: ["Option 1", "Option 2", "Option 3"],
+    },
+    {
+      label: t("user_dashboard.property_location.label2"),
+      options: ["Option A", "Option B", "Option C"],
+    },
+    {
+      label: t("user_dashboard.property_location.label3"),
+      options: ["Option X", "Option Y", "Option Z"],
+    },
   ];
 
   //   const [selectedValues, setSelectedValues] = useState({});
@@ -23,13 +36,17 @@ const OrderLocation = ({ onChange, selectedValues }) => {
 
   return (
     <Box>
-      <OrderTitles title="تأكيد عنوان العقار" />
+      <OrderTitles title={t("user_dashboard.property_location.title")} />
 
       {/* Render select dropdowns */}
       {selectData.map((select, index) => (
         <div key={index}>
           <InputLabel
-            sx={{ color: "black", fontWeight: "600",   marginTop: index === 0 ? "3rem" : "1rem", }}
+            sx={{
+              color: "black",
+              fontWeight: "600",
+              marginTop: index === 0 ? "3rem" : "1rem",
+            }}
           >
             {select.label}
           </InputLabel>
@@ -38,7 +55,7 @@ const OrderLocation = ({ onChange, selectedValues }) => {
             required
             IconComponent={ArrowDropDownIcon}
             className={`${styles.select} select`}
-            classes={{ icon: styles.selectIcon }}
+            classes={lang === "ar" && { icon: styles.selectIcon }}
             sx={{
               borderRadius: "12px !important",
               boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",

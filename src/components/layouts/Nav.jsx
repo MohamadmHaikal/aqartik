@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import {
   AppBar,
   Box,
@@ -47,16 +47,12 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { ChatsHeader } from "../chat/ChatsHeader";
 import { Header } from "../../styledComponents/MainPageStyles";
+import { useTranslation } from "react-i18next";
+
 const drawerWidth = 240;
-const navItems = [
-  { label: "رئيسية", url: "/" },
-  { label: "جميع الإعلانات", url: "/ads" },
-  { label: "الإعلانات المميزة", url: "/userdashbored" },
-  { label: "من نحن", url: "/about" },
-  { label: "اتصل بنا", url: "/" },
-];
 
 const theme = createTheme();
+
 export default function Nav({
   showMessages,
   setShowMessages,
@@ -64,12 +60,23 @@ export default function Nav({
   setIsUserSelected,
   setUserData,
 }) {
+  const { t, i18n } = useTranslation();
+
+  const navItems = [
+    { label: `${t("nav.navlinks.home_page")}`, url: "/" },
+    { label: t("nav.navlinks.advertisements"), url: "/ads" },
+    { label: t("nav.navlinks.special_advertisements"), url: "/userdashbored" },
+    { label: t("nav.navlinks.about_us"), url: "/about" },
+    { label: t("nav.navlinks.contact_us"), url: "/" },
+  ];
+
   const location = useLocation();
   const isHome = location.pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const sideNavRef = useRef(null);
+
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
     setIsDrawerOpen((prevState) => !prevState);
@@ -78,6 +85,14 @@ export default function Nav({
 
   const isDetailsPage = location.pathname === "/details";
   const isAboutPage = location.pathname === "/about";
+
+  const isOfficesPage = location.pathname === "/offices";
+  const { id } = useParams();
+  const isOfficePage =
+    location.pathname.startsWith("/offices/") && id ? true : false;
+
+  // to detect language
+  const language = i18n.language;
 
   // Hide the <Box> component on the home page and special ads page
   // const drawer = (
@@ -303,11 +318,12 @@ export default function Nav({
                     display: { xs: "none", lg: "block" },
                   }}
                 >
-                  إضافة إعلان
+                  {t("nav.buttons.add_advertisement")}
                 </Typography>
               </Button>
             </Link>
             <LoginButton />
+           
             <LanguageButton />
           </Box>
         </Toolbar>
@@ -315,7 +331,7 @@ export default function Nav({
         {/* <SmallNavLoginMenu /> */}
 
         {/* this next section in nav for search in houses */}
-        {!isDetailsPage && !isAboutPage && (
+        {!isDetailsPage && !isAboutPage && !isOfficesPage && !isOfficePage && (
           <Box
             className={styles.changeBackroundColor}
             sx={{
@@ -381,7 +397,7 @@ export default function Nav({
                   <Typography
                     sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.2rem" }}
                   >
-                    أختر المدينة
+                    {t("subnav.city_filter")}
                   </Typography>
                   <Typography
                     sx={{
@@ -414,7 +430,7 @@ export default function Nav({
                   <Typography
                     sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.2rem" }}
                   >
-                    أختر الحي
+                    {t("subnav.neighborhood_filter")}
                   </Typography>
                   <Typography
                     sx={{
@@ -447,7 +463,7 @@ export default function Nav({
                   <Typography
                     sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.2rem" }}
                   >
-                    أختر العقار
+                    {t("subnav.neighborhood_filter")}
                   </Typography>
                   <Typography
                     sx={{
@@ -483,7 +499,7 @@ export default function Nav({
                   <Typography
                     sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.2rem" }}
                   >
-                    السعر
+                    {t("subnav.price")}
                   </Typography>
                   <Typography
                     sx={{
@@ -516,7 +532,8 @@ export default function Nav({
                     alignItems: "center",
                     display: "flex",
                     position: "absolute",
-                    left: "6px",
+                    left: language === "ar" ? "6px" : "",
+                    right: language === "ar" ? "" : "6px",
                   }}
                 >
                   <Button href="/ads">
@@ -567,9 +584,9 @@ export default function Nav({
       </AppBar>
       {/* this for LoginNav in small screesns */}
 
-      <Box></Box>
+      {/* <Box></Box>
       <Box component="nav">
-        {/* <Drawer
+        <Drawer
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
@@ -585,8 +602,8 @@ export default function Nav({
           }}
         >
           {drawer}
-        </Drawer> */}
-      </Box>
+        </Drawer>
+      </Box> */}
     </Box>
   );
 }

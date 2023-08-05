@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Box, Typography, Link, Button } from "@mui/material";
 
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
@@ -6,6 +6,9 @@ import CallIcon from "@mui/icons-material/Call";
 import ChatIcon from "@mui/icons-material/Chat";
 import ReportModal from "../layouts/ReportModal";
 import WarningIcon from "@mui/icons-material/Warning";
+import ChatContext from "../../context/chatContext";
+import { useTranslation } from "react-i18next";
+
 const customLinkStyles = {
   textDecoration: "none",
   color: "inherit",
@@ -13,6 +16,9 @@ const customLinkStyles = {
 
 const DetailsCard = () => {
   const [modalReportOpen, setModalReportOpen] = useState(false);
+  const { isUserSelected, setIsUserSelected } = useContext(ChatContext);
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
   const handleReportOpenModal = () => {
     setModalReportOpen(true);
@@ -46,7 +52,7 @@ const DetailsCard = () => {
             2500
           </Typography>
           <Typography sx={{ color: "orange", fontSize: "35px" }}>
-            ريال
+            {t("details_page.details_card.currency")}
           </Typography>
         </Box>
         <Box
@@ -59,7 +65,7 @@ const DetailsCard = () => {
         ></Box>
         <Box sx={{ display: "flex", padding: "1rem" }}>
           <Typography sx={{ fontWeight: "bold", marginLeft: "0.5rem" }}>
-            اسم المعلن:
+            {t("details_page.details_card.advertiser_name")}:
           </Typography>
           <Typography>محمد ممجدددد</Typography>
         </Box>
@@ -75,7 +81,7 @@ const DetailsCard = () => {
             width: "10rem",
           }}
         >
-          وسيط المعلن
+          {t("details_page.details_card.advertiser_broker")}
         </Box>
         <Box
           sx={{
@@ -87,7 +93,7 @@ const DetailsCard = () => {
         ></Box>
         <Box sx={{ display: "flex", padding: "1rem" }}>
           <Typography sx={{ fontWeight: "bold", marginLeft: "0.5rem" }}>
-            رقم مرجعي للاعلان:
+            {t("details_page.details_card.ad_reference_number")}:
           </Typography>
           <Typography> 098978</Typography>
         </Box>
@@ -126,8 +132,14 @@ const DetailsCard = () => {
                   },
                 }}
               >
-                <WhatsAppIcon sx={{ marginLeft: "0.8rem" , fontSize:"25px"}} />
-                واتس آب
+                <WhatsAppIcon
+                  sx={{
+                    marginLeft: lang === "ar" && "15px",
+                    marginRight: lang === "en" && "15px",
+                    fontSize: "25px",
+                  }}
+                />
+                {t("details_page.details_card.whatsapp_button")}
               </Button>
             </Link>
           </Box>
@@ -150,7 +162,7 @@ const DetailsCard = () => {
                   boxShadow: "none",
                   marginTop: "1rem",
                   fontSize: "17px",
-                 
+
                   "&:hover": {
                     color: "white",
                     backgroundColor: "var(--green-color)",
@@ -158,8 +170,14 @@ const DetailsCard = () => {
                   },
                 }}
               >
-                <CallIcon sx={{ marginLeft: "0.8rem" , fontSize:"25px"}} />
-                مكالمة
+                <CallIcon
+                  sx={{
+                    marginLeft: lang === "ar" && "15px",
+                    marginRight: lang === "en" && "15px",
+                    fontSize: "25px",
+                  }}
+                />
+                {t("details_page.details_card.phone_button")}
               </Button>
             </Link>
           </Box>
@@ -194,9 +212,13 @@ const DetailsCard = () => {
           onClick={handleReportOpenModal}
         >
           <WarningIcon
-            sx={{ color: "var(--green-color)", marginLeft: "15px" }}
+            sx={{
+              color: "var(--green-color)",
+              marginLeft: lang === "ar" && "15px",
+              marginRight: lang === "en" && "15px",
+            }}
           />
-          إبلاغ
+          {t("details_page.details_card.report_button")}
         </Button>
         <Button
           sx={{
@@ -216,9 +238,16 @@ const DetailsCard = () => {
               boxShadow: "none",
             },
           }}
+          onClick={() => setIsUserSelected(true)}
         >
-          <ChatIcon sx={{ color: "var(--green-color)", marginLeft: "15px" }} />
-          محادثة
+          <ChatIcon
+            sx={{
+              color: "var(--green-color)",
+              marginLeft: lang === "ar" && "15px",
+              marginRight: lang === "en" && "15px",
+            }}
+          />
+          {t("details_page.details_card.chat_button")}
         </Button>
         <ReportModal open={modalReportOpen} onClose={handleReportCloseModal} />
       </Box>

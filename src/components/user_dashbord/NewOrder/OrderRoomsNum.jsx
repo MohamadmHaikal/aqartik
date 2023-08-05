@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import { OrderTitles } from ".";
+import { useTranslation } from "react-i18next";
 
 const OrderRoomsNum = ({
   roomNumbers,
@@ -8,6 +9,8 @@ const OrderRoomsNum = ({
   selectedChoices,
   setSelectedChoices,
 }) => {
+  const { t } = useTranslation();
+
   const showFirstBox = false;
   const roomslabels = [
     "عدد الصالات",
@@ -172,7 +175,7 @@ const OrderRoomsNum = ({
               fontSize: { xs: "1.5rem", md: "2.25rem" },
             }}
           >
-            مميزات العقار
+            {t("user_dashboard.property_features.title")}
           </Typography>
           <Box
             sx={{

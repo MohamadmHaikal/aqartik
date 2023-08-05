@@ -59,7 +59,8 @@ export const ChatDialogStyle = styled.div`
   bottom: 0px;
   width: 350px;
   height: 440px;
-  right: 50px;
+  right: ${(prop) => (prop.$dir === "ar" ? "50px" : "")};
+  left: ${(prop) => (prop.$dir === "en" ? "50px" : "")};
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   display: flex;

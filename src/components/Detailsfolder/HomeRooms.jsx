@@ -6,7 +6,6 @@ const HomeRooms = ({ iconRoom, numRoom, titleRoom }) => {
     <Box
       sx={{
         display: "flex",
-
         minWidth: { xs: "47%", sm: "50%" },
         borderBottom: { md: "1px solid #eee" },
         borderLeft: { md: "1px solid #eee" },

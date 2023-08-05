@@ -9,9 +9,12 @@ import {
   OrderDescripton,
   OrderMap,
 } from "./NewOrder";
+import { useTranslation } from "react-i18next";
 // import { useAmp } from "next/amp";
 const steps = ["معلومات العقار", "تفاصيل الطلب", "location", "الخطوة الأخيرة"];
 const NewRequests = () => {
+  const { t } = useTranslation();
+
   const [activeStep, setActiveStep] = useState(0);
   const [stepData, setStepData] = useState({});
   const [isCategorySelected, setIsCategorySelected] = useState(false);
@@ -105,9 +108,13 @@ const NewRequests = () => {
     <Paper
       sx={{
         position: "relative",
+
         height: {xs:"calc(-40px + 100vh)" , md:"calc(-40px + 100vh)"},
+
+        // height: { xs: "calc(-219px + 100vh)", md: "calc(-40px + 100vh)" },
+
         margin: "auto",
-        marginTop:{xs:"-3rem" , sm:"auto"},
+        marginTop: { xs: "-3rem", sm: "auto" },
         maxWidth: "500px",
         borderRadius: "12px",
         paddingX: { xs: "1rem", md: "4rem" },
@@ -232,7 +239,7 @@ const NewRequests = () => {
               disabled={activeStep === 0}
               onClick={handleBack}
             >
-              السابق
+              {t("user_dashboard.new_order.main_btn2")}
             </Button>
             <Button
               sx={{
@@ -259,7 +266,9 @@ const NewRequests = () => {
                   ))
               }
             >
-              {activeStep === 5 ? "انتهينا" : "التالي"}
+              {activeStep === 5
+                ? t("user_dashboard.new_order.main_btn3")
+                : t("user_dashboard.new_order.main_btn1")}
             </Button>
           </Box>
         </Box>

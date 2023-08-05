@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
+import { useTranslation } from "react-i18next";
 
 const SelectRealEstate = ({
   isOpen,
@@ -8,6 +9,9 @@ const SelectRealEstate = ({
   onRealEstateSelect,
   selectedRealEstate,
 }) => {
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
+
   const realEstates = [
     "Real Estate 1",
     "Real Estate 2",
@@ -59,7 +63,8 @@ const SelectRealEstate = ({
             <CheckIcon
               sx={{
                 position: "absolute",
-                left: "20px",
+                left: lang === "ar" && "20px",
+                right: lang === "en" && "20px",
                 top: "50%",
                 transform: "translateY(-50%)",
                 color: "var( --green-color)",

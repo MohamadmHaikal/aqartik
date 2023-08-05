@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Typography, Link } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { useTranslation } from "react-i18next";
 
 const Notification = () => {
   const notificationRef = useRef(null);
   const notificationIconRef = useRef(null);
   const [openNotifivations, setOpenNotification] = useState(false);
+
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const handleOpenNotification = () => {
     setOpenNotification(!openNotifivations);
   };
@@ -41,7 +45,7 @@ const Notification = () => {
             backgroundColor: "white",
             boxShadow: "5",
             minWidth: "20rem",
-            textAlign: "right",
+            textAlign: lang === "ar" ? "right" : "left",
 
             borderRadius: "1rem",
             zIndex: "10",
@@ -59,7 +63,7 @@ const Notification = () => {
               fontWeight: "600",
             }}
           >
-            الإشعارات
+            {t("notifications.title")}
           </Typography>
           <Box>
             <Box sx={{ borderBottom: "1px solid #eee", padding: "1rem" }}>

@@ -8,8 +8,11 @@ import {
   Radio,
   Button,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const EditInformation = ({ onCancel }) => {
+  const { t } = useTranslation();
+
   const [selectedValue, setSelectedValue] = useState("");
   const [title, setTitle] = useState("rama");
 
@@ -40,7 +43,9 @@ const EditInformation = ({ onCancel }) => {
             width: "100%",
           }}
         >
-          <Typography>الاسم</Typography>
+          <Typography>
+            {t("user_dashboard.incoming_orders.card1.label1")}
+          </Typography>
           <TextField
             type="text"
             name="title"
@@ -54,7 +59,7 @@ const EditInformation = ({ onCancel }) => {
               borderRadius: "12px !important",
               boxShadow: "1",
               "& .css-1iy5sao-MuiInputBase-root-MuiOutlinedInput-root": {
-                borderRadius: "12px", 
+                borderRadius: "12px",
               },
             }}
             InputProps={{
@@ -68,7 +73,9 @@ const EditInformation = ({ onCancel }) => {
           ></TextField>
         </Box>
         <Box sx={{ marginTop: "1rem" }}>
-          <Typography variant="label">التصنيف</Typography>
+          <Typography variant="label">
+            {t("user_dashboard.incoming_orders.card1.label2")}
+          </Typography>
 
           <RadioGroup
             value={selectedValue}
@@ -147,7 +154,7 @@ const EditInformation = ({ onCancel }) => {
               },
             }}
           >
-            حفظ التعديلات
+            {t("user_dashboard.outgoing_requests.submit_btn")}
           </Button>
           <Button
             sx={{
@@ -166,7 +173,7 @@ const EditInformation = ({ onCancel }) => {
             }}
             onClick={onCancel}
           >
-            إلغاء
+            {t("user_dashboard.outgoing_requests.cancel_btn")}
           </Button>
         </Box>
       </form>

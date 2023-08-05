@@ -11,8 +11,12 @@ import {
   Modal,
   Link,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const PersonalInfo = () => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
@@ -38,7 +42,10 @@ const PersonalInfo = () => {
       } else {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          [id]: "يجب إدخال أحرف صحيحة فقط",
+          [id]:
+            lang === "ar"
+              ? "يجب إدخال أحرف صحيحة فقط"
+              : "Only  characters must be entered ",
         }));
       }
     }
@@ -50,7 +57,10 @@ const PersonalInfo = () => {
       } else {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          [id]: "يجب إدخال عنوان بريد إلكتروني صالح",
+          [id]:
+            lang === "ar"
+              ? "يجب إدخال عنوان بريد إلكتروني صالح"
+              : " must enter a valid email address",
         }));
       }
     }
@@ -62,7 +72,10 @@ const PersonalInfo = () => {
       } else {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          [id]: "يجب إدخال أرقام فقط",
+          [id]:
+            lang === "ar"
+              ? "يجب إدخال أرقام فقط"
+              : "Only numbers must be entered",
         }));
       }
     }
@@ -74,7 +87,10 @@ const PersonalInfo = () => {
       } else {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          [id]: "يجب إدخال رقم جوال سعودي ",
+          [id]:
+            lang === "ar"
+              ? "يجب إدخال رقم جوال سعودي "
+              : " must enter a Saudi mobile number",
         }));
       }
     }
@@ -113,9 +129,13 @@ const PersonalInfo = () => {
     setLink(value);
 
     if (value.trim() === "") {
-      setLinkError("هذا الحقل مطلوب");
+      lang === "ar"
+        ? setLinkError("هذا الحقل مطلوب")
+        : setLinkError("this field is required");
     } else if (!value.match(/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i)) {
-      setLinkError("الرجاء إدخال رابط صحيح");
+      lang === "ar"
+        ? setLinkError("الرجاء إدخال رابط صحيح")
+        : setLinkError("Please enter a valid link");
     } else {
       setLinkError("");
     }
@@ -130,9 +150,10 @@ const PersonalInfo = () => {
       link.trim() === ""
     ) {
       setErrors({
-        fullname: "هذا الحقل مطلوب",
-        nationalId: "هذا الحقل مطلوب",
-        link: "هذا الحقل مطلوب",
+        fullname: lang === "ar" ? "هذا الحقل مطلوب" : "this field in required",
+        nationalId:
+          lang === "ar" ? "هذا الحقل مطلوب" : "this field in required",
+        link: lang === "ar" ? "هذا الحقل مطلوب" : "this field in required",
       });
       return;
     }
@@ -180,11 +201,13 @@ const PersonalInfo = () => {
               hidden
               onChange={handleImageUpload}
             />
-            {selectedImage ? null : "إضافة صورة"}
+            {selectedImage ? null : t("user_dashboard.personal_info.img_btn")}
           </Button>
-          <Typography sx={{ color: "gray" }}>رفع صورة الشعار</Typography>
+          <Typography sx={{ color: "gray" }}>
+            {t("user_dashboard.personal_info.title1")}
+          </Typography>
           <Typography sx={{ color: "red" }}>
-            صورة الشعار لا تتجاوز 2MB
+            {t("user_dashboard.personal_info.hint1")}
           </Typography>
         </Box>
         <Grid
@@ -199,7 +222,10 @@ const PersonalInfo = () => {
           }}
         >
           <Grid item xs={10} md={6}>
-            <label htmlFor="fullname">اسم المستخدم</label>
+            <label htmlFor="fullname">
+              {" "}
+              {t("user_dashboard.personal_info.label2")}
+            </label>
             <TextField
               id="fullname"
               value={formData.fullname}
@@ -212,7 +238,10 @@ const PersonalInfo = () => {
             />
           </Grid>
           <Grid item xs={10} md={6}>
-            <label htmlFor="companyname">اسم الشركة</label>
+            <label htmlFor="companyname">
+              {" "}
+              {t("user_dashboard.personal_info.label3")}
+            </label>
             <TextField
               id="companyname"
               value={formData.companyname}
@@ -225,7 +254,10 @@ const PersonalInfo = () => {
             />
           </Grid>
           <Grid item xs={10} md={6}>
-            <label htmlFor="deskname">اسم المكتب</label>
+            <label htmlFor="deskname">
+              {" "}
+              {t("user_dashboard.personal_info.label4")}
+            </label>
             <TextField
               id="deskname"
               value={formData.deskname}
@@ -238,7 +270,10 @@ const PersonalInfo = () => {
             />
           </Grid>
           <Grid item xs={10} md={6}>
-            <label htmlFor="email">البريد الالكتروني</label>
+            <label htmlFor="email">
+              {" "}
+              {t("user_dashboard.personal_info.label5")}
+            </label>
             <TextField
               id="email"
               value={formData.email}
@@ -251,7 +286,10 @@ const PersonalInfo = () => {
             />
           </Grid>
           <Grid item xs={10} md={6}>
-            <label htmlFor="nationalId">رقم الهوية الوطنية</label>
+            <label htmlFor="nationalId">
+              {" "}
+              {t("user_dashboard.personal_info.label6")}
+            </label>
             <TextField
               id="nationalId"
               value={formData.nationalId}
@@ -269,7 +307,10 @@ const PersonalInfo = () => {
             />
           </Grid>
           <Grid item xs={10} md={6}>
-            <label htmlFor="phoneNumber">رقم الجوال</label>
+            <label htmlFor="phoneNumber">
+              {" "}
+              {t("user_dashboard.personal_info.label7")}
+            </label>
             <TextField
               id="phoneNumber"
               value="055746474648"
@@ -284,7 +325,10 @@ const PersonalInfo = () => {
             />
           </Grid>
           <Grid item xs={10} md={6}>
-            <label htmlFor="description">النبذة التعريفية</label>
+            <label htmlFor="description">
+              {" "}
+              {t("user_dashboard.personal_info.label8")}
+            </label>
             <TextField
               id="description"
               value={formData.description}
@@ -299,7 +343,10 @@ const PersonalInfo = () => {
             />
           </Grid>
           <Grid item xs={10} md={6}>
-            <label htmlFor="membershipType">نوع العضوية</label>
+            <label htmlFor="membershipType">
+              {" "}
+              {t("user_dashboard.personal_info.label9")}
+            </label>
             <RadioGroup
               name="membershipType"
               value={membershipType}
@@ -356,7 +403,7 @@ const PersonalInfo = () => {
             {/* this section for License */}
             <Box sx={{ marginY: "2rem" }}>
               <Typography sx={{ fontWeight: "bold" }}>
-                هل لديك رخصة ممارسة نشاط الوساطة و التسويق العقاري؟
+                {t("user_dashboard.personal_info.license")}
               </Typography>
               <RadioGroup
                 name="license"
@@ -367,7 +414,7 @@ const PersonalInfo = () => {
                 <FormControlLabel
                   value="yes"
                   control={<Radio sx={{ opacity: "0" }} />}
-                  label="نعم"
+                  label={t("user_dashboard.personal_info.license_btn1")}
                   sx={{
                     backgroundColor:
                       license === "yes" ? "var(--green-color)" : "white",
@@ -390,7 +437,7 @@ const PersonalInfo = () => {
                 <FormControlLabel
                   value="no"
                   control={<Radio sx={{ opacity: "0" }} />}
-                  label="لا"
+                  label={t("user_dashboard.personal_info.license_btn2")}
                   sx={{
                     backgroundColor:
                       license === "no" ? "var(--green-color)" : "white",
@@ -413,7 +460,9 @@ const PersonalInfo = () => {
               </RadioGroup>
               {license === "yes" && (
                 <Box sx={{ marginY: "1rem" }}>
-                  <label htmlFor="licenseLink">اضافة رابط الرخصة*</label>
+                  <label htmlFor="licenseLink">
+                    {t("user_dashboard.personal_info.license_modal_title")}*
+                  </label>
                   <TextField
                     id="licenseLink"
                     type="text"
@@ -448,8 +497,7 @@ const PersonalInfo = () => {
                   }}
                 >
                   <Typography>
-                    هل ترغب في التسحيل لدى الهيئة العامة للعقار للحصول على رخصة
-                    الوساطة والتسويق العقاري؟
+                    {t("user_dashboard.personal_info.license_modal_desc")}
                   </Typography>
                   <Box sx={{ marginY: "1rem" }}>
                     <Button
@@ -467,7 +515,7 @@ const PersonalInfo = () => {
                           color: "var(--green-color)",
                         }}
                       >
-                        موافق
+                        {t("user_dashboard.personal_info.license_modal_btn1")}
                       </Link>
                     </Button>
                     <Button
@@ -479,7 +527,7 @@ const PersonalInfo = () => {
                         marginX: "0.3rem",
                       }}
                     >
-                      لاحقا
+                      {t("user_dashboard.personal_info.license_modal_btn2")}
                     </Button>
                   </Box>
                 </Box>
@@ -504,7 +552,7 @@ const PersonalInfo = () => {
             },
           }}
         >
-          حفظ واستمرار
+          {t("user_dashboard.personal_info.main_btn")}
         </Button>
       </form>
     </Box>

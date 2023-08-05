@@ -9,8 +9,11 @@ import {
 
 import { Addads } from "../addadsolder";
 import { Box, Container } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
+  const { t } = useTranslation();
+
   return (
     <>
       <Box sx={{ marginTop: { xs: "6rem", md: "12rem" } }}>
@@ -23,7 +26,7 @@ const Home = () => {
               marginX: "auto",
             }}
           >
-            <Titles title="أهم الاعلانات"></Titles>
+            <Titles title={t("homepage.titles.title2")}></Titles>
             <TabsFilter />
           </Box>
         </Container>

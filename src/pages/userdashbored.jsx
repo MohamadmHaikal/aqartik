@@ -12,7 +12,10 @@ import {
   SubscribeDetails,
 } from "../components/user_dashbord";
 import { UserDashboradSpeacialAds } from "../components";
+import { useTranslation } from "react-i18next";
 const UserDashbored = () => {
+  const { t } = useTranslation();
+
   const [selectedItem, setSelectedItem] = useState(0);
   const [selectedSubitem, setSelectedSubitem] = useState(0);
 
@@ -46,7 +49,11 @@ const UserDashbored = () => {
           content = <OutgoingOrder />;
           break;
         case 2:
-          content = <IcomingOrders title="الطلبات الواردة" />;
+          content = (
+            <IcomingOrders
+              title={t("user_dashboard.incoming_orders.page_title2")}
+            />
+          );
           break;
 
         default:

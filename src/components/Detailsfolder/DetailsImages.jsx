@@ -6,8 +6,11 @@ import "lightgallery/css/lg-thumbnail.css";
 import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
 import "../../styles/detailsimages.css";
 import { Button, useMediaQuery, Box } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 export default function DetailsImages() {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const galleryRef = useRef(null);
   const [showMore, setShowMore] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
@@ -57,12 +60,14 @@ export default function DetailsImages() {
     5: "2fr 2fr  4fr ",
   };
   const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
+
   const displayImages = isXsScreen
     ? images.slice(0, 1)
     : showMore
     ? images
     : images.slice(0, 5);
   const totalImages = displayImages.length;
+
   const handleShowMore = () => {
     setShowMore((prevShowMore) => !prevShowMore);
   };

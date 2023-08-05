@@ -6,8 +6,11 @@ import {
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
+import { useTranslation } from "react-i18next";
 
 const EditMap = ({ onCancel }) => {
+  const { t } = useTranslation();
+
   const mapCenter = { lat: 23.8859, lng: 45.0792 };
   return (
     <Box>
@@ -92,7 +95,7 @@ const EditMap = ({ onCancel }) => {
               },
             }}
           >
-            حفظ التعديلات
+            {t("user_dashboard.outgoing_requests.submit_btn")}
           </Button>
           <Button
             sx={{
@@ -111,7 +114,7 @@ const EditMap = ({ onCancel }) => {
             }}
             onClick={onCancel}
           >
-            إلغاء
+            {t("user_dashboard.outgoing_requests.cancel_btn")}
           </Button>
         </Box>
       </form>

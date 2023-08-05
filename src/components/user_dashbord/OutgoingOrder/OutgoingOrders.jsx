@@ -22,6 +22,7 @@ import {
 } from "./index";
 
 import { Map } from "../../../assets";
+import { useTranslation } from "react-i18next";
 // import './Incoming.module.css'
 
 const CircleIconButton = styled(IconButton)({
@@ -52,6 +53,8 @@ const CustomAccordionDetails = styled(AccordionDetails)({
   padding: { xs: "0rem", md: "2rem" },
 });
 const OutGoingOrders = () => {
+  const { t } = useTranslation();
+
   const [isExpanded, setIsExpanded] = useState(false);
   const [edditInfo, setEditInfo] = useState(false);
   const [descriptionEdit, setDescriptionEdit] = useState(false);
@@ -101,7 +104,7 @@ const OutGoingOrders = () => {
   };
   return (
     <Box sx={{ padding: { xs: "16px 5px", sm: "16px 56px" } }}>
-      <OrderTitles title="الطلبات الصادرة" />
+      <OrderTitles title={t("user_dashboard.outgoing_requests.title")} />
       <Box
         sx={{
           overflowY: "auto",
@@ -143,7 +146,9 @@ const OutGoingOrders = () => {
                       marginX: "1rem",
                     }}
                   >
-                    {accordion.expanded ? "معاينة" : "غير معروض"}
+                    {accordion.expanded
+                      ? t("user_dashboard.incoming_orders.ad_expanded.one")
+                      : t("user_dashboard.incoming_orders.ad_expanded.two")}
                   </Typography>
                 </Box>
               </CustomAccordionSummary>
@@ -170,7 +175,7 @@ const OutGoingOrders = () => {
                       <Typography
                         sx={{ fontWeight: "600", fontSize: "1.2rem" }}
                       >
-                        معلومات العقار
+                        {t("user_dashboard.incoming_orders.card1.label1")}
                       </Typography>
 
                       <Typography
@@ -181,7 +186,8 @@ const OutGoingOrders = () => {
                         }}
                         onClick={handleEditInformation}
                       >
-                        {!edditInfo && " تعديل"}
+                        {!edditInfo &&
+                          t("user_dashboard.outgoing_requests.edit_btn")}
                       </Typography>
                     </Box>
                     {edditInfo && (
@@ -201,7 +207,9 @@ const OutGoingOrders = () => {
                               marginBottom: "1rem",
                             }}
                           >
-                            <Typography>الاسم</Typography>
+                            <Typography>
+                              {t("user_dashboard.incoming_orders.card1.label1")}
+                            </Typography>
                             <Typography>rama</Typography>
                           </Box>
                           <Box
@@ -211,9 +219,12 @@ const OutGoingOrders = () => {
                               marginBottom: "1rem",
                             }}
                           >
-                            <Typography>التصنيف</Typography>
+                            <Typography>
+                              {t("user_dashboard.incoming_orders.card1.label2")}
+                            </Typography>
                             <Typography>شقة</Typography>
                           </Box>
+
                         </Box>
                       </Fade>
                     )}
@@ -232,7 +243,7 @@ const OutGoingOrders = () => {
                           marginTop: "1rem",
                         }}
                       >
-                        عنوان العقار
+                        {t("user_dashboard.incoming_orders.card2.title")}
                       </Typography>
 
                       <Typography
@@ -243,7 +254,8 @@ const OutGoingOrders = () => {
                         }}
                         onClick={handleEditLocation}
                       >
-                        {!edditLoc && " تعديل"}
+                        {!edditLoc &&
+                          t("user_dashboard.outgoing_requests.edit_btn")}
                       </Typography>
                     </Box>
                     {edditLoc && (
@@ -263,7 +275,9 @@ const OutGoingOrders = () => {
                               marginBottom: "1rem",
                             }}
                           >
-                            <Typography>المدينة</Typography>
+                            <Typography>
+                              {t("user_dashboard.incoming_orders.card2.label1")}
+                            </Typography>
                             <Typography>جدة</Typography>
                           </Box>
                           <Box
@@ -273,7 +287,10 @@ const OutGoingOrders = () => {
                               marginBottom: "1rem",
                             }}
                           >
-                            <Typography>الحي</Typography>
+                            <Typography>
+                              {" "}
+                              {t("user_dashboard.incoming_orders.card2.label2")}
+                            </Typography>
                             <Typography>حي الزمرد</Typography>
                           </Box>
                           <Box
@@ -283,7 +300,12 @@ const OutGoingOrders = () => {
                               marginBottom: "1rem",
                             }}
                           >
-                            <Typography>الاتجاه </Typography>
+                            <Typography>
+                              {" "}
+                              {t(
+                                "user_dashboard.incoming_orders.card2.label3"
+                              )}{" "}
+                            </Typography>
                             <Typography>شمال</Typography>
                           </Box>
                         </Box>
@@ -349,7 +371,7 @@ const OutGoingOrders = () => {
                       <Typography
                         sx={{ fontWeight: "600", fontSize: "1.2rem" }}
                       >
-                        حالة عرض العقار
+                        {t("user_dashboard.incoming_orders.card3.title")}
                       </Typography>
 
                       <Typography
@@ -360,7 +382,7 @@ const OutGoingOrders = () => {
                         }}
                         onClick={handleModalOpen}
                       >
-                        تغيير
+                        {t("user_dashboard.outgoing_requests.state_btn")}
                       </Typography>
                     </Box>
                     <Box
@@ -369,7 +391,10 @@ const OutGoingOrders = () => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography> الحالة</Typography>
+                      <Typography>
+                        {" "}
+                        {t("user_dashboard.incoming_orders.card3.label1")}
+                      </Typography>
                       <Typography
                         sx={{
                           color: "rgb(244, 67, 54)",
@@ -392,7 +417,7 @@ const OutGoingOrders = () => {
                       <Typography
                         sx={{ fontWeight: "600", fontSize: "1.2rem" }}
                       >
-                        الموقع على الخريطة
+                        {t("user_dashboard.incoming_orders.card4.title")}
                       </Typography>
 
                       <Typography
@@ -403,7 +428,8 @@ const OutGoingOrders = () => {
                         }}
                         onClick={handleMapEdit}
                       >
-                        {!MapEdit && " تعديل"}
+                        {!MapEdit &&
+                          t("user_dashboard.outgoing_requests.edit_btn")}
                       </Typography>
                     </Box>
                     {MapEdit && (
@@ -458,7 +484,7 @@ const OutGoingOrders = () => {
                 }}
               >
                 <Typography sx={{ fontWeight: "600", fontSize: "1.2rem" }}>
-                  وحدات هذا العقار
+                  {t("user_dashboard.outgoing_requests.units")}
                 </Typography>
                 <Typography sx={{ color: "rgb(132, 132, 132)" }}>
                   1 وحدات

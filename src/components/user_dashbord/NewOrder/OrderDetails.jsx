@@ -1,26 +1,36 @@
 import React, { useState } from "react";
 import { OrderTitles } from ".";
 import { Box, Typography, TextField } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const OrderDetails = ({ inputValues, onInputChange }) => {
+  const { t } = useTranslation();
   const homedata2 = [
     {
-      title: "السعر",
-      subtitle: "ريال سعودي",
-      placeholder: "الرجاء كتابة السعر...",
+      title: t("user_dashboard.order_details.label1"),
+      subtitle: t("user_dashboard.order_details.hint1"),
+      placeholder: t("user_dashboard.order_details.placeholder1"),
     },
     {
-      title: "المساحة",
-      subtitle: "متر مربع",
-      placeholder: "الرجاء كتابة المساحة...",
+      title: t("user_dashboard.order_details.label2"),
+      subtitle: t("user_dashboard.order_details.hint2"),
+      placeholder: t("user_dashboard.order_details.placeholder2"),
     },
-    { title: "العرض", subtitle: "متر", placeholder: "الرجاء كتابة العرض..." },
-    { title: "طول", subtitle: "متر", placeholder: "الرجاء كتابة طول..." },
+    {
+      title: t("user_dashboard.order_details.label3"),
+      subtitle: t("user_dashboard.order_details.hint3"),
+      placeholder: t("user_dashboard.order_details.placeholder3"),
+    },
+    {
+      title: t("user_dashboard.order_details.label4"),
+      subtitle: t("user_dashboard.order_details.hint4"),
+      placeholder: t("user_dashboard.order_details.placeholder4"),
+    },
   ];
- 
+
   return (
     <Box>
-      <OrderTitles title="معلومات العقار" />
+      <OrderTitles title={t("user_dashboard.order_details.title")} />
       {homedata2.map((item, index) => (
         <Box
           sx={{

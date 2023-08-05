@@ -23,10 +23,11 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { useTranslation } from "react-i18next";
 
 const drawerWidth = 290;
 
-const StyledDrawer = styled("div")(({ theme, isSidebarOpen }) => ({
+const StyledDrawer = styled("div")(({ theme, isSidebarOpen, lang }) => ({
   transition: "width 0.2s ease-in-out",
   width: isSidebarOpen ? drawerWidth : 0,
   overflowX: "hidden",
@@ -34,7 +35,8 @@ const StyledDrawer = styled("div")(({ theme, isSidebarOpen }) => ({
   fontWeight: "700",
   top: 0,
   bottom: 0,
-  right: 0,
+  left: lang === "en" ? "0px" : "",
+  right: lang === "ar" ? "0px" : "",
   backgroundColor: "#fff",
   // boxShadow: theme.shadows[3],
   zIndex: theme.zIndex.drawer,
@@ -50,7 +52,8 @@ const SideBar = ({
   const [isSublistOpen, setSublistOpen] = React.useState(false);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("lg"));
-
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [selectedSubitemIndex, setSelectedSubitemIndex] = useState(0);
 
@@ -89,7 +92,7 @@ const SideBar = ({
         <MenuIcon />
       </IconButton>
 
-      <StyledDrawer isSidebarOpen={!isSmallScreen || isSidebarOpen}>
+      <StyledDrawer lang={lang} isSidebarOpen={!isSmallScreen || isSidebarOpen}>
         {isSmallScreen && (
           <IconButton
             edge="start"
@@ -99,7 +102,8 @@ const SideBar = ({
             sx={{
               position: "absolute",
               top: "16px",
-              right: "16px",
+              right: lang === "ar" ? "16px" : "",
+              left: lang === "en" ? "16px" : "",
               zIndex: "100",
               color: "var(--green-color)",
             }}
@@ -129,17 +133,21 @@ const SideBar = ({
                 }}
               >
                 <AddIcon sx={{ marginLeft: "5px" }} />
-                <Typography>أضافة إعلان</Typography>
+                <Typography>
+                  {t("user_dashboard.sidebar.add_new_button")}
+                </Typography>
               </Button>
             </Link>
           </ListItem>
           {[
+
             "ملف شخصي",
             "إعلاناتي",
             "طلبات",
             "إعلانات مفضلة",
             "إدارة المستخدمين",
             "تفاصيل الاشتراك",
+
           ].map((text, index) => (
             <React.Fragment key={text}>
               <ListItem
@@ -149,7 +157,9 @@ const SideBar = ({
                   padding: "8px 36px",
                   color: "var(--green-color)",
                   cursor: "pointer",
-                  textAlign: "right",
+
+                  textAlign: lang === "ar" ? "right" : "left",
+
                   fontWeight: "700",
                   backgroundColor:
                     selectedItem === index ? "#cffecf" : "inherit",
@@ -194,32 +204,36 @@ const SideBar = ({
                   {isSublistOpen && (
                     <Collapse in={isSublistOpen} timeout="auto" unmountOnExit>
                       <List component="div" disablePadding>
-                        {["طلبات جديدة", "طلبات صادرة", "طلبات واردة"].map(
-                          (subtext, subindex) => (
-                            <ListItem
-                              key={subindex}
-                              onClick={() => handleSubitemClick(subindex)}
-                              sx={{
-                                height: 65,
-                                padding: "8px 36px",
-                                color: "var(--green-color)",
-                                cursor: "pointer",
-                                textAlign: "right",
-                                backgroundColor:
-                                  selectedSubitemIndex === subindex
-                                    ? "#cffecf"
-                                    : "inherit",
-                                "&:hover": {
-                                  backgroundColor: "rgba(0, 0, 0, 0.04)",
-                                },
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                            >
-                              <ListItemText primary={subtext} />
-                            </ListItem>
-                          )
-                        )}
+
+                        {[
+                          t("user_dashboard.sidebar.button3_btn1"),
+                          t("user_dashboard.sidebar.button3_btn2"),
+                          t("user_dashboard.sidebar.button3_btn3"),
+                        ].map((subtext, subindex) => (
+                          <ListItem
+                            key={subindex}
+                            onClick={() => handleSubitemClick(subindex)}
+                            sx={{
+                              height: 65,
+                              padding: "8px 36px",
+                              color: "var(--green-color)",
+                              cursor: "pointer",
+                              textAlign: lang === "ar" ? "right" : "left",
+                              backgroundColor:
+                                selectedSubitemIndex === subindex
+                                  ? "#cffecf"
+                                  : "inherit",
+                              "&:hover": {
+                                backgroundColor: "rgba(0, 0, 0, 0.04)",
+                              },
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                          >
+                            <ListItemText primary={subtext} />
+                          </ListItem>
+                        ))}
+
                       </List>
                     </Collapse>
                   )}

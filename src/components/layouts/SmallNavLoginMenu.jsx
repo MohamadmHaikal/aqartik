@@ -11,7 +11,10 @@ import { Link } from "react-router-dom";
 import { Profile, Favorite, Aqar, Call, Logout } from "../../assets";
 
 import Avatar from "@mui/material/Avatar";
+import { useTranslation } from "react-i18next";
 const SmallNavLoginMenu = () => {
+  const { t } = useTranslation();
+
   return (
     <Box sx={{ display: { xs: "block", md: "none" } }}>
       <Box
@@ -119,7 +122,7 @@ const SmallNavLoginMenu = () => {
                   >
                     <img src={Profile} alt="profile" />
                   </Box>
-                  <Typography>الملف الشخصي</Typography>
+                  <Typography>{t("profile_menu.profile_btn")}</Typography>
                 </ListItem>
               </Link>
               <Link
@@ -147,7 +150,7 @@ const SmallNavLoginMenu = () => {
                   >
                     <img src={Favorite} alt="profile" />
                   </Box>
-                  <Typography> مفضلتي</Typography>
+                  <Typography> {t("profile_menu.favourite_btn")}</Typography>
                 </ListItem>
               </Link>
               <Link
@@ -175,7 +178,7 @@ const SmallNavLoginMenu = () => {
                   >
                     <img src={Aqar} alt="aqar" />
                   </Box>
-                  <Typography> أضف عقارك</Typography>
+                  <Typography> {t("profile_menu.add_property_btn")}</Typography>
                 </ListItem>
               </Link>
               <ListItem
@@ -199,7 +202,7 @@ const SmallNavLoginMenu = () => {
                 >
                   <img src={Call} alt="call" />
                 </Box>
-                <Typography> تواصل معنا </Typography>
+                <Typography> {t("profile_menu.contact_us_btn")} </Typography>
               </ListItem>
               <ListItem
                 sx={{
@@ -223,7 +226,7 @@ const SmallNavLoginMenu = () => {
                 >
                   <img src={Logout} alt="logout" />
                 </Box>
-                <Typography> تسجيل الخروج </Typography>
+                <Typography> {t("profile_menu.logout_btn")} </Typography>
               </ListItem>
             </List>
           </Box>

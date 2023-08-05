@@ -13,10 +13,15 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { OrderTitles } from "../NewOrder";
 import OrderCard from "../OrderConstant/OrderCard";
+
 import { Map, Logo } from "../../../assets";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Star from "../Star";
+
+
+import { useTranslation } from "react-i18next";
+
 // import './Incoming.module.css'
 
 const CircleIconButton = styled(IconButton)({
@@ -47,6 +52,9 @@ const CustomAccordionDetails = styled(AccordionDetails)({
   padding: "2rem",
 });
 const IcomingOrders = ({ title }) => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const [isExpanded, setIsExpanded] = useState(false);
 
   const [accordions, setAccordions] = useState([
@@ -114,7 +122,9 @@ const IcomingOrders = ({ title }) => {
                       marginX: "1rem",
                     }}
                   >
-                    {accordion.expanded ? "معاينة" : "غير معروض"}
+                    {accordion.expanded
+                      ? t("user_dashboard.incoming_orders.ad_expanded.one")
+                      : t("user_dashboard.incoming_orders.ad_expanded.two")}
                   </Typography>
                 </Box>
               </CustomAccordionSummary>
@@ -130,7 +140,9 @@ const IcomingOrders = ({ title }) => {
                 }}
               >
                 <Box>
-                  <OrderCard title="معلومات العقار">
+                  <OrderCard
+                    title={t("user_dashboard.incoming_orders.card1.title")}
+                  >
                     <Box
                       sx={{
                         display: "flex",
@@ -138,7 +150,9 @@ const IcomingOrders = ({ title }) => {
                         marginBottom: "1rem",
                       }}
                     >
-                      <Typography>الاسم</Typography>
+                      <Typography>
+                        {t("user_dashboard.incoming_orders.card1.label1")}
+                      </Typography>
                       <Typography>rama</Typography>
                     </Box>
                     <Box
@@ -148,17 +162,27 @@ const IcomingOrders = ({ title }) => {
                         marginBottom: "1rem",
                       }}
                     >
-                      <Typography>التصنيف</Typography>
+                      <Typography>
+                        {t("user_dashboard.incoming_orders.card1.label2")}
+                      </Typography>
                       <Typography>شقة</Typography>
                     </Box>
+                   
+                  </OrderCard>
+                  <OrderCard
+                    title={t("user_dashboard.incoming_orders.card2.title")}
+                  >
                     <Box
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",
+
                         marginBottom: "1rem",
                       }}
                     >
-                      <Typography>المدينة</Typography>
+                      <Typography>
+                        {t("user_dashboard.incoming_orders.card2.label1")}
+                      </Typography>
                       <Typography>جدة</Typography>
                     </Box>
                     <Box
@@ -168,7 +192,9 @@ const IcomingOrders = ({ title }) => {
                         marginBottom: "1rem",
                       }}
                     >
-                      <Typography>الحي</Typography>
+                      <Typography>
+                        {t("user_dashboard.incoming_orders.card2.label2")}
+                      </Typography>
                       <Typography>حي الزمرد</Typography>
                     </Box>
                     <Box
@@ -178,7 +204,9 @@ const IcomingOrders = ({ title }) => {
                         marginBottom: "1rem",
                       }}
                     >
-                      <Typography>الاتجاه </Typography>
+                      <Typography>
+                        {t("user_dashboard.incoming_orders.card2.label3")}{" "}
+                      </Typography>
                       <Typography>شمال</Typography>
                     </Box>
                   </OrderCard>
@@ -190,14 +218,19 @@ const IcomingOrders = ({ title }) => {
                   </OrderCard>
                 </Box>
                 <Box>
-                  <OrderCard title="حالة عرض العقار  ">
+                  <OrderCard
+                    title={t("user_dashboard.incoming_orders.card3.title")}
+                  >
                     <Box
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography> الحالة</Typography>
+                      <Typography>
+                        {" "}
+                        {t("user_dashboard.incoming_orders.card3.label1")}
+                      </Typography>
                       <Typography
                         sx={{
                           color: "rgb(244, 67, 54)",
@@ -209,7 +242,12 @@ const IcomingOrders = ({ title }) => {
                       </Typography>
                     </Box>
                   </OrderCard>
-                  <OrderCard title="الموقع على الخريطة ">
+
+               
+                  <OrderCard
+                    title={t("user_dashboard.incoming_orders.card4.title")}
+                  >
+
                     <Box
                       sx={{
                         display: "flex",

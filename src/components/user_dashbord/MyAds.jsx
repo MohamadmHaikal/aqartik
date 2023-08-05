@@ -1,8 +1,12 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import IcomingOrders from "./IncomingOrder/IcomingOrders";
 
 const MyAds = () => {
-  return <IcomingOrders title=" إعلانات" />;
+  const { t } = useTranslation();
+  return (
+    <IcomingOrders title={t("user_dashboard.incoming_orders.page_title")} />
+  );
 };
 
 export default MyAds;

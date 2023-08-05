@@ -4,8 +4,12 @@ import styles from "../../../components/addadsolder/confirmLocation.module.css";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { useTranslation } from "react-i18next";
 
 const EditLocation = ({ onCancel }) => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const defaultValues = {
     المدينة: "Option 1",
     الحي: "Option A",
@@ -15,11 +19,17 @@ const EditLocation = ({ onCancel }) => {
 
   const selectDataLocation = [
     {
-      label: "المدينة",
-      options: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"],
+      label: t("user_dashboard.property_location.label1"),
+      options: ["Option 1", "Option 2", "Option 3"],
     },
-    { label: "الحي", options: ["Option A", "Option B", "Option C"] },
-    { label: "الاتجاه", options: ["Option X", "Option Y", "Option Z"] },
+    {
+      label: t("user_dashboard.property_location.label2"),
+      options: ["Option A", "Option B", "Option C"],
+    },
+    {
+      label: t("user_dashboard.property_location.label3"),
+      options: ["Option X", "Option Y", "Option Z"],
+    },
   ];
   const handleClearSelection = (label) => {
     setSelectedValues((prevSelectedValues) => ({
@@ -55,7 +65,8 @@ const EditLocation = ({ onCancel }) => {
                 sx={{
                   cursor: "pointer",
                   position: "absolute",
-                  left: "11%",
+                  left: lang === "ar" && "11%",
+                  right: lang === "en" && "11%",
                   top: "25px",
                   fontSize: "16px",
                   color: "rgba(0, 0, 0, 0.54)",
@@ -67,7 +78,7 @@ const EditLocation = ({ onCancel }) => {
                 required
                 IconComponent={ArrowDropDownIcon}
                 className={`${styles.select} select`}
-                classes={{ icon: styles.selectIcon }}
+                classes={lang === "ar" && { icon: styles.selectIcon }}
                 sx={{
                   borderRadius: "12px !important",
                   boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
@@ -138,7 +149,7 @@ const EditLocation = ({ onCancel }) => {
               },
             }}
           >
-            حفظ التعديلات
+            {t("user_dashboard.outgoing_requests.submit_btn")}
           </Button>
           <Button
             sx={{
@@ -157,7 +168,7 @@ const EditLocation = ({ onCancel }) => {
             }}
             onClick={onCancel}
           >
-            إلغاء
+            {t("user_dashboard.outgoing_requests.cancel_btn")}
           </Button>
         </Box>
       </form>
