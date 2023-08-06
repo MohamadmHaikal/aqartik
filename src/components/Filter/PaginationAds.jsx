@@ -12,19 +12,26 @@ const theme = createTheme({
   },
 });
 
-const PaginationAds = () => {
+const PaginationAds = ({
+  handlePageChange,
+  current_page,
+  per_page,
+  last_page,
+}) => {
   return (
     <ThemeProvider theme={theme}>
       <StyledEngineProvider injectFirst>
         <Pagination
-          count={10}
+          page={current_page}
+          count={last_page}
           color="primary"
+          onChange={handlePageChange}
           sx={{
             "& .Mui-selected": {
-              color: "#FFFFFF !important", // white color
-              backgroundColor: "#14b183", // background color when selected
+              color: "#FFFFFF !important",
+              backgroundColor: "#14b183",
               "&:hover": {
-                backgroundColor: "#14b183", // background color when selected and hovered
+                backgroundColor: "#14b183",
               },
             },
             "& .MuiButtonBase-root": {

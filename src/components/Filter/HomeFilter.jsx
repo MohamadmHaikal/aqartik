@@ -16,6 +16,7 @@ import HomeType from "./HomeType";
 
 import { Link } from "react-router-dom";
 import { Location } from "../../assets";
+import useDataFetcher from "../../api/useDataFetcher ";
 // Create a custom styled component
 const StyledContainer = styled(Container)(({ theme }) => ({
   [theme.breakpoints.down("xs")]: {
@@ -28,6 +29,30 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 }));
 
 const HomeFilter = () => {
+  const [per_page, set_per_page] = useState();
+  const [current_page, set_current_page] = useState();
+  const [ads, setAds] = useState([]);
+  const [last_page, set_last_page] = useState();
+  const { data, isLoading, error, get, post } = useDataFetcher();
+  useEffect(() => {
+    get(`/api/ads/get_all_ads?page=${current_page}`);
+  }, [current_page]);
+
+  useEffect(() => {
+    if (data) {
+      set_current_page(data.ads.current_page);
+      set_per_page(data.ads.per_page);
+      setAds(data.ads.data);
+      set_last_page(data.ads.last_page);
+    }
+    console.log(current_page);
+  }, [data]);
+
+
+
+  const handlePageChange = (event, new_page) => {
+    set_current_page(new_page);
+  };
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const [showSearchBox, setShowSearchBox] = useState(true);
@@ -162,10 +187,10 @@ const HomeFilter = () => {
             </Box>
           </Grid>
           <Grid item xs={12} md={8}>
-            <TabsFilter />
+            <TabsFilter data={ads} />
           </Grid>
         </Grid>
-        <PaginationAds></PaginationAds>
+        {/* <PaginationAds></PaginationAds> */}
       </StyledContainer>
       {/* // this Box for xs small screens */}
       <Box sx={{ display: { xs: "block", md: "none" } }}>
@@ -380,8 +405,14 @@ const HomeFilter = () => {
           <SpecialAds />
           <SpecialAds />
         </Box>
-        <PaginationAds />
+        {/* <PaginationAds /> */}
       </Box>
+      <PaginationAds
+        handlePageChange={handlePageChange}
+        current_page={current_page}
+        per_page={per_page}
+        last_page={last_page}
+      />
     </>
   );
 };

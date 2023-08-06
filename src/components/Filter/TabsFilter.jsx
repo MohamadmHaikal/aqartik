@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   useTheme,
@@ -17,6 +17,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import NorthIcon from "@mui/icons-material/North";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
+import PaginationAds from "./PaginationAds";
 
 import "./tabs.module.css";
 
@@ -49,7 +50,9 @@ const TabPanel = ({ children, value, index }) => {
   );
 };
 
-const TabsFilter = () => {
+const TabsFilter = ({ data }) => {
+  console.log(data);
+
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [isListOrderOpen, setListOrderOpen] = React.useState(false);
   const [isBoxShown, setBoxShown] = React.useState(false);
@@ -197,20 +200,14 @@ const TabsFilter = () => {
           </Box>
         )}
 
-        {tabData.map((tab, index) => (
-          <TabPanel key={index} value={value} index={index}>
-            <Box>
-              <SpecialAds
-                title="شقة شقة شقة شقة"
-                location="الرياض"
-                icons={icons}
-                description="بهندسة معمارية حديثه تراعي الخصوصية ومتطلبات العائلة السعودية سلسلة فلل البدر صممت لتوفر لك مساحة السكن المثالية لعائلتك بادر بالحجز"
-                ratings={10}
-                price={20000}
-                isNew={1}
-              ></SpecialAds>
-            </Box>
-          </TabPanel>
+        {data.map((ad, index) => (
+          <>
+            <TabPanel key={ad.id}>
+              <Box>
+                <SpecialAds ad={ad}></SpecialAds>
+              </Box>
+            </TabPanel>
+          </>
         ))}
         {isMdScreen && isListOrderOpen && isBoxShown && (
           <Box
