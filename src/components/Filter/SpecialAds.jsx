@@ -7,14 +7,17 @@ import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import FavoriteIcons from "./FavoriteIcons";
 
 const SpecialAds = ({
-  title,
-  location,
-  icons,
-  description,
-  ratings,
-  price,
-  isNew,
+  ad,
+
+  // title,
+  // location,
+  // icons,
+  // description,
+  // ratings,
+  // price,
+  // isNew,
 }) => {
+  // console.log(ad);
   return (
     <>
       <a
@@ -98,7 +101,7 @@ const SpecialAds = ({
                     fontSize: { xs: "18px", md: "1.25rem" },
                   }}
                 >
-                  {title}
+                  {ad.title}
                 </Typography>
 
                 <Box
@@ -111,8 +114,7 @@ const SpecialAds = ({
                     sx={{ color: "rgb(132, 132, 132)" }}
                   />
                   <Typography sx={{ color: "rgb(132, 132, 132)" }}>
-                    {" "}
-                    {location}
+                    {ad.city}
                   </Typography>
                 </Box>
               </Box>
@@ -125,12 +127,12 @@ const SpecialAds = ({
                     fontSize: { xs: "16px", md: "20px" },
                   }}
                 >
-                  {price} ر.س
+                  {ad.price} ر.س
                 </Typography>
               </Box>
             </Box>
             <Box sx={{ display: "flex" }}>
-              {icons &&
+              {/* {icons &&
                 icons.map((icon, index) => (
                   <Box
                     key={index}
@@ -145,7 +147,7 @@ const SpecialAds = ({
                       {icon.number}
                     </Typography>
                   </Box>
-                ))}
+                ))} */}
             </Box>
             <Box
               sx={{
@@ -157,7 +159,7 @@ const SpecialAds = ({
                 maxWidth: { xs: "100%", md: "80%" },
               }}
             >
-              {description}
+              {ad.description}
             </Box>
 
             <Box
@@ -173,11 +175,11 @@ const SpecialAds = ({
                 <Typography
                   sx={{ color: "rgb(132, 132, 132)", marginTop: "2px" }}
                 >
-                  ({ratings})
+                  ({"ratings"})
                 </Typography>
               </Box>
               <Box sx={{ display: "flex" }}>
-                {isNew ? (
+                {ad.is_special ? (
                   <Box
                     sx={{
                       backgroundColor: "rgb(255, 255, 255)",

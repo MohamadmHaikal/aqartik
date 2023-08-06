@@ -21,6 +21,12 @@ const Addads = () => {
   const { data, isLoading, get } = useDataFetcher();
   const [categories, setCategories] = useState([]);
 
+  const {
+    data: info,
+    isLoading: isInfoLoading,
+    get: getInfo,
+  } = useDataFetcher();
+
   useEffect(() => {
     get("/api/ads/get_categories");
   }, []);

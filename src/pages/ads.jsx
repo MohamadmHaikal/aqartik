@@ -1,8 +1,8 @@
-import React from "react";
-// import HomeFilter from "../components/HomeFilter";
+import { useEffect, useState } from "react";
+import useDataFetcher from "../api/useDataFetcher ";
 import { HomeFilter } from "../components";
 
-const ads = () => {
+const Ads = () => {
   return (
     <>
       <HomeFilter />
@@ -10,4 +10,4 @@ const ads = () => {
   );
 };
 
-export default ads;
+export default Ads;
