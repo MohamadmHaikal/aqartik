@@ -22,10 +22,33 @@ import { SpecialAds, PaginationAds } from "../components";
 
 import { List, ListItem, ListItemText, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import useDataFetcher from "../api/useDataFetcher ";
 
 const Details = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const [per_page, set_per_page] = useState();
+  const [current_page, set_current_page] = useState();
+  const [ads, setAds] = useState([]);
+  const [last_page, set_last_page] = useState();
+  const { data, isLoading, get } = useDataFetcher();
+
+  useEffect(() => {
+    get(`/api/ads/get_all_ads?page=${current_page}`);
+  }, [current_page]);
+
+  useEffect(() => {
+    if (data) {
+      set_current_page(data.ads.current_page);
+      set_per_page(data.ads.per_page);
+      setAds(data.ads.data);
+      set_last_page(data.ads.last_page);
+    }
+  }, [data]);
+
+  const handlePageChange = (event, new_page) => {
+    set_current_page(new_page);
+  };
 
   const isNewHome = true;
   const [isListOpen, setListOpen] = useState(false);
@@ -386,17 +409,20 @@ const Details = () => {
               {t("details_page.similer_sec_title")}
             </Typography>
             <Box>
-              <SpecialAds
-                title="شقة شقة شقة شقة"
-                location="الرياض"
-                icons={icons}
-                description="بهندسة معمارية حديثه تراعي الخصوصية ومتطلبات العائلة السعودية سلسلة فلل البدر صممت لتوفر لك مساحة السكن المثالية لعائلتك بادر بالحجز"
-                ratings={10}
-                price={20000}
-                isNew={1}
-              ></SpecialAds>
+              {ads.map((ad, i) => (
+                <SpecialAds key={ad.id} ad={ad} />
+              ))}
             </Box>
-            <PaginationAds />
+            {isLoading ? (
+              ""
+            ) : (
+              <PaginationAds
+                handlePageChange={handlePageChange}
+                current_page={current_page}
+                per_page={per_page}
+                last_page={last_page}
+              />
+            )}
           </Box>
         </Container>
       </Box>

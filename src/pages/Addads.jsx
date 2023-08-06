@@ -11,11 +11,31 @@ import {
   LicenseModal,
 } from "../components";
 import { useTranslation } from "react-i18next";
+import useDataFetcher from "../api/useDataFetcher ";
 // import LicenseModal from "./LicenseModal";
 
 const Addads = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+
+  const { data, isLoading, get } = useDataFetcher();
+  const [categories, setCategories] = useState([]);
+
+  const {
+    data: info,
+    isLoading: isInfoLoading,
+    get: getInfo,
+  } = useDataFetcher();
+
+  useEffect(() => {
+    get("/api/ads/get_categories");
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setCategories(data.categories);
+    }
+  }, [data]);
 
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
@@ -28,6 +48,7 @@ const Addads = () => {
 
   const [hasNextStep, setHasNextStep] = useState(true);
   const isLastStep = step === 7;
+
   useEffect(() => {
     setIsLicenseModalOpen(true);
   }, []);
@@ -86,6 +107,7 @@ const Addads = () => {
           <CatgouryAds
             formData={formData}
             setFormData={setFormData}
+            categories={categories}
             setError={setError}
             error={error}
           />

@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
   useTheme,
   useMediaQuery,
@@ -22,6 +21,7 @@ import PaginationAds from "./PaginationAds";
 import "./tabs.module.css";
 
 import { useTranslation } from "react-i18next";
+import useDataFetcher from "../../api/useDataFetcher ";
 
 const icons = [
   {
@@ -59,6 +59,23 @@ const TabsFilter = ({ data }) => {
   const theme = useTheme();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [value, setValue] = React.useState(0);
+
+  // const { data, isLoading, get } = useDataFetcher();
+  // const [current_page, set_current_page] = useState();
+  // const [pre_page, set_per_page] = useState();
+
+  // useEffect(() => {
+  //   get("/api/ads/get_all_ads");
+  // }, []);
+
+  // useEffect(() => {
+  //   if (data) {
+  //     set_current_page(data?.ads?.current_page);
+  //     set_per_page(data?.ads?.per_page);
+  //   }
+  // }, [data]);
+
+  // console.log(current_page, pre_page);
 
   const { t } = useTranslation();
 

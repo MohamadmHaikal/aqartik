@@ -3,7 +3,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import { Addads, Home } from "./components";
 import UserDashbored from "./pages/userdashbored";
-import Ads from "./pages/ads";
+import Ads from "./pages/Ads";
 import Login from "./pages/loginFolder/Login";
 import Details from "./pages/details";
 import About from "./pages/about";
