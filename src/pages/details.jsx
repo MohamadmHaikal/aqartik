@@ -22,17 +22,8 @@ import { SpecialAds, PaginationAds } from "../components";
 
 import { List, ListItem, ListItemText, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import useDataFetcher from "../api/useDataFetcher ";
 
 const Details = () => {
-  const id = 1;
-
-  const { data, isLoading, error, get, post } = useDataFetcher();
-
-  useEffect(() => {
-    get(`api/ads/details/${id}`);
-  }, [id]);
-
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
