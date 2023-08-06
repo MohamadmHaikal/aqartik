@@ -48,8 +48,6 @@ const HomeFilter = () => {
     console.log(current_page);
   }, [data]);
 
-
-
   const handlePageChange = (event, new_page) => {
     set_current_page(new_page);
   };
@@ -402,8 +400,8 @@ const HomeFilter = () => {
           )}
         </Box>
         <Box sx={{ width: "95%", margin: "auto" }}>
-          <SpecialAds />
-          <SpecialAds />
+          {/* <SpecialAds />
+          <SpecialAds /> */}
         </Box>
         {/* <PaginationAds /> */}
       </Box>
