@@ -9,7 +9,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: "ar", // Default language fallback
-    debug: true, // Set to true to enable i18next debugging
+    debug: false, // Set to true to enable i18next debugging
     interpolation: {
       escapeValue: false, // React already escapes variables
     },

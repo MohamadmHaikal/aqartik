@@ -2,29 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
-  const { t } = useTranslation();
-
-  const categories = [
-    { id: 1, name: "استراحة" },
-    { id: 2, name: "شقة" },
-    { id: 3, name: "فيلا" },
-    { id: 4, name: "مزرعة" },
-    { id: 5, name: "Category 5" },
-    { id: 6, name: "Category 6" },
-    { id: 7, name: "Category 7" },
-    { id: 8, name: "Category 8" },
-    { id: 9, name: "Category 9" },
-    { id: 10, name: "Category 10" },
-    { id: 11, name: "Category 11" },
-    { id: 12, name: "Category 12" },
-    { id: 13, name: "Category 13" },
-    { id: 14, name: "Category 14" },
-    { id: 15, name: "Category 15" },
-    { id: 16, name: "Category 16" },
-
-    // ... and so on, add all 21 categories here
-  ];
+const CatgouryAds = ({
+  formData,
+  setFormData,
+  categories,
+  setError,
+  error,
+  onNext,
+}) => {
+  const { t, i18n } = useTranslation();
 
   const handleNameChange = (event) => {
     const inputValue = event.target.value;
@@ -42,9 +28,10 @@ const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
 
     setFormData((prevFormData) => ({ ...prevFormData, name: inputValue }));
   };
+
   const handleCategoryChange = (selectedCategory) => {
     const selectedCategoryObject = categories.find(
-      (category) => category.name === selectedCategory
+      (category) => category.id === selectedCategory
     );
     if (selectedCategoryObject) {
       setFormData((prevFormData) => ({
@@ -66,8 +53,6 @@ const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
       }));
     }
   }, []);
-  // console.log("Selected Category:", formData.category);
-  // console.log("Entered Name:", formData.name);
 
   return (
     <Box>
@@ -140,10 +125,12 @@ const CatgouryAds = ({ formData, setFormData, setError, error, onNext }) => {
                   ? ""
                   : "1px solid gray",
             }}
-            onClick={() => handleCategoryChange(category.name)}
+            onClick={() => handleCategoryChange(category.id)}
           >
             <input type="hidden" value={category.id} onChange={() => {}} />
-            <Typography sx={{ margin: "auto" }}>{category.name}</Typography>
+            <Typography sx={{ margin: "auto" }}>
+              {i18n.language === "ar" ? category.ar_name : category.en_name}
+            </Typography>
           </Box>
         ))}
       </Box>
