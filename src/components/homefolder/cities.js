@@ -2,6 +2,9 @@ export const cities = [
   {
     name_ar: "الرياض",
     name_en: "Riyadh",
+    city_lang: 24.786743064871313,
+    city_long: 46.71276479959488,
+
     neighborhoods: [
       { name_ar: "العليا", name_en: "Olaya" },
       { name_ar: "الملز", name_en: "Al-Malaz" },
@@ -14,6 +17,8 @@ export const cities = [
   {
     name_ar: "جدة",
     name_en: "Jeddah",
+    city_lang: 22.576342745531417,
+    city_long: 39.08629964099778,
     neighborhoods: [
       { name_ar: "البلد", name_en: "Al-Balad" },
       { name_ar: "الحمراء", name_en: "Al-Hamra" },
@@ -26,6 +31,8 @@ export const cities = [
   {
     name_ar: "الدمام",
     name_en: "Dammam",
+    city_lang: 25.65440368228523,
+    city_long: 49.06466389911196,
     neighborhoods: [
       { name_ar: "العدامة", name_en: "Al-Adama" },
       { name_ar: "السويدي", name_en: "Al-Suwaidi" },
@@ -38,6 +45,8 @@ export const cities = [
   {
     name_ar: "مكة المكرمة",
     name_en: "Makkah",
+    city_lang: 21.3006259043885,
+    city_long: 39.96813545446616,
     neighborhoods: [
       { name_ar: "الحرم", name_en: "Al-Haram" },
       { name_ar: "العزيزية", name_en: "Al-Aziziyah" },
@@ -50,6 +59,8 @@ export const cities = [
   {
     name_ar: "المدينة المنورة",
     name_en: "Madinah",
+    city_lang: 24.571799566660626,
+    city_long: 39.60663704759898,
     neighborhoods: [
       { name_ar: "النور", name_en: "Al-Noor" },
       { name_ar: "الهجرة", name_en: "Al-Hijrah" },
@@ -74,72 +85,96 @@ export const cities = [
   {
     name_ar: "القصيم",
     name_en: "Al-Qassim",
+    city_lang: 26.53683241348124,
+    city_long: 43.093180817068706,
     neighborhoods: [],
     img_url: "5.jpg",
   },
   {
     name_ar: "الإحساء",
     name_en: "Al-Ahsa",
+    city_lang: 23.631197447085146,
+    city_long: 49.857917883994986,
     neighborhoods: [],
     img_url: "6.jpg",
   },
   {
     name_ar: "حائل",
     name_en: "Hail",
+    city_lang: 27.533274756523184,
+    city_long: 41.707608172397784,
     neighborhoods: [],
     img_url: "7.jpg",
   },
   {
     name_ar: "تبوك",
     name_en: "Tabuk",
+    city_lang: 28.411123176458446,
+    city_long: 36.59025125675705,
     neighborhoods: [],
     img_url: "8.jpg",
   },
   {
     name_ar: "الطائف",
     name_en: "Taif",
+    city_lang: 21.3891,
+    city_long: 40.4189,
     neighborhoods: [],
     img_url: "9.jpg",
   },
   {
     name_ar: "ابها",
     name_en: "Abha",
+    city_lang: 18.2164,
+    city_long: 42.5053,
     neighborhoods: [],
     img_url: "10.jpg",
   },
   {
     name_ar: "الباحة",
     name_en: "Al-Baha",
+    city_lang: 20.077178507446337,
+    city_long: 41.477997807412684,
     neighborhoods: [],
     img_url: "11.jpg",
   },
   {
     name_ar: "عرعر",
     name_en: "Arar",
+    city_lang: 30.959894624055636,
+    city_long: 41.05966313614458,
     neighborhoods: [],
     img_url: "12.jpg",
   },
   {
     name_ar: "نجران",
     name_en: "Najran",
+    city_lang: 17.60988170345048,
+    city_long: 44.22956797899045,
     neighborhoods: [],
     img_url: "13.jpg",
   },
   {
     name_ar: "جازان",
     name_en: "Jazan",
+    city_lang: 16.927763708964225,
+    city_long: 42.56753012054083,
     neighborhoods: [],
     img_url: "14.jpg",
   },
   {
     name_ar: "عسير",
     name_en: "Asir",
+    city_lang: 19.0602778,
+    city_long: 43.3652755,
     neighborhoods: [],
     img_url: "15.jpg",
   },
   {
     name_ar: "الجوف",
     name_en: "Al-Jouf",
+    city_lang: 30.467841303666642,
+    city_long: 39.60054406680274,
     neighborhoods: [],
     img_url: "16.jpg",
   },
