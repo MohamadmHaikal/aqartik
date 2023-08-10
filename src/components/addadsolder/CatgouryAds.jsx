@@ -2,10 +2,173 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-const CatgouryAds = ({ formData, setFormData, categories }) => {
+const categories = [
+  {
+    id: 1,
+    ar_name: "فيلا ",
+    en_name: "Villa ",
+  },
+  {
+    id: 2,
+    ar_name: "أرض ",
+    en_name: "Land ",
+  },
+  {
+    id: 3,
+    ar_name: "عمارة ",
+    en_name: "Building ",
+  },
+  {
+    id: 4,
+    ar_name: "بيت ",
+    en_name: "House ",
+  },
+  {
+    id: 5,
+    ar_name: "استراحة ",
+    en_name: "Chalet ",
+  },
+  {
+    id: 6,
+    ar_name: "مزرعة ",
+    en_name: "Farm ",
+  },
+  {
+    id: 7,
+    ar_name: "مستودع ",
+    en_name: "Warehouse ",
+  },
+  {
+    id: 8,
+    ar_name: "شقة ",
+    en_name: "Apartment ",
+  },
+  {
+    id: 20,
+    ar_name: "مخيم للإيجار",
+    en_name: "Camp for rent",
+  },
+  {
+    id: 21,
+    ar_name: "محل للتقبيل",
+    en_name: "Shop for sale",
+  },
+];
+
+const main_array = [
+  {
+    id: 1,
+    ar_name: "فيلا للبيع",
+    en_name: "Villa for sale",
+  },
+  {
+    id: 2,
+    ar_name: "أرض للبيع",
+    en_name: "Land for sale",
+  },
+  {
+    id: 3,
+    ar_name: "عمارة للبيع",
+    en_name: "Building for sale",
+  },
+  {
+    id: 4,
+    ar_name: "بيت للبيع",
+    en_name: "House for sale",
+  },
+  {
+    id: 5,
+    ar_name: "استراحة للبيع",
+    en_name: "Chalet for sale",
+  },
+  {
+    id: 6,
+    ar_name: "مزرعة للبيع",
+    en_name: "Farm for sale",
+  },
+  {
+    id: 7,
+    ar_name: "مستودع للبيع",
+    en_name: "Warehouse for sale",
+  },
+  {
+    id: 8,
+    ar_name: "شقة للبيع",
+    en_name: "Apartment for sale",
+  },
+  {
+    id: 9,
+    ar_name: "فيلا للإيجار",
+    en_name: "Villa for rent",
+  },
+  {
+    id: 10,
+    ar_name: "أرض للإيجار",
+    en_name: "Land for rent",
+  },
+  {
+    id: 11,
+    ar_name: "عمارة للإيجار",
+    en_name: "Building for rent",
+  },
+  {
+    id: 12,
+    ar_name: "استراحة للإيجار",
+    en_name: "Chalet for rent",
+  },
+  {
+    id: 13,
+    ar_name: "مزرعة للإيجار",
+    en_name: "Farm for rent",
+  },
+  {
+    id: 14,
+    ar_name: "شقة للإيجار",
+    en_name: "Apartment for rent",
+  },
+  {
+    id: 15,
+    ar_name: "دور للإيجار",
+    en_name: "Floor for rent",
+  },
+  {
+    id: 16,
+    ar_name: "مكتب للإيجار",
+    en_name: "Office for rent",
+  },
+  {
+    id: 17,
+    ar_name: "غرفة للإيجار",
+    en_name: "Room for rent",
+  },
+  {
+    id: 18,
+    ar_name: "محل للإيجار",
+    en_name: "Shop for rent",
+  },
+  {
+    id: 19,
+    ar_name: "مستودع للإيجار",
+    en_name: "Warehouse for rent",
+  },
+  {
+    id: 20,
+    ar_name: "مخيم للإيجار",
+    en_name: "Camp for rent",
+  },
+  {
+    id: 21,
+    ar_name: "محل للتقبيل",
+    en_name: "Shop for sale",
+  },
+];
+const CatgouryAds = ({ formData, setFormData }) => {
   const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
   const [nameError, setNameError] = useState();
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedType, setSelectedType] = useState("sell"); // Default value
 
   useEffect(() => {
     // Set the default category value to the first category in the list
@@ -35,6 +198,14 @@ const CatgouryAds = ({ formData, setFormData, categories }) => {
   };
 
   const handleCategoryChange = (selectedCategory) => {
+    if (selectedCategoryId === selectedCategory) {
+      setSelectedCategoryId(null); // Unselect the category if it's already selected
+    } else {
+      setSelectedCategoryId(selectedCategory);
+    }
+
+    setSelectedType(""); // Reset the type when a new category is selected
+
     const selectedCategoryObject = categories.find(
       (category) => category.id === selectedCategory
     );
@@ -46,6 +217,22 @@ const CatgouryAds = ({ formData, setFormData, categories }) => {
         },
       }));
     }
+  };
+
+  const handleTypeChange = (type) => {
+    setSelectedType(type);
+
+    console.log("Selected Category ID:", selectedCategoryId);
+    console.log("Selected Type:", type);
+
+    const filteredItem = main_array.filter((item) => {
+      return (
+        item.id === selectedCategoryId &&
+        item.en_name.toLowerCase().includes(type.toLowerCase())
+      );
+    });
+
+    console.log(filteredItem);
   };
 
   return (
@@ -88,44 +275,121 @@ const CatgouryAds = ({ formData, setFormData, categories }) => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: { xs: "space-evenly", md: "space-between" },
+          alignItems: "start",
+          justifyContent: "start",
+          alignContent: "flex-start",
+          gap: "16px",
           flexWrap: "wrap",
-          height: { xs: "26rem", sm: "20rem" },
+          height: "auto",
           marginTop: "16px",
         }}
       >
         {categories.map((category) => (
-          <Box
-            key={category.id}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "0.5rem",
+          <div key={category.id}>
+            <Box
+              key={category.id}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "0.5rem",
+                borderRadius: "5px",
+                minWidth: "6rem",
+                maxWidth: "9rem",
+                cursor: "pointer",
+                height: "2.5rem",
+                backgroundColor:
+                  formData.category && formData.category.id === category.id
+                    ? "var(--green-color)"
+                    : "transparent",
+                color:
+                  formData.category && formData.category.id === category.id
+                    ? "white"
+                    : "black",
+                border:
+                  formData.category && formData.category.id === category.id
+                    ? ""
+                    : "1px solid gray",
+              }}
+              onClick={() => handleCategoryChange(category.id)}
+            >
+              <input type="hidden" value={category.id} onChange={() => {}} />
+              <Typography sx={{ margin: "auto" }}>
+                {i18n.language === "ar" ? category.ar_name : category.en_name}
+              </Typography>
+            </Box>
+            {selectedCategoryId === category.id && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  minWidth: "6rem",
+                  maxWidth: "9rem",
+                }}
+              >
+                <Box
+                  sx={{
+                    height: "40px",
+                    width: "40px",
+                    borderRadius: "5px",
+                    display: "flex",
+                    placeItems: "center",
+                    cursor: "pointer",
+                    backgroundColor: selectedType.includes("sell")
+                      ? "var(--green-color)"
+                      : "transparent",
+                    border: selectedType.includes("sell")
+                      ? "0px"
+                      : "1px solid var(--green-color)",
+                    transition: "background-color 0.3s, color 0.3s",
+                  }}
+                  onClick={() => handleTypeChange("sell")}
+                >
+                  <input type="hidden" value={1} onChange={() => {}} />
 
-              borderRadius: "5px",
-              minWidth: "6rem",
-              height: "2rem",
-              margin: "10px",
-              backgroundColor:
-                formData.category && formData.category.id === category.id
-                  ? "var(--green-color)"
-                  : "transparent",
-              color:
-                formData.category && formData.category.id === category.id
-                  ? "white"
-                  : "black",
-              border:
-                formData.category && formData.category.id === category.id
-                  ? ""
-                  : "1px solid gray",
-            }}
-            onClick={() => handleCategoryChange(category.id)}
-          >
-            <input type="hidden" value={category.id} onChange={() => {}} />
-            <Typography sx={{ margin: "auto" }}>
-              {i18n.language === "ar" ? category.ar_name : category.en_name}
-            </Typography>
-          </Box>
+                  <span
+                    style={{
+                      flex: 1,
+                      textAlign: "center",
+                      color: selectedType.includes("sell") ? "white" : "black",
+                    }}
+                  >
+                    {lang === "ar" ? "بيع" : "sell"}
+                  </span>
+                </Box>
+
+                <Box
+                  sx={{
+                    height: "40px",
+                    width: "40px",
+                    borderRadius: "5px",
+                    display: "flex",
+                    placeItems: "center",
+                    cursor: "pointer",
+                    backgroundColor: selectedType.includes("rent")
+                      ? "var(--green-color)"
+                      : "transparent",
+                    border: selectedType.includes("rent")
+                      ? "0px"
+                      : "1px solid var(--green-color)",
+                    transition: "background-color 0.3s, color 0.3s",
+                  }}
+                  onClick={() => handleTypeChange("rent")}
+                >
+                  <input type="hidden" value={2} onChange={() => {}} />
+                  <span
+                    style={{
+                      flex: 1,
+                      textAlign: "center",
+                      color: selectedType.includes("rent") ? "white" : "black",
+                    }}
+                  >
+                    {lang === "ar" ? "إيجار" : "Rent"}
+                  </span>
+                </Box>
+              </div>
+            )}
+          </div>
         ))}
       </Box>
     </Box>

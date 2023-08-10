@@ -10,8 +10,8 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const HomeSlider = () => {
-  const homeImages = [abha, boat, house];
+const HomeSlider = ({ ad }) => {
+  const homeImages = ad.gallery;
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const CustomPrevArrow = (props) => {
@@ -57,13 +57,22 @@ const HomeSlider = () => {
     <Box sx={{ position: "relative", margin: { xs: "auto", lg: "0" } }}>
       <Slider {...settings}>
         {homeImages.map((image, index) => (
-          <img
+          <div
             key={index}
-            src={image}
-            alt={`Slide ${index + 1}`}
-            style={{ width: "100%", height: "219 !important" }}
-            className={styles.imageBorder}
-          />
+            className={styles.customSlide} // Apply your custom slide class
+          >
+            <img
+              key={index}
+              src={` https://aqar-plus.sta.sa/public/assets/images/ads/image/${image.name}`}
+              alt={`Slide ${index + 1}`}
+              style={{
+                width: "100%",
+                height: "219 !important",
+                objectFit: "cover",
+              }}
+              className={styles.imageBorder}
+            />
+          </div>
         ))}
       </Slider>
       <Box
@@ -80,7 +89,7 @@ const HomeSlider = () => {
         }}
       >
         <VisibilityIcon sx={{ width: "1rem" }} />
-        <Typography>4K</Typography>
+        <Typography>{ad.views}K</Typography>
       </Box>
     </Box>
   );

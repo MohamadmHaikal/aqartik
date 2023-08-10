@@ -12,6 +12,9 @@ const containerStyle = {
   width: "100%",
   height: "400px",
 };
+
+const googleMapsApiKey = "AIzaSyCUSxdxRLpvkegxpk9-82sUjCylgekfGUk";
+
 const Map = ({ formData, setFormData }) => {
   const [userMarkers, setUserMarkers] = useState([]);
   const [centeredMap, setCenteredMap] = useState({
@@ -40,6 +43,7 @@ const Map = ({ formData, setFormData }) => {
   };
 
   const handleMapClick = (event) => {
+    console.log(event);
     const clickedPosition = {
       lat: event.latLng.lat(),
       lng: event.latLng.lng(),
@@ -58,23 +62,21 @@ const Map = ({ formData, setFormData }) => {
     }));
 
     setUserMarkers([newMarker]);
+
+    //getting the country
+    fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${clickedPosition.lat},${clickedPosition.lng}&key=${googleMapsApiKey}&language=en`
+    ).then((response) => console.log(response));
   };
 
   return (
-    <LoadScript googleMapsApiKey="AIzaSyCUSxdxRLpvkegxpk9-82sUjCylgekfGUk">
+    <LoadScript googleMapsApiKey={googleMapsApiKey}>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={centeredMap}
         zoom={10}
         onClick={(event) => handleMapClick(event)}
       >
-        {/* {markers.map((marker) => (
-          <Marker
-            key={marker.id}
-            position={marker.position}
-            onClick={() => handleMarkerClick(marker)}
-          />
-        ))} */}
         {userMarkers.map((marker, index) => (
           <Marker key={index} position={marker.position} />
         ))}

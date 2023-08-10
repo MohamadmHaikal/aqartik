@@ -21,7 +21,7 @@ import DetailsImagesXs from "./DetailsImagesXs";
 import DetailsXsTabs from "./DetailsXsTabs";
 import { useTranslation } from "react-i18next";
 
-const DetailsXsScreens = () => {
+const DetailsXsScreens = ({ adInfo }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
@@ -60,7 +60,7 @@ const DetailsXsScreens = () => {
         <Box sx={{ paddingBottom: "60px" }}>
           {/* this for swiper slider */}
           <Box>
-            <DetailsImagesXs />
+            <DetailsImagesXs adInfo={adInfo} />
           </Box>
           <Box
             sx={{
@@ -185,7 +185,7 @@ const DetailsXsScreens = () => {
           </Box>
 
           {/* this Box for Tabs  */}
-          <DetailsXsTabs />
+          <DetailsXsTabs adInfo={adInfo} />
         </Box>
       </Box>
       <Box
@@ -232,7 +232,7 @@ const DetailsXsScreens = () => {
               fontSize: "35px",
             }}
           >
-            2500
+            {adInfo.price}
           </Typography>
           <Typography sx={{ color: "orange", fontSize: "35px" }}>
             {t("currency")}

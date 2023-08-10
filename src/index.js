@@ -33,6 +33,11 @@ const MainApp = () => {
     );
   }, [language]);
 
+  localStorage.setItem("isNewHome", "true");
+  setTimeout(() => {
+    localStorage.setItem("isNewHome", "false");
+  }, 48 * 60 * 60 * 1000);
+
   return (
     <>
       <ThemeProvider theme={theme}>

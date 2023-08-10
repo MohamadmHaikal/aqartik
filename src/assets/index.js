@@ -36,8 +36,10 @@ import Chalets from "./chalets.svg";
 import Camps from "./camps.svg";
 import Chair from "./chair.svg";
 import Farms from "./farms.svg";
-import Special from "./special.svg"
+import Special from "./special.svg";
+import Maintence from "./maintence.png";
 export {
+  Maintence,
   Special,
   Camps,
   Chair,

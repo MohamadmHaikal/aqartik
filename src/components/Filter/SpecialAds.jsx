@@ -5,12 +5,26 @@ import HomeSlider from "./HomeSlider";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import FavoriteIcons from "./FavoriteIcons";
+import { useNavigate } from "react-router";
+import Icons from "./Icons";
 
 const SpecialAds = ({ ad }) => {
+  const isNewHome = localStorage.getItem("isNewHome") === "true";
+  const navigate = useNavigate();
+
+  const handleAdClick = (ad) => {
+    navigate(`/details/${ad.id}`, { state: { ad } });
+  };
+  const filteredFeatures =
+    ad?.QuantityAds?.filter((feature) =>
+      Icons.some((icon) => icon.en_name === feature.quantity_feature.en_name)
+    ) || [];
+
   return (
     <>
       <a
-        href="details"
+        key={ad.id}
+        // to={`/details/${ad.id}`}
         style={{
           display: "flex",
           textDecoration: "none",
@@ -26,6 +40,7 @@ const SpecialAds = ({ ad }) => {
             color: "inherit",
           },
         }}
+        onClick={() => handleAdClick(ad)}
       >
         <Box
           sx={{
@@ -63,7 +78,7 @@ const SpecialAds = ({ ad }) => {
               margin: { xs: "auto", lg: "0" },
             }}
           >
-            <HomeSlider />
+            <HomeSlider ad={ad} />
           </Box>
 
           <Box
@@ -103,7 +118,7 @@ const SpecialAds = ({ ad }) => {
                     sx={{ color: "rgb(132, 132, 132)" }}
                   />
                   <Typography sx={{ color: "rgb(132, 132, 132)" }}>
-                    {ad.city}
+                    {ad.city} , {ad.neighborhood} , {ad.road}
                   </Typography>
                 </Box>
               </Box>
@@ -121,22 +136,35 @@ const SpecialAds = ({ ad }) => {
               </Box>
             </Box>
             <Box sx={{ display: "flex" }}>
-              {/* {icons &&
-                icons.map((icon, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      marginX: "0.5rem",
-                      color: "rgb(132, 132, 132)",
-                    }}
-                  >
-                    {icon.icon}
-                    <Typography sx={{ marginRight: "5px" }}>
-                      {icon.number}
-                    </Typography>
-                  </Box>
-                ))} */}
+              <Box
+                sx={{
+                  display: "flex",
+                  marginX: "0.5rem",
+                  color: "rgb(132, 132, 132)",
+                }}
+              >
+                {filteredFeatures.map((feature) => {
+                  const matchingIcon = Icons.find(
+                    (icon) => icon.en_name === feature.quantity_feature.en_name
+                  );
+
+                  if (matchingIcon) {
+                    return (
+                      <Box
+                        key={feature.id}
+                        sx={{ display: "flex", marginLeft: "10px" }}
+                      >
+                        <Box>{matchingIcon.icon}</Box>
+                        <Typography sx={{ marginRight: "5px" }}>
+                          {feature.quantity}
+                        </Typography>
+                      </Box>
+                    );
+                  }
+
+                  return null;
+                })}
+              </Box>
             </Box>
             <Box
               sx={{
@@ -168,7 +196,7 @@ const SpecialAds = ({ ad }) => {
                 </Typography>
               </Box>
               <Box sx={{ display: "flex" }}>
-                {ad.is_special ? (
+                {isNewHome ? (
                   <Box
                     sx={{
                       backgroundColor: "rgb(255, 255, 255)",

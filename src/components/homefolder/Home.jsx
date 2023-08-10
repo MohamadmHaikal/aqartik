@@ -12,6 +12,8 @@ import { Addads } from "../addadsolder";
 import { Box, Container } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
+import { Skeleton } from "@mui/material";
+import SkeleltonSpeacialAds from "../Loading/SkeleltonSpeacialAds";
 
 const Home = () => {
   const [per_page, set_per_page] = useState();
@@ -30,7 +32,7 @@ const Home = () => {
       setAds(data.ads.data);
       set_last_page(data.ads.last_page);
     }
-    console.log(current_page);
+    // console.log(current_page);
   }, [data]);
 
   const { t } = useTranslation();
@@ -52,8 +54,11 @@ const Home = () => {
             }}
           >
             <Titles title={t("homepage.titles.title2")}></Titles>
+
             {isLoading ? (
-              "isloading..."
+              Array.from({ length: 5 }).map((_, index) => (
+                <SkeleltonSpeacialAds key={index} />
+              ))
             ) : (
               <>
                 <TabsFilter data={ads} />

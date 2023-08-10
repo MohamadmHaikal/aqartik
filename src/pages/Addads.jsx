@@ -22,6 +22,12 @@ const Addads = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
+  const {
+    data: sendFormData,
+    isLoading: isLoadingSendForm,
+    post,
+  } = useDataFetcher();
+
   //for getting the categories
   const { data, isLoading, get } = useDataFetcher();
   const [categories, setCategories] = useState([]);
@@ -64,9 +70,8 @@ const Addads = () => {
   const [formData, setFormData] = useState({});
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [isLicenseModalOpen, setIsLicenseModalOpen] = useState(false);
-  const [afterWidth, setAfterWidth] = useState(0); // Initial width of &:after
+  const [afterWidth, setAfterWidth] = useState(13.7); // Initial width of &:after
   const [error, setError] = useState(false);
-  // const [error2, setError2] = useState(false);
   const [inputErrors, setInputErrors] = useState({});
 
   console.log(formData);
@@ -208,18 +213,6 @@ const Addads = () => {
         } else {
           setError(true);
         }
-      } else if (step === 3) {
-        if (formData.hasOwnProperty("aqarCategoryQuantity")) {
-          if (
-            formData.aqarCategoryQuantity.length === category_quantity.length
-          ) {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
       } else if (step === 4) {
         if (
           formData.hasOwnProperty("selectedInterface") &&
@@ -285,6 +278,18 @@ const Addads = () => {
         } else {
           setError(true);
         }
+      } else if (step === 3) {
+        if (formData.hasOwnProperty("aqarCategoryQuantity")) {
+          if (
+            formData.aqarCategoryQuantity.length === category_quantity.length
+          ) {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
       } else if (step === 4) {
         if (
           formData.hasOwnProperty("selectedInterface") &&
@@ -316,6 +321,83 @@ const Addads = () => {
           setError(true);
         }
       }
+    } else if (category_bool?.length === 0 && category_quantity?.length === 0) {
+      if (step === 1) {
+        if (
+          formData.hasOwnProperty("category") &&
+          formData.hasOwnProperty("name") &&
+          formData?.name !== ""
+        ) {
+          setError(false);
+        } else {
+          setError(true);
+        }
+      } else if (step === 2) {
+        if (
+          formData.hasOwnProperty("inputValues") &&
+          formData.hasOwnProperty("radioSelected") &&
+          formData.hasOwnProperty("aqar_type")
+        ) {
+          const allInputsFilled = Object.values(formData?.inputValues).every(
+            (val) => val !== ""
+          );
+          const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
+          if (
+            !allInputsFilled ||
+            !isInputsFour ||
+            formData?.aqar_type === "" ||
+            formData?.radioSelected === ""
+          ) {
+            setError(true);
+          } else {
+            setError(false);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 3) {
+        if (
+          formData.hasOwnProperty("selectedInterface") &&
+          formData.hasOwnProperty("selectedCity") &&
+          formData.hasOwnProperty("selectedDistrict")
+        ) {
+          setError(false);
+        } else {
+          setError(true);
+        }
+      } else if (step === 4) {
+        if (formData.hasOwnProperty("description")) {
+          if (formData.description !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 6) {
+        if (formData.hasOwnProperty("selectedImage")) {
+          if (formData.selectedImage !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      }
+    } else {
+      if (step === 1) {
+        if (
+          formData.hasOwnProperty("category") &&
+          formData.hasOwnProperty("name") &&
+          formData?.name !== ""
+        ) {
+          setError(false);
+        } else {
+          setError(true);
+        }
+      }
     }
   }, [formData, step, category_quantity, category_bool]);
 
@@ -327,7 +409,7 @@ const Addads = () => {
     setStep(step + 1);
 
     if (category_bool?.length > 0 && category_quantity?.length > 0) {
-      setAfterWidth(afterWidth + 12.5);
+      setAfterWidth(afterWidth + 12.32);
     } else {
       setAfterWidth(afterWidth + 13.7);
     }
@@ -337,15 +419,15 @@ const Addads = () => {
     if (step > 1) {
       setStep(step - 1);
       if (category_bool?.length > 0 && category_quantity?.length > 0) {
-        setAfterWidth(afterWidth - 12.5);
+        setAfterWidth(afterWidth - 12.32);
       } else {
         setAfterWidth(afterWidth - 13.7);
       }
     }
   };
 
-  const handleSubmit = () => {
-    setLoadingSubmit(true);
+  const handleSubmit = async () => {
+    // setLoadingSubmit(true);
     const sendForm = new FormData();
     // Iterate through properties of formData and append each property to sendForm
     for (const property in formData) {
@@ -353,18 +435,20 @@ const Addads = () => {
         sendForm.append(property, formData[property]);
       }
     }
-    sendForm.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
 
-    // Simulating form submission delay
-    // setTimeout(() => {
-    //   setLoadingSubmit(false);
-    //   // Reset form data and go back to the first step
-    //   setFormData({});
-    //   setStep(1);
-    //   setAfterWidth(12.5); // Reset the width after submitting the form
-    // }, 2000);
+    if (sendForm) {
+      fetch("https://aqar-plus.sta.sa/public/api/ads/store", {
+        method: "POST",
+        body: sendForm,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("API response:", data);
+        })
+        .catch((error) => {
+          console.error("Error sending FormData:", error);
+        });
+    }
   };
 
   const renderStep = () => {
@@ -635,6 +719,80 @@ const Addads = () => {
         default:
           return null;
       }
+    } else if (category_bool?.length === 0 && category_quantity?.length === 0) {
+      switch (step) {
+        case 1:
+          return isLoading ? (
+            "loading"
+          ) : (
+            <CatgouryAds
+              formData={formData}
+              setFormData={setFormData}
+              categories={categories}
+            />
+          );
+        case 2:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeInformation
+              formData={formData}
+              setFormData={setFormData}
+              inputErrors={inputErrors}
+              setInputErrors={setInputErrors}
+              setError={setError}
+              type_aqar={type_aqar}
+            />
+          );
+        case 3:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <ConfimLocation
+              formData={formData}
+              setFormData={setFormData}
+              interfaces={interfaces}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 4:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeDescroption
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 5:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <MapAds
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 6:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeImagesAdd
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        // Render other steps...
+        default:
+          return null;
+      }
     } else {
       switch (step) {
         default:
@@ -749,7 +907,7 @@ const Addads = () => {
                   transition: "all 400ms ease-in-out 0s",
                   zIndex: "-1",
                   border: "4px solid var(--green-color)",
-                  borderStartEndradius: "0px",
+                  borderEndEndRadius: "16px",
                   borderInline: "0px none",
                   borderBlockEnd: "0px none",
                 },

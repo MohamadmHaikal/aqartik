@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 
-const HomeRooms = ({ iconRoom, numRoom, titleRoom }) => {
+const HomeRooms = ({ iconRoom, numRoom, titleRoom, checkIcon }) => {
   return (
     <Box
       sx={{
@@ -25,7 +25,13 @@ const HomeRooms = ({ iconRoom, numRoom, titleRoom }) => {
       >
         {iconRoom}
       </Box>
-      <Typography sx={{ minWidth: { xs: "0", md: "6rem" }, fontSize: "15px" }}>
+      <Typography
+        sx={{
+          minWidth: { xs: "0", md: "6rem" },
+          fontSize: "15px",
+          minWidth: { xs: "50%", md: "70%" },
+        }}
+      >
         {titleRoom}
       </Typography>
       <Typography
@@ -38,6 +44,7 @@ const HomeRooms = ({ iconRoom, numRoom, titleRoom }) => {
       >
         {numRoom}
       </Typography>
+      <Box>{checkIcon}</Box>
     </Box>
   );
 };

@@ -1,26 +1,29 @@
 import React, { useState } from "react";
 
-import { Tabs, Tab, Box, Typography, TextField, Button } from "@mui/material";
+import {
+  Tabs,
+  Tab,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Link,
+} from "@mui/material";
 import DetailsTabContent from "./DetailsTabContent";
-import GppMaybeIcon from "@mui/icons-material/GppMaybe";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 import WifiIcon from "@mui/icons-material/Wifi";
 
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import DescriptionIcon from "@mui/icons-material/Description";
 
-import KitchenIcon from "@mui/icons-material/Kitchen";
-import LocalParkingIcon from "@mui/icons-material/LocalParking";
-import CheckIcon from "@mui/icons-material/Check";
 import Map from "../../assets/map.jpg";
 import HomeRooms from "./HomeRooms";
+// import Map from "../addadsolder/Map";
 
 import { DetailsFeaturesBox, FiveStars } from "../Detailsfolder";
 import { useTranslation } from "react-i18next";
+import MapLocation from "./detailspagexs/MapLocation";
 
-const DetailsTabs = () => {
+const DetailsTabs = ({ adInfo }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const [selectedTab, setSelectedTab] = useState(0);
@@ -97,7 +100,7 @@ const DetailsTabs = () => {
         <DetailsTabContent
           title={t("details_page.details_tabs.specifications_and_features")}
         />
-        <DetailsFeaturesBox />
+        <DetailsFeaturesBox adInfo={adInfo} />
       </Box>
       <Box hidden={selectedTab !== 1}>
         <DetailsTabContent
@@ -105,7 +108,7 @@ const DetailsTabs = () => {
         />
         <Box sx={{ display: "flex", color: "gray" }}>
           <ErrorOutlineIcon sx={{ marginX: "0.3rem" }} />
-          <Typography>
+          <Typography sx={{ marginBottom: "1rem" }}>
             {t("details_page.details_tabs.location_and_map_tab.desc")}.
           </Typography>
         </Box>
@@ -117,7 +120,18 @@ const DetailsTabs = () => {
             borderRadius: "2rem",
           }}
         >
-          <img src={Map} alt="mapImg" style={{ width: "100%" }} />
+          {/* <MapLocation lat={adInfo.lat} lng={adInfo.lng} /> */}
+          {/* <Map /> */}
+          <Link
+            href={`https://www.google.com/maps/dir/My+Location/${adInfo.lat},${adInfo.lng}/@${adInfo.lat},${adInfo.lng},12z/data=!3m1!4b1?entry=ttu`}
+            target="_blank"
+          >
+            <img
+              src={Map}
+              alt="mapImg"
+              style={{ width: "100%", borderRadius: "2rem" }}
+            />
+          </Link>
         </Box>
       </Box>
       <Box hidden={selectedTab !== 2}>

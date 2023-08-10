@@ -11,7 +11,8 @@ import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 
 import { Typography } from "@mui/material";
-
+import { useTranslation } from "react-i18next";
+import { cities } from "./cities";
 const CustomPrevButton = ({ onClick }) => {
   // Custom previous button component
   return (
@@ -46,13 +47,12 @@ const Responsive = {
 };
 
 const CarsouelCity = () => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const owlCarouselRef = useRef(null);
   const [carouselKey, setCarouselKey] = useState(0);
 
-  const [itemsArray, setItemsArray] = useState([
-    { src: abha, alt: "abha", citTitle: "أبها" },
-    { src: jeddah, alt: "jeddah", citTitle: "الرياض" },
-  ]);
+  const [itemsArray, setItemsArray] = useState(cities);
 
   const handlePrevClick = () => {
     if (owlCarouselRef.current) {
@@ -87,6 +87,8 @@ const CarsouelCity = () => {
         key={carouselKey}
         loop={true}
         items={2}
+        rtl={true}
+        startPosition={lang=== "ar" ? itemsArray.length - 2 : itemsArray.length}
         responsive={Responsive}
         autoplay={true}
         autoplayTimeout={7000}
@@ -96,16 +98,16 @@ const CarsouelCity = () => {
         navText={customNavText}
         className={styles.city_carsouel}
       >
-        {itemsArray.map((item, index) => (
-          <div className={styles.item} key={`${item.src}-${index}`}>
+        {itemsArray.map((city, index) => (
+          <div className={styles.item} key={`${city.src}-${index}`}>
             {/* Render your item content here */}
             <Link href="/">
               <div className={styles.cityDiv}>
                 <div className={styles.cityImg}>
                   <div className={styles.Imgbackgrounddiv}>
                     <img
-                      src={item.src}
-                      alt={item.alt}
+                      src={`./cities/${city.img_url}`}
+                      // alt={item.alt}
                       style={{ height: "100%", width: "100%" }}
                     />
                   </div>
@@ -116,7 +118,7 @@ const CarsouelCity = () => {
                     className={styles.ImgHeading}
                     sx={{ fontWeight: "600 !important" }}
                   >
-                    {item.citTitle}
+                    {lang === "ar" ? city.name_ar : city.name_en}
                   </Typography>
                 </div>
               </div>

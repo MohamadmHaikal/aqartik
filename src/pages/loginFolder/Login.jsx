@@ -54,12 +54,13 @@ const Login = () => {
         code: otp,
       });
       console.log(res.data.status);
-      if (res.data.status == 0) {
+      if (res.data.status === 0) {
         toast.error(res.data.message);
         navigate("/userDashbored");
       } else {
         toast.success(res.data.message);
         navigate("/userDashbored");
+        localStorage.setItem("user_token", res.data);
       }
     } catch (err) {
       console.log(err);
