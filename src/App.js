@@ -173,7 +173,7 @@ function App() {
               }
             />
             <Route
-              path="/mappage"
+              path="/mappage/:lan/:long"
               element={
                 <Layout
                   showNavFooter={isMediumScreen}
