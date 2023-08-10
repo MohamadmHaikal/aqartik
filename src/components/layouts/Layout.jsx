@@ -10,6 +10,7 @@ import SendIcon from "@mui/icons-material/Send";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import ChatContext from "../../context/chatContext";
 import { useTranslation } from "react-i18next";
+import { Toaster } from "react-hot-toast";
 
 const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
   const location = useLocation();
@@ -30,6 +31,7 @@ const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
 
   return (
     <div>
+      <Toaster position="top-center" reverseOrder={false} />
       {showNavFooter && (!hideNavAndFooter || !isMediumScreen) && (
         <Nav
           showMessages={showMessages}

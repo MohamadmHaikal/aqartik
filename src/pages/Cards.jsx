@@ -10,7 +10,6 @@ const Cards = () => {
     get("/api/memberships/all");
   }, []);
 
-  // console.log(data);
   return (
     <Container sx={{ marginTop: "17rem" }}>
       <Typography

@@ -9,8 +9,15 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
+  MenuItem,
+  Select,
+  InputLabel,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
+
+import styles from "./confirmLocation.module.css";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+
 const customFormControlClass = {
   flexFlow: "row",
   display: "flex",
@@ -22,43 +29,62 @@ const HomeInformation = ({
   setFormData,
   inputErrors,
   setInputErrors,
+  setError,
+  type_aqar,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
   const [inputValues, setInputValues] = useState(formData.inputValues || {});
 
   const [radioSelected, setRadioSelected] = useState(
     formData.radioSelected || ""
   );
+
   const [showAdditionalBox, setShowAdditionalBox] = useState(
     formData.showAdditionalBox || false
   );
+
   const [additionalRadioSelected, setAdditionalRadioSelected] = useState(
     formData.additionalRadioSelected || ""
   );
+  const [selectedtype, setSelectedtype] = useState(formData.aqar_type || "");
+
+  const handleCityChange = (event) => {
+    setSelectedtype(event.target.value);
+    setFormData((prevData) => ({
+      ...prevData,
+      aqar_type: event.target.value,
+    }));
+  };
 
   const homedata = [
     {
       title: t("user_dashboard.order_details.label1"),
       subtitle: t("user_dashboard.order_details.hint1"),
       placeholder: t("user_dashboard.order_details.placeholder1"),
+      name: "price",
     },
     {
       title: t("user_dashboard.order_details.label2"),
       subtitle: t("user_dashboard.order_details.hint2"),
       placeholder: t("user_dashboard.order_details.placeholder2"),
+      name: "area",
     },
     {
       title: t("user_dashboard.order_details.label3"),
       subtitle: t("user_dashboard.order_details.hint3"),
       placeholder: t("user_dashboard.order_details.placeholder3"),
+      name: "width",
     },
     {
       title: t("user_dashboard.order_details.label4"),
       subtitle: t("user_dashboard.order_details.hint4"),
       placeholder: t("user_dashboard.order_details.placeholder4"),
+      name: "height",
     },
   ];
+
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -105,6 +131,7 @@ const HomeInformation = ({
       inputValues: newInputValues,
     }));
   };
+
   const handleRadioChange = (event) => {
     const { name, value } = event.target;
 
@@ -133,8 +160,9 @@ const HomeInformation = ({
           variant="h4"
           sx={{
             fontWeight: "600",
-            marginBottom: "2.5rem",
-            fontSize: { xs: "1.5rem", md: "2.25rem" },
+            marginBottom: "16px",
+            marginTop: "8px",
+            fontSize: { xs: "1.2rem", md: "1.5rem" },
           }}
         >
           {t("user_dashboard.new_order.order_info.main_title")}
@@ -144,14 +172,14 @@ const HomeInformation = ({
             sx={{
               display: "flex",
               flexDirection: "column",
-              marginBottom: "1rem",
+              marginBottom: "12px",
             }}
             key={index}
           >
             <Box sx={{ display: "flex", alignItems: "baseline" }}>
               <label
                 htmlFor={`my-text-field-${index}`}
-                style={{ fontWeight: "600", marginBottom: "0.5rem" }}
+                style={{ fontWeight: "500", marginBottom: "4px" }}
               >
                 {item.title}
               </label>
@@ -159,7 +187,7 @@ const HomeInformation = ({
                 style={{
                   color: "#999",
                   marginRight: "0.5rem",
-                  fontSize: "12px",
+                  fontSize: "11px",
                 }}
               >
                 ({item.subtitle}){" "}
@@ -167,9 +195,9 @@ const HomeInformation = ({
             </Box>
             <TextField
               type="text"
-              name={`input-${index}`}
+              name={item.name}
               placeholder={item.placeholder}
-              value={inputValues[`input-${index}`] || ""}
+              value={inputValues[`${item.name}`] || ""}
               onChange={handleInputChange}
               error={inputErrors[`input-${index}`]}
               helperText={inputErrors[`input-${index}`] ? "قيمة غير صحيحة" : ""}
@@ -181,18 +209,53 @@ const HomeInformation = ({
                 },
               }}
             />
-            {/* {inputErrors && <Typography>يرجى ادخال المعلومات</Typography>} */}
           </Box>
         ))}
       </Box>
       <Box>
-        <Typography sx={{ fontWeight: "600" }}>
+        <InputLabel sx={{ color: "black", fontWeight: "500" }}>
+          {t("user_dashboard.property_location.label4")}
+        </InputLabel>
+        <Select
+          value={selectedtype}
+          onChange={handleCityChange}
+          label=""
+          required
+          IconComponent={ArrowDropDownIcon}
+          className={`${styles.select} select`}
+          classes={lang === "ar" && { icon: styles.selectIcon }}
+          sx={{
+            borderRadius: "12px !important",
+            boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
+            border: "1px solid rgba(0, 0, 0, 0.06) !important",
+            paddingBlock: "5px",
+            height: "48px",
+            width: "100%",
+            marginBlock: "4px 16px",
+          }}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                borderRadius: "1rem",
+              },
+            },
+          }}
+        >
+          {type_aqar?.map((type) => (
+            <MenuItem key={type.id} value={type.id}>
+              {lang === "ar" ? type.ar_name : type.en_name}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
+      <Box>
+        <Typography sx={{ fontWeight: "500" }}>
           {t("user_dashboard.order_details.title2")}
         </Typography>
         <FormControl
           component="fieldset"
           sx={{
-            marginTop: "0.5rem",
+            marginTop: "4px",
             width: "100%",
             flexDirection: "row",
             justifyContent: "space-between",

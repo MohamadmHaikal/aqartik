@@ -26,18 +26,18 @@ function App() {
   const lang = i18n.language;
   const { data, isLoading, error, get, post } = useDataFetcher();
   const [generalData, setGeneralData] = useState([]);
-  const [website_status, set_website_status] = useState();
+  const [website_status, set_website_status] = useState(null);
 
   useEffect(() => {
     get("/api/settings/genral");
   }, []);
+
   useEffect(() => {
     if (data) {
       setGeneralData(data.settings);
       set_website_status(data.settings.site_status);
     }
   }, [data]);
-  console.log(generalData);
   return (
     <>
       <Helmet>
@@ -61,7 +61,7 @@ function App() {
           }
         />
       </Helmet>
-      {website_status ? (
+      {website_status === 1 && (
         <Router basename="/">
           <Routes>
             <Route
@@ -204,7 +204,8 @@ function App() {
             />
           </Routes>
         </Router>
-      ) : (
+      )}
+      {website_status === 0 && (
         <div
           style={{ width: "100%", height: "100vh", backgroundColor: "#EEE" }}
         >

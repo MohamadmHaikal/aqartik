@@ -27,7 +27,6 @@ import useDataFetcher from "../api/useDataFetcher ";
 
 const Details = () => {
   const adInfo = useLocation().state.ad;
-  // console.log(adInfo);
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const [per_page, set_per_page] = useState();
@@ -93,7 +92,6 @@ const Details = () => {
   };
   const handleCopyLink = () => {
     const currentUrl = window.location.href;
-    console.log(currentUrl);
 
     navigator.clipboard.writeText(currentUrl).then(() => {
       setCopied(true);

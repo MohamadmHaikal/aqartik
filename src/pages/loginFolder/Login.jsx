@@ -11,54 +11,60 @@ import {
 } from "@mui/material";
 import { Logo } from "../../assets";
 import { useTranslation } from "react-i18next";
+import { myAxios } from "../../api/myAxios";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 const Login = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCounterActive, setIsCounterActive] = useState(true);
-  const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(120);
   const [enteredPhoneNumber, setEnteredPhoneNumber] = useState("");
+
   const handlePhoneNumberChange = (event) => {
     const inputPhoneNumber = event.target.value.replace(/\D/g, "");
     setPhoneNumber(inputPhoneNumber);
     setEnteredPhoneNumber(inputPhoneNumber);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setIsModalOpen(true);
+    try {
+      const res = await myAxios.post("/api/login", {
+        phone: phoneNumber,
+      });
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setTimer(120);
-    setIsCounterActive(true);
-  };
-  const handleOtpChange = (event, index) => {
-    const inputDigit = event.target.value;
-    setOtp((prevOtp) => {
-      let updatedOtp = prevOtp;
-      updatedOtp =
-        updatedOtp.substring(0, index) +
-        inputDigit +
-        updatedOtp.substring(index + 1);
+  const [otp, setOTP] = useState(["", "", "", ""]);
 
-      // Move cursor to the next input field
-      if (inputDigit && index < otp.length - 1) {
-        inputRefs[index + 1].current.focus();
+  const verifyOTP = async (e) => {
+    // e.target.disabled = true;
+    try {
+      const res = await myAxios.post("/api/CheckCode", {
+        phone: phoneNumber,
+        code: otp,
+      });
+      console.log(res.data.status);
+      if (res.data.status === 0) {
+        toast.error(res.data.message);
+        navigate("/userDashbored");
+      } else {
+        toast.success(res.data.message);
+        navigate("/userDashbored");
+        localStorage.setItem("user_token", res.data);
       }
-
-      return updatedOtp;
-    });
-  };
-  const handleVerifyOtp = () => {
-    // Perform OTP verification logic here
-    // You can use the `otp` state variable for further processing
-    // For demonstration purposes, let's just close the modal after verifying OTP
-    handleCloseModal();
+    } catch (err) {
+      console.log(err);
+    }
   };
   useEffect(() => {
     let countdown = setInterval(() => {
@@ -84,7 +90,6 @@ const Login = () => {
 
   // Create refs for each input field
 
-  const inputRefs = [useRef(), useRef(), useRef(), useRef()];
   return (
     <>
       <Container>
@@ -182,7 +187,7 @@ const Login = () => {
         </Grid>
         <Modal
           open={isModalOpen}
-          onClose={handleCloseModal}
+          // onClose={handleCloseModal}
           aria-labelledby="otp-modal"
           aria-describedby="enter-otp"
         >
@@ -222,141 +227,112 @@ const Login = () => {
             >
               <Typography>
                 {t("login.hint")}
-
                 <span>{enteredPhoneNumber}</span>
               </Typography>
             </Box>
-            <form>
-              <Box sx={{ display: "flex", marginY: "1rem", direction: "ltr" }}>
-                <input
-                  type="text"
-                  value={otp[0] || ""}
-                  onChange={(event) => handleOtpChange(event, 0)}
-                  ref={inputRefs[0]}
-                  style={{
-                    width: "55px",
-                    height: "55px",
-                    borderRadius: "13px",
-                    backgroundColor: "#ffffff",
-                    lineHeight: "50px",
-                    textAlign: "center",
-                    fontSize: "24px",
-                    fontWeight: 400,
-                    color: "#3c3c3c",
-                    margin: "0 2px",
-                    border: "1px solid #e2e1e1",
-                    boxShadow: "0px 1px 5px rgba(0, 0, 0, 0.15)",
-                  }}
-                />
-                <input
-                  type="text"
-                  value={otp[1] || ""}
-                  onChange={(event) => handleOtpChange(event, 1)}
-                  ref={inputRefs[1]}
-                  style={{
-                    width: "55px",
-                    height: "55px",
-                    borderRadius: "13px",
-                    backgroundColor: "#ffffff",
-                    lineHeight: "50px",
-                    textAlign: "center",
-                    fontSize: "24px",
-                    fontWeight: 400,
-                    color: "#3c3c3c",
-                    margin: "0 2px",
-                    border: "1px solid #e2e1e1",
-                    boxShadow: "0px 1px 5px rgba(0, 0, 0, 0.15)",
-                  }}
-                />
-                <input
-                  type="text"
-                  value={otp[2] || ""}
-                  onChange={(event) => handleOtpChange(event, 2)}
-                  ref={inputRefs[2]}
-                  style={{
-                    width: "55px",
-                    height: "55px",
-                    borderRadius: "13px",
-                    backgroundColor: "#ffffff",
-                    lineHeight: "50px",
-                    textAlign: "center",
-                    fontSize: "24px",
-                    fontWeight: 400,
-                    color: "#3c3c3c",
-                    margin: "0 2px",
-                    border: "1px solid #e2e1e1",
-                    boxShadow: "0px 1px 5px rgba(0, 0, 0, 0.15)",
-                  }}
-                />
-                <input
-                  type="text"
-                  value={otp[3] || ""}
-                  onChange={(event) => handleOtpChange(event, 3)}
-                  ref={inputRefs[3]}
-                  style={{
-                    width: "55px",
-                    height: "55px",
-                    borderRadius: "13px",
-                    backgroundColor: "#ffffff",
-                    lineHeight: "50px",
-                    textAlign: "center",
-                    fontSize: "24px",
-                    fontWeight: 400,
-                    color: "#3c3c3c",
-                    margin: "0 2px",
-                    border: "1px solid #e2e1e1",
-                    boxShadow: "0px 1px 5px rgba(0, 0, 0, 0.15)",
-                  }}
-                />
-              </Box>
-              <Link href="/userdashbored">
+            <Box sx={{ display: "flex", marginY: "1rem", direction: "ltr" }}>
+              {Array.from({ length: 4 }).map((_, index) => {
+                const inputIndex = index;
+                return (
+                  <TextField
+                    key={index}
+                    type="text"
+                    value={otp[inputIndex] || ""}
+                    onChange={(e) => {
+                      const updatedOTP = [...otp];
+                      updatedOTP[inputIndex] = e.target.value;
+                      setOTP(updatedOTP.join(""));
+                      if (e.target.value && index < 3) {
+                        const nextInput = document.getElementById(
+                          `otp-input-${index + 1}`
+                        );
+                        nextInput && nextInput.focus();
+                      }
+                    }}
+                    inputProps={{
+                      maxLength: 1,
+                    }}
+                    autoFocus={index === 0}
+                    id={`otp-input-${index}`}
+                    sx={{
+                      width: "55px",
+                      height: "55px",
+                      borderRadius: "8px",
+                      backgroundColor: "#ffffff",
+                      fontSize: "24px",
+                      textAlign: "center",
+                      fontWeight: 400,
+                      display: "flex",
+                      placeItems: "center",
+                      color: "#3c3c3c",
+                      margin: "0 2px",
+                      border: "1px solid #e2e1e1",
+                      boxShadow: "0px 1px 5px rgba(0, 0, 0, 0.15)",
+
+                      "& .MuiOutlinedInput-root": {
+                        "&:hover fieldset": {
+                          borderColor: "#14b183",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#14b183",
+                          color: "#171718",
+                        },
+                      },
+                    }}
+                  />
+                );
+              })}
+            </Box>
+            <Button
+              sx={{
+                backgroundColor: "var(--green-color)",
+                color: "white",
+                width: "100%",
+                borderRadius: "2rem",
+                marginBottom: "1em",
+                "&:hover": {
+                  backgroundColor: "var(--green-color)",
+                  color: "white",
+                },
+
+                "&:disabled": {
+                  backgroundColor: "#ccc", // Change to your desired disabled background color
+                  color: "#888",
+                },
+              }}
+              onClick={(e) => verifyOTP(e)}
+            >
+              {t("login.modal_btn")}
+            </Button>
+            <Box
+              sx={{
+                color: "#6c757d",
+                fontSize: "14px",
+                textAlign: "center",
+                marginBottom: "1rem",
+              }}
+            >
+              {t("login.modal_msg")}
+
+              {isCounterActive && (
+                <Typography sx={{ textAlign: "center", color: "red" }}>
+                  {formattedTime}
+                </Typography>
+              )}
+              {!isCounterActive && (
                 <Button
                   sx={{
-                    backgroundColor: "var(--green-color)",
-                    color: "white",
-                    width: "100%",
+                    color: "var(--green-color)",
+                    border: "1px solid var(--green-color)",
                     borderRadius: "2rem",
-                    marginBottom: "1em",
-                    "&:hover": {
-                      backgroundColor: "var(--green-color)",
-                      color: "white",
-                    },
+                    width: "100%",
                   }}
-                  onClick={handleVerifyOtp}
+                  onClick={() => setIsCounterActive(true)}
                 >
-                  {t("login.modal_btn")}
+                  {t("login.re_btn")}
                 </Button>
-              </Link>
-              <Box
-                sx={{
-                  color: "#6c757d",
-                  fontSize: "14px",
-                  textAlign: "center",
-                  marginBottom: "1rem",
-                }}
-              >
-                {t("login.modal_msg")}
-
-                {isCounterActive && (
-                  <Typography sx={{ textAlign: "center", color: "red" }}>
-                    {formattedTime}
-                  </Typography>
-                )}
-                {!isCounterActive && (
-                  <Button
-                    sx={{
-                      color: "var(--green-color)",
-                      border: "1px solid var(--green-color)",
-                      borderRadius: "2rem",
-                      width: "100%",
-                    }}
-                    onClick={() => setIsCounterActive(true)}
-                  >
-                    {t("login.re_btn")}
-                  </Button>
-                )}
-              </Box>
-            </form>
+              )}
+            </Box>
           </Box>
         </Modal>
       </Container>

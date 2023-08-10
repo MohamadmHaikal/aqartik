@@ -3,63 +3,69 @@ import { Box, Typography, Select, MenuItem, InputLabel } from "@mui/material";
 import styles from "./confirmLocation.module.css";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useTranslation } from "react-i18next";
+import { cities } from "../../cities";
 
-const ConfimLocation = ({ formData, setFormData }) => {
+const ConfimLocation = ({ formData, setFormData, interfaces }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+
   const [selectedCity, setSelectedCity] = useState(
-    formData.selectedCity || "option1"
+    formData.selectedCity || null
   );
   const [selectedDistrict, setSelectedDistrict] = useState(
-    formData.selectedDistrict || "option1"
+    formData.selectedDistrict || null
   );
-  const [selectedStreet, setSelectedStreet] = useState(
-    formData.selectedStreet || "option1"
+  const [selectedInterface, setSelectedInterface] = useState(
+    formData.selectedInterface || null
   );
 
   const handleCityChange = (event) => {
-    const selectedValue = event.target.value;
     setSelectedCity(event.target.value);
     setFormData((prevData) => ({
       ...prevData,
       selectedCity: event.target.value,
     }));
-    console.log("Selected City:", selectedValue);
   };
 
   const handleDistrictChange = (event) => {
-    const selectedValue = event.target.value;
     setSelectedDistrict(event.target.value);
     setFormData((prevData) => ({
       ...prevData,
       selectedDistrict: event.target.value,
     }));
-    console.log("Selected District:", selectedValue);
   };
 
   const handleStreetChange = (event) => {
-    const selectedValue = event.target.value;
-    setSelectedStreet(event.target.value);
+    setSelectedInterface(event.target.value);
     setFormData((prevData) => ({
       ...prevData,
-      selectedStreet: event.target.value,
+      selectedInterface: event.target.value,
     }));
-    console.log("Selected Street:", selectedValue);
   };
 
-  const isFormValid = selectedCity && selectedDistrict && selectedStreet;
+  // const isFormValid = selectedCity && selectedDistrict && selectedStreet;
 
+  const selectedCityData = cities.find((city) => city.name_en === selectedCity);
+
+  const neighborhoods = selectedCityData ? selectedCityData.neighborhoods : [];
   return (
     <Box>
       <Typography
         variant="h4"
-        sx={{ fontWeight: "600", fontSize: { xs: "1.5rem", md: "2.25rem" } }}
+        sx={{
+          fontWeight: "600",
+          marginBottom: "24px",
+          marginTop: "8px",
+          fontSize: { xs: "1.2rem", md: "1.5rem" },
+        }}
       >
         {t("user_dashboard.property_location.title")}
       </Typography>
-      <InputLabel sx={{ color: "black", fontWeight: "600", marginTop: "3rem" }}>
+
+      <InputLabel sx={{ color: "black", fontWeight: "500", marginTop: "1rem" }}>
         {t("user_dashboard.property_location.label1")}
       </InputLabel>
+
       <Select
         value={selectedCity}
         onChange={handleCityChange}
@@ -75,7 +81,7 @@ const ConfimLocation = ({ formData, setFormData }) => {
           paddingBlock: "5px",
           height: "48px",
           width: "100%",
-          marginBlock: "1rem 40px",
+          marginBlock: "4px 12px",
         }}
         MenuProps={{
           PaperProps: {
@@ -85,30 +91,22 @@ const ConfimLocation = ({ formData, setFormData }) => {
           },
         }}
       >
-        <MenuItem
-          value="option1"
-          className={selectedCity === "option1" ? styles.selectedMenuItem : ""}
-        >
-          Option 1
-        </MenuItem>
-        <MenuItem
-          value="option2"
-          className={selectedCity === "option2" ? styles.selectedMenuItem : ""}
-        >
-          Option 2
-        </MenuItem>
-        <MenuItem
-          value="option3"
-          className={selectedCity === "option3" ? styles.selectedMenuItem : ""}
-        >
-          Option 3
-        </MenuItem>
+        {cities.map((city) => (
+          <MenuItem
+            value={city.name_en}
+            className={
+              selectedCity === city.name_en ? styles.selectedMenuItem : ""
+            }
+          >
+            {city.name_en}
+          </MenuItem>
+        ))}
       </Select>
 
       <InputLabel
         sx={{
           color: "black",
-          fontWeight: "600",
+          fontWeight: "400",
         }}
       >
         {t("user_dashboard.property_location.label2")}
@@ -128,7 +126,7 @@ const ConfimLocation = ({ formData, setFormData }) => {
           paddingBlock: "5px",
           height: "48px",
           width: "100%",
-          marginBlock: "1rem 40px",
+          marginBlock: "4px 12px",
         }}
         MenuProps={{
           PaperProps: {
@@ -138,45 +136,31 @@ const ConfimLocation = ({ formData, setFormData }) => {
           },
         }}
       >
-        <MenuItem
-          value="option1"
-          className={
-            selectedDistrict === "option1" ? styles.selectedMenuItem : ""
-          }
-        >
-          Option 1
-        </MenuItem>
-        <MenuItem
-          value="option2"
-          className={
-            selectedDistrict === "option2" ? styles.selectedMenuItem : ""
-          }
-        >
-          Option 2
-        </MenuItem>
-        <MenuItem
-          value="option3"
-          className={
-            selectedDistrict === "option3" ? styles.selectedMenuItem : ""
-          }
-        >
-          Option 3
-        </MenuItem>
+        {neighborhoods.map((nei) => (
+          <MenuItem
+            value={nei.name_en}
+            className={
+              selectedInterface === nei.name_en ? styles.selectedMenuItem : ""
+            }
+          >
+            {nei.name_en}
+          </MenuItem>
+        ))}
       </Select>
 
       <InputLabel
         sx={{
           color: "black",
-          fontWeight: "600",
+          fontWeight: "500",
         }}
       >
         {t("user_dashboard.property_location.label3")}
       </InputLabel>
-      <Typography sx={{ color: "gray" }}>
+      <Typography sx={{ color: "gray", fontSize: "14px" }}>
         {t("user_dashboard.property_location.hint")}
       </Typography>
       <Select
-        value={selectedStreet}
+        value={selectedInterface}
         onChange={handleStreetChange}
         label=""
         required
@@ -190,7 +174,7 @@ const ConfimLocation = ({ formData, setFormData }) => {
           paddingBlock: "5px",
           height: "48px",
           width: "100%",
-          marginBlock: "1rem 40px",
+          marginBlock: "4px 12px",
         }}
         MenuProps={{
           PaperProps: {
@@ -200,37 +184,19 @@ const ConfimLocation = ({ formData, setFormData }) => {
           },
         }}
       >
-        <MenuItem
-          value="option1"
-          className={
-            selectedStreet === "option1" ? styles.selectedMenuItem : ""
-          }
-        >
-          Option 1
-        </MenuItem>
-        <MenuItem
-          value="option2"
-          className={
-            selectedStreet === "option2" ? styles.selectedMenuItem : ""
-          }
-        >
-          Option 2
-        </MenuItem>
-        <MenuItem
-          value="option3"
-          className={
-            selectedStreet === "option3" ? styles.selectedMenuItem : ""
-          }
-        >
-          Option 3
-        </MenuItem>
+        {interfaces.map((interface_item) => (
+          <MenuItem
+            value={interface_item.id}
+            className={
+              selectedInterface === interface_item.en_name
+                ? styles.selectedMenuItem
+                : ""
+            }
+          >
+            {interface_item.en_name}
+          </MenuItem>
+        ))}
       </Select>
-
-      {isFormValid ? null : (
-        <Typography variant="body2" sx={{ color: "red", marginTop: "1rem" }}>
-          Please select all options.
-        </Typography>
-      )}
     </Box>
   );
 };

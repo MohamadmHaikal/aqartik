@@ -6,19 +6,9 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import FavoriteIcons from "./FavoriteIcons";
 import { useNavigate } from "react-router";
-
 import Icons from "./Icons";
-const SpecialAds = ({
-  ad,
 
-  // title,
-  // location,
-  // icons,
-  // description,
-  // ratings,
-  // price,
-  // isNew,
-}) => {
+const SpecialAds = ({ ad }) => {
   const isNewHome = localStorage.getItem("isNewHome") === "true";
   const navigate = useNavigate();
 

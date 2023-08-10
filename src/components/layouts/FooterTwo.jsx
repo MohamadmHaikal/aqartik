@@ -38,7 +38,6 @@ const FooterTwo = () => {
       setFooterData(data.settings);
     }
   }, [data]);
-  console.log(FooterData);
 
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -355,11 +354,15 @@ const FooterTwo = () => {
             <Box sx={{ width: "100%", maxWidth: "none" }}>
               <Box sx={{ marginBottom: "20px" }}>
                 <Link href="/">
-                  <img src={
-                    lang === "ar"
-                      ? `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_ar}`
-                      : `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_en}`
-                  } alt="logo" style={{ width: "140px" }} />
+                  <img
+                    src={
+                      lang === "ar"
+                        ? `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_ar}`
+                        : `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_en}`
+                    }
+                    alt="logo"
+                    style={{ width: "140px" }}
+                  />
                 </Link>
               </Box>
               <Box

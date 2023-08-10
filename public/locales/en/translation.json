@@ -317,7 +317,8 @@
             "hint": "Choose the direction of the neighborhood in the city",
             "label1": "city",
             "label2": "neighborhood",
-            "label3": "direction"
+            "label3": "direction",
+            "label4": "property type"
         },
         "property_desc": {
             "title": "Property description",

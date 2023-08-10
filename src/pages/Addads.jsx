@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, Box, Link } from "@mui/material";
+import { Button, Container, Box } from "@mui/material";
 import {
   CatgouryAds,
   MapAds,
@@ -10,17 +10,29 @@ import {
   HomeInformation,
   LicenseModal,
 } from "../components";
+
+import AddFeatureComponent from "../components/addadsolder/AddFeatureComponent";
+
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../api/useDataFetcher ";
+import { Link } from "react-router-dom";
 // import LicenseModal from "./LicenseModal";
 
 const Addads = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
+  const {
+    data: sendFormData,
+    isLoading: isLoadingSendForm,
+    post,
+  } = useDataFetcher();
+
+  //for getting the categories
   const { data, isLoading, get } = useDataFetcher();
   const [categories, setCategories] = useState([]);
 
+  //for getting the category information
   const {
     data: info,
     isLoading: isInfoLoading,
@@ -37,17 +49,42 @@ const Addads = () => {
     }
   }, [data]);
 
+  //declaring the important arrays
+  const [type_aqar, set_type_aqar] = useState([]);
+  const [type_res, set_type_res] = useState([]);
+  const [interfaces, set_interfaces] = useState([]);
+  const [category_bool, set_category_bool] = useState([]);
+  const [category_quantity, set_category_quantity] = useState([]);
+
+  useEffect(() => {
+    set_type_aqar(info?.type_aqar);
+    set_type_res(info?.type_res);
+    set_interfaces(info?.interfaces);
+    set_category_bool(info?.categoryBool);
+    set_category_quantity(info?.categoryQuantity);
+  }, [info]);
+
   const [step, setStep] = useState(1);
+  const [isLastStep, setIsLastStep] = useState();
+
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [isLicenseModalOpen, setIsLicenseModalOpen] = useState(false);
-  const [afterWidth, setAfterWidth] = useState(16.3); // Initial width of &:after
+  const [afterWidth, setAfterWidth] = useState(13.7); // Initial width of &:after
   const [error, setError] = useState(false);
-  // const [error2, setError2] = useState(false);
   const [inputErrors, setInputErrors] = useState({});
 
-  const [hasNextStep, setHasNextStep] = useState(true);
-  const isLastStep = step === 7;
+  console.log(formData);
+
+  useEffect(() => {
+    if (category_bool?.length > 0 && category_quantity?.length > 0) {
+      step === 8 ? setIsLastStep(8) : setIsLastStep(null);
+    } else {
+      step === 7 ? setIsLastStep(7) : setIsLastStep(null);
+    }
+  }, [step, category_bool, category_quantity]);
+
+  const [hasNextStep, setHasNextStep] = useState(false);
 
   useEffect(() => {
     setIsLicenseModalOpen(true);
@@ -63,112 +100,714 @@ const Addads = () => {
 
   const hasPrevStep = step > 1;
 
+  useEffect(() => {
+    if (category_bool?.length > 0 && category_quantity?.length > 0) {
+      if (step === 1) {
+        if (
+          formData.hasOwnProperty("category") &&
+          formData.hasOwnProperty("name") &&
+          formData?.name !== ""
+        ) {
+          setError(false);
+        } else {
+          setError(true);
+        }
+      } else if (step === 2) {
+        if (
+          formData.hasOwnProperty("inputValues") &&
+          formData.hasOwnProperty("radioSelected") &&
+          formData.hasOwnProperty("aqar_type")
+        ) {
+          const allInputsFilled = Object.values(formData?.inputValues).every(
+            (val) => val !== ""
+          );
+          const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
+          if (
+            !allInputsFilled ||
+            !isInputsFour ||
+            formData?.aqar_type === "" ||
+            formData?.radioSelected === ""
+          ) {
+            setError(true);
+          } else {
+            setError(false);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 3) {
+        if (formData.hasOwnProperty("aqarCategoryQuantity")) {
+          if (
+            formData.aqarCategoryQuantity.length === category_quantity.length
+          ) {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 4) {
+      } else if (step === 5) {
+        if (
+          formData.hasOwnProperty("selectedInterface") &&
+          formData.hasOwnProperty("selectedCity") &&
+          formData.hasOwnProperty("selectedDistrict")
+        ) {
+          setError(false);
+        } else {
+          setError(true);
+        }
+      } else if (step === 6) {
+        if (formData.hasOwnProperty("description")) {
+          if (formData.description !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 8) {
+        if (formData.hasOwnProperty("selectedImage")) {
+          if (formData.selectedImage !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      }
+    } else if (category_bool?.length > 0 && category_quantity?.length === 0) {
+      if (step === 1) {
+        if (
+          formData.hasOwnProperty("category") &&
+          formData.hasOwnProperty("name") &&
+          formData?.name !== ""
+        ) {
+          setError(false);
+        } else {
+          setError(true);
+        }
+      } else if (step === 2) {
+        if (
+          formData.hasOwnProperty("inputValues") &&
+          formData.hasOwnProperty("radioSelected") &&
+          formData.hasOwnProperty("aqar_type")
+        ) {
+          const allInputsFilled = Object.values(formData?.inputValues).every(
+            (val) => val !== ""
+          );
+          const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
+          if (
+            !allInputsFilled ||
+            !isInputsFour ||
+            formData?.aqar_type === "" ||
+            formData?.radioSelected === ""
+          ) {
+            setError(true);
+          } else {
+            setError(false);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 4) {
+        if (
+          formData.hasOwnProperty("selectedInterface") &&
+          formData.hasOwnProperty("selectedCity") &&
+          formData.hasOwnProperty("selectedDistrict")
+        ) {
+          setError(false);
+        } else {
+          setError(true);
+        }
+      } else if (step === 5) {
+        if (formData.hasOwnProperty("description")) {
+          if (formData.description !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 7) {
+        if (formData.hasOwnProperty("selectedImage")) {
+          if (formData.selectedImage !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      }
+    } else if (category_bool?.length === 0 && category_quantity?.length > 0) {
+      if (step === 1) {
+        if (
+          formData.hasOwnProperty("category") &&
+          formData.hasOwnProperty("name") &&
+          formData?.name !== ""
+        ) {
+          setError(false);
+        } else {
+          setError(true);
+        }
+      } else if (step === 2) {
+        if (
+          formData.hasOwnProperty("inputValues") &&
+          formData.hasOwnProperty("radioSelected") &&
+          formData.hasOwnProperty("aqar_type")
+        ) {
+          const allInputsFilled = Object.values(formData?.inputValues).every(
+            (val) => val !== ""
+          );
+          const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
+          if (
+            !allInputsFilled ||
+            !isInputsFour ||
+            formData?.aqar_type === "" ||
+            formData?.radioSelected === ""
+          ) {
+            setError(true);
+          } else {
+            setError(false);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 3) {
+        if (formData.hasOwnProperty("aqarCategoryQuantity")) {
+          if (
+            formData.aqarCategoryQuantity.length === category_quantity.length
+          ) {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 4) {
+        if (
+          formData.hasOwnProperty("selectedInterface") &&
+          formData.hasOwnProperty("selectedCity") &&
+          formData.hasOwnProperty("selectedDistrict")
+        ) {
+          setError(false);
+        } else {
+          setError(true);
+        }
+      } else if (step === 5) {
+        if (formData.hasOwnProperty("description")) {
+          if (formData.description !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 7) {
+        if (formData.hasOwnProperty("selectedImage")) {
+          if (formData.selectedImage !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      }
+    } else if (category_bool?.length === 0 && category_quantity?.length === 0) {
+      if (step === 1) {
+        if (
+          formData.hasOwnProperty("category") &&
+          formData.hasOwnProperty("name") &&
+          formData?.name !== ""
+        ) {
+          setError(false);
+        } else {
+          setError(true);
+        }
+      } else if (step === 2) {
+        if (
+          formData.hasOwnProperty("inputValues") &&
+          formData.hasOwnProperty("radioSelected") &&
+          formData.hasOwnProperty("aqar_type")
+        ) {
+          const allInputsFilled = Object.values(formData?.inputValues).every(
+            (val) => val !== ""
+          );
+          const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
+          if (
+            !allInputsFilled ||
+            !isInputsFour ||
+            formData?.aqar_type === "" ||
+            formData?.radioSelected === ""
+          ) {
+            setError(true);
+          } else {
+            setError(false);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 3) {
+        if (
+          formData.hasOwnProperty("selectedInterface") &&
+          formData.hasOwnProperty("selectedCity") &&
+          formData.hasOwnProperty("selectedDistrict")
+        ) {
+          setError(false);
+        } else {
+          setError(true);
+        }
+      } else if (step === 4) {
+        if (formData.hasOwnProperty("description")) {
+          if (formData.description !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 6) {
+        if (formData.hasOwnProperty("selectedImage")) {
+          if (formData.selectedImage !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      }
+    } else {
+      if (step === 1) {
+        if (
+          formData.hasOwnProperty("category") &&
+          formData.hasOwnProperty("name") &&
+          formData?.name !== ""
+        ) {
+          setError(false);
+        } else {
+          setError(true);
+        }
+      }
+    }
+  }, [formData, step, category_quantity, category_bool]);
+
   const handleNext = () => {
     // Perform form validation
-    if (step === 1 && (!formData.name || error)) {
-      setError(true);
-      return; // Stop execution if the field is empty or has an error
-    } else if (step === 2 && (!formData.inputValues || inputErrors)) {
-      setInputErrors(true);
-      // Check for errors in the input fields of step 2
-      return; // Stop execution if there are errors
+    if (step === 1) {
+      getInfo(`/api/ads/info/${formData?.category?.id}`);
     }
-
-    setError(false); // Reset the error state if there are no errors
-    setInputErrors(false);
-
     setStep(step + 1);
-    setAfterWidth(afterWidth + 13.7); // Increase the width by 10
+
+    if (category_bool?.length > 0 && category_quantity?.length > 0) {
+      setAfterWidth(afterWidth + 12.32);
+    } else {
+      setAfterWidth(afterWidth + 13.7);
+    }
   };
+
   const handlePrev = () => {
     if (step > 1) {
       setStep(step - 1);
-      setAfterWidth(afterWidth - 13.7); // Decrease the width by 10
+      if (category_bool?.length > 0 && category_quantity?.length > 0) {
+        setAfterWidth(afterWidth - 12.32);
+      } else {
+        setAfterWidth(afterWidth - 13.7);
+      }
     }
   };
 
-  const handleSubmit = () => {
-    setLoading(true);
+  const handleSubmit = async () => {
+    // setLoadingSubmit(true);
+    const sendForm = new FormData();
+    // Iterate through properties of formData and append each property to sendForm
+    for (const property in formData) {
+      if (formData.hasOwnProperty(property)) {
+        sendForm.append(property, formData[property]);
+      }
+    }
 
-    // Simulating form submission delay
-    setTimeout(() => {
-      setLoading(false);
-      // Reset form data and go back to the first step
-      setFormData({});
-      setStep(1);
-      setAfterWidth(13.7); // Reset the width after submitting the form
-    }, 2000);
+    if (sendForm) {
+      fetch("https://aqar-plus.sta.sa/public/api/ads/store", {
+        method: "POST",
+        body: sendForm,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("API response:", data);
+        })
+        .catch((error) => {
+          console.error("Error sending FormData:", error);
+        });
+    }
   };
 
   const renderStep = () => {
-    switch (step) {
-      case 1:
-        return (
-          <CatgouryAds
-            formData={formData}
-            setFormData={setFormData}
-            categories={categories}
-            setError={setError}
-            error={error}
-          />
-        );
-      case 2:
-        return (
-          <HomeInformation
-            formData={formData}
-            setFormData={setFormData}
-            inputErrors={inputErrors}
-            setInputErrors={setInputErrors}
-          />
-        );
-      case 3:
-        return (
-          <HomeDetails
-            formData={formData}
-            setFormData={setFormData}
-            setError={setError}
-            error={error}
-          />
-        );
-      case 4:
-        return (
-          <ConfimLocation
-            formData={formData}
-            setFormData={setFormData}
-            setError={setError}
-            error={error}
-          />
-        );
-      case 5:
-        return (
-          <HomeDescroption
-            formData={formData}
-            setFormData={setFormData}
-            setError={setError}
-            error={error}
-          />
-        );
-      case 6:
-        return (
-          <MapAds
-            formData={formData}
-            setFormData={setFormData}
-            setError={setError}
-            error={error}
-          />
-        );
-      case 7:
-        return (
-          <HomeImagesAdd
-            formData={formData}
-            setFormData={setFormData}
-            setError={setError}
-            error={error}
-          />
-        );
-      // Render other steps...
-      default:
-        return null;
+    //render both steps
+    if (category_bool?.length > 0 && category_quantity?.length > 0) {
+      switch (step) {
+        case 1:
+          return isLoading ? (
+            "loading"
+          ) : (
+            <CatgouryAds
+              formData={formData}
+              setFormData={setFormData}
+              categories={categories}
+            />
+          );
+        case 2:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeInformation
+              formData={formData}
+              setFormData={setFormData}
+              inputErrors={inputErrors}
+              setInputErrors={setInputErrors}
+              setError={setError}
+              type_aqar={type_aqar}
+            />
+          );
+        case 3:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeDetails
+              formData={formData}
+              setFormData={setFormData}
+              categoryQuantity={category_quantity}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 4:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <AddFeatureComponent
+              formData={formData}
+              setFormData={setFormData}
+              category_bool={category_bool}
+            />
+          );
+        case 5:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <ConfimLocation
+              formData={formData}
+              setFormData={setFormData}
+              interfaces={interfaces}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 6:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeDescroption
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 7:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <MapAds
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 8:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeImagesAdd
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        // Render other steps...
+        default:
+          return null;
+      }
+    } else if (category_bool?.length > 0 && category_quantity?.length === 0) {
+      switch (step) {
+        case 1:
+          return isLoading ? (
+            "loading"
+          ) : (
+            <CatgouryAds
+              formData={formData}
+              setFormData={setFormData}
+              categories={categories}
+            />
+          );
+        case 2:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeInformation
+              formData={formData}
+              setFormData={setFormData}
+              inputErrors={inputErrors}
+              setInputErrors={setInputErrors}
+              setError={setError}
+              type_aqar={type_aqar}
+            />
+          );
+        case 3:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <AddFeatureComponent
+              formData={formData}
+              setFormData={setFormData}
+              category_bool={category_bool}
+            />
+          );
+        case 4:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <ConfimLocation
+              formData={formData}
+              setFormData={setFormData}
+              interfaces={interfaces}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 5:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeDescroption
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 6:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <MapAds
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 7:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeImagesAdd
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        // Render other steps...
+        default:
+          return null;
+      }
+    } else if (category_bool?.length === 0 && category_quantity?.length > 0) {
+      switch (step) {
+        case 1:
+          return isLoading ? (
+            "loading"
+          ) : (
+            <CatgouryAds
+              formData={formData}
+              setFormData={setFormData}
+              categories={categories}
+            />
+          );
+        case 2:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeInformation
+              formData={formData}
+              setFormData={setFormData}
+              inputErrors={inputErrors}
+              setInputErrors={setInputErrors}
+              setError={setError}
+              type_aqar={type_aqar}
+            />
+          );
+        case 3:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeDetails
+              formData={formData}
+              setFormData={setFormData}
+              categoryQuantity={category_quantity}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 4:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <ConfimLocation
+              formData={formData}
+              setFormData={setFormData}
+              interfaces={interfaces}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 5:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeDescroption
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 6:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <MapAds
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 7:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeImagesAdd
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        // Render other steps...
+        default:
+          return null;
+      }
+    } else if (category_bool?.length === 0 && category_quantity?.length === 0) {
+      switch (step) {
+        case 1:
+          return isLoading ? (
+            "loading"
+          ) : (
+            <CatgouryAds
+              formData={formData}
+              setFormData={setFormData}
+              categories={categories}
+            />
+          );
+        case 2:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeInformation
+              formData={formData}
+              setFormData={setFormData}
+              inputErrors={inputErrors}
+              setInputErrors={setInputErrors}
+              setError={setError}
+              type_aqar={type_aqar}
+            />
+          );
+        case 3:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <ConfimLocation
+              formData={formData}
+              setFormData={setFormData}
+              interfaces={interfaces}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 4:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeDescroption
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 5:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <MapAds
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        case 6:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <HomeImagesAdd
+              formData={formData}
+              setFormData={setFormData}
+              setError={setError}
+              error={error}
+            />
+          );
+        // Render other steps...
+        default:
+          return null;
+      }
+    } else {
+      switch (step) {
+        default:
+          return isLoading ? (
+            "loading"
+          ) : (
+            <CatgouryAds
+              formData={formData}
+              setFormData={setFormData}
+              categories={categories}
+              setError={setError}
+              error={error}
+            />
+          );
+      }
     }
   };
 
@@ -199,7 +838,7 @@ const Addads = () => {
             position: "relative",
             marginInline: "auto",
             marginBlockStart: { xs: "0px", sm: "40px" },
-            maxWidth: "500px",
+            maxWidth: "550px",
             marginLeft: { lg: "1%" },
           }}
         >
@@ -207,8 +846,8 @@ const Addads = () => {
             <Box
               sx={{
                 borderRadius: { xs: "0", sm: "12px 12px 0px 0px" },
-                paddingInline: { xs: "15px", md: "5%" },
-                paddingBlock: "40px 112px",
+                paddingInline: { xs: "15px", md: "3%" },
+                paddingBlock: "16px 112px",
                 border: "1px solid rgb(220, 220, 220)",
                 boxShadow: "rgba(0, 0, 0, 0.1) 0px 0px 8px 0px",
                 display: "flex",
@@ -218,15 +857,14 @@ const Addads = () => {
               }}
             >
               <Link
-                href="/"
-                sx={{
-                  textAlign: lang === "ar" ? "left" : "right",
+                to={"/"}
+                style={{
                   textDecoration: "none",
-                  marginBottom: { xs: "-28px", md: "-2rem" },
                   color: "var(--green-color)",
+                  textAlign: lang === "ar" ? "left" : "right",
                 }}
               >
-                الرئيسية{" >>"}
+                الرئيسية
               </Link>
               {/* Render the current step */}
               {renderStep()}
@@ -269,7 +907,7 @@ const Addads = () => {
                   transition: "all 400ms ease-in-out 0s",
                   zIndex: "-1",
                   border: "4px solid var(--green-color)",
-                  borderStartEndradius: "0px",
+                  borderEndEndRadius: "16px",
                   borderInline: "0px none",
                   borderBlockEnd: "0px none",
                 },
@@ -297,7 +935,7 @@ const Addads = () => {
                   {step >= 1 && (
                     <Button
                       onClick={handlePrev}
-                      disabled={loading || !hasPrevStep}
+                      disabled={loadingSubmit || !hasPrevStep}
                       sx={{
                         fontWeight: "600",
                         height: "48px",
@@ -326,24 +964,20 @@ const Addads = () => {
                       {t("user_dashboard.new_order.main_btn2")}
                     </Button>
                   )}
-                  {step <= 6 && !isLastStep && (
+                  {step <= 7 && !isLastStep && (
                     <Button
                       onClick={handleNext}
-                      disabled={loading || !hasNextStep}
+                      disabled={loadingSubmit || hasNextStep || error}
                       sx={{
                         fontWeight: "600",
                         height: "48px",
                         width: "160px",
-                        background: formData.name
-                          ? "var(--green-color)"
-                          : "gray",
+                        background: "var(--green-color)",
                         color: "white",
                         borderRadius: "12px",
                         border: "1px solid rgba(0, 0, 0, 0.12)",
                         "&:hover": {
-                          background: formData.name
-                            ? "var(--green-color)"
-                            : "gray",
+                          background: "var(--green-color)",
                           color: "white",
                           transform: formData.name ? "scale(1.02)" : "none",
                           transition: "transform 0.2s ease-in-out",
@@ -356,7 +990,7 @@ const Addads = () => {
                   {isLastStep && (
                     <Button
                       onClick={handleSubmit}
-                      disabled={loading}
+                      disabled={loadingSubmit || error}
                       sx={{
                         fontWeight: "600",
                         height: "48px",
@@ -371,7 +1005,7 @@ const Addads = () => {
                         },
                       }}
                     >
-                      {loading
+                      {loadingSubmit
                         ? "Loading..."
                         : t("user_dashboard.new_order.main_btn3")}
                     </Button>
