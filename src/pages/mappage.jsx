@@ -17,6 +17,7 @@ import { Order, List } from "../assets";
 import SpecialAds from "../components/Filter/SpecialAds";
 import AdsList from "../components/MapFolder/AdsList";
 import AdsListSmall from "../components/MapFolder/AdsListSmall";
+
 const Mappage = () => {
   const theme = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -501,7 +502,12 @@ const Mappage = () => {
               }}
             >
               <Box>
-                <SpecialAds title="شاليه بمسبح وشقة خارجية" price="20000" location="جدة" rate="10"/>
+                <SpecialAds
+                  title="شاليه بمسبح وشقة خارجية"
+                  price="20000"
+                  location="جدة"
+                  rate="10"
+                />
               </Box>
             </Box>
           </Box>
