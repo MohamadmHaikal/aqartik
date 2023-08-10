@@ -6,18 +6,7 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import FavoriteIcons from "./FavoriteIcons";
 
-const SpecialAds = ({
-  ad,
-
-  // title,
-  // location,
-  // icons,
-  // description,
-  // ratings,
-  // price,
-  // isNew,
-}) => {
-  // console.log(ad);
+const SpecialAds = ({ ad }) => {
   return (
     <>
       <a

@@ -12,8 +12,6 @@ import { useTranslation } from "react-i18next";
 const HomeImagesAdd = ({ formData, setFormData }) => {
   const { t } = useTranslation();
 
-  // const dragItem = useRef();
-  // const dragOverItem = useRef();
   const [croppedImage, setCroppedImage] = useState(
     formData.croppedImage || null
   );
@@ -81,22 +79,23 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
         variant="h4"
         sx={{
           fontWeight: "600",
-          marginBottom: "3rem",
-          fontSize: { xs: "1.5rem", md: "2.25rem" },
+          marginBottom: "24px",
+          marginTop: "8px",
+          fontSize: { xs: "1.2rem", md: "1.5rem" },
         }}
       >
         {t("user_dashboard.property_images.title")}
       </Typography>
       <Box sx={{ color: "rgb(118, 118, 118)" }}>
-        <Typography sx={{ fontWeight: "700", fontSize: "18px" }}>
+        <Typography sx={{ fontWeight: "600", fontSize: "16px" }}>
           {t("user_dashboard.property_images.desc1")}
         </Typography>
-        <Typography sx={{ marginY: "1rem" }}>
+        <Typography sx={{ marginY: "8px" }}>
           {t("user_dashboard.property_images.desc2")}
         </Typography>
         <Typography> {t("user_dashboard.property_images.desc3")}</Typography>
       </Box>
-      <Box sx={{ marginY: "1rem", fontSize: "18px", fontWeight: "600" }}>
+      <Box sx={{ marginY: "8px", fontSize: "16px", fontWeight: "600" }}>
         <Typography variant="label">
           {" "}
           {t("user_dashboard.property_images.label1")}
@@ -155,7 +154,7 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
           {" "}
           {t("user_dashboard.property_images.label2")}
         </Typography>
-        <Typography sx={{ color: "rgb(118, 118, 118)", marginY: "1rem" }}>
+        <Typography sx={{ color: "rgb(118, 118, 118)", marginY: "8px" }}>
           {t("user_dashboard.property_images.hint1")}
         </Typography>
         <CropeerImage
@@ -168,7 +167,7 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
         <Typography variant="label">
           {t("user_dashboard.property_images.label3")}
         </Typography>
-        <Typography sx={{ color: "rgb(118, 118, 118)", marginY: "1rem" }}>
+        <Typography sx={{ color: "rgb(118, 118, 118)", marginY: "8px" }}>
           {t("user_dashboard.property_images.hint2")}
         </Typography>
         <Box

@@ -2,15 +2,20 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-const CatgouryAds = ({
-  formData,
-  setFormData,
-  categories,
-  setError,
-  error,
-  onNext,
-}) => {
+const CatgouryAds = ({ formData, setFormData, categories }) => {
   const { t, i18n } = useTranslation();
+
+  const [nameError, setNameError] = useState();
+
+  useEffect(() => {
+    // Set the default category value to the first category in the list
+    if (!formData.category && categories.length > 0) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        category: categories[0],
+      }));
+    }
+  }, []);
 
   const handleNameChange = (event) => {
     const inputValue = event.target.value;
@@ -21,9 +26,9 @@ const CatgouryAds = ({
 
     // Check if the input value is empty or contains invalid characters
     if (inputValue.trim() !== "" && isValidInput) {
-      setError(false);
+      setNameError(false);
     } else {
-      setError(true);
+      setNameError(true);
     }
 
     setFormData((prevFormData) => ({ ...prevFormData, name: inputValue }));
@@ -37,22 +42,11 @@ const CatgouryAds = ({
       setFormData((prevFormData) => ({
         ...prevFormData,
         category: {
-          value: selectedCategoryObject.name,
           id: selectedCategoryObject.id,
         },
       }));
     }
   };
-
-  useEffect(() => {
-    // Set the default category value to the first category in the list
-    if (!formData.category && categories.length > 0) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        category: categories[0],
-      }));
-    }
-  }, []);
 
   return (
     <Box>
@@ -60,8 +54,9 @@ const CatgouryAds = ({
         variant="h4"
         sx={{
           fontWeight: "600",
-          marginBottom: "2rem",
-          fontSize: { xs: "1.5rem", md: "2.25rem" },
+          marginBottom: "16px",
+          marginTop: "8px",
+          fontSize: { xs: "1.2rem", md: "1.5rem" },
         }}
       >
         {t("user_dashboard.new_order.order_info.main_title")}
@@ -69,7 +64,7 @@ const CatgouryAds = ({
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <label
           htmlFor="my-text-field"
-          style={{ fontWeight: "600", marginBottom: "1rem" }}
+          style={{ fontWeight: "500", marginBottom: "4px" }}
         >
           {t("user_dashboard.new_order.order_info.label1")}
         </label>
@@ -78,16 +73,16 @@ const CatgouryAds = ({
           type="text"
           value={formData.name || ""}
           onChange={handleNameChange}
-          error={error}
-          helperText={error ? "الرجاء ادخال اسم عقار صحيح" : ""}
+          error={nameError}
+          helperText={nameError ? "الرجاء ادخال اسم عقار صحيح" : ""}
           placeholder={t("user_dashboard.new_order.order_info.placeholder1")}
           sx={{ borderRadius: "12px" }}
         />
       </Box>
-      <Typography sx={{ fontWeight: "600", marginTop: "2rem" }}>
+      <Typography sx={{ fontWeight: "500", marginTop: "18px" }}>
         {t("user_dashboard.new_order.order_info.title")}
       </Typography>
-      <Typography sx={{ color: "gray", marginTop: "0.5rem" }}>
+      <Typography sx={{ color: "gray", marginTop: "4px" }}>
         {t("user_dashboard.new_order.order_info.desc")}
       </Typography>
       <Box
@@ -96,8 +91,7 @@ const CatgouryAds = ({
           justifyContent: { xs: "space-evenly", md: "space-between" },
           flexWrap: "wrap",
           height: { xs: "26rem", sm: "20rem" },
-          overflowY: "scroll",
-          marginTop: "2rem",
+          marginTop: "16px",
         }}
       >
         {categories.map((category) => (

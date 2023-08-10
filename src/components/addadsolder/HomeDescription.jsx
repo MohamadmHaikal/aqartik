@@ -22,7 +22,7 @@ const HomeDescription = ({ formData, setFormData }) => {
       <Typography
         sx={{
           color: "rgb(118, 118, 118)",
-          marginBottom: "2rem",
+          marginBottom: "8px",
         }}
       >
         {t("user_dashboard.property_desc.hint")}
@@ -97,7 +97,7 @@ const HomeDescription = ({ formData, setFormData }) => {
       <TextField
         fullWidth
         multiline
-        rows={9}
+        rows={7}
         placeholder={t("user_dashboard.property_desc.placeholder")}
         required
         value={description}

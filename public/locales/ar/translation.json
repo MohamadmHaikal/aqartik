@@ -154,7 +154,7 @@
     "details_page": {
         "ad_num": "رقم الأعلان",
         "ad_date": "تاريخ الإعلان",
-        "unit_area": "Unit area",
+        "unit_area": "المساحة",
         "fav_button": "المفضلة",
         "share_button": "مشاركة",
         "facebook_share": "مشاركة على الفيسبوك",
@@ -314,7 +314,8 @@
             "hint": "اختر اتجاه الحي في المدينة",
             "label1": "المدينة",
             "label2": "الحي",
-            "label3": "الاتجاه"
+            "label3": "الاتجاه",
+            "label4": "نوع العقار"
         },
         "property_desc": {
             "title": "وصف العقار",

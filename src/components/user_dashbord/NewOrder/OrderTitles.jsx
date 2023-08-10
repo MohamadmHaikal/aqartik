@@ -7,8 +7,9 @@ const OrderTitles = ({ title }) => {
       variant="h4"
       sx={{
         fontWeight: "600",
-        marginBottom: "2rem",
-        fontSize: { xs: "1.5rem", md: "2.125rem" },
+        marginBottom: "24px",
+        marginTop: "8px",
+        fontSize: { xs: "1.2rem", md: "1.5rem" },
       }}
     >
       {title}
