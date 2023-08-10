@@ -12,34 +12,35 @@ import "lightgallery/css/lg-thumbnail.css";
 
 SwiperCore.use([Pagination]);
 
-const images = [
-  {
-    src: "/pool.jpg",
-  },
-  {
-    src: "/baranda.jpg",
-  },
-  {
-    src: "/bedroom.jpg",
-  },
-  {
-    src: "/childrenjpg.jpg",
-  },
-  {
-    src: "/living.jpg",
-  },
-  {
-    src: "/abha.jpg",
-  },
-  {
-    src: "/parking.jpg",
-  },
-  {
-    src: "/house.jpg",
-  },
-];
+// const images = [
+//   {
+//     src: "/pool.jpg",
+//   },
+//   {
+//     src: "/baranda.jpg",
+//   },
+//   {
+//     src: "/bedroom.jpg",
+//   },
+//   {
+//     src: "/childrenjpg.jpg",
+//   },
+//   {
+//     src: "/living.jpg",
+//   },
+//   {
+//     src: "/abha.jpg",
+//   },
+//   {
+//     src: "/parking.jpg",
+//   },
+//   {
+//     src: "/house.jpg",
+//   },
+// ];
 
-const DetailsImagesXs = () => {
+const DetailsImagesXs = ({ adInfo }) => {
+  const images = adInfo.gallery;
   const galleryRef = useRef(null);
   useEffect(() => {
     const mySwiper = new Swiper(".swiper-container", {
@@ -67,9 +68,13 @@ const DetailsImagesXs = () => {
       <Box className={`swiper-container ${styles.details_container}`}>
         <Box className="swiper-wrapper" ref={galleryRef}>
           {images.map((image, index) => (
-            <a key={index} data-src={image.src} className="swiper-slide">
+            <a
+              key={index}
+              data-src={` https://aqar-plus.sta.sa/public/assets/images/ads/image/${image.name}`}
+              className="swiper-slide"
+            >
               <img
-                src={image.src}
+                src={` https://aqar-plus.sta.sa/public/assets/images/ads/image/${image.name}`}
                 className={styles.imgSlider}
                 alt={`Image ${index}`}
               />

@@ -24,19 +24,16 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
 import FacebookIcon from "@mui/icons-material/Facebook";
 
-<<<<<<< HEAD
-
 const tabDataXs = [
-  { label: "افتراضي", content: "Content 1" },
+  { label: "الجميع", content: "Content 1" },
   { label: "الأقرب لموقعي", content: "Content 2" },
   { label: "الأعلى تقييما", content: "Content 3" },
   { label: "الأعلى مشاهدة", content: "Content 4" },
   { label: "الأقل سعرا", content: "Content 5" },
   { label: "الأعلى سعرا", content: "Content 6" },
 ];
-=======
+
 import { useTranslation } from "react-i18next";
->>>>>>> abd
 
 const icons = [
   {

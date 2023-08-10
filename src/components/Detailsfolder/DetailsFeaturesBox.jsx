@@ -1,17 +1,136 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import BathtubIcon from "@mui/icons-material/Bathtub";
-import BedIcon from "@mui/icons-material/Bed";
-import ChairIcon from "@mui/icons-material/Chair";
-import AddRoadIcon from "@mui/icons-material/AddRoad";
-import BusinessIcon from "@mui/icons-material/Business";
-
-import HomeRooms from "./HomeRooms";
 import { useTranslation } from "react-i18next";
 
-const DetailsFeaturesBox = () => {
+import HomeRooms from "./HomeRooms";
+
+import Icons from "../Filter/Icons";
+import CheckIcon from "@mui/icons-material/Check";
+
+//   {
+//     name: "Kitchen",
+//     icon: <KitchenIcon />,
+//   },
+//   {
+//     name: "Car Entrance",
+//     icon: <LocalParkingIcon />,
+//   },
+//   {
+//     name: "Elevator",
+//     icon: <ElevatorIcon />,
+//   },
+//   {
+//     name: "Appendix",
+//     icon: <ParkIcon />,
+//   },
+//   {
+//     name: "Cellar",
+//     icon: <ParkIcon />,
+//   },
+//   {
+//     name: "Yard",
+//     icon: <NaturePeopleIcon />,
+//   },
+//   {
+//     name: "Driver room",
+//     icon: <CarRepairIcon />,
+//   },
+//   {
+//     name: "Maid room",
+//     icon: <CleaningServicesIcon />,
+//   },
+//   {
+//     name: "Swimming pool",
+//     icon: <PoolIcon />,
+//   },
+//   {
+//     name: "Verse",
+//     icon: <HomeWorkIcon />,
+//   },
+//   {
+//     name: "Duplex",
+//     icon: <HighlightIcon />,
+//   },
+//   {
+//     name: "Hall staircase",
+//     icon: <StairsIcon />,
+//   },
+//   {
+//     name: "Football stadium",
+//     icon: <SportsSoccerIcon />,
+//   },
+//   {
+//     name: "Volleyball stadium",
+//     icon: <SportsFootballIcon />,
+//   },
+//   {
+//     name: "Window air conditioner",
+//     icon: <AcUnitIcon />,
+//   },
+//   {
+//     name: "Split air conditioner ",
+//     icon: <AcUnitIcon />,
+//   },
+//   {
+//     name: "Central  air conditioner ",
+//     icon: <AcUnitIcon />,
+//   },
+//   {
+//     name: "Floor",
+//     icon: <BusinessIcon />,
+//   },
+//   {
+//     name: "Street Width",
+//     icon: <EditRoadIcon />,
+//   },
+//   {
+//     name: "Wells",
+//     icon: <SpaIcon />,
+//   },
+//   {
+//     name: "Stores",
+//     icon: <StoreIcon />,
+//   },
+//   {
+//     name: "Trees",
+//     icon: <ForestIcon />,
+//   },
+//   {
+//     name: "Rooms",
+//     icon: <ChairIcon />,
+//   },
+//   {
+//     name: "Lounges",
+//     icon: <ChairIcon />,
+//   },
+//   {
+//     name: "Toilets",
+//     icon: <BathtubIcon />,
+//   },
+//   {
+//     name: "Car Parking",
+//     icon: <LocalParkingIcon />,
+//   },
+//   {
+//     name: "Number of units",
+//     icon: <LocalParkingIcon />,
+//   },
+// ];
+
+const DetailsFeaturesBox = ({ adInfo }) => {
+  console.log(adInfo);
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const filteredFeatures =
+    adInfo?.BoolFeaturea?.filter((feature) =>
+      Icons.some((icon) => icon.en_name === feature.bool_featurea.en_name)
+    ) || [];
+
+  const filteredQuantity =
+    adInfo?.QuantityAds?.filter((feature) =>
+      Icons.some((icon) => icon.en_name === feature.quantity_feature.en_name)
+    ) || [];
+
   return (
     <Box
       sx={{
@@ -24,7 +143,49 @@ const DetailsFeaturesBox = () => {
         overflow: "hidden",
       }}
     >
-      <HomeRooms
+      {filteredFeatures.map((feature) => {
+        const matchingIcon = Icons.find(
+          (icon) => icon.en_name === feature.bool_featurea.en_name
+        );
+        if (matchingIcon) {
+          return (
+            <>
+              <HomeRooms
+                key={feature.id}
+                iconRoom={matchingIcon.icon}
+                titleRoom={
+                  lang === "ar"
+                    ? feature.bool_featurea.ar_name
+                    : feature.bool_featurea.en_name
+                }
+                numRoom=""
+                checkIcon={
+                  <CheckIcon
+                    sx={{ color: "var(--green-color)", marginRight: "-10px" }}
+                  />
+                }
+              />
+            </>
+          );
+        }
+      })}
+      {filteredQuantity.map((feature) => {
+        const matchingIcon = Icons.find(
+          (icon) => icon.en_name === feature.quantity_feature.en_name
+        );
+        if (matchingIcon) {
+          return (
+            <HomeRooms
+              key={feature.id}
+              iconRoom={matchingIcon.icon}
+              titleRoom={ lang === "ar" ? feature.quantity_feature.ar_name : feature.quantity_feature.en_name  }
+              numRoom={feature.quantity}
+              checkIcon=" "
+            />
+          );
+        }
+      })}
+      {/* <HomeRooms
         iconRoom={<BedIcon />}
         titleRoom={t(
           "details_page.details_tabs.specifications_and_features_tab.bedrooms"
@@ -58,7 +219,7 @@ const DetailsFeaturesBox = () => {
           "details_page.details_tabs.specifications_and_features_tab.floor"
         )}
         numRoom="2"
-      ></HomeRooms>
+      ></HomeRooms> */}
 
       {/* if there is update show it */}
       <Box sx={{ display: "flex", padding: "5px", alignItems: "center" }}>

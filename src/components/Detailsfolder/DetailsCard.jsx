@@ -14,7 +14,7 @@ const customLinkStyles = {
   color: "inherit",
 };
 
-const DetailsCard = () => {
+const DetailsCard = ({ adInfo }) => {
   const [modalReportOpen, setModalReportOpen] = useState(false);
   const { isUserSelected, setIsUserSelected } = useContext(ChatContext);
   const { t, i18n } = useTranslation();
@@ -49,7 +49,7 @@ const DetailsCard = () => {
               marginLeft: "0.5rem",
             }}
           >
-            2500
+            {adInfo.price}
           </Typography>
           <Typography sx={{ color: "orange", fontSize: "35px" }}>
             {t("details_page.details_card.currency")}
@@ -67,7 +67,7 @@ const DetailsCard = () => {
           <Typography sx={{ fontWeight: "bold", marginLeft: "0.5rem" }}>
             {t("details_page.details_card.advertiser_name")}:
           </Typography>
-          <Typography>محمد ممجدددد</Typography>
+          <Typography> {adInfo.user.username}</Typography>
         </Box>
         <Box
           sx={{
@@ -108,7 +108,7 @@ const DetailsCard = () => {
         >
           <Box>
             <Link
-              href="https://api.whatsapp.com/send?phone=YOUR_PHONE_NUMBER"
+              href={`https://api.whatsapp.com/send?phone=${adInfo.phone}`}
               passHref
               sx={{ width: "100%", display: "flex", justifyContent: "center" }}
             >
@@ -145,7 +145,7 @@ const DetailsCard = () => {
           </Box>
           <Box>
             <Link
-              href="tel:YOUR_PHONE_NUMBER"
+              href={`tel:${adInfo.phone}`}
               passHref
               sx={{ width: "100%", display: "flex", justifyContent: "center" }}
             >

@@ -19,6 +19,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Map } from "../../../assets";
 import FiveStars from "../FiveStars";
 import { useTranslation } from "react-i18next";
+import MapLocation from "./MapLocation";
 
 // Define your custom theme
 const theme = createTheme({
@@ -54,7 +55,7 @@ const theme = createTheme({
   },
 });
 
-const DetailsXsTabs = () => {
+const DetailsXsTabs = ({ adInfo }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
@@ -117,7 +118,7 @@ const DetailsXsTabs = () => {
                 {/* Content for the first tab (المواصفات والميزات) */}
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Typography sx={{ fontSize: "17px", fontWeight: "700" }}>
-                    استديو تصميم مودرن وانيق
+                    {adInfo.title}
                   </Typography>
                   <Typography
                     sx={{
@@ -176,7 +177,7 @@ const DetailsXsTabs = () => {
                     <Typography
                       sx={{ color: "rgb(132, 132, 132)", fontSize: "15px" }}
                     >
-                      الرياض - حي الملقا
+                      {adInfo.city} , {adInfo.neighborhood} , {adInfo.road}
                     </Typography>
                   </Box>
                   <Box
@@ -197,10 +198,10 @@ const DetailsXsTabs = () => {
                     <Typography
                       sx={{ color: "rgb(132, 132, 132)", fontSize: "15px" }}
                     >
-                      مساحة 120 م
+                      مساحة {adInfo.space} م
                     </Typography>
                   </Box>
-                  <Box
+                  {/* <Box
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -220,7 +221,7 @@ const DetailsXsTabs = () => {
                     >
                       مخصص ل عوائل و عزاب
                     </Typography>
-                  </Box>
+                  </Box> */}
                 </Box>
                 <Typography
                   sx={{
@@ -241,13 +242,13 @@ const DetailsXsTabs = () => {
                     marginTop: "9px",
                   }}
                 >
-                  تقع في شمال الرياض بالقرب من طريق أنس بن مالك ،
-                  {showMore ? "قريبه من جميع الخدمات" : " ..."}
+                  {adInfo.description}
+                  {/* {showMore ? "قريبه من جميع الخدمات" : " ..."}
                   <Button onClick={toggleShowMore} sx={{ color: "black" }}>
                     {showMore
                       ? t("details_page.xs_less")
                       : t("details_page.xs_more")}
-                  </Button>
+                  </Button> */}
                 </Typography>
                 <Box
                   sx={{
@@ -276,7 +277,7 @@ const DetailsXsTabs = () => {
                 >
                   {t("details_page.details_tabs.specifications_and_features")}
                 </Typography>
-                <DetailsFeaturesBox />
+                <DetailsFeaturesBox adInfo={adInfo} />
               </Box>
             )}
             {activeTab === 1 && (
@@ -294,7 +295,10 @@ const DetailsXsTabs = () => {
                   {t("details_page.details_tabs.location_and_map_tab.desc")}
                 </Button>
                 <Box sx={{ marginTop: "1rem" }}>
-                  <Link href="https://www.google.com/maps/dir/My+Location/24.8099167,46.6088413/@24.8100367,46.5387048,12z/data=!3m1!4b1?entry=ttu">
+                  <Link
+                    href={`https://www.google.com/maps/dir/My+Location/${adInfo.lat},${adInfo.lng}/@${adInfo.lat},${adInfo.lng},12z/data=!3m1!4b1?entry=ttu`}
+                    target="_blank"
+                  >
                     <img
                       src={Map}
                       alt="map"

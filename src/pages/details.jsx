@@ -11,6 +11,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
 import ImagesTest from "../components/Detailsfolder/detailspagexs/ImagesTest";
+import { useLocation } from "react-router";
 
 import {
   DetailsCard,
@@ -25,6 +26,8 @@ import { useTranslation } from "react-i18next";
 import useDataFetcher from "../api/useDataFetcher ";
 
 const Details = () => {
+  const adInfo = useLocation().state.ad;
+  // console.log(adInfo);
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const [per_page, set_per_page] = useState();
@@ -32,9 +35,18 @@ const Details = () => {
   const [ads, setAds] = useState([]);
   const [last_page, set_last_page] = useState();
   const { data, isLoading, get } = useDataFetcher();
+  const createdDate = new Date(adInfo.created_at);
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
+  const formattedDate = createdDate.toLocaleString("en-US", options);
 
   useEffect(() => {
-    get(`/api/ads/get_all_ads?page=${current_page}`);
+    get(
+      `/api/ads/get_all_ads?page=${current_page}&category_id=${adInfo.category_aqar.id}`
+    );
   }, [current_page]);
 
   useEffect(() => {
@@ -50,10 +62,12 @@ const Details = () => {
     set_current_page(new_page);
   };
 
-  const isNewHome = true;
+  const isNewHome = localStorage.getItem("isNewHome") === "true";
   const [isListOpen, setListOpen] = useState(false);
   const listRef = useRef(null);
   const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
+
+  const [copied, setCopied] = useState(false);
   const icons = [
     {
       icon: <FavoriteIcons />,
@@ -78,10 +92,12 @@ const Details = () => {
     }
   };
   const handleCopyLink = () => {
-    const linkToCopy = "your_link_url"; // Replace with the actual link you want to copy
+    const currentUrl = window.location.href;
+    console.log(currentUrl);
 
-    navigator.clipboard.writeText(linkToCopy).then(() => {
-      console.log("Link copied!");
+    navigator.clipboard.writeText(currentUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
     });
   };
   useEffect(() => {
@@ -104,7 +120,7 @@ const Details = () => {
                 fontSize: { xs: "1.5rem", md: "2.25rem" },
               }}
             >
-              شقة انيقه بصالة ودخول ذاتي
+              {adInfo.title}
             </Typography>
           </Box>
           <Box sx={{ display: "flex", marginY: "1rem" }}>
@@ -138,7 +154,7 @@ const Details = () => {
                 {t("details_page.ad_date")}:
               </Typography>
               <Typography sx={{ marginX: "0.5rem", fontSize: "12px" }}>
-                0989
+                {formattedDate}
               </Typography>
             </Box>
           </Box>
@@ -188,7 +204,7 @@ const Details = () => {
                     fomtSize: "1.2rem",
                   }}
                 />
-                حي الزهور الرياض
+                {adInfo.city} {adInfo.neighborhood} {adInfo.road}
               </Typography>
               <Typography
                 sx={{
@@ -205,9 +221,9 @@ const Details = () => {
                     fomtSize: "1.2rem",
                   }}
                 />
-                {t("details_page.unit_area")} 100 م²
+                {t("details_page.unit_area")} {adInfo.space}
               </Typography>
-              <Typography
+              {/* <Typography
                 sx={{
                   display: "flex",
                   marginX: "0.3rem",
@@ -223,7 +239,7 @@ const Details = () => {
                   }}
                 />
                 مخصص ل عوائل و عزاب
-              </Typography>
+              </Typography> */}
             </Box>
             <Box
               sx={{
@@ -268,6 +284,7 @@ const Details = () => {
                       boxShadow:
                         "0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12)",
                     }}
+                    className="list-container"
                   >
                     <ListItem
                       sx={{
@@ -283,7 +300,7 @@ const Details = () => {
                           width: "100%",
                           display: "flex",
                         }}
-                        href="https://www.facebook.com/sharer/sharer.php?u=your_link_url"
+                        href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -308,7 +325,9 @@ const Details = () => {
                           width: "100%",
                           display: "flex",
                         }}
-                        href="https://twitter.com/intent/tweet?text=your_link_text&url=your_link_url"
+                        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                          "Check out this link!"
+                        )}&url=${window.location.href}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -336,7 +355,7 @@ const Details = () => {
             </Box>
           </Box>
           {/* <ImagesTest /> */}
-          <DetailsImages />
+          <DetailsImages adInfo={adInfo} />
           <Grid container spacing={2}>
             <Grid item xs={12} md={8}>
               <Typography
@@ -349,12 +368,7 @@ const Details = () => {
                 {t("details_page.details_title")}
               </Typography>
               <Typography sx={{ fontSize: { xs: "15px", md: "18px" } }}>
-                تقع في شمال الرياض بالقرب من طريق أنس بن مالك ، قريبه من جميع
-                الخدمات ، ومنها كافيه مقابل العماره . صممت بألوان مريحه ومؤثثة
-                بأثاث مودرن . يوجد انترنت سريع وشاشة سمارت فيها كل ما تحتاج
-                .تتميز بخصوصية تامه بدخول ذاتي. وتحتوي على صاله جلوس وغرفه نوم
-                وركن لتحضير ودوره مياه عزكم الله واتمنى لك اقامه سعيدة وحياك
-                الله في بيتك الثاني .
+                {adInfo.description}
               </Typography>
               {isNewHome && (
                 <Box
@@ -389,10 +403,10 @@ const Details = () => {
                   </Box>
                 </Box>
               )}
-              <DetailsTabs />
+              <DetailsTabs adInfo={adInfo} />
             </Grid>
             <Grid item xs={12} md={4}>
-              <DetailsCard />
+              <DetailsCard adInfo={adInfo} />
             </Grid>
           </Grid>
 
@@ -428,10 +442,10 @@ const Details = () => {
       </Box>
 
       {/* this section page for xs screens */}
-      <DetailsXsScreens />
+      <DetailsXsScreens adInfo={adInfo} />
       {/* this for price */}
     </>
   );
 };
-
+// lang === "ar" ? "ar_name" : "en_name"
 export default Details;

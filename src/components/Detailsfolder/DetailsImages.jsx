@@ -8,7 +8,7 @@ import "../../styles/detailsimages.css";
 import { Button, useMediaQuery, Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-export default function DetailsImages() {
+export default function DetailsImages({ adInfo }) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const galleryRef = useRef(null);
@@ -25,33 +25,34 @@ export default function DetailsImages() {
     };
   }, []);
 
-  const images = [
-    {
-      src: "/pool.jpg",
-    },
-    {
-      src: "/baranda.jpg",
-    },
-    {
-      src: "/bedroom.jpg",
-    },
-    {
-      src: "/childrenjpg.jpg",
-    },
-    {
-      src: "/living.jpg",
-    },
-    {
-      src: "/abha.jpg",
-    },
-    {
-      src: "/parking.jpg",
-    },
-    {
-      src: "/house.jpg",
-    },
-  ];
-
+  // const images =
+  // [
+  //   {
+  //     src: "/pool.jpg",
+  //   },
+  //   {
+  //     src: "/baranda.jpg",
+  //   },
+  //   {
+  //     src: "/bedroom.jpg",
+  //   },
+  //   {
+  //     src: "/childrenjpg.jpg",
+  //   },
+  //   {
+  //     src: "/living.jpg",
+  //   },
+  //   {
+  //     src: "/abha.jpg",
+  //   },
+  //   {
+  //     src: "/parking.jpg",
+  //   },
+  //   {
+  //     src: "/house.jpg",
+  //   },
+  // ];
+  const images = adInfo.gallery;
   const gridTemplate = {
     1: "1fr",
     2: "1fr 1fr",
@@ -109,11 +110,11 @@ export default function DetailsImages() {
             key={image.src}
             // data-lg-size="1406-1390"
             className="gallery-item"
-            data-src={image.src}
+            data-src={` https://aqar-plus.sta.sa/public/assets/images/ads/image/${image.name}`}
             style={{
               height:
-                isXsScreen && totalImages === 1
-                  ? "250px"
+                totalImages === 1
+                  ? "508px"
                   : (totalImages === 2 && "508px") ||
                     (totalImages === 2 && "508px") ||
                     (totalImages === 3 && index === 1 && "508px") ||
@@ -131,7 +132,7 @@ export default function DetailsImages() {
             }}
           >
             <img
-              src={image.src}
+              src={` https://aqar-plus.sta.sa/public/assets/images/ads/image/${image.name}`}
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           </a>
@@ -163,7 +164,7 @@ export default function DetailsImages() {
           عرض الفيديو
         </Button>
       )}
-      {!showMore && images.length > 4 && (
+      {!showMore && (
         <Button
           onClick={handleShowMore}
           style={{

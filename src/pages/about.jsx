@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Container, Typography } from "@mui/material";
 import axios from "axios";
+import WeatherApp from "../components/LocationUser/WeatherApp";
 
 const About = () => {
   const [title, setTitle] = useState("");
@@ -35,6 +36,7 @@ const About = () => {
           {description}
         </Typography>
       </Box>
+      <WeatherApp />
     </Container>
   );
 };

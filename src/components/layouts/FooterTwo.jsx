@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { Box, Container, Grid, Link, Typography } from "@mui/material";
 import {
@@ -23,27 +23,44 @@ import {
 } from "@mui/icons-material";
 
 import { useTranslation } from "react-i18next";
+import useDataFetcher from "../../api/useDataFetcher ";
 
 const phoneNumber = "000000000000";
 
 const FooterTwo = () => {
-  const { t } = useTranslation();
+  const { data, isLoading, error, get, post } = useDataFetcher();
+  const [FooterData, setFooterData] = useState([]);
+  useEffect(() => {
+    get("/api/settings/genral");
+  }, []);
+  useEffect(() => {
+    if (data) {
+      setFooterData(data.settings);
+    }
+  }, [data]);
+  console.log(FooterData);
+
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
   const downloadLinks = [
-    { label: "app store", image: Appstore },
-    { label: "google play", image: Googleplay },
+    { label: "app store", image: Appstore, url: FooterData.social_link7 },
+    { label: "google play", image: Googleplay, url: FooterData.social_link8 },
   ];
 
   const socialMediaLinks = [
     {
       url: Twitter,
+      url_link: FooterData.social_link2,
     },
 
     {
       url: FaceBook,
+      url_link: FooterData.social_link1,
     },
     {
       url: Instagram,
+      url_link: FooterData.social_link6,
     },
     {
       url: LinkedIn,
@@ -52,22 +69,23 @@ const FooterTwo = () => {
   const socialMediaLinksSmall = [
     {
       icon: <FacebookIcon sx={{ fontSize: "2.3rem", marginX: "7px" }} />,
-      url: "",
+      url: FooterData.social_link6,
     },
     {
       icon: <TwitterIcon sx={{ fontSize: "2.3rem", marginX: "7px" }} />,
-      url: "",
+      url: FooterData.social_link2,
     },
 
     {
       icon: <InstagramIcon sx={{ fontSize: "2.3rem", marginX: "7px" }} />,
-      url: "",
+      url: FooterData.social_link6,
     },
     {
       icon: <YouTubeIcon sx={{ fontSize: "2.3rem", marginX: "7px" }} />,
       url: "",
     },
   ];
+
   return (
     <>
       {/* footer for larger screen */}
@@ -89,7 +107,11 @@ const FooterTwo = () => {
                 sx={{ position: "relative", width: "170px", height: "56px" }}
               >
                 <img
-                  src={Logo}
+                  src={
+                    lang === "ar"
+                      ? `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_ar}`
+                      : `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_en}`
+                  }
                   alt="logo"
                   style={{
                     width: "100%",
@@ -113,11 +135,13 @@ const FooterTwo = () => {
                   }}
                 >
                   <LocationOnIcon sx={{ marginLeft: "5px" }} />
-                  المملكة العربية السعودية / الرياض
+                  {lang === "ar"
+                    ? FooterData.contact_t1_ar
+                    : FooterData.contact_t1_en}
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <MailIcon sx={{ marginLeft: "5px" }} />{" "}
-                  <Typography>tsf@gmail.com</Typography>
+                  <Typography>{FooterData.contact_t6}</Typography>
                 </Box>
               </Box>
 
@@ -228,7 +252,7 @@ const FooterTwo = () => {
                   </li>
                   {downloadLinks.map((link, index) => (
                     <li key={index}>
-                      <Link href="#" sx={{ textDecoration: "none" }}>
+                      <Link href={link.url} sx={{ textDecoration: "none" }}>
                         <Box
                           sx={{
                             width: "160px",
@@ -269,10 +293,10 @@ const FooterTwo = () => {
                 {t("footer.contact_phone")}
               </Typography>
               <Link
-                href={`tel:${phoneNumber}`}
+                href={`tel:${FooterData.contact_t3}`}
                 sx={{ textDecoration: "none", color: "black" }}
               >
-                {phoneNumber}
+                {FooterData.contact_t3}
               </Link>
             </Grid>
 
@@ -299,7 +323,7 @@ const FooterTwo = () => {
                 }}
               >
                 {socialMediaLinks.map((socialMediaLink, index) => (
-                  <Link key={index} href="#">
+                  <Link key={index} href={socialMediaLink.url_link}>
                     <img
                       src={socialMediaLink.url}
                       style={{ width: "40px", height: "40px" }}
@@ -331,7 +355,11 @@ const FooterTwo = () => {
             <Box sx={{ width: "100%", maxWidth: "none" }}>
               <Box sx={{ marginBottom: "20px" }}>
                 <Link href="/">
-                  <img src={Logo} alt="logo" style={{ width: "140px" }} />
+                  <img src={
+                    lang === "ar"
+                      ? `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_ar}`
+                      : `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_en}`
+                  } alt="logo" style={{ width: "140px" }} />
                 </Link>
               </Box>
               <Box
@@ -434,10 +462,14 @@ const FooterTwo = () => {
                     marginRight: "25px",
                   }}
                 >
-                  {phoneNumber}
+                  {FooterData.contact_t3}
                 </Link>
               </Box>
-              <Typography>{t("footer.time")}</Typography>
+              <Typography sx={{ width: "50%" }}>
+                {lang === "ar"
+                  ? FooterData.contact_t7_ar
+                  : FooterData.contact_t7_en}
+              </Typography>
             </Box>
           </Box>
           <Box

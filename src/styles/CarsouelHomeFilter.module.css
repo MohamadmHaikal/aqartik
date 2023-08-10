@@ -1,3 +1,15 @@
+.customSlide {
+  width: 300px !important;
+  height: 219px !important;
+}
+
+@media only screen and (max-width: 900px) {
+  .customSlide {
+    width: 100% !important;
+    height: 219px !important;
+  }
+}
+
 .imageBorder {
   border-radius: 16px !important;
   width: 100%;

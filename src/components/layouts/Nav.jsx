@@ -83,7 +83,7 @@ export default function Nav({
     setIsSideNavOpen((prevState) => !prevState);
   };
 
-  const isDetailsPage = location.pathname === "/details";
+  const isDetailsPage = location.pathname.includes("/details");
   const isAboutPage = location.pathname === "/about";
 
   const isOfficesPage = location.pathname === "/offices";

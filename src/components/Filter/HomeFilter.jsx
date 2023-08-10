@@ -18,6 +18,8 @@ import { Link } from "react-router-dom";
 import { Location } from "../../assets";
 import useDataFetcher from "../../api/useDataFetcher ";
 import { AdsClick } from "@mui/icons-material";
+import SkeleltonSpeacialAds from "../Loading/SkeleltonSpeacialAds";
+
 // Create a custom styled component
 const StyledContainer = styled(Container)(({ theme }) => ({
   [theme.breakpoints.down("xs")]: {
@@ -186,13 +188,15 @@ const HomeFilter = () => {
               <AccordinFilters />
             </Box>
           </Grid>
-          {isLoading ? (
-            "loading..."
-          ) : (
-            <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={8}>
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_, index) => (
+                <SkeleltonSpeacialAds key={index} />
+              ))
+            ) : (
               <TabsFilter data={ads} />
-            </Grid>
-          )}
+            )}
+          </Grid>
         </Grid>
         {/* <PaginationAds></PaginationAds> */}
       </StyledContainer>
@@ -406,9 +410,11 @@ const HomeFilter = () => {
           )}
         </Box>
         <Box sx={{ width: "95%", margin: "auto" }}>
-          {ads.map((ad, i) => (
-            <SpecialAds key={ad.id} ad={ad} />
-          ))}
+          {isLoading
+            ? Array.from({ length: 5 }).map((_, index) => (
+                <SkeleltonSpeacialAds key={index} />
+              ))
+            : ads.map((ad, i) => <SpecialAds key={ad.id} ad={ad} />)}
         </Box>
         {/* <PaginationAds /> */}
       </Box>
