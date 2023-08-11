@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Link, Typography } from "@mui/material";
 import Divider from "@mui/material/Divider";
 // import HomeSlider from "../components/Filter/HomeSlider";
-
 import MapMark from "../components/MapFolder/MapMark";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
 import MapFilter from "../components/MapFolder/MapFilter";
@@ -17,12 +15,23 @@ import { Order, List } from "../assets";
 import SpecialAds from "../components/Filter/SpecialAds";
 import AdsList from "../components/MapFolder/AdsList";
 import AdsListSmall from "../components/MapFolder/AdsListSmall";
+import useDataFetcher from "../api/useDataFetcher ";
+import { useLocation } from "react-router";
 
 const Mappage = () => {
   const theme = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+
+  const { data, isLoading, error, get, post } = useDataFetcher();
+  const state = useLocation().state;
+  useEffect(() => {
+    get(
+      `api/ads/get_all_ads?lat=${state.lat}&lng=${state.lng}&zoom=${state.zoom}`
+    );
+  }, []);
+  console.log(data);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -190,7 +199,7 @@ const Mappage = () => {
                 zIndex: "33",
               }}
             >
-              <MapMark />
+              <MapMark state={state} />
             </Box>
             <Button
               sx={{

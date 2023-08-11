@@ -15,7 +15,7 @@ import { Toaster } from "react-hot-toast";
 const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
   const location = useLocation();
   const { pathname } = location;
-  const hideFooter = pathname === "/mappage" || pathname === "/Mappage";
+  const hideFooter = location.pathname.includes("/mappage");
   const hideNavAndFooter =
     location.pathname.includes("/details") || pathname === "/ads";
   const { isUserSelected, setIsUserSelected } = useContext(ChatContext);
