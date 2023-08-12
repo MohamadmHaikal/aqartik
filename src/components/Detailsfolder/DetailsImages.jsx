@@ -110,7 +110,7 @@ export default function DetailsImages({ adInfo }) {
             key={image.src}
             // data-lg-size="1406-1390"
             className="gallery-item"
-            data-src={` https://aqar-plus.sta.sa/public/assets/images/ads/image/${image.name}`}
+            data-src={` https://www.dashboard.aqartik.com/assets/images/ads/image/${image.name}`}
             style={{
               height:
                 totalImages === 1
@@ -132,7 +132,7 @@ export default function DetailsImages({ adInfo }) {
             }}
           >
             <img
-              src={` https://aqar-plus.sta.sa/public/assets/images/ads/image/${image.name}`}
+              src={` https://www.dashboard.aqartik.com/assets/images/ads/image/${image.name}`}
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           </a>

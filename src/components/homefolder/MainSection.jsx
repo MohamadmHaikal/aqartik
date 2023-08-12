@@ -123,7 +123,7 @@ const MainSection = () => {
               >
                 {banner.image && (
                   <img
-                    src={`https://aqar-plus.sta.sa/public/assets/images/banners/${banner.image.name}`}
+                    src={`https://www.dashboard.aqartik.com/assets/images/banners/${banner.image.name}`}
                     alt={banner.ar_title}
                     style={{ width: "100%", height: "100%" }}
                   />
