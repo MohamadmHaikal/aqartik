@@ -1,7 +1,7 @@
 import React from "react";
 import MapCreate from "./MapCreate";
 
-const MapMark = () => {
+const MapMark = ({ state }) => {
   const locations = [
     { latitude: 24.7136, longitude: 46.6753, price: "100" },
     { latitude: 26.3174, longitude: 43.7759, price: "20000" },
@@ -12,7 +12,7 @@ const MapMark = () => {
 
   return (
     <div style={{ height: "100vh" }}>
-      <MapCreate locations={locations} />
+      <MapCreate locations={locations} state={state} />
     </div>
   );
 };

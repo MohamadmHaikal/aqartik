@@ -46,7 +46,7 @@ const CustomMarker = ({ price, isActive, onClick }) => {
   );
 };
 const MapCreate = (props) => {
-  const { locations } = props;
+  const { locations, state } = props;
   const [mapLoaded, setMapLoaded] = useState(false);
   const [overlayViews, setOverlayViews] = useState([]);
   const [activeMarkerIndex, setActiveMarkerIndex] = useState(null);
@@ -87,8 +87,8 @@ const MapCreate = (props) => {
   };
 
   const cityCenter = {
-    lat: 24.7136,
-    lng: 46.6753,
+    lat: state.lat,
+    lng: state.lng,
   };
 
   const mapOptions = {
@@ -107,7 +107,7 @@ const MapCreate = (props) => {
       <LoadScript googleMapsApiKey="AIzaSyCUSxdxRLpvkegxpk9-82sUjCylgekfGUk">
         <GoogleMap
           mapContainerStyle={mapStyles}
-          zoom={15}
+          zoom={state.zoom}
           center={cityCenter}
           options={mapOptions}
           onLoad={handleMapLoad}

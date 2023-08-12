@@ -57,13 +57,10 @@ const HomeSlider = ({ ad }) => {
     <Box sx={{ position: "relative", margin: { xs: "auto", lg: "0" } }}>
       <Slider {...settings}>
         {homeImages.map((image, index) => (
-          <div
-            key={index}
-            className={styles.customSlide} // Apply your custom slide class
-          >
+          <div key={index} className={styles.customSlide}>
             <img
               key={index}
-              src={` https://aqar-plus.sta.sa/public/assets/images/ads/image/${image.name}`}
+              src={`https://www.dashboard.aqartik.com/assets/images/ads/image/${image.name}`}
               alt={`Slide ${index + 1}`}
               style={{
                 width: "100%",

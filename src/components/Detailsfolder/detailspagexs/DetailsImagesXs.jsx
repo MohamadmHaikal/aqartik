@@ -70,11 +70,11 @@ const DetailsImagesXs = ({ adInfo }) => {
           {images.map((image, index) => (
             <a
               key={index}
-              data-src={` https://aqar-plus.sta.sa/public/assets/images/ads/image/${image.name}`}
+              data-src={` https://www.dashboard.aqartik.com/assets/images/ads/image/${image.name}`}
               className="swiper-slide"
             >
               <img
-                src={` https://aqar-plus.sta.sa/public/assets/images/ads/image/${image.name}`}
+                src={` https://www.dashboard.aqartik.com/assets/images/ads/image/${image.name}`}
                 className={styles.imgSlider}
                 alt={`Image ${index}`}
               />

@@ -13,7 +13,8 @@ import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { cities } from "./cities";
 import { Link } from "react-router-dom";
-// import { createBrowserHistory } from "history";
+import useDataFetcher from "../../api/useDataFetcher ";
+
 const CustomPrevButton = ({ onClick }) => {
   // Custom previous button component
   return (
@@ -51,13 +52,8 @@ const CarsouelCity = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const owlCarouselRef = useRef(null);
-  // const history = createBrowserHistory();
   const [carouselKey, setCarouselKey] = useState(0);
-
   const [itemsArray, setItemsArray] = useState(cities);
-  // const handleCityClick = (city) => {
-  //   history.push(`/mappage/${city.city_lang}/${city.city_long}`);
-  // };
 
   const handlePrevClick = () => {
     if (owlCarouselRef.current) {
@@ -91,11 +87,11 @@ const CarsouelCity = () => {
         ref={owlCarouselRef}
         key={carouselKey}
         loop={true}
-        items={2}
-        rtl={true}
-        startPosition={
-          lang === "ar" ? itemsArray.length - 2 : itemsArray.length
-        }
+        // items={2}
+        // rtl={true}
+        // startPosition={
+        //   lang === "ar" ? itemsArray.length - 2 : itemsArray.length
+        // }
         responsive={Responsive}
         autoplay={true}
         autoplayTimeout={7000}
@@ -106,13 +102,14 @@ const CarsouelCity = () => {
         className={styles.city_carsouel}
       >
         {itemsArray.map((city, index) => (
-          <div className={styles.item} key={`${city.src}-${index}`}>
+          <div className={styles.item} key={index}>
             {/* Render your item content here */}
             <Link
-              to={`/mappage/${city.city_lang}/${city.city_long}`}
-              onClick={(e) => {
-                e.preventDefault();
-                // handleCityClick(city);
+              to="/mappage"
+              state={{
+                lat: city.city_lang,
+                lng: city.city_long,
+                zoom: city.zoom,
               }}
             >
               <div className={styles.cityDiv}>
