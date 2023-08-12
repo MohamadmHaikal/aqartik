@@ -1,53 +1,77 @@
-import React, { useState } from "react";
-import { Box, Typography, Select, MenuItem, InputLabel } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Typography,
+  Select,
+  MenuItem,
+  InputLabel,
+  TextField,
+} from "@mui/material";
+
 import styles from "./confirmLocation.module.css";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useTranslation } from "react-i18next";
-import { cities } from "../../cities";
 
-const ConfimLocation = ({ formData, setFormData, interfaces }) => {
+const ConfimLocation = ({ formData, setFormData, interfaces, mapData }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
-  const [selectedCity, setSelectedCity] = useState(
-    formData.selectedCity || null
+  const [selectedCity, setSelectedCity] = useState(formData.city || null);
+
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState(
+    formData.neighborhood || null
   );
-  const [selectedDistrict, setSelectedDistrict] = useState(
-    formData.selectedDistrict || null
-  );
+
+  const [selectedRoad, setSelectedRoad] = useState(formData.road || null);
+
   const [selectedInterface, setSelectedInterface] = useState(
-    formData.selectedInterface || null
+    formData.interface_id || null
   );
+
+  useEffect(() => {
+    setSelectedCity(mapData.cityName);
+    setSelectedNeighborhood(mapData.neighborhoodName);
+    setSelectedRoad(mapData.rood);
+    setFormData((prevData) => ({
+      ...prevData,
+      city: mapData.cityName,
+      neighborhood: mapData.neighborhoodName,
+      road: mapData.rood,
+    }));
+  }, []);
 
   const handleCityChange = (event) => {
     setSelectedCity(event.target.value);
     setFormData((prevData) => ({
       ...prevData,
-      selectedCity: event.target.value,
+      city: event.target.value,
     }));
   };
 
-  const handleDistrictChange = (event) => {
-    setSelectedDistrict(event.target.value);
+  const handleNeighborhoodChange = (event) => {
+    setSelectedNeighborhood(event.target.value);
     setFormData((prevData) => ({
       ...prevData,
-      selectedDistrict: event.target.value,
+      neighborhood: event.target.value,
     }));
   };
 
-  const handleStreetChange = (event) => {
+  const handleRoadChange = (event) => {
+    setSelectedRoad(event.target.value);
+    setFormData((prevData) => ({
+      ...prevData,
+      road: event.target.value,
+    }));
+  };
+
+  const handleInterfaceChange = (event) => {
     setSelectedInterface(event.target.value);
     setFormData((prevData) => ({
       ...prevData,
-      selectedInterface: event.target.value,
+      interface_id: event.target.value,
     }));
   };
 
-  // const isFormValid = selectedCity && selectedDistrict && selectedStreet;
-
-  const selectedCityData = cities.find((city) => city.name_en === selectedCity);
-
-  const neighborhoods = selectedCityData ? selectedCityData.neighborhoods : [];
   return (
     <Box>
       <Typography
@@ -65,95 +89,59 @@ const ConfimLocation = ({ formData, setFormData, interfaces }) => {
       <InputLabel sx={{ color: "black", fontWeight: "500", marginTop: "1rem" }}>
         {t("user_dashboard.property_location.label1")}
       </InputLabel>
-
-      <Select
+      <TextField
+        type="text"
+        size="small"
+        InputProps={{
+          readOnly: mapData.cityName ? true : false,
+        }}
         value={selectedCity}
         onChange={handleCityChange}
-        label=""
-        required
-        IconComponent={ArrowDropDownIcon}
-        className={`${styles.select} select`}
-        classes={lang === "ar" && { icon: styles.selectIcon }}
         sx={{
-          borderRadius: "12px !important",
-          boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
-          border: "1px solid rgba(0, 0, 0, 0.06) !important",
-          paddingBlock: "5px",
-          height: "48px",
           width: "100%",
-          marginBlock: "4px 12px",
-        }}
-        MenuProps={{
-          PaperProps: {
-            style: {
-              borderRadius: "1rem",
-            },
+          borderRadius: "12px",
+          textAlign: lang === "ar" ? "right" : "left",
+          "&[readonly]": {
+            backgroundColor: "lightgray",
+            color: "darkgray",
           },
         }}
-      >
-        {cities.map((city) => (
-          <MenuItem
-            value={city.name_en}
-            className={
-              selectedCity === city.name_en ? styles.selectedMenuItem : ""
-            }
-          >
-            {city.name_en}
-          </MenuItem>
-        ))}
-      </Select>
-
-      <InputLabel
-        sx={{
-          color: "black",
-          fontWeight: "400",
-        }}
-      >
+      />
+      <InputLabel sx={{ color: "black", fontWeight: "500", marginTop: "1rem" }}>
         {t("user_dashboard.property_location.label2")}
       </InputLabel>
-      <Select
-        value={selectedDistrict}
-        onChange={handleDistrictChange}
-        label=""
-        required
-        IconComponent={ArrowDropDownIcon}
-        className={`${styles.select} select`}
-        classes={lang === "ar" && { icon: styles.selectIcon }}
+      <TextField
+        type="text"
+        size="small"
+        InputProps={{
+          readOnly: mapData.neighborhoodName ? true : false,
+        }}
+        value={selectedNeighborhood}
+        onChange={handleNeighborhoodChange}
         sx={{
-          borderRadius: "12px !important",
-          boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
-          border: "1px solid rgba(0, 0, 0, 0.06) !important",
-          paddingBlock: "5px",
-          height: "48px",
           width: "100%",
-          marginBlock: "4px 12px",
+          borderRadius: "12px",
+          textAlign: lang === "ar" ? "right" : "left",
         }}
-        MenuProps={{
-          PaperProps: {
-            style: {
-              borderRadius: "1rem",
-            },
-          },
+      />
+      <InputLabel sx={{ color: "black", fontWeight: "500", marginTop: "1rem" }}>
+        {lang === "ar" ? "اسم الشارع" : "road name"}
+      </InputLabel>
+      <TextField
+        type="text"
+        size="small"
+        value={selectedRoad}
+        onChange={handleRoadChange}
+        InputProps={{
+          readOnly: mapData.rood ? true : false,
         }}
-      >
-        {neighborhoods.map((nei) => (
-          <MenuItem
-            value={nei.name_en}
-            className={
-              selectedInterface === nei.name_en ? styles.selectedMenuItem : ""
-            }
-          >
-            {nei.name_en}
-          </MenuItem>
-        ))}
-      </Select>
-
-      <InputLabel
         sx={{
-          color: "black",
-          fontWeight: "500",
+          width: "100%",
+          borderRadius: "12px",
+          textAlign: lang === "ar" ? "right" : "left",
         }}
-      >
+      />
+      <InputLabel sx={{ color: "black", fontWeight: "500", marginTop: "1rem" }}>
         {t("user_dashboard.property_location.label3")}
       </InputLabel>
       <Typography sx={{ color: "gray", fontSize: "14px" }}>
@@ -161,7 +149,7 @@ const ConfimLocation = ({ formData, setFormData, interfaces }) => {
       </Typography>
       <Select
         value={selectedInterface}
-        onChange={handleStreetChange}
+        onChange={handleInterfaceChange}
         label=""
         required
         IconComponent={ArrowDropDownIcon}

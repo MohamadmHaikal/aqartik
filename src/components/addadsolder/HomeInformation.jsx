@@ -48,13 +48,13 @@ const HomeInformation = ({
   const [additionalRadioSelected, setAdditionalRadioSelected] = useState(
     formData.additionalRadioSelected || ""
   );
-  const [selectedtype, setSelectedtype] = useState(formData.aqar_type || "");
+  const [selectedtype, setSelectedtype] = useState(formData.type_aqar_id || "");
 
   const handleCityChange = (event) => {
     setSelectedtype(event.target.value);
     setFormData((prevData) => ({
       ...prevData,
-      aqar_type: event.target.value,
+      type_aqar_id: event.target.value,
     }));
   };
 
@@ -214,7 +214,7 @@ const HomeInformation = ({
       </Box>
       <Box>
         <InputLabel sx={{ color: "black", fontWeight: "500" }}>
-          {t("user_dashboard.property_location.label4")}
+          {lang === "ar" ? "سكني أو تجاري" : "Residential or commercial"}
         </InputLabel>
         <Select
           value={selectedtype}

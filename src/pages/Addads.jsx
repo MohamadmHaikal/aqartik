@@ -55,6 +55,7 @@ const Addads = () => {
   const [interfaces, set_interfaces] = useState([]);
   const [category_bool, set_category_bool] = useState([]);
   const [category_quantity, set_category_quantity] = useState([]);
+  const [mapData, setMapData] = useState({});
 
   useEffect(() => {
     set_type_aqar(info?.type_aqar);
@@ -104,9 +105,9 @@ const Addads = () => {
     if (category_bool?.length > 0 && category_quantity?.length > 0) {
       if (step === 1) {
         if (
-          formData.hasOwnProperty("category") &&
-          formData.hasOwnProperty("name") &&
-          formData?.name !== ""
+          formData.hasOwnProperty("category_id") &&
+          formData.hasOwnProperty("title") &&
+          formData?.title !== ""
         ) {
           setError(false);
         } else {
@@ -148,19 +149,29 @@ const Addads = () => {
           setError(true);
         }
       } else if (step === 4) {
-      } else if (step === 5) {
-        if (
-          formData.hasOwnProperty("selectedInterface") &&
-          formData.hasOwnProperty("selectedCity") &&
-          formData.hasOwnProperty("selectedDistrict")
-        ) {
-          setError(false);
-        } else {
-          setError(true);
-        }
       } else if (step === 6) {
         if (formData.hasOwnProperty("description")) {
           if (formData.description !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 7) {
+        if (
+          formData.hasOwnProperty("interface_id") &&
+          formData.hasOwnProperty("neighborhood") &&
+          formData.hasOwnProperty("city") &&
+          formData.hasOwnProperty("road")
+        ) {
+          if (
+            formData.interface_id !== "" &&
+            formData.neighborhood !== "" &&
+            formData.city !== "" &&
+            formData.road !== ""
+          ) {
             setError(false);
           } else {
             setError(true);
@@ -182,9 +193,9 @@ const Addads = () => {
     } else if (category_bool?.length > 0 && category_quantity?.length === 0) {
       if (step === 1) {
         if (
-          formData.hasOwnProperty("category") &&
-          formData.hasOwnProperty("name") &&
-          formData?.name !== ""
+          formData.hasOwnProperty("category_id") &&
+          formData.hasOwnProperty("title") &&
+          formData?.title !== ""
         ) {
           setError(false);
         } else {
@@ -213,19 +224,29 @@ const Addads = () => {
         } else {
           setError(true);
         }
-      } else if (step === 4) {
-        if (
-          formData.hasOwnProperty("selectedInterface") &&
-          formData.hasOwnProperty("selectedCity") &&
-          formData.hasOwnProperty("selectedDistrict")
-        ) {
-          setError(false);
-        } else {
-          setError(true);
-        }
       } else if (step === 5) {
         if (formData.hasOwnProperty("description")) {
           if (formData.description !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 6) {
+        if (
+          formData.hasOwnProperty("interface_id") &&
+          formData.hasOwnProperty("neighborhood") &&
+          formData.hasOwnProperty("city") &&
+          formData.hasOwnProperty("road")
+        ) {
+          if (
+            formData.interface_id !== "" &&
+            formData.neighborhood !== "" &&
+            formData.city !== "" &&
+            formData.road !== ""
+          ) {
             setError(false);
           } else {
             setError(true);
@@ -247,9 +268,9 @@ const Addads = () => {
     } else if (category_bool?.length === 0 && category_quantity?.length > 0) {
       if (step === 1) {
         if (
-          formData.hasOwnProperty("category") &&
-          formData.hasOwnProperty("name") &&
-          formData?.name !== ""
+          formData.hasOwnProperty("category_id") &&
+          formData.hasOwnProperty("title") &&
+          formData?.title !== ""
         ) {
           setError(false);
         } else {
@@ -290,19 +311,29 @@ const Addads = () => {
         } else {
           setError(true);
         }
-      } else if (step === 4) {
-        if (
-          formData.hasOwnProperty("selectedInterface") &&
-          formData.hasOwnProperty("selectedCity") &&
-          formData.hasOwnProperty("selectedDistrict")
-        ) {
-          setError(false);
-        } else {
-          setError(true);
-        }
       } else if (step === 5) {
         if (formData.hasOwnProperty("description")) {
           if (formData.description !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 6) {
+        if (
+          formData.hasOwnProperty("interface_id") &&
+          formData.hasOwnProperty("neighborhood") &&
+          formData.hasOwnProperty("city") &&
+          formData.hasOwnProperty("road")
+        ) {
+          if (
+            formData.interface_id !== "" &&
+            formData.neighborhood !== "" &&
+            formData.city !== "" &&
+            formData.road !== ""
+          ) {
             setError(false);
           } else {
             setError(true);
@@ -324,9 +355,9 @@ const Addads = () => {
     } else if (category_bool?.length === 0 && category_quantity?.length === 0) {
       if (step === 1) {
         if (
-          formData.hasOwnProperty("category") &&
-          formData.hasOwnProperty("name") &&
-          formData?.name !== ""
+          formData.hasOwnProperty("category_id") &&
+          formData.hasOwnProperty("title") &&
+          formData?.title !== ""
         ) {
           setError(false);
         } else {
@@ -355,19 +386,29 @@ const Addads = () => {
         } else {
           setError(true);
         }
-      } else if (step === 3) {
-        if (
-          formData.hasOwnProperty("selectedInterface") &&
-          formData.hasOwnProperty("selectedCity") &&
-          formData.hasOwnProperty("selectedDistrict")
-        ) {
-          setError(false);
-        } else {
-          setError(true);
-        }
       } else if (step === 4) {
         if (formData.hasOwnProperty("description")) {
           if (formData.description !== "") {
+            setError(false);
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      } else if (step === 5) {
+        if (
+          formData.hasOwnProperty("interface_id") &&
+          formData.hasOwnProperty("neighborhood") &&
+          formData.hasOwnProperty("city") &&
+          formData.hasOwnProperty("road")
+        ) {
+          if (
+            formData.interface_id !== "" &&
+            formData.neighborhood !== "" &&
+            formData.city !== "" &&
+            formData.road !== ""
+          ) {
             setError(false);
           } else {
             setError(true);
@@ -389,9 +430,9 @@ const Addads = () => {
     } else {
       if (step === 1) {
         if (
-          formData.hasOwnProperty("category") &&
-          formData.hasOwnProperty("name") &&
-          formData?.name !== ""
+          formData.hasOwnProperty("category_id") &&
+          formData.hasOwnProperty("title") &&
+          formData?.title !== ""
         ) {
           setError(false);
         } else {
@@ -400,11 +441,11 @@ const Addads = () => {
       }
     }
   }, [formData, step, category_quantity, category_bool]);
-
+  console.log(info);
   const handleNext = () => {
     // Perform form validation
     if (step === 1) {
-      getInfo(`/api/ads/info/${formData?.category?.id}`);
+      getInfo(`/api/ads/info/${formData?.category_id}`);
     }
     setStep(step + 1);
 
@@ -504,10 +545,9 @@ const Addads = () => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <ConfimLocation
+            <HomeDescroption
               formData={formData}
               setFormData={setFormData}
-              interfaces={interfaces}
               setError={setError}
               error={error}
             />
@@ -516,20 +556,24 @@ const Addads = () => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <HomeDescroption
+            <MapAds
               formData={formData}
               setFormData={setFormData}
               setError={setError}
               error={error}
+              mapData={mapData}
+              setMapData={setMapData}
             />
           );
         case 7:
           return isInfoLoading ? (
             "loading"
           ) : (
-            <MapAds
+            <ConfimLocation
               formData={formData}
               setFormData={setFormData}
+              interfaces={interfaces}
+              mapData={mapData}
               setError={setError}
               error={error}
             />
@@ -584,19 +628,8 @@ const Addads = () => {
               category_bool={category_bool}
             />
           );
+
         case 4:
-          return isInfoLoading ? (
-            "loading"
-          ) : (
-            <ConfimLocation
-              formData={formData}
-              setFormData={setFormData}
-              interfaces={interfaces}
-              setError={setError}
-              error={error}
-            />
-          );
-        case 5:
           return isInfoLoading ? (
             "loading"
           ) : (
@@ -607,13 +640,28 @@ const Addads = () => {
               error={error}
             />
           );
-        case 6:
+        case 5:
           return isInfoLoading ? (
             "loading"
           ) : (
             <MapAds
               formData={formData}
               setFormData={setFormData}
+              setError={setError}
+              error={error}
+              mapData={mapData}
+              setMapData={setMapData}
+            />
+          );
+        case 6:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <ConfimLocation
+              formData={formData}
+              setFormData={setFormData}
+              interfaces={interfaces}
+              mapData={mapData}
               setError={setError}
               error={error}
             />
@@ -670,19 +718,8 @@ const Addads = () => {
               error={error}
             />
           );
+
         case 4:
-          return isInfoLoading ? (
-            "loading"
-          ) : (
-            <ConfimLocation
-              formData={formData}
-              setFormData={setFormData}
-              interfaces={interfaces}
-              setError={setError}
-              error={error}
-            />
-          );
-        case 5:
           return isInfoLoading ? (
             "loading"
           ) : (
@@ -693,13 +730,28 @@ const Addads = () => {
               error={error}
             />
           );
-        case 6:
+        case 5:
           return isInfoLoading ? (
             "loading"
           ) : (
             <MapAds
               formData={formData}
               setFormData={setFormData}
+              setError={setError}
+              error={error}
+              mapData={mapData}
+              setMapData={setMapData}
+            />
+          );
+        case 6:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <ConfimLocation
+              formData={formData}
+              setFormData={setFormData}
+              interfaces={interfaces}
+              mapData={mapData}
               setError={setError}
               error={error}
             />
@@ -744,19 +796,8 @@ const Addads = () => {
               type_aqar={type_aqar}
             />
           );
+
         case 3:
-          return isInfoLoading ? (
-            "loading"
-          ) : (
-            <ConfimLocation
-              formData={formData}
-              setFormData={setFormData}
-              interfaces={interfaces}
-              setError={setError}
-              error={error}
-            />
-          );
-        case 4:
           return isInfoLoading ? (
             "loading"
           ) : (
@@ -767,13 +808,28 @@ const Addads = () => {
               error={error}
             />
           );
-        case 5:
+        case 4:
           return isInfoLoading ? (
             "loading"
           ) : (
             <MapAds
               formData={formData}
               setFormData={setFormData}
+              setError={setError}
+              error={error}
+              mapData={mapData}
+              setMapData={setMapData}
+            />
+          );
+        case 5:
+          return isInfoLoading ? (
+            "loading"
+          ) : (
+            <ConfimLocation
+              formData={formData}
+              setFormData={setFormData}
+              interfaces={interfaces}
+              mapData={mapData}
               setError={setError}
               error={error}
             />

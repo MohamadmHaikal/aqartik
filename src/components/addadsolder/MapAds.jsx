@@ -2,11 +2,8 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import Map from "./Map";
 import { useTranslation } from "react-i18next";
-const MapAds = ({ formData, setFormData }) => {
+const MapAds = ({ formData, setFormData, setError, mapData, setMapData }) => {
   const { t } = useTranslation();
-  const handleMapChange = (mapData) => {
-    setFormData({ ...formData, mapData });
-  };
   return (
     <Box>
       <Typography
@@ -34,7 +31,13 @@ const MapAds = ({ formData, setFormData }) => {
           marginTop: "1rem",
         }}
       >
-        <Map formData={formData} setFormData={setFormData} />
+        <Map
+          formData={formData}
+          setFormData={setFormData}
+          setError={setError}
+          mapData={mapData}
+          setMapData={setMapData}
+        />
       </Box>
     </Box>
   );

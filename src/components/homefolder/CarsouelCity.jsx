@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import styles from "../../styles/CarsouelCity.module.css";
 
-import { abha, jeddah } from "../../assets";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 // import { Link } from "@mui/material";
@@ -14,7 +13,7 @@ import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { cities } from "./cities";
 import { Link } from "react-router-dom";
-import { createBrowserHistory } from "history";
+// import { createBrowserHistory } from "history";
 const CustomPrevButton = ({ onClick }) => {
   // Custom previous button component
   return (
@@ -52,13 +51,13 @@ const CarsouelCity = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const owlCarouselRef = useRef(null);
-  const history = createBrowserHistory();
+  // const history = createBrowserHistory();
   const [carouselKey, setCarouselKey] = useState(0);
 
   const [itemsArray, setItemsArray] = useState(cities);
-  const handleCityClick = (city) => {
-    history.push(`/mappage/${city.city_lang}/${city.city_long}`);
-  };
+  // const handleCityClick = (city) => {
+  //   history.push(`/mappage/${city.city_lang}/${city.city_long}`);
+  // };
 
   const handlePrevClick = () => {
     if (owlCarouselRef.current) {
@@ -113,7 +112,7 @@ const CarsouelCity = () => {
               to={`/mappage/${city.city_lang}/${city.city_long}`}
               onClick={(e) => {
                 e.preventDefault();
-                handleCityClick(city);
+                // handleCityClick(city);
               }}
             >
               <div className={styles.cityDiv}>
