@@ -231,8 +231,8 @@ const CropeerImage = ({
                 initialAspectRatio={16 / 9}
                 guides={false}
                 ref={cropperRef}
-                viewMode={1} // Set viewMode to "1" for "cropper-view-mode"
-                dragMode="move" // Set dragMode to "move" for "cropper-point"
+                viewMode={1}
+                dragMode="move"
                 background={false}
                 className={`${styles.custom_cropper} custom_cropper`}
               />

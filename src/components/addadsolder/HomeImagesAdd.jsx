@@ -64,7 +64,6 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
   };
 
   const handleButtonClick = () => {
-    // Programmatically trigger the file input click event
     document.getElementById("video-input").click();
     if (selectedVideoFile) {
       // Clear the selected video file

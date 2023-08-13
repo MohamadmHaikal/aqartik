@@ -23,15 +23,21 @@ const Mappage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-
   const { data, isLoading, error, get, post } = useDataFetcher();
+  const [mapData, setMapData] = useState([]);
   const state = useLocation().state;
   useEffect(() => {
     get(
       `api/ads/get_all_ads?lat=${state.lat}&lng=${state.lng}&zoom=${state.zoom}`
     );
+    // console.log(state)
   }, []);
-  console.log(data);
+  useEffect(() => {
+    if (data) {
+      setMapData(data.ads.data);
+      // console.log(mapData);
+    }
+  }, [data]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -95,9 +101,7 @@ const Mappage = () => {
             <Box
               sx={{
                 display: "flex",
-
                 alignItems: "center",
-
                 justifyContent: "space-between",
                 flexDirection: "row",
                 height: "107px",
@@ -135,18 +139,16 @@ const Mappage = () => {
                 تصفية
               </Button>
               <Typography sx={{ fontWeight: "700", fontSize: "17px" }}>
-                {" "}
                 50 إعلان{" "}
               </Typography>
             </Box>
-            <AdsList />
+            <AdsList mapData={mapData} />
           </Box>
           <Box
             sx={{
               backgroundColor: "azure",
               position: "relative",
               width: { xs: "100%", md: "70%" },
-
               height: {
                 xs: "100vh !important",
                 md: "calc(-200px + 100vh) !important",
@@ -199,7 +201,7 @@ const Mappage = () => {
                 zIndex: "33",
               }}
             >
-              <MapMark state={state} />
+              <MapMark mapData={mapData} state={state} />
             </Box>
             <Button
               sx={{
@@ -232,7 +234,7 @@ const Mappage = () => {
             </Button>
           </Box>
         </Box>
-        {/* this Box only in xs to md */}
+        {/* this Box only in xs */}
         <Box
           sx={{
             height: "40px",

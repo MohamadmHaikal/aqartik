@@ -28,6 +28,13 @@ const UserDashbored = () => {
     if (data) setUserData(data?.user);
   }, [data]);
 
+  // useEffect(() => {
+  //   if (data) {
+  //     setUserdata(data.user);
+  //   }
+  // }, [data]);
+  // console.log(data);
+
   const handleItemClick = (index) => {
     setSelectedItem(index);
   };
@@ -95,6 +102,7 @@ const UserDashbored = () => {
             selectedSubitem={selectedSubitem}
           />
         </Grid>
+
         <Grid item xs={12} lg={9}>
           <Box sx={{ marginTop: "7rem" }}> {content}</Box>
         </Grid>
