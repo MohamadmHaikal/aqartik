@@ -33,21 +33,6 @@ const CustomNextButton = ({ onClick }) => {
   );
 };
 
-const Responsive = {
-  0: {
-    items: 1.5,
-    margin: 5,
-  },
-  768: {
-    items: 2.5,
-    margin: 10,
-  },
-  1024: {
-    items: 3,
-    margin: 20,
-  },
-};
-
 const CarsouelCity = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -72,7 +57,23 @@ const CarsouelCity = () => {
       return prevItems;
     });
   };
-
+  const Responsive = {
+    0: {
+      items: 1.5,
+      margin: 5,
+      rtl: lang === "ar",
+    },
+    768: {
+      items: 2.5,
+      margin: 10,
+      rtl: lang === "ar",
+    },
+    1024: {
+      items: 3,
+      margin: 20,
+      rtl: lang === "ar",
+    },
+  };
   const customNavText = [
     <CustomPrevButton onClick={handlePrevClick} />,
     <CustomNextButton onClick={handleNextClick} />,
@@ -86,12 +87,8 @@ const CarsouelCity = () => {
       <OwlCarousel
         ref={owlCarouselRef}
         key={carouselKey}
-        loop={true}
-        // items={2}
-        // rtl={true}
-        // startPosition={
-        //   lang === "ar" ? itemsArray.length - 2 : itemsArray.length
-        // }
+        // loop={true}
+        rtl={true}
         responsive={Responsive}
         autoplay={true}
         autoplayTimeout={7000}

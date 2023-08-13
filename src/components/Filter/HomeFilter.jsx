@@ -145,9 +145,9 @@ const HomeFilter = () => {
               <Link
                 to="/mappage"
                 state={{
-                  lat: maplat,
-                  lng: maplng,
-                  zoom: mapzoom,
+                  lat: 24.7136,
+                  lng: 46.6753,
+                  zoom: 10,
                 }}
                 style={{
                   display: "flex",

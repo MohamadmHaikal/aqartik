@@ -15,7 +15,7 @@ const HomeSliderMap = ({ ad }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
-    console.log(ad);
+    // console.log(ad);
   }, [ad]);
 
   const CustomPrevArrow = (props) => {

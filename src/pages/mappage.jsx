@@ -23,7 +23,6 @@ const Mappage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-
   const { data, isLoading, error, get, post } = useDataFetcher();
   const [mapData, setMapData] = useState([]);
   const state = useLocation().state;
@@ -31,11 +30,12 @@ const Mappage = () => {
     get(
       `api/ads/get_all_ads?lat=${state.lat}&lng=${state.lng}&zoom=${state.zoom}`
     );
+    // console.log(state)
   }, []);
   useEffect(() => {
     if (data) {
       setMapData(data.ads.data);
-      console.log(mapData);
+      // console.log(mapData);
     }
   }, [data]);
 
@@ -101,9 +101,7 @@ const Mappage = () => {
             <Box
               sx={{
                 display: "flex",
-
                 alignItems: "center",
-
                 justifyContent: "space-between",
                 flexDirection: "row",
                 height: "107px",
@@ -141,7 +139,6 @@ const Mappage = () => {
                 تصفية
               </Button>
               <Typography sx={{ fontWeight: "700", fontSize: "17px" }}>
-                {" "}
                 50 إعلان{" "}
               </Typography>
             </Box>
@@ -152,7 +149,6 @@ const Mappage = () => {
               backgroundColor: "azure",
               position: "relative",
               width: { xs: "100%", md: "70%" },
-
               height: {
                 xs: "100vh !important",
                 md: "calc(-200px + 100vh) !important",
@@ -205,7 +201,7 @@ const Mappage = () => {
                 zIndex: "33",
               }}
             >
-              <MapMark state={state} />
+              <MapMark mapData={mapData} state={state} />
             </Box>
             <Button
               sx={{

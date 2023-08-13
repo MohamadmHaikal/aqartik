@@ -7,6 +7,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, Link, Typography } from "@mui/material";
+import { useNavigate } from "react-router";
 import Icons from "../Filter/Icons";
 const icons = [
   {
@@ -20,6 +21,11 @@ const icons = [
 ];
 
 const AdsList = ({ mapData }) => {
+  const navigate = useNavigate();
+
+  const handleAdClick = (ad) => {
+    navigate(`/details/${ad.id}`, { state: { ad } });
+  };
   const [isBoxVisible, setBoxVisible] = useState(true);
   console.log(mapData);
 
@@ -220,7 +226,7 @@ const AdsList = ({ mapData }) => {
         قائمة الإعلانات على الخريطة
       </Box>
       {mapData.map((ad, index) => (
-        <Box sx={{ paddingX: "23px" }} key={ad.id}>
+        <Box sx={{ paddingX: "23px", paddingBottom: "2rem" }} key={index}>
           {/* this is my ads  */}
           <Box
             sx={{
@@ -230,8 +236,8 @@ const AdsList = ({ mapData }) => {
             }}
           >
             <Link
-              href="#"
-              sx={{
+              key={ad.id}
+              style={{
                 textDecoration: "none",
                 height: "196.5px",
                 boxShadow: "rgba(0, 0, 0, 0.16) 0px 2px 6px",
@@ -242,6 +248,7 @@ const AdsList = ({ mapData }) => {
                 padding: "8px 8px 8px 0px",
                 borderRadius: "16px",
               }}
+              onClick={() => handleAdClick(ad)}
             >
               <Box sx={{ position: "absolute", left: "10px", bottom: "18px" }}>
                 <FavoriteIcons />
@@ -311,10 +318,16 @@ const AdsList = ({ mapData }) => {
                           return (
                             <Box
                               key={feature.id}
-                              sx={{ display: "flex", marginLeft: "5px" }}
+                              sx={{ display: "flex", marginLeft: "px" }}
                             >
                               <Box>{matchingIcon.icon}</Box>
-                              <Typography sx={{ marginRight: "2px" }}>
+                              <Typography
+                                sx={{
+                                  marginRight: "2px",
+                                  fontSize: "14px",
+                                  alignItems: "center",
+                                }}
+                              >
                                 {feature.quantity}
                               </Typography>
                             </Box>

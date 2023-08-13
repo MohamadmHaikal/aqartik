@@ -1,7 +1,8 @@
 import React from "react";
 import MapCreate from "./MapCreate";
 
-const MapMark = ({ state }) => {
+const MapMark = ({mapData , state }) => {
+console.log(mapData)
   const locations = [
     { latitude: 24.7136, longitude: 46.6753, price: "100" },
     { latitude: 26.3174, longitude: 43.7759, price: "20000" },
