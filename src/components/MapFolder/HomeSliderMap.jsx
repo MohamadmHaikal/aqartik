@@ -11,11 +11,15 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const HomeSliderMap = ({ ad }) => {
-  const homeImages = ad.gallery;
+  // const homeImages = ad?.gallery;
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [img, setImg] = useState([]);
 
   useEffect(() => {
     // console.log(ad);
+    if (ad) {
+      setImg(ad?.gallery);
+    }
   }, [ad]);
 
   const CustomPrevArrow = (props) => {
@@ -60,7 +64,7 @@ const HomeSliderMap = ({ ad }) => {
   return (
     <Box sx={{ position: "relative", margin: { xs: "auto", lg: "0" } }}>
       <Slider {...settings}>
-        {homeImages.map((image, index) => (
+        {img.map((image, index) => (
           <img
             key={index}
             src={`https://www.dashboard.aqartik.com/assets/images/ads/image/${image.name}`}
