@@ -13,11 +13,18 @@ import {
 } from "../components/user_dashbord";
 import { UserDashboradSpeacialAds } from "../components";
 import { useTranslation } from "react-i18next";
+
 const UserDashbored = () => {
   const { t } = useTranslation();
-
   const [selectedItem, setSelectedItem] = useState(0);
   const [selectedSubitem, setSelectedSubitem] = useState(0);
+
+  // useEffect(() => {
+  //   if (data) {
+  //     setUserdata(data.user);
+  //   }
+  // }, [data]);
+  // console.log(data);
 
   const handleItemClick = (index) => {
     setSelectedItem(index);
@@ -86,6 +93,7 @@ const UserDashbored = () => {
             selectedSubitem={selectedSubitem}
           />
         </Grid>
+
         <Grid item xs={12} lg={9}>
           <Box sx={{ marginTop: "7rem" }}> {content}</Box>
         </Grid>

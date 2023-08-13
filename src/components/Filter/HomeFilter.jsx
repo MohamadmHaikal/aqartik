@@ -35,6 +35,9 @@ const HomeFilter = () => {
   const [per_page, set_per_page] = useState();
   const [current_page, set_current_page] = useState();
   const [ads, setAds] = useState([]);
+  const [maplat, setLat] = useState();
+  const [maplng, setLng] = useState();
+  const [mapzoom, setZoom] = useState();
   const [last_page, set_last_page] = useState();
   const { data, isLoading, get } = useDataFetcher();
 
@@ -48,6 +51,14 @@ const HomeFilter = () => {
       set_per_page(data.ads.per_page);
       setAds(data.ads.data);
       set_last_page(data.ads.last_page);
+
+      if (data.ads.data.length > 0) {
+        const firstAd = data.ads.data[0];
+        setLat(firstAd.lat);
+        setLng(firstAd.lng);
+        setZoom(firstAd.zoom);
+        console.log(firstAd.lng);
+      }
     }
   }, [data]);
 
@@ -132,7 +143,12 @@ const HomeFilter = () => {
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Link
-                href="/mappage"
+                to="/mappage"
+                state={{
+                  lat: maplat,
+                  lng: maplng,
+                  zoom: mapzoom,
+                }}
                 style={{
                   display: "flex",
                   color: "#fff",
@@ -318,7 +334,12 @@ const HomeFilter = () => {
               }}
             >
               <Link
-                to="/MapPage"
+                to="/mappage"
+                // state={{
+                //   lat: data.ads.lat,
+                //   lng: data.ads.long,
+                //   zoom: data.ads.zoom,
+                // }}
                 style={{ display: "flex", alignItems: "center" }}
               >
                 {/* <img src={Location} alt="location" /> */}

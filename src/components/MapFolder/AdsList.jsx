@@ -7,6 +7,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, Link, Typography } from "@mui/material";
+import Icons from "../Filter/Icons";
 const icons = [
   {
     icon: <TwitterIcon />,
@@ -18,12 +19,14 @@ const icons = [
   },
 ];
 
-const AdsList = () => {
+const AdsList = ({ mapData }) => {
   const [isBoxVisible, setBoxVisible] = useState(true);
+  console.log(mapData);
 
-  const handleBoxClose = () => {
+  const handleBoxClose = ({ mapData }) => {
     setBoxVisible(false);
   };
+
   return (
     <>
       {/* if click in some ads */}
@@ -114,7 +117,7 @@ const AdsList = () => {
                         height: "11.5rem",
                       }}
                     >
-                      <HomeSliderMap />
+                      {/* <HomeSliderMap ad={mapData} /> */}
                     </Box>
                   </Box>
                   <Box sx={{ padding: "9px 12px" }}>
@@ -216,264 +219,151 @@ const AdsList = () => {
       >
         قائمة الإعلانات على الخريطة
       </Box>
-      <Box sx={{ paddingX: "23px" }}>
-        {/* this is my ads  */}
-        <Box
-          sx={{
-            position: "relative",
-            paddingTop: "12.5px",
-            paddingBottom: "12.5px",
-          }}
-        >
-          <Link
-            href="#"
+      {mapData.map((ad, index) => (
+        <Box sx={{ paddingX: "23px" }} key={ad.id}>
+          {/* this is my ads  */}
+          <Box
             sx={{
-              textDecoration: "none",
-              height: "196.5px",
-              boxShadow: "rgba(0, 0, 0, 0.16) 0px 2px 6px",
-              overflow: "hidden",
               position: "relative",
-              display: "block",
-              backgroundColor: "white",
-              padding: "8px 8px 8px 0px",
-              borderRadius: "16px",
+              paddingTop: "12.5px",
+              paddingBottom: "12.5px",
             }}
           >
-            <Box sx={{ position: "absolute", left: "10px", bottom: "18px" }}>
-              <FavoriteIcons />
-            </Box>
-
-            <Box
+            <Link
+              href="#"
               sx={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "row",
+                textDecoration: "none",
+                height: "196.5px",
+                boxShadow: "rgba(0, 0, 0, 0.16) 0px 2px 6px",
+                overflow: "hidden",
+                position: "relative",
+                display: "block",
+                backgroundColor: "white",
+                padding: "8px 8px 8px 0px",
+                borderRadius: "16px",
               }}
             >
-              <Box>
-                <Box
-                  sx={{
-                    width: "13rem",
-                    height: "11.5rem",
-                  }}
-                >
-                  <HomeSliderMap />
-                </Box>
+              <Box sx={{ position: "absolute", left: "10px", bottom: "18px" }}>
+                <FavoriteIcons />
               </Box>
-              <Box sx={{ padding: "9px 12px" }}>
-                <Typography
-                  sx={{
-                    fontSize: "16px",
-                    fontWeight: "700",
-                    marginBottom: "10px",
-                    color: "rgb(5, 5, 54)",
-                  }}
-                >
-                  استراحة بمسطح اخضر
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: "500",
-                    color: "rgb(141, 141, 163)",
-                    marginBottom: "10px",
-                  }}
-                >
-                  الرياض, حي الجبلية
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    marginX: "0.5rem",
-                    color: "rgb(132, 132, 132)",
-                    marginBottom: "10px",
-                    marginRight: "-5px",
-                  }}
-                >
-                  {icons &&
-                    icons.map((icon, index) => (
-                      <Box
-                        key={index}
-                        sx={{
-                          display: "flex",
-                          marginLeft: "10px",
-                        }}
-                      >
-                        {icon.icon}
-                        <Typography sx={{ marginRight: "5px" }}>
-                          {icon.number}
-                        </Typography>
-                      </Box>
-                    ))}
-                </Box>
-                <Typography
-                  sx={{
-                    color: "var(--green-color)",
-                    fontWeight: "700",
-                    marginBottom: "10px",
-                  }}
-                >
-                  3000 ر.س
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  <StarIcon
-                    sx={{
-                      color: "var(--green-color)",
-                      marginLeft: "5px",
-                      fontSize: "18px",
-                    }}
-                  />
+
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "row",
+                }}
+              >
+                <Box>
                   <Box
                     sx={{
-                      color: "gray",
-                      display: "flex",
+                      width: "13rem",
+                      height: "11.5rem",
                     }}
                   >
-                    <Typography>0.0</Typography>
-                    <Typography>(0)</Typography>
-                    <Typography>تقييم</Typography>
+                    <HomeSliderMap ad={ad} />
+                  </Box>
+                </Box>
+                <Box sx={{ padding: "9px 12px" }}>
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      fontWeight: "700",
+                      marginBottom: "10px",
+                      color: "rgb(5, 5, 54)",
+                    }}
+                  >
+                    {ad.title}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "12px",
+                      fontWeight: "500",
+                      color: "rgb(141, 141, 163)",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {" "}
+                    {ad.city} , {ad.neighborhood} , {ad.road}
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      marginX: "0.5rem",
+                      color: "rgb(132, 132, 132)",
+                      marginBottom: "10px",
+                      marginRight: "-5px",
+                    }}
+                  >
+                    {ad.QuantityAds &&
+                      ad.QuantityAds.filter((feature) =>
+                        Icons.some(
+                          (icon) =>
+                            icon.en_name === feature.quantity_feature.en_name
+                        )
+                      ).map((feature) => {
+                        const matchingIcon = Icons.find(
+                          (icon) =>
+                            icon.en_name === feature.quantity_feature.en_name
+                        );
+
+                        if (matchingIcon) {
+                          return (
+                            <Box
+                              key={feature.id}
+                              sx={{ display: "flex", marginLeft: "5px" }}
+                            >
+                              <Box>{matchingIcon.icon}</Box>
+                              <Typography sx={{ marginRight: "2px" }}>
+                                {feature.quantity}
+                              </Typography>
+                            </Box>
+                          );
+                        }
+
+                        return null;
+                      })}
+                  </Box>
+                  <Typography
+                    sx={{
+                      color: "var(--green-color)",
+                      fontWeight: "700",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {ad.price} ر.س
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <StarIcon
+                      sx={{
+                        color: "var(--green-color)",
+                        marginLeft: "5px",
+                        fontSize: "18px",
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        color: "gray",
+                        display: "flex",
+                      }}
+                    >
+                      <Typography>0.0</Typography>
+                      <Typography>(0)</Typography>
+                      <Typography>تقييم</Typography>
+                    </Box>
                   </Box>
                 </Box>
               </Box>
-            </Box>
-          </Link>
+            </Link>
+          </Box>
         </Box>
-      </Box>
-      <Box sx={{ paddingX: "23px" }}>
-        {/* this is my ads  */}
-        <Box
-          sx={{
-            position: "relative",
-            paddingTop: "12.5px",
-            paddingBottom: "12.5px",
-          }}
-        >
-          <Link
-            href="#"
-            sx={{
-              textDecoration: "none",
-              height: "196.5px",
-              boxShadow: "rgba(0, 0, 0, 0.16) 0px 2px 6px",
-              overflow: "hidden",
-              position: "relative",
-              display: "block",
-              backgroundColor: "white",
-              padding: "8px 8px 8px 0px",
-              borderRadius: "16px",
-            }}
-          >
-            <Box sx={{ position: "absolute", left: "10px", bottom: "18px" }}>
-              <FavoriteIcons />
-            </Box>
-
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "row",
-              }}
-            >
-              <Box>
-                <Box
-                  sx={{
-                    width: "13rem",
-                    height: "11.5rem",
-                  }}
-                >
-                  <HomeSliderMap />
-                </Box>
-              </Box>
-              <Box sx={{ padding: "9px 12px" }}>
-                <Typography
-                  sx={{
-                    fontSize: "16px",
-                    fontWeight: "700",
-                    marginBottom: "10px",
-                    color: "rgb(5, 5, 54)",
-                  }}
-                >
-                  استراحة بمسطح اخضر
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: "500",
-                    color: "rgb(141, 141, 163)",
-                    marginBottom: "10px",
-                  }}
-                >
-                  الرياض, حي الجبلية
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    marginX: "0.5rem",
-                    color: "rgb(132, 132, 132)",
-                    marginBottom: "10px",
-                    marginRight: "-5px",
-                  }}
-                >
-                  {icons &&
-                    icons.map((icon, index) => (
-                      <Box
-                        key={index}
-                        sx={{
-                          display: "flex",
-                          marginLeft: "10px",
-                        }}
-                      >
-                        {icon.icon}
-                        <Typography sx={{ marginRight: "5px" }}>
-                          {icon.number}
-                        </Typography>
-                      </Box>
-                    ))}
-                </Box>
-                <Typography
-                  sx={{
-                    color: "var(--green-color)",
-                    fontWeight: "700",
-                    marginBottom: "10px",
-                  }}
-                >
-                  3000 ر.س
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  <StarIcon
-                    sx={{
-                      color: "var(--green-color)",
-                      marginLeft: "5px",
-                      fontSize: "18px",
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      color: "gray",
-                      display: "flex",
-                    }}
-                  >
-                    <Typography>0.0</Typography>
-                    <Typography>(0)</Typography>
-                    <Typography>تقييم</Typography>
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-          </Link>
-        </Box>
-      </Box>
+      ))}
     </>
   );
 };

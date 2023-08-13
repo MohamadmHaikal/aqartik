@@ -25,13 +25,19 @@ const Mappage = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   const { data, isLoading, error, get, post } = useDataFetcher();
+  const [mapData, setMapData] = useState([]);
   const state = useLocation().state;
   useEffect(() => {
     get(
       `api/ads/get_all_ads?lat=${state.lat}&lng=${state.lng}&zoom=${state.zoom}`
     );
   }, []);
-  console.log(data);
+  useEffect(() => {
+    if (data) {
+      setMapData(data.ads.data);
+      console.log(mapData);
+    }
+  }, [data]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -139,7 +145,7 @@ const Mappage = () => {
                 50 إعلان{" "}
               </Typography>
             </Box>
-            <AdsList />
+            <AdsList mapData={mapData} />
           </Box>
           <Box
             sx={{
@@ -232,7 +238,7 @@ const Mappage = () => {
             </Button>
           </Box>
         </Box>
-        {/* this Box only in xs to md */}
+        {/* this Box only in xs */}
         <Box
           sx={{
             height: "40px",

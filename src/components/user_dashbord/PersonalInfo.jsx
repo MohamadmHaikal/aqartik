@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Button,
@@ -12,10 +12,32 @@ import {
   Link,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import useDataFetcher from "../../api/useDataFetcher ";
+import { event } from "jquery";
 
 const PersonalInfo = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const { data, isLoading, error, get, post } = useDataFetcher();
+  const [userData, setUserdata] = useState([]);
+  const [username, setUserName] = useState(userData.username);
+  const [phoneNumber, setPhoneNumber] = useState(userData.phone);
+  const [compayName, setCompanyName] = useState(userData.company_name);
+  const [officeName, setOfficeName] = useState(userData.office_name);
+  const [email, setEmail] = useState(userData.email);
+  const [membershipId, setMembershipId] = useState(userData.membershipId);
+  const [about, setAbout] = useState(userData.about);
+
+  useEffect(() => {
+    get(`api/user/get_user_data`);
+  }, []);
+  useEffect(() => {
+    if (data) {
+      setUserdata(data.user);
+      setPhoneNumber(userData.phone);
+      console.log(data.user);
+    }
+  }, [data]);
 
   const [formData, setFormData] = useState({
     fullname: "",
@@ -48,6 +70,7 @@ const PersonalInfo = () => {
               : "Only  characters must be entered ",
         }));
       }
+      // setUserName(event.target.value);
     }
 
     // Validate email input
@@ -93,6 +116,31 @@ const PersonalInfo = () => {
               : " must enter a Saudi mobile number",
         }));
       }
+    }
+    switch (id) {
+      case "fullname":
+        setUserName(value);
+        break;
+      case "companyname":
+        setCompanyName(value);
+        break;
+      case "deskname":
+        setOfficeName(value);
+        break;
+      case "email":
+        setEmail(value);
+        break;
+      case "nationalId":
+        setMembershipId(value);
+        break;
+      case "phoneNumber":
+        setPhoneNumber(value);
+        break;
+      case "description":
+        setAbout(value);
+        break;
+      default:
+        break;
     }
 
     setFormData((prevData) => ({
@@ -188,7 +236,9 @@ const PersonalInfo = () => {
               marginBottom: "1rem",
               borderRadius: "50%",
               color: "gray",
-              backgroundImage: selectedImage ? `url(${selectedImage})` : "none",
+              backgroundImage: selectedImage
+                ? `url(${selectedImage})`
+                : `https://www.dashboard.aqartik.com//images/avatar/${userData.image}`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               alignItems: "center",
@@ -196,6 +246,7 @@ const PersonalInfo = () => {
             }}
           >
             <input
+              id={userData.image_id}
               type="file"
               accept="image/*"
               hidden
@@ -228,7 +279,7 @@ const PersonalInfo = () => {
             </label>
             <TextField
               id="fullname"
-              value={formData.fullname}
+              value={username}
               type="text"
               fullWidth
               sx={{ marginTop: "1rem" }}
@@ -244,7 +295,7 @@ const PersonalInfo = () => {
             </label>
             <TextField
               id="companyname"
-              value={formData.companyname}
+              value={compayName}
               type="text"
               fullWidth
               sx={{ marginTop: "1rem" }}
@@ -260,7 +311,7 @@ const PersonalInfo = () => {
             </label>
             <TextField
               id="deskname"
-              value={formData.deskname}
+              value={officeName}
               type="text"
               fullWidth
               sx={{ marginTop: "1rem" }}
@@ -276,7 +327,7 @@ const PersonalInfo = () => {
             </label>
             <TextField
               id="email"
-              value={formData.email}
+              value={email}
               type="email"
               fullWidth
               sx={{ marginTop: "1rem" }}
@@ -292,7 +343,7 @@ const PersonalInfo = () => {
             </label>
             <TextField
               id="nationalId"
-              value={formData.nationalId}
+              value={membershipId}
               type="text"
               fullWidth
               sx={{
@@ -313,9 +364,10 @@ const PersonalInfo = () => {
             </label>
             <TextField
               id="phoneNumber"
-              value="055746474648"
+              value={phoneNumber}
               type="tel"
               fullWidth
+              InputProps={{ readOnly: true }}
               sx={{
                 marginTop: "1rem",
                 "& input[type=tel]": {
@@ -331,7 +383,7 @@ const PersonalInfo = () => {
             </label>
             <TextField
               id="description"
-              value={formData.description}
+              value={about}
               type="text"
               fullWidth
               multiline
@@ -348,7 +400,7 @@ const PersonalInfo = () => {
               {t("user_dashboard.personal_info.label9")}
             </label>
             <RadioGroup
-              name="membershipType"
+              name={userData.type_id}
               value={membershipType}
               onChange={handleMembershipTypeChange}
               sx={{
