@@ -46,7 +46,8 @@ const CustomMarker = ({ price, isActive, onClick }) => {
   );
 };
 const MapCreate = (props) => {
-  const { locations, state } = props;
+  const { locations, state, isBoxVisible, setBoxVisible, setSelectedAd } =
+    props;
   const [mapLoaded, setMapLoaded] = useState(false);
   const [overlayViews, setOverlayViews] = useState([]);
   const [activeMarkerIndex, setActiveMarkerIndex] = useState(null);
@@ -61,13 +62,13 @@ const MapCreate = (props) => {
       const loadedOverlayViews = locations.map((location, index) => (
         <OverlayView
           key={index}
-          position={{ lat: location.latitude, lng: location.longitude }}
+          position={{ lat: location.lat, lng: location.lng }}
           mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
         >
           <CustomMarker
             price={location.price}
-            isActive={activeMarkerIndex === index}
-            onClick={() => handleMarkerClick(index)}
+            isActive={activeMarkerIndex === location.id}
+            onClick={() => handleMarkerClick(location.id)}
           />
         </OverlayView>
       ));
@@ -76,9 +77,11 @@ const MapCreate = (props) => {
       setOverlayViews(loadedOverlayViews);
     }
   }, [mapLoaded, locations, activeMarkerIndex]);
-  const handleMarkerClick = (index) => {
-    setActiveMarkerIndex(index);
+  const handleMarkerClick = (id) => {
+    setActiveMarkerIndex(id);
     setMarkerClicked(true);
+    setBoxVisible(true);
+    setSelectedAd(id);
   };
 
   const mapStyles = {
@@ -115,7 +118,14 @@ const MapCreate = (props) => {
           {overlayViews}
         </GoogleMap>
       </LoadScript>
-      {isMarkerClicked && <AdsListSmall />}
+      {isMarkerClicked && (
+        <AdsListSmall
+          data={locations}
+          isBoxVisible={isBoxVisible}
+          setBoxVisible={setBoxVisible}
+          activeMarkerIndex={activeMarkerIndex}
+        />
+      )}
     </>
   );
 };

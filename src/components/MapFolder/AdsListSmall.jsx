@@ -7,8 +7,13 @@ import Styles from "./swipermap.module.css";
 import { house } from "../../assets";
 import FavoriteIcons from "../Filter/FavoriteIcons";
 
-const AdsListSmall = () => {
-  const [isBoxVisible, setBoxVisible] = useState(true);
+const AdsListSmall = ({
+  data,
+  isBoxVisible,
+  setBoxVisible,
+  activeMarkerIndex,
+}) => {
+  // const [isBoxVisible, setBoxVisible] = useState(true);
 
   const handleBoxClose = () => {
     setBoxVisible(false);
@@ -17,6 +22,15 @@ const AdsListSmall = () => {
   if (!isBoxVisible) {
     return null; // Return null when the Box is not visible
   }
+   // Find the index of the ad that matches the activeMarkerIndex
+   const activeAdIndex = data.findIndex((ad) => ad.id === activeMarkerIndex);
+
+   // Move the active ad to the beginning of the array
+   if (activeAdIndex !== -1) {
+     const [activeAd] = data.splice(activeAdIndex, 1);
+     data.unshift(activeAd);
+   }
+  console.log(data);
   return (
     <Box
       sx={{
@@ -61,210 +75,112 @@ const AdsListSmall = () => {
           slidesPerView={1}
           className={Styles.swiper_container}
         >
-          <SwiperSlide className={Styles.swiper_slide}>
-            <Box
-              sx={{
-                position: "relative",
-                paddingTop: "4px",
-                paddingBottom: "4px",
-              }}
-            >
-              <Link
-                href="#"
+          {data.map((ad, index) => (
+            <SwiperSlide className={Styles.swiper_slide} key={index}>
+              <Box
                 sx={{
-                  textDecoration: "none",
-                  height: "130px",
-                  boxShadow: "rgba(0, 0, 0, 0.16) 0px 2px 6px",
-                  overflow: "hidden",
                   position: "relative",
-                  display: "block",
-                  backgroundColor: "white",
-                  borderRadius: "10px",
+                  paddingTop: "4px",
+                  paddingBottom: "4px",
                 }}
               >
-                <Box
+                <Link
+                  href="#"
                   sx={{
-                    display: "flex",
-
-                    alignItems: "center",
-                    flexDirection: "row",
+                    textDecoration: "none",
+                    height: "130px",
+                    boxShadow: "rgba(0, 0, 0, 0.16) 0px 2px 6px",
+                    overflow: "hidden",
+                    position: "relative",
+                    display: "block",
+                    backgroundColor: "white",
+                    borderRadius: "10px",
                   }}
                 >
                   <Box
                     sx={{
-                      width: "117px",
-                      height: "130px",
-                      overflow: "hidden",
-                      position: "relative",
-                      borderRadius: "0px",
+                      display: "flex",
+
+                      alignItems: "center",
+                      flexDirection: "row",
                     }}
                   >
-                    <img
-                      src={house}
-                      alt="home"
-                      style={{
-                        position: "absolute",
-                        height: "100%",
-                        width: "100%",
-                        inset: "0px",
-                        objectFit: "cover",
-                        color: "transparent",
-                      }}
-                    />
-                  </Box>
-                  <Box sx={{ padding: "9px" }}>
                     <Box
                       sx={{
-                        display: "flex",
-
-                        alignItems: "center",
-                        flexDirection: "row",
-                        marginBottom: "10px",
+                        width: "117px",
+                        height: "130px",
+                        overflow: "hidden",
+                        position: "relative",
+                        borderRadius: "0px",
                       }}
                     >
-                      <StarIcon
-                        sx={{
-                          marginLeft: "5px",
-                          color: "var(--green-color)",
-                          fontSize: "1.2rem",
+                      <img
+                        // src={`https://www.dashboard.aqartik.com/${ad.thumbnail.name}`}
+                        alt="home"
+                        style={{
+                          position: "absolute",
+                          height: "100%",
+                          width: "100%",
+                          inset: "0px",
+                          objectFit: "cover",
+                          color: "transparent",
                         }}
                       />
-                      <Typography sx={{ fontSize: "12px", color: "gray" }}>
-                        9.3 تقييم
+                    </Box>
+                    <Box sx={{ padding: "9px" }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+
+                          alignItems: "center",
+                          flexDirection: "row",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <StarIcon
+                          sx={{
+                            marginLeft: "5px",
+                            color: "var(--green-color)",
+                            fontSize: "1.2rem",
+                          }}
+                        />
+                        <Typography sx={{ fontSize: "12px", color: "gray" }}>
+                          9.3 تقييم
+                        </Typography>
+                      </Box>
+                      <Typography
+                        sx={{
+                          fontSize: "14px",
+                          fontWeight: "700",
+                          marginBottom: "10px",
+                          color: "black",
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {ad.title}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: "var(--green-color)",
+                          fontWeight: "700",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {ad.price} ر.س
                       </Typography>
                     </Box>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: "700",
-                        marginBottom: "10px",
-                        color: "black",
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      استديو انيق بموقع مميز
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: "var(--green-color)",
-                        fontWeight: "700",
-                        fontSize: "14px",
-                      }}
-                    >
-                      1000 ر.س
-                    </Typography>
-                  </Box>
-                  <Box sx={{ position: "absolute", top: "10px", left: "10px" }}>
-                    <FavoriteIcons />
-                  </Box>
-                </Box>
-              </Link>
-            </Box>
-          </SwiperSlide>
-          <SwiperSlide>
-            <Box
-              sx={{
-                position: "relative",
-                paddingTop: "4px",
-                paddingBottom: "4px",
-              }}
-            >
-              <Link
-                href="#"
-                sx={{
-                  textDecoration: "none",
-                  height: "130px",
-                  boxShadow: "rgba(0, 0, 0, 0.16) 0px 2px 6px",
-                  overflow: "hidden",
-                  position: "relative",
-                  display: "block",
-                  backgroundColor: "white",
-                  borderRadius: "10px",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: "117px",
-                      height: "130px",
-                      overflow: "hidden",
-                      position: "relative",
-                      borderRadius: "0px",
-                    }}
-                  >
-                    <img
-                      src={house}
-                      alt="home"
-                      style={{
-                        position: "absolute",
-                        height: "100%",
-                        width: "100%",
-                        inset: "0px",
-                        objectFit: "cover",
-                        color: "transparent",
-                      }}
-                    />
-                  </Box>
-                  <Box sx={{ padding: "9px" }}>
                     <Box
-                      sx={{
-                        display: "flex",
-
-                        alignItems: "center",
-                        flexDirection: "row",
-                        marginBottom: "10px",
-                      }}
+                      sx={{ position: "absolute", top: "10px", left: "10px" }}
                     >
-                      <StarIcon
-                        sx={{
-                          marginLeft: "5px",
-                          color: "var(--green-color)",
-                          fontSize: "1.2rem",
-                        }}
-                      />
-                      <Typography sx={{ fontSize: "12px", color: "gray" }}>
-                        9.3 تقييم
-                      </Typography>
+                      <FavoriteIcons />
                     </Box>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: "700",
-                        marginBottom: "10px",
-                        color: "black",
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      استديو انيق بموقع مميز
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: "var(--green-color)",
-                        fontWeight: "700",
-                        fontSize: "14px",
-                      }}
-                    >
-                      1000 ر.س
-                    </Typography>
                   </Box>
-                  <Box sx={{ position: "absolute", top: "10px", left: "10px" }}>
-                    <FavoriteIcons />
-                  </Box>
-                </Box>
-              </Link>
-            </Box>
-          </SwiperSlide>
+                </Link>
+              </Box>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </Box>
     </Box>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HomeSliderMap from "../MapFolder/HomeSliderMap";
 import NorthIcon from "@mui/icons-material/North";
 import StarIcon from "@mui/icons-material/Star";
@@ -20,18 +20,32 @@ const icons = [
   },
 ];
 
-const AdsList = ({ mapData }) => {
+const AdsList = ({ mapData, isBoxVisible, setBoxVisible, selectedAd }) => {
   const navigate = useNavigate();
+  const [selectedAdData, setSelectedAdData] = useState([]);
+  const [selectedImages, setSelectedImages] = useState();
 
   const handleAdClick = (ad) => {
     navigate(`/details/${ad.id}`, { state: { ad } });
   };
-  const [isBoxVisible, setBoxVisible] = useState(true);
-  console.log(mapData);
 
   const handleBoxClose = ({ mapData }) => {
     setBoxVisible(false);
   };
+  useEffect(() => {
+    if (selectedAd != "null") {
+      setSelectedAdData(mapData.filter((item) => item.id === selectedAd));
+    }
+  }, [selectedAd]);
+
+  // useEffect(() => {
+  //   if (!selectedAdData) {
+  //     // setSelectedImages(selectedAdData[0]);
+  //   } else {
+  //     setSelectedImages(selectedAdData[0]);
+  //   }
+  // }, [selectedAdData]);
+  console.log(selectedAdData);
 
   return (
     <>
@@ -66,7 +80,7 @@ const AdsList = ({ mapData }) => {
                   fontWeight: "700",
                 }}
               >
-                استديو بأثاث مريح وبسيط
+                {selectedAdData[0]?.title}
               </Typography>
             </Box>
             <Box>
@@ -123,7 +137,9 @@ const AdsList = ({ mapData }) => {
                         height: "11.5rem",
                       }}
                     >
-                      {/* <HomeSliderMap ad={mapData} /> */}
+                      {selectedAdData.length > 0 && (
+                        <HomeSliderMap ad={selectedAdData[0]} />
+                      )}
                     </Box>
                   </Box>
                   <Box sx={{ padding: "9px 12px" }}>
@@ -135,7 +151,7 @@ const AdsList = ({ mapData }) => {
                         color: "rgb(5, 5, 54)",
                       }}
                     >
-                      استراحة بمسطح اخضر
+                      {selectedAdData[0]?.title}
                     </Typography>
                     <Typography
                       sx={{
@@ -145,7 +161,11 @@ const AdsList = ({ mapData }) => {
                         marginBottom: "10px",
                       }}
                     >
-                      الرياض, حي الجبلية
+                      {selectedAdData[0]?.city}
+                      {""}
+                      {selectedAdData[0]?.neighborhood}
+                      {""}
+                      {selectedAdData[0]?.road}
                     </Typography>
                     <Box
                       sx={{
@@ -179,7 +199,7 @@ const AdsList = ({ mapData }) => {
                         marginBottom: "10px",
                       }}
                     >
-                      3000 ر.س
+                      {selectedAdData[0]?.price} ر.س
                     </Typography>
                     <Box
                       sx={{

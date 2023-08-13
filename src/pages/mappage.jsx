@@ -25,6 +25,8 @@ const Mappage = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { data, isLoading, error, get, post } = useDataFetcher();
   const [mapData, setMapData] = useState([]);
+  const [isBoxVisible, setBoxVisible] = useState(false);
+  const [selectedAd, setSelectedAd] = useState();
   const state = useLocation().state;
   useEffect(() => {
     get(
@@ -142,7 +144,12 @@ const Mappage = () => {
                 50 إعلان{" "}
               </Typography>
             </Box>
-            <AdsList mapData={mapData} />
+            <AdsList
+              mapData={mapData}
+              isBoxVisible={isBoxVisible}
+              setBoxVisible={setBoxVisible}
+              selectedAd={selectedAd}
+            />
           </Box>
           <Box
             sx={{
@@ -201,7 +208,13 @@ const Mappage = () => {
                 zIndex: "33",
               }}
             >
-              <MapMark mapData={mapData} state={state} />
+              <MapMark
+                mapData={mapData}
+                state={state}
+                isBoxVisible={isBoxVisible}
+                setBoxVisible={setBoxVisible}
+                setSelectedAd={setSelectedAd}
+              />
             </Box>
             <Button
               sx={{
