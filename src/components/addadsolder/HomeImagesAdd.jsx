@@ -15,23 +15,30 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
   const [croppedImage, setCroppedImage] = useState(
     formData.croppedImage || null
   );
+
   const [selectedImages, setSelectedImages] = useState(
     formData.selectedImages || []
   );
+
+  const [images, setImages] = useState([]);
+
   const [selectedVideoFile, setSelectedVideoFile] = useState(
     formData.selectedVideoFile || null
   );
   useEffect(() => {
     // Update the formData when selectedImages or selectedVideoFile changes
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      selectedImages,
-      selectedVideoFile,
-    }));
-  }, [selectedImages, selectedVideoFile, setFormData]);
+    if (selectedVideoFile) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        video: selectedVideoFile,
+      }));
+    }
+  }, [selectedVideoFile]);
+
   const handleCroppedImage = (image) => {
     setCroppedImage(image);
   };
+
   const handleDeleteImage = (index) => {
     setSelectedImages((prevImages) => {
       const updatedImages = [...prevImages];
@@ -39,22 +46,23 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
       return updatedImages;
     });
   };
+
   const handleImageSelect = (image) => {
     if (selectedImages.length < 9) {
       setSelectedImages((prevImages) => [...prevImages, image]);
     }
   };
+
   const handleVideoSelect = (event) => {
     const file = event.target.files[0];
     const fileSize = file.size / 1024; // Size in KB
-
     if (fileSize <= 40000) {
       setSelectedVideoFile(file);
     } else {
       setSelectedVideoFile(null);
     }
-    console.log(selectedVideoFile);
   };
+
   const handleButtonClick = () => {
     // Programmatically trigger the file input click event
     document.getElementById("video-input").click();
@@ -63,15 +71,6 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
       setSelectedVideoFile(null);
     }
   };
-  // const dragStart = (e, position) => {
-  //   dragItem.current = position;
-  //   console.log(e.target.innerHTML);
-  // };
-
-  // const dragEnter = (e, position) => {
-  //   dragOverItem.current = position;
-  //   console.log(e.target.innerHTML);
-  // };
 
   return (
     <Box>
@@ -97,7 +96,6 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
       </Box>
       <Box sx={{ marginY: "8px", fontSize: "16px", fontWeight: "600" }}>
         <Typography variant="label">
-          {" "}
           {t("user_dashboard.property_images.label1")}
         </Typography>
         <Box>
@@ -159,6 +157,7 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
         </Typography>
         <CropeerImage
           onCrop={handleCroppedImage}
+          type={1}
           isFirstButton={true}
           formData={formData}
           setFormData={setFormData}
@@ -179,6 +178,7 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
         >
           <CropeerImage
             onCrop={handleImageSelect}
+            type={2}
             width="200px"
             height="120px"
             maxImages={8}

@@ -174,10 +174,6 @@ const CatgouryAds = ({ formData, setFormData }) => {
   const [filteredItems, setFilteredItems] = useState([]);
   const [isSelected, setIsSelected] = useState();
 
-  useEffect(() => {
-    console.log();
-  }, [formData]);
-
   const handleNameChange = (event) => {
     const inputValue = event.target.value;
 
@@ -221,8 +217,7 @@ const CatgouryAds = ({ formData, setFormData }) => {
         if (filtered.length > 0) {
           setFormData((prevFormData) => ({
             ...prevFormData,
-            category_id: filtered["0"]?.id,
-            category_name: filtered["0"]?.en_name,
+            category_aqar: filtered["0"],
           }));
         }
       }
@@ -243,12 +238,12 @@ const CatgouryAds = ({ formData, setFormData }) => {
           forText.toLowerCase() === "for"
         );
       });
+
       setFilteredItems(filtered);
       if (filtered.length > 0) {
         setFormData((prevFormData) => ({
           ...prevFormData,
-          category_id: filtered["0"]?.id,
-          category_name: filtered["0"]?.en_name,
+          category_aqar: filtered["0"],
         }));
       }
     }

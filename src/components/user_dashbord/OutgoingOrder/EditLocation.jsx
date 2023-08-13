@@ -1,118 +1,202 @@
 import React, { useState } from "react";
-import { Box, Select, MenuItem, InputLabel, Button } from "@mui/material";
+import {
+  Box,
+  Select,
+  MenuItem,
+  InputLabel,
+  Button,
+  TextField,
+} from "@mui/material";
 import styles from "../../../components/addadsolder/confirmLocation.module.css";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useTranslation } from "react-i18next";
 
-const EditLocation = ({ onCancel }) => {
+const EditLocation = ({ ad, onCancel }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
-
-  const defaultValues = {
-    المدينة: "Option 1",
-    الحي: "Option A",
-    الاتجاه: "Option X",
-  };
-  const [selectedValues, setSelectedValues] = useState(defaultValues);
-
-  const selectDataLocation = [
-    {
-      label: t("user_dashboard.property_location.label1"),
-      options: ["Option 1", "Option 2", "Option 3"],
-    },
-    {
-      label: t("user_dashboard.property_location.label2"),
-      options: ["Option A", "Option B", "Option C"],
-    },
-    {
-      label: t("user_dashboard.property_location.label3"),
-      options: ["Option X", "Option Y", "Option Z"],
-    },
-  ];
-  const handleClearSelection = (label) => {
-    setSelectedValues((prevSelectedValues) => ({
-      ...prevSelectedValues,
-      [label]: "",
-    }));
-  };
+  const [city, setCity] = useState(ad.city);
+  const [neighborhood, setNeighborhood] = useState(ad.neighborhood);
+  const [road, setRoad] = useState(ad.road);
+  const [selectedInterface, setSelectedInterface] = useState(
+    ad.interface_aqar.id
+  );
 
   return (
     <Box>
       <form>
-        <Box>
-          {selectDataLocation.map((select, index) => (
-            <div
-              key={index}
-              style={{
-                display: "flex",
-                alignItems: "baseline",
-                position: "relative",
+        <Box sx={{ marginY: "16px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              position: "relative",
+            }}
+          >
+            <InputLabel
+              sx={{
+                color: "black",
+                minWidth: { xs: "3rem", sm: "6rem" },
               }}
             >
-              <InputLabel
-                sx={{
-                  color: "black",
+              {lang === "ar" ? "المدينة" : "city"}
+            </InputLabel>
+            <TextField
+              type="text"
+              name="title"
+              value={city}
+              // onChange={handleTitleChange}
+              sx={{
+                maxWidth: "340px",
+                width: { xs: "80%", md: "90%" },
+                marginInline: "1rem auto",
 
-                  minWidth: { xs: "3rem", sm: "6rem" },
-                }}
-              >
-                {select.label}
-              </InputLabel>
-              <ClearIcon
-                onClick={() => handleClearSelection(select.label)}
-                sx={{
-                  cursor: "pointer",
-                  position: "absolute",
-                  left: lang === "ar" && "11%",
-                  right: lang === "en" && "11%",
-                  top: "25px",
-                  fontSize: "16px",
-                  color: "rgba(0, 0, 0, 0.54)",
-                  zIndex: "1",
-                }}
-              />
-              <Select
-                label=""
-                required
-                IconComponent={ArrowDropDownIcon}
-                className={`${styles.select} select`}
-                classes={lang === "ar" && { icon: styles.selectIcon }}
-                sx={{
-                  borderRadius: "12px !important",
-                  boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
-                  border: "1px solid rgba(0, 0, 0, 0.06) !important",
-                  paddingBlock: "5px",
-                  height: "48px",
-                  width: { xs: "100%", md: "70%" },
-                  margin: "0.5rem 0rem",
-                  position: "relative",
-                }}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      borderRadius: "1rem",
-                      maxHeight: "150px",
-                    },
+                borderRadius: "12px !important",
+                boxShadow: "1",
+                "& .css-1iy5sao-MuiInputBase-root-MuiOutlinedInput-root": {
+                  borderRadius: "12px",
+                },
+              }}
+              InputProps={{
+                sx: {
+                  "& input": {
+                    borderRadius: "12px !important",
+                    padding: "13px 0.8rem",
                   },
-                }}
-                value={selectedValues[select.label] || ""}
-                onChange={(e) =>
-                  setSelectedValues((prevSelectedValues) => ({
-                    ...prevSelectedValues,
-                    [select.label]: e.target.value,
-                  }))
-                }
-              >
-                {select.options.map((option, optionIndex) => (
-                  <MenuItem key={optionIndex} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </div>
-          ))}
+                },
+              }}
+            ></TextField>
+          </div>
+        </Box>
+        <Box sx={{ marginY: "16px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              position: "relative",
+            }}
+          >
+            <InputLabel
+              sx={{
+                color: "black",
+                minWidth: { xs: "3rem", sm: "6rem" },
+              }}
+            >
+              {lang === "ar" ? "الحي" : "neighborhood"}
+            </InputLabel>
+            <TextField
+              type="text"
+              name="title"
+              value={ad.neighborhood}
+              // onChange={handleTitleChange}
+              sx={{
+                maxWidth: "340px",
+                width: { xs: "80%", md: "90%" },
+                marginInline: "1rem auto",
+
+                borderRadius: "12px !important",
+                boxShadow: "1",
+                "& .css-1iy5sao-MuiInputBase-root-MuiOutlinedInput-root": {
+                  borderRadius: "12px",
+                },
+              }}
+              InputProps={{
+                sx: {
+                  "& input": {
+                    borderRadius: "12px !important",
+                    padding: "13px 0.8rem",
+                  },
+                },
+              }}
+            ></TextField>
+          </div>
+        </Box>
+        <Box sx={{ marginY: "16px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              position: "relative",
+            }}
+          >
+            <InputLabel
+              sx={{
+                color: "black",
+                minWidth: { xs: "3rem", sm: "6rem" },
+              }}
+            >
+              {lang === "ar" ? "الشارع" : "road"}
+            </InputLabel>
+            <TextField
+              type="text"
+              name="title"
+              value={ad.road}
+              // onChange={handleTitleChange}
+              sx={{
+                maxWidth: "340px",
+                width: { xs: "80%", md: "90%" },
+                marginInline: "1rem auto",
+
+                borderRadius: "12px !important",
+                boxShadow: "1",
+                "& .css-1iy5sao-MuiInputBase-root-MuiOutlinedInput-root": {
+                  borderRadius: "12px",
+                },
+              }}
+              InputProps={{
+                sx: {
+                  "& input": {
+                    borderRadius: "12px !important",
+                    padding: "13px 0.8rem",
+                  },
+                },
+              }}
+            ></TextField>
+          </div>
+        </Box>
+        <Box sx={{ marginY: "16px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              position: "relative",
+            }}
+          >
+            <InputLabel
+              sx={{
+                color: "black",
+                minWidth: { xs: "3rem", sm: "6rem" },
+              }}
+            >
+              {lang === "ar" ? "الواجهة" : "interface"}
+            </InputLabel>
+            <TextField
+              type="text"
+              name="title"
+              value={ad.road}
+              // onChange={handleTitleChange}
+              sx={{
+                maxWidth: "340px",
+                width: { xs: "80%", md: "90%" },
+                marginInline: "1rem auto",
+
+                borderRadius: "12px !important",
+                boxShadow: "1",
+                "& .css-1iy5sao-MuiInputBase-root-MuiOutlinedInput-root": {
+                  borderRadius: "12px",
+                },
+              }}
+              InputProps={{
+                sx: {
+                  "& input": {
+                    borderRadius: "12px !important",
+                    padding: "13px 0.8rem",
+                  },
+                },
+              }}
+            ></TextField>
+          </div>
         </Box>
         <Box
           sx={{
@@ -155,7 +239,6 @@ const EditLocation = ({ onCancel }) => {
             sx={{
               fontWeight: "600",
               borderRadius: "8px",
-
               border: "1px solid var(--green-color)",
               minWidth: "186px",
               padding: "0.75rem 2.5rem",

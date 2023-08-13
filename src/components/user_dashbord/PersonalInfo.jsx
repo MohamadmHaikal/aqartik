@@ -24,6 +24,7 @@ const PersonalInfo = () => {
     phoneNumber: "",
     description: "",
   });
+
   const [errors, setErrors] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
   const [link, setLink] = useState("");

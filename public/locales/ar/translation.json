@@ -266,6 +266,9 @@
       },
       "card4": {
         "title": "الموقع على الخريطة"
+      },
+      "card5": {
+        "title": "وصف العقار"
       }
     },
     "new_order": {
@@ -347,7 +350,7 @@
       "cut_btn": "قص وحفظ المحدد"
     },
     "outgoing_requests": {
-      "title": "outgoing requests",
+      "title": "الطلبات الصادرة",
       "submit_btn": "حفظ التعديلات",
       "cancel_btn": "الغاء",
       "edit_btn": "تعديل",

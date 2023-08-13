@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 
 const CropeerImage = ({
   onCrop,
+  type,
   width,
   height,
   maxImages,
@@ -21,8 +22,9 @@ const CropeerImage = ({
 
   // Added hasBackground prop with default value
   const cropperRef = useRef(null);
+
   const [selectedImage, setSelectedImage] = useState(
-    formData.selectedImage || null
+    formData.thumbnail || null
   );
   const [open, setOpen] = useState(false);
   const [initialImage, setInitialImage] = useState(null);
@@ -61,6 +63,20 @@ const CropeerImage = ({
       };
       reader.readAsDataURL(file);
     }
+    // const blob = new Blob([file], { type: file.type });
+    // console.log(blob);
+    if (type === 1) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        thumbnail: file,
+      }));
+    }
+    if (type === 2) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        images: prevFormData?.images ? [...prevFormData?.images, file] : [file], // Append new blob to the array
+      }));
+    }
   };
 
   const handleCrop = () => {
@@ -68,13 +84,24 @@ const CropeerImage = ({
       const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas();
       if (croppedCanvas) {
         const croppedImageUrl = croppedCanvas.toDataURL();
-        const imageData = new FormData();
-        imageData.append("image", croppedImageUrl);
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          selectedImage: selectedImage,
-          imageData: imageData,
-        }));
+        // if (type === 1) {
+        //   croppedCanvas.toBlob((blob) => {
+        //     setFormData((prevFormData) => ({
+        //       ...prevFormData,
+        //       thumbnail: blob,
+        //     }));
+        //   });
+        // }
+        // if (type === 2) {
+        //   croppedCanvas.toBlob((blob) => {
+        //     setFormData((prevFormData) => ({
+        //       ...prevFormData,
+        //       images: prevFormData?.images
+        //         ? [...prevFormData?.images, blob]
+        //         : [blob], // Append new blob to the array
+        //     }));
+        //   });
+        // }
         onCrop(croppedImageUrl);
       }
     }

@@ -60,7 +60,7 @@ const Login = () => {
       } else {
         toast.success(res.data.message);
         navigate("/userDashbored");
-        localStorage.setItem("user_token", res.data);
+        localStorage.setItem("user_token", res.data.access_token);
       }
     } catch (err) {
       console.log(err);

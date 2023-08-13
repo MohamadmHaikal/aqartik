@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Accordion,
@@ -13,6 +13,9 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { OrderTitles } from "../NewOrder";
 import OrderCard from "../OrderConstant/OrderCard";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { Map, Logo } from "../../../assets";
+
 import {
   EditInformation,
   EditLocation,
@@ -21,9 +24,9 @@ import {
   EditDescription,
 } from "./index";
 
-import { Map } from "../../../assets";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import useDataFetcher from "../../../api/useDataFetcher ";
 // import './Incoming.module.css'
 
 const CircleIconButton = styled(IconButton)({
@@ -53,28 +56,31 @@ const CustomAccordionDetails = styled(AccordionDetails)({
   borderRadius: "12px",
   padding: { xs: "0rem", md: "2rem" },
 });
-const OutGoingOrders = () => {
-  const { t } = useTranslation();
+const OutGoingOrders = ({ userData }) => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const { data, isLoading, get } = useDataFetcher();
+  const [myAds, setMyAds] = useState([]);
+
+  useEffect(() => {
+    get("/api/user/get_user_ads");
+  }, []);
+
+  useEffect(() => {
+    console.log(data);
+    if (data) setMyAds(data.ads.data);
+  }, [data]);
+
   const [edditInfo, setEditInfo] = useState(false);
   const [descriptionEdit, setDescriptionEdit] = useState(false);
   const [edditLoc, setEditLoc] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [MapEdit, setMapEdit] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
-  const [accordions, setAccordions] = useState([
-    { id: 1, expanded: false },
-    { id: 2, expanded: false },
-  ]);
-  const handleAccordionChange = (accordionId) => (event, isExpanded) => {
-    setAccordions((prevAccordions) =>
-      prevAccordions.map((accordion) =>
-        accordion.id === accordionId
-          ? { ...accordion, expanded: isExpanded }
-          : accordion
-      )
-    );
+  const handleChange = (panel, work) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
   };
   const handleEditInformation = () => {
     setEditInfo(true);
@@ -105,7 +111,7 @@ const OutGoingOrders = () => {
   };
   return (
     <Box sx={{ padding: { xs: "16px 5px", sm: "16px 56px" } }}>
-      <OrderTitles title={t("user_dashboard.outgoing_requests.title")} />
+      <OrderTitles title={t("user_dashboard.incoming_orders.page_title")} />
       <Box
         sx={{
           overflowY: "auto",
@@ -119,11 +125,12 @@ const OutGoingOrders = () => {
           // boxShadow: "2",
         }}
       >
-        {accordions.map((accordion) => (
+        {myAds.map((ad) => (
           <CustomAccordion
-            key={accordion.id}
-            expanded={accordion.expanded}
-            onChange={handleAccordionChange(accordion.id)}
+            key={ad.id}
+            TransitionProps={{ unmountOnExit: true }}
+            expanded={expanded === `panel${ad.id}`}
+            onChange={handleChange(`panel${ad.id}`, ad)}
           >
             <Box sx={{ paddingInline: "20px" }}>
               <CustomAccordionSummary
@@ -132,22 +139,23 @@ const OutGoingOrders = () => {
                     <ExpandMoreIcon sx={{ fontSize: "2rem" }} />
                   </CircleIconButton>
                 }
-                aria-controls={`panel${accordion.id}-content`}
-                id={`panel${accordion.id}-header`}
+                aria-controls={`panel${ad.id}-content`}
+                id={`panel${ad.id}-header`}
               >
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Typography sx={{ fontSize: "24px", fontWeight: "700" }}>
-                    rama
+                    {ad.title}
                   </Typography>
                   <Typography
                     sx={{
-                      color: accordion.expanded
-                        ? "var(--green-color)"
-                        : "rgb(244, 67, 54)",
+                      color:
+                        expanded === `panel${ad.id}`
+                          ? "var(--green-color)"
+                          : "rgb(244, 67, 54)",
                       marginX: "1rem",
                     }}
                   >
-                    {accordion.expanded
+                    {expanded === `panel${ad.id}`
                       ? t("user_dashboard.incoming_orders.ad_expanded.one")
                       : t("user_dashboard.incoming_orders.ad_expanded.two")}
                   </Typography>
@@ -194,7 +202,7 @@ const OutGoingOrders = () => {
                     {edditInfo && (
                       <Fade in={edditInfo}>
                         <Box>
-                          <EditInformation onCancel={onCancel} />
+                          <EditInformation ad={ad} onCancel={onCancel} />
                         </Box>
                       </Fade>
                     )}
@@ -211,7 +219,7 @@ const OutGoingOrders = () => {
                             <Typography>
                               {t("user_dashboard.incoming_orders.card1.label1")}
                             </Typography>
-                            <Typography>rama</Typography>
+                            <Typography>{ad.title}</Typography>
                           </Box>
                           <Box
                             sx={{
@@ -223,7 +231,11 @@ const OutGoingOrders = () => {
                             <Typography>
                               {t("user_dashboard.incoming_orders.card1.label2")}
                             </Typography>
-                            <Typography>شقة</Typography>
+                            <Typography>
+                              {lang === "ar"
+                                ? ad.category_aqar.ar_name
+                                : ad.category_aqar.en_name}
+                            </Typography>
                           </Box>
                         </Box>
                       </Fade>
@@ -261,7 +273,10 @@ const OutGoingOrders = () => {
                     {edditLoc && (
                       <Fade in={edditLoc}>
                         <Box>
-                          <EditLocation onCancel={handleCloseEditLocation} />
+                          <EditLocation
+                            ad={ad}
+                            onCancel={handleCloseEditLocation}
+                          />
                         </Box>
                       </Fade>
                     )}
@@ -278,7 +293,7 @@ const OutGoingOrders = () => {
                             <Typography>
                               {t("user_dashboard.incoming_orders.card2.label1")}
                             </Typography>
-                            <Typography>جدة</Typography>
+                            <Typography>{ad.city}</Typography>
                           </Box>
                           <Box
                             sx={{
@@ -291,7 +306,19 @@ const OutGoingOrders = () => {
                               {" "}
                               {t("user_dashboard.incoming_orders.card2.label2")}
                             </Typography>
-                            <Typography>حي الزمرد</Typography>
+                            <Typography>{ad?.neighborhood}</Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              marginBottom: "1rem",
+                            }}
+                          >
+                            <Typography>
+                              {lang === "ar" ? "الشارع" : "road"}
+                            </Typography>
+                            <Typography>{ad?.road}</Typography>
                           </Box>
                           <Box
                             sx={{
@@ -306,7 +333,11 @@ const OutGoingOrders = () => {
                                 "user_dashboard.incoming_orders.card2.label3"
                               )}{" "}
                             </Typography>
-                            <Typography>شمال</Typography>
+                            {/* <Typography>
+                              {lang === "ar"
+                                ? ad?.interface_aqar.ar_name
+                                : ad?.interface_aqar.en_name}
+                            </Typography> */}
                           </Box>
                         </Box>
                       </Fade>
@@ -354,9 +385,7 @@ const OutGoingOrders = () => {
                                 t("user_dashboard.outgoing_requests.edit_btn")}
                             </Typography>
                           </Box>
-                          <Typography>
-                            jsdfnjsd lskdnfsd klsdnf,m sflksslkd
-                          </Typography>
+                          <Typography>{ad?.description}</Typography>
                         </Box>
                       </Fade>
                     )}
@@ -478,21 +507,58 @@ const OutGoingOrders = () => {
                   </OrderCard>
                 </Box>
               </Box>
-              <Box
-                sx={{
-                  borderRadius: "12px",
-                  border: "1px solid rgb(234, 234, 234)",
-                  paddingBlock: "1.5rem",
-                  paddingInline: "2rem",
-                }}
-              >
-                <Typography sx={{ fontWeight: "600", fontSize: "1.2rem" }}>
-                  {t("user_dashboard.outgoing_requests.units")}
-                </Typography>
-                <Typography sx={{ color: "rgb(132, 132, 132)" }}>
-                  1 وحدات
-                </Typography>
-              </Box>
+              <OrderCard title="وحدات هذا العقار ">
+                <Link
+                  to="/EditAds"
+                  state={{ ad: ad }}
+                  style={{
+                    textDecoration: "none",
+                    color: "black",
+                    "&:hover": {
+                      backgroundColor: "rgba(56, 31, 118, 0.04)",
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingY: "2rem",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: { xs: "block", md: "flex" },
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <img
+                        src={Logo}
+                        alt=""
+                        style={{ width: "80px", objectFit: "cover" }}
+                      />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          marginInlineStart: "1rem",
+                          alignItems: "start",
+                        }}
+                      >
+                        <Typography>fkfjg</Typography>
+                        <Typography sx={{ color: "red" }}>
+                          {" "}
+                          غير معروض (أوف لابن)
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <ChevronLeftIcon sx={{ color: "gray" }} />
+                  </Box>
+                </Link>
+              </OrderCard>
             </CustomAccordionDetails>
           </CustomAccordion>
         ))}

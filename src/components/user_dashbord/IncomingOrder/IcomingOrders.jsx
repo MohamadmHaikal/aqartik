@@ -50,7 +50,7 @@ const CustomAccordionDetails = styled(AccordionDetails)({
   borderRadius: "12px",
   padding: "2rem",
 });
-const IcomingOrders = ({ title }) => {
+const IcomingOrders = ({ userData, title }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 

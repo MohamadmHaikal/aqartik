@@ -47,6 +47,7 @@ const Map = ({ formData, setFormData, setError, mapData, setMapData }) => {
     const clickedPosition = {
       lat: event.latLng.lat(),
       lng: event.latLng.lng(),
+      zoom: 10,
     };
 
     const newMarker = {
@@ -70,9 +71,6 @@ const Map = ({ formData, setFormData, setError, mapData, setMapData }) => {
       .then((response) => response.json())
       .then((data) => {
         if (data.status === "OK" && data.results.length > 0) {
-          let cityName = "";
-          let neighborhoodName = "";
-
           for (const result of data.results) {
             // Extract city name and neighborhood name from address components
             for (const component of result.address_components) {

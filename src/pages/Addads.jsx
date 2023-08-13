@@ -16,9 +16,10 @@ import AddFeatureComponent from "../components/addadsolder/AddFeatureComponent";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../api/useDataFetcher ";
 import { Link } from "react-router-dom";
+import { ConstructionOutlined } from "@mui/icons-material";
 // import LicenseModal from "./LicenseModal";
 
-const Addads = () => {
+const Addads = ({ type, ad }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
@@ -75,8 +76,10 @@ const Addads = () => {
   const [error, setError] = useState(false);
   const [inputErrors, setInputErrors] = useState({});
 
+  useEffect(() => {
+    type === 1 ? setFormData(ad) : setFormData({});
+  }, [type]);
   console.log(formData);
-
   useEffect(() => {
     if (category_bool?.length > 0 && category_quantity?.length > 0) {
       step === 8 ? setIsLastStep(8) : setIsLastStep(null);
@@ -101,351 +104,351 @@ const Addads = () => {
 
   const hasPrevStep = step > 1;
 
-  useEffect(() => {
-    if (category_bool?.length > 0 && category_quantity?.length > 0) {
-      if (step === 1) {
-        if (
-          formData.hasOwnProperty("category_id") &&
-          formData.hasOwnProperty("title") &&
-          formData?.title !== ""
-        ) {
-          setError(false);
-        } else {
-          setError(true);
-        }
-      } else if (step === 2) {
-        if (
-          formData.hasOwnProperty("inputValues") &&
-          formData.hasOwnProperty("radioSelected") &&
-          formData.hasOwnProperty("aqar_type")
-        ) {
-          const allInputsFilled = Object.values(formData?.inputValues).every(
-            (val) => val !== ""
-          );
-          const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
-          if (
-            !allInputsFilled ||
-            !isInputsFour ||
-            formData?.aqar_type === "" ||
-            formData?.radioSelected === ""
-          ) {
-            setError(true);
-          } else {
-            setError(false);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 3) {
-        if (formData.hasOwnProperty("aqarCategoryQuantity")) {
-          if (
-            formData.aqarCategoryQuantity.length === category_quantity.length
-          ) {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 4) {
-      } else if (step === 6) {
-        if (formData.hasOwnProperty("description")) {
-          if (formData.description !== "") {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 7) {
-        if (
-          formData.hasOwnProperty("interface_id") &&
-          formData.hasOwnProperty("neighborhood") &&
-          formData.hasOwnProperty("city") &&
-          formData.hasOwnProperty("road")
-        ) {
-          if (
-            formData.interface_id !== "" &&
-            formData.neighborhood !== "" &&
-            formData.city !== "" &&
-            formData.road !== ""
-          ) {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 8) {
-        if (formData.hasOwnProperty("selectedImage")) {
-          if (formData.selectedImage !== "") {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      }
-    } else if (category_bool?.length > 0 && category_quantity?.length === 0) {
-      if (step === 1) {
-        if (
-          formData.hasOwnProperty("category_id") &&
-          formData.hasOwnProperty("title") &&
-          formData?.title !== ""
-        ) {
-          setError(false);
-        } else {
-          setError(true);
-        }
-      } else if (step === 2) {
-        if (
-          formData.hasOwnProperty("inputValues") &&
-          formData.hasOwnProperty("radioSelected") &&
-          formData.hasOwnProperty("aqar_type")
-        ) {
-          const allInputsFilled = Object.values(formData?.inputValues).every(
-            (val) => val !== ""
-          );
-          const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
-          if (
-            !allInputsFilled ||
-            !isInputsFour ||
-            formData?.aqar_type === "" ||
-            formData?.radioSelected === ""
-          ) {
-            setError(true);
-          } else {
-            setError(false);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 5) {
-        if (formData.hasOwnProperty("description")) {
-          if (formData.description !== "") {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 6) {
-        if (
-          formData.hasOwnProperty("interface_id") &&
-          formData.hasOwnProperty("neighborhood") &&
-          formData.hasOwnProperty("city") &&
-          formData.hasOwnProperty("road")
-        ) {
-          if (
-            formData.interface_id !== "" &&
-            formData.neighborhood !== "" &&
-            formData.city !== "" &&
-            formData.road !== ""
-          ) {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 7) {
-        if (formData.hasOwnProperty("selectedImage")) {
-          if (formData.selectedImage !== "") {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      }
-    } else if (category_bool?.length === 0 && category_quantity?.length > 0) {
-      if (step === 1) {
-        if (
-          formData.hasOwnProperty("category_id") &&
-          formData.hasOwnProperty("title") &&
-          formData?.title !== ""
-        ) {
-          setError(false);
-        } else {
-          setError(true);
-        }
-      } else if (step === 2) {
-        if (
-          formData.hasOwnProperty("inputValues") &&
-          formData.hasOwnProperty("radioSelected") &&
-          formData.hasOwnProperty("aqar_type")
-        ) {
-          const allInputsFilled = Object.values(formData?.inputValues).every(
-            (val) => val !== ""
-          );
-          const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
-          if (
-            !allInputsFilled ||
-            !isInputsFour ||
-            formData?.aqar_type === "" ||
-            formData?.radioSelected === ""
-          ) {
-            setError(true);
-          } else {
-            setError(false);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 3) {
-        if (formData.hasOwnProperty("aqarCategoryQuantity")) {
-          if (
-            formData.aqarCategoryQuantity.length === category_quantity.length
-          ) {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 5) {
-        if (formData.hasOwnProperty("description")) {
-          if (formData.description !== "") {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 6) {
-        if (
-          formData.hasOwnProperty("interface_id") &&
-          formData.hasOwnProperty("neighborhood") &&
-          formData.hasOwnProperty("city") &&
-          formData.hasOwnProperty("road")
-        ) {
-          if (
-            formData.interface_id !== "" &&
-            formData.neighborhood !== "" &&
-            formData.city !== "" &&
-            formData.road !== ""
-          ) {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 7) {
-        if (formData.hasOwnProperty("selectedImage")) {
-          if (formData.selectedImage !== "") {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      }
-    } else if (category_bool?.length === 0 && category_quantity?.length === 0) {
-      if (step === 1) {
-        if (
-          formData.hasOwnProperty("category_id") &&
-          formData.hasOwnProperty("title") &&
-          formData?.title !== ""
-        ) {
-          setError(false);
-        } else {
-          setError(true);
-        }
-      } else if (step === 2) {
-        if (
-          formData.hasOwnProperty("inputValues") &&
-          formData.hasOwnProperty("radioSelected") &&
-          formData.hasOwnProperty("aqar_type")
-        ) {
-          const allInputsFilled = Object.values(formData?.inputValues).every(
-            (val) => val !== ""
-          );
-          const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
-          if (
-            !allInputsFilled ||
-            !isInputsFour ||
-            formData?.aqar_type === "" ||
-            formData?.radioSelected === ""
-          ) {
-            setError(true);
-          } else {
-            setError(false);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 4) {
-        if (formData.hasOwnProperty("description")) {
-          if (formData.description !== "") {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 5) {
-        if (
-          formData.hasOwnProperty("interface_id") &&
-          formData.hasOwnProperty("neighborhood") &&
-          formData.hasOwnProperty("city") &&
-          formData.hasOwnProperty("road")
-        ) {
-          if (
-            formData.interface_id !== "" &&
-            formData.neighborhood !== "" &&
-            formData.city !== "" &&
-            formData.road !== ""
-          ) {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      } else if (step === 6) {
-        if (formData.hasOwnProperty("selectedImage")) {
-          if (formData.selectedImage !== "") {
-            setError(false);
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      }
-    } else {
-      if (step === 1) {
-        if (
-          formData.hasOwnProperty("category_id") &&
-          formData.hasOwnProperty("title") &&
-          formData?.title !== ""
-        ) {
-          setError(false);
-        } else {
-          setError(true);
-        }
-      }
-    }
-  }, [formData, step, category_quantity, category_bool]);
-  console.log(info);
+  // useEffect(() => {
+  //   if (category_bool?.length > 0 && category_quantity?.length > 0) {
+  //     if (step === 1) {
+  //       if (
+  //         formData.hasOwnProperty("category_id") &&
+  //         formData.hasOwnProperty("title") &&
+  //         formData?.title !== ""
+  //       ) {
+  //         setError(false);
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 2) {
+  //       if (
+  //         formData.hasOwnProperty("inputValues") &&
+  //         formData.hasOwnProperty("radioSelected") &&
+  //         formData.hasOwnProperty("aqar_type")
+  //       ) {
+  //         const allInputsFilled = Object.values(formData?.inputValues).every(
+  //           (val) => val !== ""
+  //         );
+  //         const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
+  //         if (
+  //           !allInputsFilled ||
+  //           !isInputsFour ||
+  //           formData?.aqar_type === "" ||
+  //           formData?.radioSelected === ""
+  //         ) {
+  //           setError(true);
+  //         } else {
+  //           setError(false);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 3) {
+  //       if (formData.hasOwnProperty("aqarCategoryQuantity")) {
+  //         if (
+  //           formData.aqarCategoryQuantity.length === category_quantity.length
+  //         ) {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 4) {
+  //     } else if (step === 6) {
+  //       if (formData.hasOwnProperty("description")) {
+  //         if (formData.description !== "") {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 7) {
+  //       if (
+  //         formData.hasOwnProperty("interface_id") &&
+  //         formData.hasOwnProperty("neighborhood") &&
+  //         formData.hasOwnProperty("city") &&
+  //         formData.hasOwnProperty("road")
+  //       ) {
+  //         if (
+  //           formData.interface_id !== "" &&
+  //           formData.neighborhood !== "" &&
+  //           formData.city !== "" &&
+  //           formData.road !== ""
+  //         ) {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 8) {
+  //       if (formData.hasOwnProperty("selectedImage")) {
+  //         if (formData.selectedImage !== "") {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     }
+  //   } else if (category_bool?.length > 0 && category_quantity?.length === 0) {
+  //     if (step === 1) {
+  //       if (
+  //         formData.hasOwnProperty("category_id") &&
+  //         formData.hasOwnProperty("title") &&
+  //         formData?.title !== ""
+  //       ) {
+  //         setError(false);
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 2) {
+  //       if (
+  //         formData.hasOwnProperty("inputValues") &&
+  //         formData.hasOwnProperty("radioSelected") &&
+  //         formData.hasOwnProperty("aqar_type")
+  //       ) {
+  //         const allInputsFilled = Object.values(formData?.inputValues).every(
+  //           (val) => val !== ""
+  //         );
+  //         const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
+  //         if (
+  //           !allInputsFilled ||
+  //           !isInputsFour ||
+  //           formData?.aqar_type === "" ||
+  //           formData?.radioSelected === ""
+  //         ) {
+  //           setError(true);
+  //         } else {
+  //           setError(false);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 5) {
+  //       if (formData.hasOwnProperty("description")) {
+  //         if (formData.description !== "") {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 6) {
+  //       if (
+  //         formData.hasOwnProperty("interface_id") &&
+  //         formData.hasOwnProperty("neighborhood") &&
+  //         formData.hasOwnProperty("city") &&
+  //         formData.hasOwnProperty("road")
+  //       ) {
+  //         if (
+  //           formData.interface_id !== "" &&
+  //           formData.neighborhood !== "" &&
+  //           formData.city !== "" &&
+  //           formData.road !== ""
+  //         ) {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 7) {
+  //       if (formData.hasOwnProperty("selectedImage")) {
+  //         if (formData.selectedImage !== "") {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     }
+  //   } else if (category_bool?.length === 0 && category_quantity?.length > 0) {
+  //     if (step === 1) {
+  //       if (
+  //         formData.hasOwnProperty("category_id") &&
+  //         formData.hasOwnProperty("title") &&
+  //         formData?.title !== ""
+  //       ) {
+  //         setError(false);
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 2) {
+  //       if (
+  //         formData.hasOwnProperty("inputValues") &&
+  //         formData.hasOwnProperty("radioSelected") &&
+  //         formData.hasOwnProperty("aqar_type")
+  //       ) {
+  //         const allInputsFilled = Object.values(formData?.inputValues).every(
+  //           (val) => val !== ""
+  //         );
+  //         const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
+  //         if (
+  //           !allInputsFilled ||
+  //           !isInputsFour ||
+  //           formData?.aqar_type === "" ||
+  //           formData?.radioSelected === ""
+  //         ) {
+  //           setError(true);
+  //         } else {
+  //           setError(false);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 3) {
+  //       if (formData.hasOwnProperty("aqarCategoryQuantity")) {
+  //         if (
+  //           formData.aqarCategoryQuantity.length === category_quantity.length
+  //         ) {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 5) {
+  //       if (formData.hasOwnProperty("description")) {
+  //         if (formData.description !== "") {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 6) {
+  //       if (
+  //         formData.hasOwnProperty("interface_id") &&
+  //         formData.hasOwnProperty("neighborhood") &&
+  //         formData.hasOwnProperty("city") &&
+  //         formData.hasOwnProperty("road")
+  //       ) {
+  //         if (
+  //           formData.interface_id !== "" &&
+  //           formData.neighborhood !== "" &&
+  //           formData.city !== "" &&
+  //           formData.road !== ""
+  //         ) {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 7) {
+  //       if (formData.hasOwnProperty("selectedImage")) {
+  //         if (formData.selectedImage !== "") {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     }
+  //   } else if (category_bool?.length === 0 && category_quantity?.length === 0) {
+  //     if (step === 1) {
+  //       if (
+  //         formData.hasOwnProperty("category_id") &&
+  //         formData.hasOwnProperty("title") &&
+  //         formData?.title !== ""
+  //       ) {
+  //         setError(false);
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 2) {
+  //       if (
+  //         formData.hasOwnProperty("inputValues") &&
+  //         formData.hasOwnProperty("radioSelected") &&
+  //         formData.hasOwnProperty("aqar_type")
+  //       ) {
+  //         const allInputsFilled = Object.values(formData?.inputValues).every(
+  //           (val) => val !== ""
+  //         );
+  //         const isInputsFour = Object.keys(formData?.inputValues).length >= 4;
+  //         if (
+  //           !allInputsFilled ||
+  //           !isInputsFour ||
+  //           formData?.aqar_type === "" ||
+  //           formData?.radioSelected === ""
+  //         ) {
+  //           setError(true);
+  //         } else {
+  //           setError(false);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 4) {
+  //       if (formData.hasOwnProperty("description")) {
+  //         if (formData.description !== "") {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 5) {
+  //       if (
+  //         formData.hasOwnProperty("interface_id") &&
+  //         formData.hasOwnProperty("neighborhood") &&
+  //         formData.hasOwnProperty("city") &&
+  //         formData.hasOwnProperty("road")
+  //       ) {
+  //         if (
+  //           formData.interface_id !== "" &&
+  //           formData.neighborhood !== "" &&
+  //           formData.city !== "" &&
+  //           formData.road !== ""
+  //         ) {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     } else if (step === 6) {
+  //       if (formData.hasOwnProperty("selectedImage")) {
+  //         if (formData.selectedImage !== "") {
+  //           setError(false);
+  //         } else {
+  //           setError(true);
+  //         }
+  //       } else {
+  //         setError(true);
+  //       }
+  //     }
+  //   } else {
+  //     if (step === 1) {
+  //       if (
+  //         formData.hasOwnProperty("category_id") &&
+  //         formData.hasOwnProperty("title") &&
+  //         formData?.title !== ""
+  //       ) {
+  //         setError(false);
+  //       } else {
+  //         setError(true);
+  //       }
+  //     }
+  //   }
+  // }, [formData, step, category_quantity, category_bool]);
+
   const handleNext = () => {
     // Perform form validation
     if (step === 1) {
-      getInfo(`/api/ads/info/${formData?.category_id}`);
+      getInfo(`/api/ads/info/${formData?.category_aqar?.id}`);
     }
     setStep(step + 1);
 
@@ -476,19 +479,82 @@ const Addads = () => {
         sendForm.append(property, formData[property]);
       }
     }
+    console.log(formData);
+    const requestBody = {};
 
-    if (sendForm) {
-      fetch("https://aqar-plus.sta.sa/public/api/ads/store", {
-        method: "POST",
-        body: sendForm,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("API response:", data);
-        })
-        .catch((error) => {
-          console.error("Error sending FormData:", error);
-        });
+    // Loop through each key-value pair in sendForm and add to requestBody
+    for (const [key, value] of sendForm.entries()) {
+      if (formData.category_aqar) {
+        requestBody["category_id"] = formData.category_aqar.id;
+      }
+      if (formData.inputValues.price) {
+        requestBody["price"] = formData.inputValues.price;
+      }
+      if (formData.inputValues.area) {
+        requestBody["space"] = formData.inputValues.area;
+      }
+      if (formData.inputValues.height) {
+        requestBody["height"] = formData.inputValues.height;
+      }
+      if (formData.inputValues.width) {
+        requestBody["width"] = formData.inputValues.width;
+      }
+      if (formData.selectedLocation.lat) {
+        requestBody["lat"] = formData.selectedLocation.lat;
+      }
+      if (formData.selectedLocation.lng) {
+        requestBody["lng"] = formData.selectedLocation.lng;
+      }
+      if (formData.selectedLocation.zoom) {
+        requestBody["zoom"] = formData.selectedLocation.zoom;
+      }
+      if (formData.selectedLocation.zoom) {
+        requestBody["zoom"] = formData.selectedLocation.zoom;
+      }
+      if (formData.aqarCategoryQuantity) {
+        requestBody["QuantityAds"] = JSON.stringify(
+          formData.aqarCategoryQuantity
+        );
+      }
+      if (formData.selectedBooleansProperties) {
+        requestBody["BoolfeatureaAds"] = JSON.stringify(
+          formData.selectedBooleansProperties
+        );
+      }
+      if (formData.images) {
+        requestBody["images"] = JSON.stringify(formData.images);
+      }
+      requestBody[key] = value;
+    }
+
+    console.log(requestBody);
+    //   BoolfeatureaAds
+    // QuantityAds
+
+    const formDataSend = new FormData();
+    // Iterate through properties of formData and append each property to sendForm
+    for (const property in requestBody) {
+      if (requestBody.hasOwnProperty(property)) {
+        formDataSend.append(property, requestBody[property]);
+      }
+    }
+
+    try {
+      const response = await fetch(
+        "https://www.dashboard.aqartik.com/api/ads/store",
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("user_token")}`,
+          },
+          method: "POST",
+          body: formDataSend,
+        }
+      );
+
+      const data = await response.json();
+      console.log("API response:", data);
+    } catch (error) {
+      console.error("Error sending FormData:", error);
     }
   };
 
@@ -1023,7 +1089,7 @@ const Addads = () => {
                   {step <= 7 && !isLastStep && (
                     <Button
                       onClick={handleNext}
-                      disabled={loadingSubmit || hasNextStep || error}
+                      disabled={loadingSubmit || hasNextStep}
                       sx={{
                         fontWeight: "600",
                         height: "48px",
@@ -1035,7 +1101,6 @@ const Addads = () => {
                         "&:hover": {
                           background: "var(--green-color)",
                           color: "white",
-                          transform: formData.name ? "scale(1.02)" : "none",
                           transition: "transform 0.2s ease-in-out",
                         },
                       }}
@@ -1046,7 +1111,7 @@ const Addads = () => {
                   {isLastStep && (
                     <Button
                       onClick={handleSubmit}
-                      disabled={loadingSubmit || error}
+                      disabled={loadingSubmit}
                       sx={{
                         fontWeight: "600",
                         height: "48px",

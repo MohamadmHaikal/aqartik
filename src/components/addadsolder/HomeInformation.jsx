@@ -109,6 +109,7 @@ const HomeInformation = ({
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+
     const formattedValue = formatNumber(value);
     const newInputValues = {
       ...inputValues,
