@@ -8,6 +8,7 @@ import SideBar from "./SideBar";
 import SpecialAds from "../Filter/SpecialAds";
 import Usersmangament from "./Usersmangament";
 import SubscribeDetails from "./SubscribeDetails";
+import Notification from "./Notification"
 
 export {
   PersonalInfo,

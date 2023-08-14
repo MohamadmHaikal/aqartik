@@ -38,7 +38,9 @@ import Chair from "./chair.svg";
 import Farms from "./farms.svg";
 import Special from "./special.svg";
 import Maintence from "./maintence.png";
+import DefaultImage from "./defaulthome.jpg"
 export {
+  DefaultImage,
   Maintence,
   Special,
   Camps,

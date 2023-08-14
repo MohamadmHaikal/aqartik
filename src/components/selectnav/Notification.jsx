@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Typography, Link } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
-const Notification = () => {
+const Notification = ({ notificationData }) => {
   const notificationRef = useRef(null);
   const notificationIconRef = useRef(null);
   const [openNotifivations, setOpenNotification] = useState(false);
@@ -55,21 +56,36 @@ const Notification = () => {
             overflow: "hidden",
           }}
         >
-          <Typography
+          <Box
             sx={{
+              display: "flex",
+              justifyContent: "space-between",
               borderBottom: "1px solid #eee",
-              color: "black",
-              padding: " 1rem",
-              fontWeight: "600",
+              alignItems: "center",
             }}
           >
-            {t("notifications.title")}
-          </Typography>
+            <Typography
+              sx={{
+                color: "black",
+                padding: " 1rem",
+                fontWeight: "600",
+              }}
+            >
+              {t("notifications.title")}
+            </Typography>
+            <Link to="/userdashbored" style={{ textDecoration: "none" }}>
+              <Typography
+                sx={{ color: "var(--green-color)", marginLeft: "5px" }}
+              >
+                عرض الكل
+              </Typography>
+            </Link>
+          </Box>
           <Box>
             <Box sx={{ borderBottom: "1px solid #eee", padding: "1rem" }}>
               <Link
                 href="#"
-                sx={{
+                style={{
                   textDecoration: "none",
                   color: "black",
                 }}
@@ -86,7 +102,7 @@ const Notification = () => {
             <Box sx={{ borderBottom: "1px solid #eee", padding: "1rem" }}>
               <Link
                 href="#"
-                sx={{
+                style={{
                   textDecoration: "none",
                   color: "black",
                 }}

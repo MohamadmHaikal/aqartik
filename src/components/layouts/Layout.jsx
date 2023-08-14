@@ -11,6 +11,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import ChatContext from "../../context/chatContext";
 import { useTranslation } from "react-i18next";
 import { Toaster } from "react-hot-toast";
+import useDataFetcher from "../../api/useDataFetcher ";
 
 const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
   const location = useLocation();
@@ -29,6 +30,19 @@ const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
   const [userData, setUserData] = useState();
   // for socket states
 
+  // for notifiacetion
+  const { data, isLoading, get } = useDataFetcher();
+  const [notificationData, setNotificationData] = useState([]);
+
+  useEffect(() => {
+    get("api/user/get_user_notifications");
+  }, []);
+  useEffect(() => {
+    if (data) {
+      setNotificationData(data);
+    }
+  }, [data]);
+
   return (
     <div>
       <Toaster position="top-center" reverseOrder={false} />
@@ -39,6 +53,7 @@ const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
           isUserSelected={isUserSelected}
           setIsUserSelected={setIsUserSelected}
           setUserData={setUserData}
+          notificationData={notificationData}
         />
       )}
       <main style={contentStyles}>{children}</main>

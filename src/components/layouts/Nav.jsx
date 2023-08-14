@@ -59,6 +59,7 @@ export default function Nav({
   isUserSelected,
   setIsUserSelected,
   setUserData,
+  notificationData
 }) {
   const { t, i18n } = useTranslation();
 
@@ -274,7 +275,7 @@ export default function Nav({
             <Button
               sx={{ minWidth: "0", display: { xs: "none", md: "block" } }}
             >
-              <Notification />
+              <Notification notificationData={notificationData}/>
             </Button>
             <Header>
               <div className="messages-container">

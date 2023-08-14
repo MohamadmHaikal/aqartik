@@ -104,7 +104,7 @@ const AdsList = ({ mapData, isBoxVisible, setBoxVisible, selectedAd }) => {
               }}
             >
               <Link
-                href="#"
+                // href="#"
                 sx={{
                   textDecoration: "none",
                   height: "196.5px",
@@ -116,6 +116,7 @@ const AdsList = ({ mapData, isBoxVisible, setBoxVisible, selectedAd }) => {
                   padding: "8px 8px 8px 0px",
                   borderRadius: "16px",
                 }}
+                onClick={() => handleAdClick(selectedAdData[0])}
               >
                 <Box
                   sx={{ position: "absolute", left: "10px", bottom: "18px" }}
@@ -176,21 +177,40 @@ const AdsList = ({ mapData, isBoxVisible, setBoxVisible, selectedAd }) => {
                         marginRight: "-5px",
                       }}
                     >
-                      {icons &&
-                        icons.map((icon, index) => (
-                          <Box
-                            key={index}
-                            sx={{
-                              display: "flex",
-                              marginLeft: "10px",
-                            }}
-                          >
-                            {icon.icon}
-                            <Typography sx={{ marginRight: "5px" }}>
-                              {icon.number}
-                            </Typography>
-                          </Box>
-                        ))}
+                      {selectedAdData[0]?.QuantityAds &&
+                        selectedAdData[0]?.QuantityAds.filter((feature) =>
+                          Icons.some(
+                            (icon) =>
+                              icon.en_name === feature.quantity_feature.en_name
+                          )
+                        ).map((feature) => {
+                          const matchingIcon = Icons.find(
+                            (icon) =>
+                              icon.en_name === feature.quantity_feature.en_name
+                          );
+
+                          if (matchingIcon) {
+                            return (
+                              <Box
+                                key={feature.id}
+                                sx={{ display: "flex", marginLeft: "px" }}
+                              >
+                                <Box>{matchingIcon.icon}</Box>
+                                <Typography
+                                  sx={{
+                                    marginRight: "2px",
+                                    fontSize: "14px",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  {feature.quantity}
+                                </Typography>
+                              </Box>
+                            );
+                          }
+
+                          return null;
+                        })}
                     </Box>
                     <Typography
                       sx={{

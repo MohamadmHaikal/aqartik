@@ -1,7 +1,13 @@
 import React from "react";
 import MapCreate from "./MapCreate";
 
-const MapMark = ({ mapData, state, isBoxVisible, setBoxVisible , setSelectedAd  }) => {
+const MapMark = ({
+  mapData,
+  state,
+  isBoxVisible,
+  setBoxVisible,
+  setSelectedAd,
+}) => {
   console.log(mapData);
   // const locations = [
   //   { latitude: 24.7136, longitude: 46.6753, price: "100" },
