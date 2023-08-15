@@ -9,22 +9,22 @@ import { useTranslation } from "react-i18next";
 
 // import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-const HomeImagesAdd = ({ formData, setFormData }) => {
+const HomeImagesAdd = ({
+  formData,
+  setFormData,
+  images,
+  setImages,
+  selectedImage,
+  setSelectedImage,
+}) => {
   const { t } = useTranslation();
 
-  const [croppedImage, setCroppedImage] = useState(
-    formData.croppedImage || null
-  );
-
-  const [selectedImages, setSelectedImages] = useState(
-    formData.selectedImages || []
-  );
-
-  const [images, setImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState(formData.images || []);
 
   const [selectedVideoFile, setSelectedVideoFile] = useState(
     formData.selectedVideoFile || null
   );
+
   useEffect(() => {
     // Update the formData when selectedImages or selectedVideoFile changes
     if (selectedVideoFile) {
@@ -35,23 +35,24 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
     }
   }, [selectedVideoFile]);
 
-  const handleCroppedImage = (image) => {
-    setCroppedImage(image);
-  };
-
   const handleDeleteImage = (index) => {
     setSelectedImages((prevImages) => {
       const updatedImages = [...prevImages];
       updatedImages.splice(index, 1);
       return updatedImages;
     });
+    setImages((prevImages) => {
+      const updatedImages = [...prevImages];
+      updatedImages.splice(index, 1);
+      return updatedImages;
+    });
   };
-
-  const handleImageSelect = (image) => {
-    if (selectedImages.length < 9) {
-      setSelectedImages((prevImages) => [...prevImages, image]);
-    }
-  };
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      images: selectedImages, // Append new blob to the array
+    }));
+  }, [selectedImages]);
 
   const handleVideoSelect = (event) => {
     const file = event.target.files[0];
@@ -155,11 +156,14 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
           {t("user_dashboard.property_images.hint1")}
         </Typography>
         <CropeerImage
-          onCrop={handleCroppedImage}
           type={1}
           isFirstButton={true}
           formData={formData}
           setFormData={setFormData}
+          setSelectedImages={setSelectedImages}
+          setImages={setImages}
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
         />
 
         <Typography variant="label">
@@ -176,7 +180,6 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
           }}
         >
           <CropeerImage
-            onCrop={handleImageSelect}
             type={2}
             width="200px"
             height="120px"
@@ -184,9 +187,13 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
             hasBackground={false} // Set hasBackground prop to false
             formData={formData}
             setFormData={setFormData}
+            setSelectedImages={setSelectedImages}
+            setImages={setImages}
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
           />
 
-          {selectedImages.map((image, index) => (
+          {images.map((image, index) => (
             <Box
               key={index}
               sx={{
@@ -244,20 +251,6 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
                 }}
                 onClick={() => handleDeleteImage(index)}
               />
-              {/* <DragIndicatorIcon
-                sx={{
-                  position: "absolute",
-                  top: "0rem",
-                  right: "0rem",
-                  color: "white",
-                  cursor: "pointer",
-                  padding: "4px",
-                  borderRadius: "0px 12px 0px 0px",
-                  backgroundColor: "var(--green-color)",
-                  cursor: "grabbing",
-                }}
-                onDragStart={(e) => dragStart(e, index)}
-              /> */}
             </Box>
           ))}
         </Box>

@@ -34,6 +34,34 @@ const Map = ({ formData, setFormData, setError, mapData, setMapData }) => {
   const [selectedMarker, setSelectedMarker] = useState(
     formData.selectedLocation || null
   );
+  const [mapLoaded, setMapLoaded] = useState(false);
+
+  const handleMapLoad = () => {
+    setMapLoaded(true);
+  };
+  useEffect(() => {
+    if (mapLoaded) {
+      if (formData.lat && formData.lng) {
+        const clickedPosition = {
+          lat: formData.lat,
+          lng: formData.lng,
+          zoom: 10,
+        };
+        const newMarker = {
+          position: clickedPosition,
+          id: new Date().getTime(), // Generate a unique ID
+        };
+        setCenteredMap({ lat: clickedPosition.lat, lng: clickedPosition.lng });
+        setFormData((prevData) => ({
+          ...prevData,
+          selectedLocation: clickedPosition,
+        }));
+        setUserMarkers([newMarker]);
+      } else {
+        console.log("no");
+      }
+    }
+  }, [mapLoaded]);
 
   const handleCloseInfoWindow = () => {
     setSelectedMarker(null);
@@ -112,6 +140,7 @@ const Map = ({ formData, setFormData, setError, mapData, setMapData }) => {
         center={centeredMap}
         zoom={10}
         onClick={(event) => handleMapClick(event)}
+        onLoad={handleMapLoad}
       >
         {userMarkers.map((marker, index) => (
           <Marker key={index} position={marker.position} />

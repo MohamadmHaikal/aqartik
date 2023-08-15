@@ -37,6 +37,37 @@ const HomeInformation = ({
 
   const [inputValues, setInputValues] = useState(formData.inputValues || {});
 
+  useEffect(() => {
+    if (formData.price && formData.space && formData.width && formData.height) {
+      setInputValues((prev) => ({
+        ...prev,
+        price: formData.price,
+      }));
+    }
+    if (formData.space) {
+      setInputValues((prev) => ({
+        ...prev,
+        area: formData.space,
+        price: formData.price,
+      }));
+    }
+    if (formData.width) {
+      setInputValues((prev) => ({
+        ...prev,
+        width: formData.width,
+      }));
+    }
+    if (formData.height) {
+      setInputValues((prev) => ({
+        ...prev,
+        height: formData.height,
+      }));
+    }
+    if (formData.type_aqar) {
+      setSelectedtype(formData.type_aqar.id);
+    }
+  }, []);
+
   const [radioSelected, setRadioSelected] = useState(
     formData.radioSelected || ""
   );

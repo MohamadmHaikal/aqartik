@@ -30,7 +30,7 @@
     },
     "buttons": {
       "add_advertisement": "اضافة اعلان",
-      "login_btn": "تسجيل الدخول"
+      "login_btn": "الدخول"
     }
   },
   "subnav": {
@@ -224,22 +224,22 @@
       "img_btn": "إضافة صورة",
       "title1": "رفع صورة الشعار",
       "hint1": "صورة الشعار لا تتجاوز 2MB",
-      "label2": "username",
-      "label3": "company name",
-      "label4": "office name",
-      "label5": "email",
-      "label6": "national ID",
-      "label7": "phone number",
-      "label8": "Introduction",
-      "label9": "Type of membership",
-      "license": "Do you have a license to practice brokerage and real estate marketing",
-      "license_btn1": "yes",
-      "license_btn2": "no",
-      "license_modal_title": "Add license link",
-      "license_modal_desc": "Would you like to register with the public authority for real estate to obtain a license Real estate brokerage and marketing",
-      "license_modal_btn1": "Agree",
-      "license_modal_btn2": "later",
-      "main_btn": "Save and continue"
+      "label2": "اسم المستخدم",
+      "label3": "اسم الشركة",
+      "label4": "اسم المكتبة",
+      "label5": "الايميل",
+      "label6": "الرقم الوطني",
+      "label7": "رقم الهاتف المحمول",
+      "label8": "نبذة",
+      "label9": "نوع العضوية",
+      "license": "هل لديك ترخيص لممارسة الوساطة والتسويق العقاري",
+      "license_btn1": "نعم",
+      "license_btn2": "لا",
+      "license_modal_title": "اضافة رخصة",
+      "license_modal_desc": "هل ترغب في التسجيل لدى الهيئة العامة للعقارات للحصول على ترخيص للوساطة العقارية والتسويق",
+      "license_modal_btn1": "أوافق",
+      "license_modal_btn2": "لاحقا",
+      "main_btn": "حفظ واستمرار"
     },
     "incoming_orders": {
       "page_title": "الاعلانات",

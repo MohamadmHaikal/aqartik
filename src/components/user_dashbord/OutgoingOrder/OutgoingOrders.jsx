@@ -8,6 +8,7 @@ import {
   IconButton,
   styled,
   Fade,
+  CircularProgress,
 } from "@mui/material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -47,20 +48,24 @@ const CustomAccordion = styled(Accordion)({
     display: "none",
   },
 });
-
 const CustomAccordionSummary = styled(AccordionSummary)({
   borderRadius: "12px",
 });
-
 const CustomAccordionDetails = styled(AccordionDetails)({
   borderRadius: "12px",
   padding: { xs: "0rem", md: "2rem" },
 });
+
 const OutGoingOrders = ({ userData }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
   const { data, isLoading, get } = useDataFetcher();
+  const {
+    data: CategoryData,
+    isLoading: isLoadingCategoryData,
+    get: getCategoryData,
+  } = useDataFetcher();
   const [myAds, setMyAds] = useState([]);
 
   useEffect(() => {
@@ -78,10 +83,17 @@ const OutGoingOrders = ({ userData }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [MapEdit, setMapEdit] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [adCategoryData, setAdCategoryData] = useState();
 
-  const handleChange = (panel, work) => (event, isExpanded) => {
+  const handleChange = (panel, ad) => async (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
+    await getCategoryData(
+      `https://www.dashboard.aqartik.com/api/ads/info/${ad.category_aqar.id}`
+    );
   };
+
+  console.log(CategoryData);
+
   const handleEditInformation = () => {
     setEditInfo(true);
   };
@@ -109,7 +121,7 @@ const OutGoingOrders = ({ userData }) => {
   const handleMapEdit = () => {
     setMapEdit(true);
   };
-  return (
+  return !isLoading ? (
     <Box sx={{ padding: { xs: "16px 5px", sm: "16px 56px" } }}>
       <OrderTitles title={t("user_dashboard.incoming_orders.page_title")} />
       <Box
@@ -276,6 +288,7 @@ const OutGoingOrders = ({ userData }) => {
                           <EditLocation
                             ad={ad}
                             onCancel={handleCloseEditLocation}
+                            interfaces={CategoryData.interfaces}
                           />
                         </Box>
                       </Fade>
@@ -333,11 +346,11 @@ const OutGoingOrders = ({ userData }) => {
                                 "user_dashboard.incoming_orders.card2.label3"
                               )}{" "}
                             </Typography>
-                            {/* <Typography>
+                            <Typography>
                               {lang === "ar"
-                                ? ad?.interface_aqar.ar_name
-                                : ad?.interface_aqar.en_name}
-                            </Typography> */}
+                                ? ad?.interface_aqar?.ar_name
+                                : ad?.interface_aqar?.en_name}
+                            </Typography>
                           </Box>
                         </Box>
                       </Fade>
@@ -348,6 +361,7 @@ const OutGoingOrders = ({ userData }) => {
                       <Fade in={descriptionEdit}>
                         <Box>
                           <EditDescription
+                            ad={ad}
                             onCancel={() => {
                               setDescriptionEdit(false);
                             }}
@@ -467,7 +481,7 @@ const OutGoingOrders = ({ userData }) => {
                     {MapEdit && (
                       <Fade in={MapEdit}>
                         <Box>
-                          <EditMap onCancel={handleCloseEditMap} />
+                          <EditMap ad={ad} onCancel={handleCloseEditMap} />
                         </Box>
                       </Fade>
                     )}
@@ -564,6 +578,18 @@ const OutGoingOrders = ({ userData }) => {
         ))}
         {modalOpen && <ShowHomeSatusModal onClose={handleModalClose} />}
       </Box>
+    </Box>
+  ) : (
+    <Box
+      sx={{
+        minHeight: "80vh",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <CircularProgress color="success" />
     </Box>
   );
 };

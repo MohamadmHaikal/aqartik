@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-const EditDescription = ({ onCancel }) => {
-  const [description, setDescription] = useState(" ");
+const EditDescription = ({ ad, onCancel }) => {
+  const [description, setDescription] = useState(ad?.description || " ");
   const { t } = useTranslation();
   const handleDescriptionChange = (event) => {
     const value = event.target.value;
+    setDescription(value);
   };
   return (
     <Box>

@@ -298,7 +298,7 @@ export default function Nav({
                   color: "var(--green-color)",
                   borderRadius: "25px",
                   // marginX: {}"0.8rem",
-                  minWidth: { xs: "0", lg: "10rem" },
+                  minWidth: { xs: "0", lg: "8rem" },
                   height: { md: "3rem" },
                   padding: { xs: "5px", md: "6px 8px" },
                 }}
@@ -309,6 +309,8 @@ export default function Nav({
                     marginX: { xs: "0px", md: "5px" },
                     width: "20px",
                     height: "20px",
+                    position: { md: "absolute" },
+                    right: { md: "2px" },
                   }}
                 />
                 <Typography
@@ -316,6 +318,8 @@ export default function Nav({
                     width: "100%",
                     fontSize: "15px",
                     display: { xs: "none", lg: "block" },
+                    position: "absolute",
+                    right: "6px",
                   }}
                 >
                   {t("nav.buttons.add_advertisement")}
@@ -369,7 +373,7 @@ export default function Nav({
                 borderRadius: "100px",
                 width: "90%",
                 margin: "auto",
-                marginTop: "2rem",
+                marginTop: "3rem",
                 position: "relative",
                 backgroundColor: "white",
               }}

@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 import { ConstructionOutlined } from "@mui/icons-material";
 // import LicenseModal from "./LicenseModal";
 
-const Addads = ({ type, ad }) => {
+const Addads = ({ type = 0, ad }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
@@ -29,26 +29,12 @@ const Addads = ({ type, ad }) => {
     post,
   } = useDataFetcher();
 
-  //for getting the categories
-  const { data, isLoading, get } = useDataFetcher();
-  const [categories, setCategories] = useState([]);
-
   //for getting the category information
   const {
     data: info,
     isLoading: isInfoLoading,
     get: getInfo,
   } = useDataFetcher();
-
-  useEffect(() => {
-    get("/api/ads/get_categories");
-  }, []);
-
-  useEffect(() => {
-    if (data) {
-      setCategories(data.categories);
-    }
-  }, [data]);
 
   //declaring the important arrays
   const [type_aqar, set_type_aqar] = useState([]);
@@ -75,6 +61,14 @@ const Addads = ({ type, ad }) => {
   const [afterWidth, setAfterWidth] = useState(13.7); // Initial width of &:after
   const [error, setError] = useState(false);
   const [inputErrors, setInputErrors] = useState({});
+
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedType, setSelectedType] = useState();
+
+  const [images, setImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(
+    formData.thumbnail || null
+  );
 
   useEffect(() => {
     type === 1 ? setFormData(ad) : setFormData({});
@@ -471,90 +465,195 @@ const Addads = ({ type, ad }) => {
   };
 
   const handleSubmit = async () => {
-    // setLoadingSubmit(true);
-    const sendForm = new FormData();
-    // Iterate through properties of formData and append each property to sendForm
-    for (const property in formData) {
-      if (formData.hasOwnProperty(property)) {
-        sendForm.append(property, formData[property]);
-      }
-    }
-    console.log(formData);
-    const requestBody = {};
-
-    // Loop through each key-value pair in sendForm and add to requestBody
-    for (const [key, value] of sendForm.entries()) {
-      if (formData.category_aqar) {
-        requestBody["category_id"] = formData.category_aqar.id;
-      }
-      if (formData.inputValues.price) {
-        requestBody["price"] = formData.inputValues.price;
-      }
-      if (formData.inputValues.area) {
-        requestBody["space"] = formData.inputValues.area;
-      }
-      if (formData.inputValues.height) {
-        requestBody["height"] = formData.inputValues.height;
-      }
-      if (formData.inputValues.width) {
-        requestBody["width"] = formData.inputValues.width;
-      }
-      if (formData.selectedLocation.lat) {
-        requestBody["lat"] = formData.selectedLocation.lat;
-      }
-      if (formData.selectedLocation.lng) {
-        requestBody["lng"] = formData.selectedLocation.lng;
-      }
-      if (formData.selectedLocation.zoom) {
-        requestBody["zoom"] = formData.selectedLocation.zoom;
-      }
-      if (formData.selectedLocation.zoom) {
-        requestBody["zoom"] = formData.selectedLocation.zoom;
-      }
-      if (formData.aqarCategoryQuantity) {
-        requestBody["QuantityAds"] = JSON.stringify(
-          formData.aqarCategoryQuantity
-        );
-      }
-      if (formData.selectedBooleansProperties) {
-        requestBody["BoolfeatureaAds"] = JSON.stringify(
-          formData.selectedBooleansProperties
-        );
-      }
-      if (formData.images) {
-        requestBody["images"] = JSON.stringify(formData.images);
-      }
-      requestBody[key] = value;
-    }
-
-    console.log(requestBody);
-    //   BoolfeatureaAds
-    // QuantityAds
-
-    const formDataSend = new FormData();
-    // Iterate through properties of formData and append each property to sendForm
-    for (const property in requestBody) {
-      if (requestBody.hasOwnProperty(property)) {
-        formDataSend.append(property, requestBody[property]);
-      }
-    }
-
-    try {
-      const response = await fetch(
-        "https://www.dashboard.aqartik.com/api/ads/store",
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("user_token")}`,
-          },
-          method: "POST",
-          body: formDataSend,
+    if (type === 0) {
+      // setLoadingSubmit(true);
+      const sendForm = new FormData();
+      // Iterate through properties of formData and append each property to sendForm
+      for (const property in formData) {
+        if (formData.hasOwnProperty(property)) {
+          sendForm.append(property, formData[property]);
         }
-      );
+      }
+      console.log(formData);
+      const requestBody = {};
 
-      const data = await response.json();
-      console.log("API response:", data);
-    } catch (error) {
-      console.error("Error sending FormData:", error);
+      // Loop through each key-value pair in sendForm and add to requestBody
+      for (const [key, value] of sendForm.entries()) {
+        if (formData.category_aqar) {
+          requestBody["category_id"] = formData.category_aqar.id;
+        }
+        if (formData.inputValues.price) {
+          requestBody["price"] = formData.inputValues.price;
+        }
+        if (formData.inputValues.area) {
+          requestBody["space"] = formData.inputValues.area;
+        }
+        if (formData.inputValues.height) {
+          requestBody["height"] = formData.inputValues.height;
+        }
+        if (formData.inputValues.width) {
+          requestBody["width"] = formData.inputValues.width;
+        }
+        if (formData.selectedLocation.lat) {
+          requestBody["lat"] = formData.selectedLocation.lat;
+        }
+        if (formData.selectedLocation.lng) {
+          requestBody["lng"] = formData.selectedLocation.lng;
+        }
+        if (formData.selectedLocation.zoom) {
+          requestBody["zoom"] = formData.selectedLocation.zoom;
+        }
+        if (formData.selectedLocation.zoom) {
+          requestBody["zoom"] = formData.selectedLocation.zoom;
+        }
+        if (formData.aqarCategoryQuantity) {
+          requestBody["QuantityAds"] = JSON.stringify(
+            formData.aqarCategoryQuantity
+          );
+        }
+        if (formData.selectedBooleansProperties) {
+          requestBody["BoolfeatureaAds"] = JSON.stringify(
+            formData.selectedBooleansProperties
+          );
+        }
+        if (formData.images) {
+          if (formData.images.length > 0) {
+            requestBody["images"] = formData.images;
+          }
+        }
+        requestBody[key] = value;
+      }
+
+      console.log(requestBody);
+      //   BoolfeatureaAds
+      // QuantityAds
+
+      const formDataSend = new FormData();
+      // Iterate through properties of formData and append each property to sendForm
+      for (const property in requestBody) {
+        if (requestBody.hasOwnProperty(property)) {
+          formDataSend.append(property, requestBody[property]);
+        }
+      }
+
+      try {
+        const response = await fetch(
+          "https://www.dashboard.aqartik.com/api/ads/store",
+          {
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            method: "POST",
+            body: formDataSend,
+          }
+        );
+
+        const data = await response.json();
+        console.log("API response:", data);
+      } catch (error) {
+        console.error("Error sending FormData:", error);
+      }
+    } else if (type === 1) {
+      // setLoadingSubmit(true);
+      const sendForm = new FormData();
+      // Iterate through properties of formData and append each property to sendForm
+      for (const property in formData) {
+        if (formData.hasOwnProperty(property)) {
+          sendForm.append(property, formData[property]);
+        }
+      }
+      console.log(formData);
+      const requestBody = {};
+
+      for (const [key, value] of sendForm.entries()) {
+        switch (key) {
+          case "category_aqar":
+            if (value) {
+              requestBody["category_id"] = value.id;
+            }
+            break;
+          case "inputValues.price":
+            if (value) {
+              requestBody["price"] = value;
+            }
+            break;
+          case "inputValues.area":
+            if (value) {
+              requestBody["space"] = value;
+            }
+            break;
+          case "inputValues.height":
+            if (value) {
+              requestBody["height"] = value;
+            }
+            break;
+          case "inputValues.width":
+            if (value) {
+              requestBody["width"] = value;
+            }
+            break;
+          case "selectedLocation.lat":
+            if (value) {
+              requestBody["lat"] = value;
+            }
+            break;
+          case "selectedLocation.lng":
+            if (value) {
+              requestBody["lng"] = value;
+            }
+            break;
+          case "selectedLocation.zoom":
+            if (value) {
+              requestBody["zoom"] = value;
+            }
+            break;
+          case "aqarCategoryQuantity":
+            if (value) {
+              requestBody["QuantityAds"] = JSON.stringify(value);
+            }
+            break;
+          case "selectedBooleansProperties":
+            if (value) {
+              requestBody["BoolfeatureaAds"] = JSON.stringify(value);
+            }
+            break;
+          case "images":
+            break;
+          case "thumbnail":
+            break;
+          default:
+            requestBody[key] = value;
+        }
+      }
+
+      console.log(requestBody);
+      //   BoolfeatureaAds
+      // QuantityAds
+
+      const formDataSend = new FormData();
+      // Iterate through properties of formData and append each property to sendForm
+      for (const property in requestBody) {
+        if (requestBody.hasOwnProperty(property)) {
+          formDataSend.append(property, requestBody[property]);
+        }
+      }
+      try {
+        const response = await fetch(
+          `https://www.dashboard.aqartik.com/api/ads/update/${ad?.id}`,
+          {
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            method: "POST",
+            body: formDataSend,
+          }
+        );
+
+        const data = await response.json();
+        console.log("API response:", data);
+      } catch (error) {
+        console.error("Error sending FormData:", error);
+      }
     }
   };
 
@@ -563,13 +662,14 @@ const Addads = ({ type, ad }) => {
     if (category_bool?.length > 0 && category_quantity?.length > 0) {
       switch (step) {
         case 1:
-          return isLoading ? (
-            "loading"
-          ) : (
+          return (
             <CatgouryAds
               formData={formData}
               setFormData={setFormData}
-              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              setSelectedCategoryId={setSelectedCategoryId}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
             />
           );
         case 2:
@@ -651,8 +751,10 @@ const Addads = ({ type, ad }) => {
             <HomeImagesAdd
               formData={formData}
               setFormData={setFormData}
-              setError={setError}
-              error={error}
+              images={images}
+              setImages={setImages}
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
             />
           );
         // Render other steps...
@@ -662,13 +764,14 @@ const Addads = ({ type, ad }) => {
     } else if (category_bool?.length > 0 && category_quantity?.length === 0) {
       switch (step) {
         case 1:
-          return isLoading ? (
-            "loading"
-          ) : (
+          return (
             <CatgouryAds
               formData={formData}
               setFormData={setFormData}
-              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              setSelectedCategoryId={setSelectedCategoryId}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
             />
           );
         case 2:
@@ -739,8 +842,11 @@ const Addads = ({ type, ad }) => {
             <HomeImagesAdd
               formData={formData}
               setFormData={setFormData}
-              setError={setError}
-              error={error}
+              step={step}
+              images={images}
+              setImages={setImages}
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
             />
           );
         // Render other steps...
@@ -750,13 +856,14 @@ const Addads = ({ type, ad }) => {
     } else if (category_bool?.length === 0 && category_quantity?.length > 0) {
       switch (step) {
         case 1:
-          return isLoading ? (
-            "loading"
-          ) : (
+          return (
             <CatgouryAds
               formData={formData}
               setFormData={setFormData}
-              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              setSelectedCategoryId={setSelectedCategoryId}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
             />
           );
         case 2:
@@ -829,8 +936,11 @@ const Addads = ({ type, ad }) => {
             <HomeImagesAdd
               formData={formData}
               setFormData={setFormData}
-              setError={setError}
-              error={error}
+              step={step}
+              images={images}
+              setImages={setImages}
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
             />
           );
         // Render other steps...
@@ -840,13 +950,14 @@ const Addads = ({ type, ad }) => {
     } else if (category_bool?.length === 0 && category_quantity?.length === 0) {
       switch (step) {
         case 1:
-          return isLoading ? (
-            "loading"
-          ) : (
+          return (
             <CatgouryAds
               formData={formData}
               setFormData={setFormData}
-              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              setSelectedCategoryId={setSelectedCategoryId}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
             />
           );
         case 2:
@@ -907,8 +1018,11 @@ const Addads = ({ type, ad }) => {
             <HomeImagesAdd
               formData={formData}
               setFormData={setFormData}
-              setError={setError}
-              error={error}
+              step={step}
+              images={images}
+              setImages={setImages}
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
             />
           );
         // Render other steps...
@@ -918,15 +1032,14 @@ const Addads = ({ type, ad }) => {
     } else {
       switch (step) {
         default:
-          return isLoading ? (
-            "loading"
-          ) : (
+          return (
             <CatgouryAds
               formData={formData}
               setFormData={setFormData}
-              categories={categories}
-              setError={setError}
-              error={error}
+              selectedCategoryId={selectedCategoryId}
+              setSelectedCategoryId={setSelectedCategoryId}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
             />
           );
       }

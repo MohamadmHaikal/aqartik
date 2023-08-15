@@ -1,17 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SpecialAds from "../Filter/SpecialAds";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
+import useDataFetcher from "../../api/useDataFetcher ";
 
 const UserDashboradSpeacialAds = () => {
-  return (
-    <Box sx={{ maxWidth: "90%" , margin:"auto" }}>
-      <SpecialAds
-        title="شقة شقة شقة شقة"
-        location="الرياض"
-        ratings={10}
-        price={20000}
-        isNew={1}
-      />
+  const { data, isLoading, get } = useDataFetcher();
+  useEffect(() => {
+    get("/api/user/get_user_ads");
+  }, []);
+  const [myAds, setMyAds] = useState([]);
+
+  useEffect(() => {
+    console.log(data);
+    if (data) setMyAds(data.ads.data);
+  }, [data]);
+  return !isLoading ? (
+    <Box sx={{ maxWidth: "90%", margin: "auto" }}>
+      {myAds.map((ad) => (
+        <SpecialAds ad={ad} />
+      ))}
+    </Box>
+  ) : (
+    <Box
+      sx={{
+        minHeight: "80vh",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <CircularProgress color="success" />
     </Box>
   );
 };

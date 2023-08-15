@@ -9,7 +9,11 @@ const HomeDetails = ({ formData, setFormData, categoryQuantity, setError }) => {
   const [aqarCategoryQuantity, setAqarCategoryQuantity] = useState(
     formData.aqarCategoryQuantity || []
   );
-
+  useEffect(() => {
+    if (formData.QuantityAds && aqarCategoryQuantity.length === 0) {
+      setAqarCategoryQuantity(formData.QuantityAds);
+    }
+  }, []);
   useEffect(() => {
     if (aqarCategoryQuantity.length === 0) {
       categoryQuantity.map((ele, index) => {
@@ -36,7 +40,7 @@ const HomeDetails = ({ formData, setFormData, categoryQuantity, setError }) => {
       ...prevFormData,
       aqarCategoryQuantity,
     }));
-  }, [aqarCategoryQuantity, setFormData]);
+  }, [aqarCategoryQuantity]);
 
   const handleIncrement = (index, quantity) => {
     if (aqarCategoryQuantity[index]?.quantity < quantity.quantity_feature.max) {

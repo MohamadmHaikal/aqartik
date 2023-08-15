@@ -13,15 +13,19 @@ import ClearIcon from "@mui/icons-material/Clear";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useTranslation } from "react-i18next";
 
-const EditLocation = ({ ad, onCancel }) => {
+const EditLocation = ({ ad, onCancel, interfaces }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
-  const [city, setCity] = useState(ad.city);
-  const [neighborhood, setNeighborhood] = useState(ad.neighborhood);
-  const [road, setRoad] = useState(ad.road);
+
   const [selectedInterface, setSelectedInterface] = useState(
-    ad.interface_aqar.id
+    ad.interface_aqar.id || null
   );
+
+  console.log(selectedInterface);
+
+  const handleInterfaceChange = (event) => {
+    setSelectedInterface(event.target.value);
+  };
 
   return (
     <Box>
@@ -40,162 +44,46 @@ const EditLocation = ({ ad, onCancel }) => {
                 minWidth: { xs: "3rem", sm: "6rem" },
               }}
             >
-              {lang === "ar" ? "المدينة" : "city"}
+              {lang === "ar" ? "الاتجاه" : "interface"}
             </InputLabel>
-            <TextField
-              type="text"
-              name="title"
-              value={city}
-              // onChange={handleTitleChange}
+            <Select
+              value={selectedInterface}
+              onChange={handleInterfaceChange}
+              label=""
+              required
+              IconComponent={ArrowDropDownIcon}
+              className={`${styles.select} select`}
+              classes={lang === "ar" && { icon: styles.selectIcon }}
               sx={{
-                maxWidth: "340px",
-                width: { xs: "80%", md: "90%" },
-                marginInline: "1rem auto",
-
                 borderRadius: "12px !important",
-                boxShadow: "1",
-                "& .css-1iy5sao-MuiInputBase-root-MuiOutlinedInput-root": {
-                  borderRadius: "12px",
-                },
+                boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
+                border: "1px solid rgba(0, 0, 0, 0.06) !important",
+                paddingBlock: "5px",
+                height: "48px",
+                width: "100%",
+                marginBlock: "4px 12px",
               }}
-              InputProps={{
-                sx: {
-                  "& input": {
-                    borderRadius: "12px !important",
-                    padding: "13px 0.8rem",
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    borderRadius: "1rem",
                   },
                 },
-              }}
-            ></TextField>
-          </div>
-        </Box>
-        <Box sx={{ marginY: "16px" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              position: "relative",
-            }}
-          >
-            <InputLabel
-              sx={{
-                color: "black",
-                minWidth: { xs: "3rem", sm: "6rem" },
               }}
             >
-              {lang === "ar" ? "الحي" : "neighborhood"}
-            </InputLabel>
-            <TextField
-              type="text"
-              name="title"
-              value={ad.neighborhood}
-              // onChange={handleTitleChange}
-              sx={{
-                maxWidth: "340px",
-                width: { xs: "80%", md: "90%" },
-                marginInline: "1rem auto",
-
-                borderRadius: "12px !important",
-                boxShadow: "1",
-                "& .css-1iy5sao-MuiInputBase-root-MuiOutlinedInput-root": {
-                  borderRadius: "12px",
-                },
-              }}
-              InputProps={{
-                sx: {
-                  "& input": {
-                    borderRadius: "12px !important",
-                    padding: "13px 0.8rem",
-                  },
-                },
-              }}
-            ></TextField>
-          </div>
-        </Box>
-        <Box sx={{ marginY: "16px" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              position: "relative",
-            }}
-          >
-            <InputLabel
-              sx={{
-                color: "black",
-                minWidth: { xs: "3rem", sm: "6rem" },
-              }}
-            >
-              {lang === "ar" ? "الشارع" : "road"}
-            </InputLabel>
-            <TextField
-              type="text"
-              name="title"
-              value={ad.road}
-              // onChange={handleTitleChange}
-              sx={{
-                maxWidth: "340px",
-                width: { xs: "80%", md: "90%" },
-                marginInline: "1rem auto",
-
-                borderRadius: "12px !important",
-                boxShadow: "1",
-                "& .css-1iy5sao-MuiInputBase-root-MuiOutlinedInput-root": {
-                  borderRadius: "12px",
-                },
-              }}
-              InputProps={{
-                sx: {
-                  "& input": {
-                    borderRadius: "12px !important",
-                    padding: "13px 0.8rem",
-                  },
-                },
-              }}
-            ></TextField>
-          </div>
-        </Box>
-        <Box sx={{ marginY: "16px" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              position: "relative",
-            }}
-          >
-            <InputLabel
-              sx={{
-                color: "black",
-                minWidth: { xs: "3rem", sm: "6rem" },
-              }}
-            >
-              {lang === "ar" ? "الواجهة" : "interface"}
-            </InputLabel>
-            <TextField
-              type="text"
-              name="title"
-              value={ad.road}
-              // onChange={handleTitleChange}
-              sx={{
-                maxWidth: "340px",
-                width: { xs: "80%", md: "90%" },
-                marginInline: "1rem auto",
-
-                borderRadius: "12px !important",
-                boxShadow: "1",
-                "& .css-1iy5sao-MuiInputBase-root-MuiOutlinedInput-root": {
-                  borderRadius: "12px",
-                },
-              }}
-              InputProps={{
-                sx: {
-                  "& input": {
-                    borderRadius: "12px !important",
-                    padding: "13px 0.8rem",
-                  },
-                },
-              }}
-            ></TextField>
+              {interfaces.map((interface_item) => (
+                <MenuItem
+                  value={interface_item.id}
+                  className={
+                    selectedInterface === interface_item.en_name
+                      ? styles.selectedMenuItem
+                      : ""
+                  }
+                >
+                  {interface_item.en_name}
+                </MenuItem>
+              ))}
+            </Select>
           </div>
         </Box>
         <Box
