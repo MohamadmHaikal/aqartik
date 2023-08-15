@@ -30,6 +30,7 @@ import SmallNavLoginMenu from "./SmallNavLoginMenu";
 import SideNavXsScreens from "./SideNavXsScreens";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./layout.module.css";
+import useDataFetcher from "../../api/useDataFetcher ";
 
 // import Link from "next/link";
 // import { Link } from "@mui/material";
@@ -59,9 +60,29 @@ export default function Nav({
   isUserSelected,
   setIsUserSelected,
   setUserData,
-  notificationData
+  notificationData,
+  generalData,
 }) {
   const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+  const { data, isLoading, get } = useDataFetcher();
+  const [navLinkss, setNavLinks] = useState();
+  useEffect(() => {
+    get(``);
+  }, []);
+  useEffect(() => {
+    if (data) {
+      const mappedNavLinks = data.map((item) => ({
+        label: item.label,
+        url: item.url,
+      }));
+      setNavLinks(mappedNavLinks);
+    }
+  }, [data]);
+  // const navItems = navLinkss.map((item) => ({
+  //   label: item.label,
+  //   url: item.url,
+  // }));
 
   const navItems = [
     { label: `${t("nav.navlinks.home_page")}`, url: "/" },
@@ -176,6 +197,7 @@ export default function Nav({
     }
     // event.stopPropagation();
   };
+
   useEffect(() => {
     document.addEventListener("click", handleOutsideClick);
 
@@ -233,7 +255,17 @@ export default function Nav({
             )}
           </IconButton>
           <Link to="/">
-            <img src={Logo} alt="logo" style={{ width: "120px" }} />
+            <Box sx={{ width: "100px" }}>
+              <img
+                src={
+                  lang === "ar" && generalData
+                    ? `https://www.dashboard.aqartik.com/uploads/settings/${generalData.style_logo_ar}`
+                    : `https://www.dashboard.aqartik.com/uploads/settings/${generalData.style_logo_en}`
+                }
+                alt="logo"
+                style={{ width: "100%" }}
+              />
+            </Box>
           </Link>
           <Box
             sx={{
@@ -275,7 +307,7 @@ export default function Nav({
             <Button
               sx={{ minWidth: "0", display: { xs: "none", md: "block" } }}
             >
-              <Notification notificationData={notificationData}/>
+              <Notification notificationData={notificationData} />
             </Button>
             <Header>
               <div className="messages-container">
@@ -464,7 +496,7 @@ export default function Nav({
                   <Typography
                     sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.2rem" }}
                   >
-                    {t("subnav.neighborhood_filter")}
+                    {t("subnav.property_filter")}
                   </Typography>
                   <Typography
                     sx={{

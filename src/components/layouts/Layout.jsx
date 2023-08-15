@@ -13,7 +13,12 @@ import { useTranslation } from "react-i18next";
 import { Toaster } from "react-hot-toast";
 import useDataFetcher from "../../api/useDataFetcher ";
 
-const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
+const Layout = ({
+  children,
+  showNavFooter = true,
+  contentStyles = {},
+  generalData,
+}) => {
   const location = useLocation();
   const { pathname } = location;
   const hideFooter = location.pathname.includes("/mappage");
@@ -54,6 +59,7 @@ const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
           setIsUserSelected={setIsUserSelected}
           setUserData={setUserData}
           notificationData={notificationData}
+          generalData={generalData}
         />
       )}
       <main style={contentStyles}>{children}</main>

@@ -60,13 +60,23 @@ const Details = () => {
   const handlePageChange = (event, new_page) => {
     set_current_page(new_page);
   };
+  const TimechangeTheNewAds = 48;
+  const [isNewHome, setIsNewHome] = useState(false);
+  const TimeNew = new Date();
+  TimeNew.setHours(TimeNew.getHours() - TimechangeTheNewAds);
+  useEffect(() => {
+    const adCreatedAt = new Date(adInfo.created_at).getTime();
+    setIsNewHome(adCreatedAt > TimeNew.getTime());
+  }, [adInfo.created_at]);
+  console.log(isNewHome);
 
-  const isNewHome = localStorage.getItem("isNewHome") === "true";
+  // const isNewHome = localStorage.getItem("isNewHome") === "true";
   const [isListOpen, setListOpen] = useState(false);
   const listRef = useRef(null);
   const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const [copied, setCopied] = useState(false);
+
   const icons = [
     {
       icon: <FavoriteIcons />,

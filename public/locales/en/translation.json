@@ -29,14 +29,14 @@
             "contact_us": "contact us"
         },
         "buttons": {
-            "add_advertisement": "add advertisement",
+            "add_advertisement": " advertisement",
             "login_btn": "sign in"
         }
     },
     "subnav": {
         "city_filter": "choose a city",
         "neighborhood_filter": "choose a neighborhood",
-        "property_filter": "choose a property",
+        "property_filter": "choose a type",
         "price": "price"
     },
     "loginmodal": {

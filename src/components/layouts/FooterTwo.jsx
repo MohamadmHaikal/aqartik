@@ -103,13 +103,13 @@ const FooterTwo = () => {
               }}
             >
               <Box
-                sx={{ position: "relative", width: "170px", height: "56px" }}
+                sx={{ position: "relative", width: "170px", height: "80px" }}
               >
                 <img
                   src={
                     lang === "ar"
-                      ? `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_ar}`
-                      : `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_en}`
+                      ? `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_ar}`
+                      : `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_en}`
                   }
                   alt="logo"
                   style={{
@@ -357,8 +357,8 @@ const FooterTwo = () => {
                   <img
                     src={
                       lang === "ar"
-                        ? `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_ar}`
-                        : `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_en}`
+                        ? `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_ar}`
+                        : `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_en}`
                     }
                     alt="logo"
                     style={{ width: "140px" }}

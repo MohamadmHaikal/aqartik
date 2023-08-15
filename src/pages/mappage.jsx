@@ -525,14 +525,13 @@ const Mappage = () => {
                 paddingX: "6px",
               }}
             >
-              <Box>
-                <SpecialAds
-                  title="شاليه بمسبح وشقة خارجية"
-                  price="20000"
-                  location="جدة"
-                  rate="10"
-                />
-              </Box>
+              {mapData.map((ad, index) => (
+                <>
+                  <Box key={ad.id}>
+                    <SpecialAds ad={ad}></SpecialAds>
+                  </Box>
+                </>
+              ))}
             </Box>
           </Box>
         </Box>

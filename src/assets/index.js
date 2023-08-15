@@ -39,7 +39,9 @@ import Farms from "./farms.svg";
 import Special from "./special.svg";
 import Maintence from "./maintence.png";
 import DefaultImage from "./defaulthome.jpg"
+import BgVideo from "./bg.mp4"
 export {
+  BgVideo,
   DefaultImage,
   Maintence,
   Special,

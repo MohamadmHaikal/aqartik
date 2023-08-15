@@ -50,8 +50,8 @@ const TabPanel = ({ children, value, index }) => {
   );
 };
 
-const TabsFilter = ({ data }) => {
-  // console.log(data);
+const TabsFilter = ({ data, userLocation }) => {
+  // console.log(userLocation);
 
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [isListOrderOpen, setListOrderOpen] = React.useState(false);

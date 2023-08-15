@@ -15,7 +15,7 @@ import useDataFetcher from "../../api/useDataFetcher ";
 import { Skeleton } from "@mui/material";
 import SkeleltonSpeacialAds from "../Loading/SkeleltonSpeacialAds";
 
-const Home = () => {
+const Home = ({ userLocation }) => {
   const [per_page, set_per_page] = useState();
   const [current_page, set_current_page] = useState();
   const [ads, setAds] = useState([]);
@@ -61,7 +61,7 @@ const Home = () => {
               ))
             ) : (
               <>
-                <TabsFilter data={ads} />
+                <TabsFilter data={ads} userLocation={userLocation} />
                 <PaginationAds
                   handlePageChange={handlePageChange}
                   current_page={current_page}

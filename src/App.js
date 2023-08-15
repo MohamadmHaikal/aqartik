@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet";
 import useDataFetcher from "./api/useDataFetcher ";
 import { Maintence } from "./assets";
+import UnderMaintence from "./components/under_mintance/UnderMaintence";
 
 function App() {
   const isMediumScreen = useMediaQuery("(min-width:900px)");
@@ -27,15 +28,35 @@ function App() {
   const { data, isLoading, error, get, post } = useDataFetcher();
   const [generalData, setGeneralData] = useState([]);
   const [website_status, set_website_status] = useState(null);
-
+  const [userLocation, setUserLocation] = useState(null);
+  // this is for take user Location
   useEffect(() => {
     get("/api/settings/genral");
   }, []);
+  useEffect(() => {
+    if (website_status === 1) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success, error);
+      } else {
+        console.log("Geolocation not supported");
+      }
+    }
+  }, [website_status]);
+
+  function success(position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    setUserLocation({ latitude, longitude });
+    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+  }
+
+  //end  this is for take user Location
 
   useEffect(() => {
     if (data) {
       setGeneralData(data.settings);
       set_website_status(data.settings.site_status);
+      // set_website_status(0);
     }
   }, [data]);
   return (
@@ -70,8 +91,9 @@ function App() {
                 <Layout
                   showNavFooter={true}
                   contentStyles={{ marginTop: "12rem !important" }}
+                  generalData={generalData}
                 >
-                  <Home />
+                  <Home userLocation={userLocation} />
                 </Layout>
               }
             />
@@ -81,6 +103,7 @@ function App() {
                 <Layout
                   showNavFooter={false}
                   contentStyles={{ marginTop: "2rem !important" }}
+                  generalData={generalData}
                 >
                   <Addads />
                 </Layout>
@@ -94,6 +117,7 @@ function App() {
                   contentStyles={{
                     marginTop: "0rem ",
                   }}
+                  generalData={generalData}
                 >
                   <UserDashbored />
                 </Layout>
@@ -102,7 +126,7 @@ function App() {
             <Route
               path="/ads"
               element={
-                <Layout showNavFooter={true}>
+                <Layout showNavFooter={true} generalData={generalData}>
                   <Ads />
                 </Layout>
               }
@@ -132,6 +156,7 @@ function App() {
                   <Layout
                     showNavFooter={true}
                     contentStyles={{ margin: "8rem 2rem 0rem 2rem" }}
+                    generalData={generalData}
                   >
                     <Offices />
                   </Layout>
@@ -143,6 +168,7 @@ function App() {
                   <Layout
                     showNavFooter={true}
                     contentStyles={{ margin: "8rem 2rem 0rem 2rem" }}
+                    generalData={generalData}
                   >
                     <Office />
                   </Layout>
@@ -156,6 +182,7 @@ function App() {
                 <Layout
                   showNavFooter={true}
                   contentStyles={{ marginTop: "9rem " }}
+                  generalData={generalData}
                 >
                   <Details />
                 </Layout>
@@ -167,6 +194,7 @@ function App() {
                 <Layout
                   showNavFooter={true}
                   contentStyles={{ marginTop: "9rem " }}
+                  generalData={generalData}
                 >
                   <About />
                 </Layout>
@@ -178,17 +206,19 @@ function App() {
                 <Layout
                   showNavFooter={isMediumScreen}
                   contentStyles={{ marginTop: "9rem !important" }}
+                  generalData={generalData}
                 >
                   <Mappage />
                 </Layout>
               }
             />
             <Route
-              path="/Cards"
+              path="/memberships"
               element={
                 <Layout
                   showNavFooter={true}
                   contentStyles={{ marginTop: "12rem !important" }}
+                  generalData={generalData}
                 >
                   <Cards />
                 </Layout>
@@ -197,7 +227,7 @@ function App() {
             <Route
               path="/EditAds"
               element={
-                <Layout showNavFooter={false}>
+                <Layout showNavFooter={false} generalData={generalData}>
                   <EditAds />
                 </Layout>
               }
@@ -206,22 +236,23 @@ function App() {
         </Router>
       )}
       {website_status === 0 && (
-        <div
-          style={{ width: "100%", height: "100vh", backgroundColor: "#EEE" }}
-        >
-          <img
-            src={Maintence}
-            alt="maintence"
-            style={{
-              width: "600px",
-              borderRadius: "1rem",
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%,-50%)",
-            }}
-          />
-        </div>
+        <UnderMaintence />
+        // <div
+        //   style={{ width: "100%", height: "100vh", backgroundColor: "#EEE" }}
+        // >
+        //   <img
+        //     src={Maintence}
+        //     alt="maintence"
+        //     style={{
+        //       width: "600px",
+        //       borderRadius: "1rem",
+        //       position: "absolute",
+        //       top: "50%",
+        //       left: "50%",
+        //       transform: "translate(-50%,-50%)",
+        //     }}
+        //   />
+        // </div>
       )}
     </>
   );

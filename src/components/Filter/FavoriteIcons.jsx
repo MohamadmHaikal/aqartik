@@ -14,7 +14,11 @@ const FavoriteIcons = () => {
       onClick={handleClickFavorite}
       style={{ alignItems: "center", display: "flex" }}
     >
-      {isFavorite ? <FavoriteIcon sx={{color:"red"}}/> : <FavoriteBorderIcon sx={{color:"black" , marginLeft:"3px"}}/>}
+      {isFavorite ? (
+        <FavoriteIcon sx={{ color: "red" }} />
+      ) : (
+        <FavoriteBorderIcon sx={{ color: "black", marginLeft: "3px" }} />
+      )}
     </div>
   );
 };

@@ -9,7 +9,15 @@ import { useNavigate } from "react-router";
 import Icons from "./Icons";
 
 const SpecialAds = ({ ad }) => {
-  const isNewHome = localStorage.getItem("isNewHome") === "true";
+  const TimechangeTheNewAds = 48;
+  const [isNewHome, setIsNewHome] = useState(false);
+  const TimeNew = new Date();
+  TimeNew.setHours(TimeNew.getHours() - TimechangeTheNewAds);
+  useEffect(() => {
+    const adCreatedAt = new Date(ad.created_at).getTime();
+    setIsNewHome(adCreatedAt > TimeNew.getTime());
+  }, [ad.created_at]);
+  console.log(isNewHome);
   const navigate = useNavigate();
 
   const handleAdClick = (ad) => {
