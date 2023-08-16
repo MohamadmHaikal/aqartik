@@ -9,31 +9,20 @@ export const GeneralProvider = ({ children }) => {
   const [generalData, setGeneralData] = useState([]);
   const [website_status, set_website_status] = useState(null);
   useEffect(() => {
-    const cookieData = Cookies.get("generalData");
-    // const cookieWebsiteStatus = Cookies.get("website_status");
-
-    if (cookieData) {
-      setGeneralData(JSON.parse(cookieData));
-      set_website_status(JSON.parse(cookieData));
-    } else {
-      get("/api/settings/general");
-    }
-    console.log(cookieData);
+    get("/api/settings/genral");
   }, []);
-  //   useEffect(() => {
-  //     if (data) {
-  //       setGeneralData(data.settings);
-  //       set_website_status(data.settings.site_status);
-  //       // set_website_status(0);
-  //     }
-  //   }, [data]);
   useEffect(() => {
-    // Update cookies whenever the context state changes
     if (data) {
-      Cookies.set("generalData", JSON.stringify(data.settings), { expires: 7 }); // Expires in 7 days
-      console.log(data);
+      setGeneralData(data.settings);
+      set_website_status(data.settings.site_status);
+
+      // Save fetched data to cookies
+      Cookies.set("generalData", JSON.stringify(data.settings));
+      Cookies.set("website_status", data.settings.site_status.toString());
+      // set_website_status(0);
     }
   }, [data]);
+
   return (
     <GeneralContext.Provider
       value={{
