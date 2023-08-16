@@ -14,13 +14,16 @@ import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
 import { Skeleton } from "@mui/material";
 import SkeleltonSpeacialAds from "../Loading/SkeleltonSpeacialAds";
+import LoaderHome from "../Loading/LoaderHome";
 
 const Home = ({ userLocation }) => {
   const [per_page, set_per_page] = useState();
   const [current_page, set_current_page] = useState();
   const [ads, setAds] = useState([]);
   const [last_page, set_last_page] = useState();
+  const [dataLoading, setDataLoading] = useState(true);
   const { data, isLoading, error, get, post } = useDataFetcher();
+
   useEffect(() => {
     get(`/api/ads/get_all_ads?page=${current_page}`);
   }, [current_page]);
@@ -43,8 +46,9 @@ const Home = ({ userLocation }) => {
 
   return (
     <>
+      {dataLoading && <LoaderHome />}
       <Box sx={{ marginTop: { xs: "6rem", md: "12rem" } }}>
-        <MainSection />
+        <MainSection setDataLoading={setDataLoading} />
         <ImportantCities />
         <Container>
           <Box

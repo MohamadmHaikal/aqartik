@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { Box, Container, Grid, Link, Typography } from "@mui/material";
 import {
@@ -17,6 +17,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import GeneralContext from "../../context/generalContext";
 import {
   Mail as MailIcon,
   LocationOn as LocationOnIcon,
@@ -28,16 +29,14 @@ import useDataFetcher from "../../api/useDataFetcher ";
 const phoneNumber = "000000000000";
 
 const FooterTwo = () => {
-  const { data, isLoading, error, get, post } = useDataFetcher();
+  const { generalData , website_status } = useContext(GeneralContext);
   const [FooterData, setFooterData] = useState([]);
+
   useEffect(() => {
-    get("/api/settings/genral");
-  }, []);
-  useEffect(() => {
-    if (data) {
-      setFooterData(data.settings);
+    if (generalData) {
+      setFooterData(generalData);
     }
-  }, [data]);
+  }, [generalData]);
 
   const { t, i18n } = useTranslation();
   const lang = i18n.language;

@@ -153,57 +153,7 @@ const SmallNavLoginMenu = () => {
                   <Typography> {t("profile_menu.favourite_btn")}</Typography>
                 </ListItem>
               </Link>
-              <Link
-                to="/addads"
-                style={{ textDecoration: "none", color: "black" }}
-              >
-                <ListItem
-                  sx={{
-                    width: "auto",
-
-                    minHeight: "48px",
-
-                    paddingTop: "6px",
-                    whiteSpace: "nowrap",
-                    paddingBottom: "6px",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      color: "rgba(0, 0, 0, 0.54)",
-                      display: "inline-flex",
-                      minWidth: "56px",
-                      flexShrink: "0",
-                    }}
-                  >
-                    <img src={Aqar} alt="aqar" />
-                  </Box>
-                  <Typography> {t("profile_menu.add_property_btn")}</Typography>
-                </ListItem>
-              </Link>
-              <ListItem
-                sx={{
-                  width: "auto",
-
-                  minHeight: "48px",
-
-                  paddingTop: "6px",
-                  whiteSpace: "nowrap",
-                  paddingBottom: "6px",
-                }}
-              >
-                <Box
-                  sx={{
-                    color: "rgba(0, 0, 0, 0.54)",
-                    display: "inline-flex",
-                    minWidth: "56px",
-                    flexShrink: "0",
-                  }}
-                >
-                  <img src={Call} alt="call" />
-                </Box>
-                <Typography> {t("profile_menu.contact_us_btn")} </Typography>
-              </ListItem>
+          
               <ListItem
                 sx={{
                   width: "auto",

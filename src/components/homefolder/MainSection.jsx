@@ -9,24 +9,34 @@ import { Box, Typography, Button, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
 
-const MainSection = () => {
+const MainSection = ({ setDataLoading }) => {
   const { data, isLoading, error, get, post } = useDataFetcher();
   const [bannersData, setBannersData] = useState([]);
   useEffect(() => {
-    get("/api/settings/banners/all");
+    setDataLoading(true);
+    const storedData = localStorage.getItem("bannersData");
+    // console.log(storedData);
+    if (storedData) {
+      setBannersData(JSON.parse(storedData));
+    } else {
+      get("/api/settings/banners/all");
+    }
+    setDataLoading(false);
   }, []);
+  console.log(bannersData);
   useEffect(() => {
     if (data && data.banners) {
       localStorage.setItem("bannersData", JSON.stringify(data.banners));
     }
   }, [data]);
-  useEffect(() => {
-    const storedData = localStorage.getItem("bannersData");
-    if (storedData) {
-      setBannersData(JSON.parse(storedData));
-    } else {
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedData = localStorage.getItem("bannersData");
+  //   if (storedData) {
+  //     setBannersData(JSON.parse(storedData));
+  //   } else {
+  //   }
+  // }, []);
+
   const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const csstransitionRef = useRef(null);
@@ -108,8 +118,8 @@ const MainSection = () => {
         onSlideChange={handleSlideChange}
         sx={{ position: "relative", marginTop: "11rem" }}
       >
-        {data &&
-          data.banners.map((banner, index) => (
+        {bannersData &&
+          bannersData.map((banner, index) => (
             <SwiperSlide key={index}>
               <Box
                 sx={{

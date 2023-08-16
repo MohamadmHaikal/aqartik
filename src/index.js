@@ -11,6 +11,7 @@ import { Login } from "./components";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import i18n from "./i18n";
 import { ChatProvider } from "./context/chatContext";
+import { GeneralProvider } from "./context/generalContext";
 const MainApp = () => {
   const theme = createTheme({
     typography: {
@@ -42,9 +43,11 @@ const MainApp = () => {
     <>
       <ThemeProvider theme={theme}>
         <I18nextProvider i18n={i18n}>
-          <ChatProvider>
-            <App />
-          </ChatProvider>
+          <GeneralProvider>
+            <ChatProvider>
+              <App />
+            </ChatProvider>
+          </GeneralProvider>
         </I18nextProvider>
       </ThemeProvider>
     </>

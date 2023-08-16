@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect , useContext} from "react";
 import { useLocation, useParams } from "react-router-dom";
 import {
   AppBar,
@@ -31,6 +31,7 @@ import SideNavXsScreens from "./SideNavXsScreens";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./layout.module.css";
 import useDataFetcher from "../../api/useDataFetcher ";
+import GeneralContext from "../../context/generalContext";
 
 // import Link from "next/link";
 // import { Link } from "@mui/material";
@@ -50,6 +51,7 @@ import { ChatsHeader } from "../chat/ChatsHeader";
 import { Header } from "../../styledComponents/MainPageStyles";
 import { useTranslation } from "react-i18next";
 
+
 const drawerWidth = 240;
 
 const theme = createTheme();
@@ -61,8 +63,9 @@ export default function Nav({
   setIsUserSelected,
   setUserData,
   notificationData,
-  generalData,
+
 }) {
+  const { generalData , website_status } = useContext(GeneralContext);
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const { data, isLoading, get } = useDataFetcher();
@@ -617,26 +620,7 @@ export default function Nav({
       </AppBar>
       {/* this for LoginNav in small screesns */}
 
-      {/* <Box></Box>
-      <Box component="nav">
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", md: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </Box> */}
+     
     </Box>
   );
 }
