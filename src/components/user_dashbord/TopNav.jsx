@@ -3,10 +3,24 @@ import { Box, Button, Typography, Paper } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Avatar from "@mui/material/Avatar";
 import { useTranslation } from "react-i18next";
+import useDataFetcher from "../../api/useDataFetcher ";
 
 const TopNav = () => {
   const { t, i18n } = useTranslation();
+
   const lang = i18n.language;
+
+  const [username, setUserName] = useState();
+  const { data, isLoading, error, get, post } = useDataFetcher();
+  useEffect(() => {
+    get(`api/user/get_user_data`);
+  }, []);
+  useEffect(() => {
+    if (data) {
+      setUserName(data.user.username);
+    }
+  }, [data]);
+
   const [showLoginList, setShowLoginList] = useState(false);
   const loginListRef = useRef(null);
 
@@ -55,7 +69,7 @@ const TopNav = () => {
             backgroundColor: "var(--green-color)",
           }}
         />
-        <Typography sx={{ fontWeight: "700" }}>Rama</Typography>
+        <Typography sx={{ fontWeight: "700" }}>{username}</Typography>
         <KeyboardArrowDownIcon sx={{ marginRight: "10px" }} />
       </Button>
 
@@ -100,7 +114,6 @@ const TopNav = () => {
               cursor: "pointer",
             }}
           >
-            <li>{t("user_dashboard.top_nav.title1")}</li>
             <li
               style={{
                 borderBottom: "none",

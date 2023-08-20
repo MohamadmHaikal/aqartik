@@ -29,6 +29,20 @@ const ConfimLocation = ({ formData, setFormData, interfaces, mapData }) => {
   );
 
   useEffect(() => {
+    if (
+      formData.space &&
+      formData.neighborhood &&
+      formData.road &&
+      formData.interface_aqar
+    ) {
+      setSelectedCity(formData.space);
+      setSelectedNeighborhood(formData.neighborhood);
+      setSelectedRoad(formData.road);
+      setSelectedInterface(formData.interface_aqar.id);
+    }
+  }, []);
+
+  useEffect(() => {
     setSelectedCity(mapData.cityName);
     setSelectedNeighborhood(mapData.neighborhoodName);
     setSelectedRoad(mapData.rood);

@@ -6,13 +6,16 @@ import {
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
+import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import { useTranslation } from "react-i18next";
+
 const googleMapsApiKey = "AIzaSyCUSxdxRLpvkegxpk9-82sUjCylgekfGUk";
+
 const containerStyle = {
   width: "100%",
   height: "400px",
 };
-const EditMap = ({ ad, onCancel }) => {
+const EditMap = ({ type, ad, onCancel }) => {
   const { t } = useTranslation();
   const [userMarkers, setUserMarkers] = useState([]);
   const [cityName, setCityName] = useState();
@@ -56,6 +59,7 @@ const EditMap = ({ ad, onCancel }) => {
       }
     }
   }, [mapLoaded]);
+  console.log(userMarkers);
 
   // const handleCloseInfoWindow = () => {
   //   setSelectedMarker(null);
@@ -126,7 +130,59 @@ const EditMap = ({ ad, onCancel }) => {
   // }, [cityName, neighborhoodName, rood]);
 
   // console.log(mapData);
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (type === 0) {
+      try {
+        const res = await fetch(
+          `https://www.dashboard.aqartik.com/api/ads/update/${ad.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            body: JSON.stringify({
+              lat: userMarkers["0"].position.lat,
+              lng: userMarkers["0"].position.lng,
+              zoom: userMarkers["0"].position.zoom,
+              road: rood,
+              neighborhood: neighborhoodName,
+              city: cityName,
+            }),
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    if (type === 1) {
+      try {
+        const res = await fetch(
+          `https://www.dashboard.aqartik.com/api/real-estate-request/update/${ad.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            body: JSON.stringify({
+              lat: userMarkers["0"].position.lat,
+              lng: userMarkers["0"].position.lng,
+              zoom: userMarkers["0"].position.zoom,
+              road: rood,
+              neighborhood: neighborhoodName,
+              city: cityName,
+            }),
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
   return (
     <Box>
       <form>
@@ -186,6 +242,7 @@ const EditMap = ({ ad, onCancel }) => {
         >
           <Button
             type="submit"
+            onClick={handleSubmit}
             sx={{
               fontWeight: "600",
               borderRadius: "8px",

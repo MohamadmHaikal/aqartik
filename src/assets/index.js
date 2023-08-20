@@ -38,6 +38,7 @@ import Chair from "./chair.svg";
 import Farms from "./farms.svg";
 import Special from "./special.svg";
 import Maintence from "./maintence.png";
+// import MapMarker from "./mapMarker.svg";
 export {
   Maintence,
   Special,
@@ -75,4 +76,5 @@ export {
   Twitter,
   Order,
   SearchFrameMoblie,
+  // MapMarker,
 };

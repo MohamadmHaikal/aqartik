@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, Box } from "@mui/material";
 import {
-  CatgouryAds,
-  MapAds,
-  ConfimLocation,
-  HomeDescroption,
-  HomeImagesAdd,
-  HomeDetails,
-  HomeInformation,
-  LicenseModal,
-} from "../components";
-
-import AddFeatureComponent from "../components/addadsolder/AddFeatureComponent";
-
+  Stepper,
+  Step,
+  StepLabel,
+  Button,
+  Box,
+  Paper,
+  Container,
+} from "@mui/material";
+import MobileStepper from "@mui/material/MobileStepper";
+import {
+  OrderInfo,
+  OrderDetails,
+  OrderRoomsNum,
+  OrderLocation,
+  OrderDescripton,
+  OrderMap,
+} from "../NewOrder";
 import { useTranslation } from "react-i18next";
-import useDataFetcher from "../api/useDataFetcher ";
-import { Link } from "react-router-dom";
-import {
-  ConstructionOutlined,
-  LocalConvenienceStoreOutlined,
-} from "@mui/icons-material";
-// import LicenseModal from "./LicenseModal";
-
-const Addads = ({ type = 0, ad = null }) => {
+import useDataFetcher from "../../../api/useDataFetcher ";
+import OrderInputs from "../NewOrder/OrderInputs";
+import { Link, useLocation } from "react-router-dom";
+const EditOrder = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+
+  const ad = useLocation().state.ad;
 
   const {
     data: sendFormData,
@@ -59,44 +60,29 @@ const Addads = ({ type = 0, ad = null }) => {
   const [isLastStep, setIsLastStep] = useState();
 
   const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    if (ad) {
+      setFormData(ad);
+    }
+  }, [ad]);
+
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [isLicenseModalOpen, setIsLicenseModalOpen] = useState(false);
-  const [afterWidth, setAfterWidth] = useState(13.7); // Initial width of &:after
+  const [afterWidth, setAfterWidth] = useState(14); // Initial width of &:after
   const [error, setError] = useState(false);
   const [inputErrors, setInputErrors] = useState({});
 
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedType, setSelectedType] = useState();
 
-  const [images, setImages] = useState([]);
-  const [deletedImages, setDeletedImages] = useState([]);
-  const [readyImages, setReadyImages] = useState([]);
-  console.log(readyImages);
-  console.log(deletedImages);
-
-  const [selectedImages, setSelectedImages] = useState(formData.images || []);
-
-  const [selectedImage, setSelectedImage] = useState(
-    formData.thumbnail || null
-  );
-  const [thumbnail, setThumbnail] = useState();
-
-  console.log(thumbnail);
-  useEffect(() => {
-    if (type === 1) {
-      setFormData(ad);
-      setReadyImages(ad.gallery);
-    } else {
-      setFormData({});
-    }
-  }, [type]);
   console.log(formData);
 
   useEffect(() => {
     if (category_bool?.length > 0 && category_quantity?.length > 0) {
-      step === 8 ? setIsLastStep(8) : setIsLastStep(null);
+      step === 7 ? setIsLastStep(true) : setIsLastStep(false);
     } else {
-      step === 7 ? setIsLastStep(7) : setIsLastStep(null);
+      step === 6 ? setIsLastStep(true) : setIsLastStep(false);
     }
   }, [step, category_bool, category_quantity]);
 
@@ -194,16 +180,6 @@ const Addads = ({ type = 0, ad = null }) => {
   //       } else {
   //         setError(true);
   //       }
-  //     } else if (step === 8) {
-  //       if (formData.hasOwnProperty("selectedImage")) {
-  //         if (formData.selectedImage !== "") {
-  //           setError(false);
-  //         } else {
-  //           setError(true);
-  //         }
-  //       } else {
-  //         setError(true);
-  //       }
   //     }
   //   } else if (category_bool?.length > 0 && category_quantity?.length === 0) {
   //     if (step === 1) {
@@ -262,16 +238,6 @@ const Addads = ({ type = 0, ad = null }) => {
   //           formData.city !== "" &&
   //           formData.road !== ""
   //         ) {
-  //           setError(false);
-  //         } else {
-  //           setError(true);
-  //         }
-  //       } else {
-  //         setError(true);
-  //       }
-  //     } else if (step === 7) {
-  //       if (formData.hasOwnProperty("selectedImage")) {
-  //         if (formData.selectedImage !== "") {
   //           setError(false);
   //         } else {
   //           setError(true);
@@ -356,16 +322,6 @@ const Addads = ({ type = 0, ad = null }) => {
   //       } else {
   //         setError(true);
   //       }
-  //     } else if (step === 7) {
-  //       if (formData.hasOwnProperty("selectedImage")) {
-  //         if (formData.selectedImage !== "") {
-  //           setError(false);
-  //         } else {
-  //           setError(true);
-  //         }
-  //       } else {
-  //         setError(true);
-  //       }
   //     }
   //   } else if (category_bool?.length === 0 && category_quantity?.length === 0) {
   //     if (step === 1) {
@@ -431,16 +387,6 @@ const Addads = ({ type = 0, ad = null }) => {
   //       } else {
   //         setError(true);
   //       }
-  //     } else if (step === 6) {
-  //       if (formData.hasOwnProperty("selectedImage")) {
-  //         if (formData.selectedImage !== "") {
-  //           setError(false);
-  //         } else {
-  //           setError(true);
-  //         }
-  //       } else {
-  //         setError(true);
-  //       }
   //     }
   //   } else {
   //     if (step === 1) {
@@ -465,9 +411,9 @@ const Addads = ({ type = 0, ad = null }) => {
     setStep(step + 1);
 
     if (category_bool?.length > 0 && category_quantity?.length > 0) {
-      setAfterWidth(afterWidth + 12.32);
+      setAfterWidth(afterWidth + 14);
     } else {
-      setAfterWidth(afterWidth + 13.7);
+      setAfterWidth(afterWidth + 17.14);
     }
   };
 
@@ -475,215 +421,115 @@ const Addads = ({ type = 0, ad = null }) => {
     if (step > 1) {
       setStep(step - 1);
       if (category_bool?.length > 0 && category_quantity?.length > 0) {
-        setAfterWidth(afterWidth - 12.32);
+        setAfterWidth(afterWidth - 14);
       } else {
-        setAfterWidth(afterWidth - 13.7);
+        setAfterWidth(afterWidth - 17.14);
       }
     }
   };
 
   const handleSubmit = async () => {
-    if (type === 0) {
-      const formDataSend = new FormData();
+    const formDataSend = new FormData();
 
-      // setLoadingSubmit(true);
-      const sendForm = new FormData();
-      // Iterate through properties of formData and append each property to sendForm
-      for (const property in formData) {
-        if (formData.hasOwnProperty(property)) {
-          sendForm.append(property, formData[property]);
-        }
+    // setLoadingSubmit(true);
+    const sendForm = new FormData();
+    // Iterate through properties of formData and append each property to sendForm
+    for (const property in formData) {
+      if (formData.hasOwnProperty(property)) {
+        sendForm.append(property, formData[property]);
       }
-      console.log(formData);
-      const requestBody = {};
+    }
+    console.log(formData);
+    const requestBody = {};
 
-      // Loop through each key-value pair in sendForm and add to requestBody
-      for (const [key, value] of sendForm.entries()) {
-        if (formData.category_aqar) {
-          requestBody["category_id"] = formData.category_aqar.id;
-        }
-        if (formData.inputValues.price) {
-          requestBody["price"] = formData.inputValues.price;
-        }
-        if (formData.inputValues.area) {
-          requestBody["space"] = formData.inputValues.area;
-        }
-        if (formData.inputValues.height) {
-          requestBody["height"] = formData.inputValues.height;
-        }
-        if (formData.inputValues.width) {
-          requestBody["width"] = formData.inputValues.width;
-        }
-        if (formData.selectedLocation.lat) {
-          requestBody["lat"] = formData.selectedLocation.lat;
-        }
-        if (formData.selectedLocation.lng) {
-          requestBody["lng"] = formData.selectedLocation.lng;
-        }
+    // Loop through each key-value pair in sendForm and add to requestBody
+    for (const [key, value] of sendForm.entries()) {
+      if (formData.category_aqar) {
+        requestBody["category_id"] = formData.category_aqar.id;
+      }
+      if (formData.inputValues.price) {
+        requestBody["price"] = formData.inputValues.price;
+      }
+      if (formData.inputValues.area) {
+        requestBody["space"] = formData.inputValues.area;
+      }
+      if (formData.inputValues.height) {
+        requestBody["height"] = formData.inputValues.height;
+      }
+      if (formData.inputValues.width) {
+        requestBody["width"] = formData.inputValues.width;
+      }
+      if (formData.selectedLocation.lat) {
+        requestBody["lat"] = formData.selectedLocation.lat;
+      }
+      if (formData.selectedLocation.lng) {
+        requestBody["lng"] = formData.selectedLocation.lng;
+      }
+      if (formData.selectedLocation.zoom) {
+        requestBody["zoom"] = formData.selectedLocation.zoom;
+      }
+      if (formData.aqarCategoryQuantity) {
+        requestBody["QuantityRequest"] = JSON.stringify(
+          formData.aqarCategoryQuantity
+        );
+      }
+      if (formData.selectedBooleansProperties) {
+        requestBody["BoolfeatureaRequest"] = JSON.stringify(
+          formData.selectedBooleansProperties
+        );
+      }
+      requestBody[key] = value;
+    }
+    console.log(requestBody);
+    //   BoolfeatureaAds
+    // QuantityAds
 
-        if (formData.selectedLocation.zoom) {
-          requestBody["zoom"] = formData.selectedLocation.zoom;
-        }
-        if (formData.aqarCategoryQuantity) {
-          requestBody["QuantityAds"] = JSON.stringify(
-            formData.aqarCategoryQuantity
-          );
-        }
-        if (formData.selectedBooleansProperties) {
-          requestBody["BoolfeatureaAds"] = JSON.stringify(
-            formData.selectedBooleansProperties
-          );
-        }
-        if (formData.images) {
-        }
-        requestBody[key] = value;
-      }
-      if (formData.images.length > 0) {
-        // Append the entire array of selected files to the formData
-        selectedImages.forEach((file) => {
-          formDataSend.append("images[]", file);
-        });
-      }
-      console.log(requestBody);
-      //   BoolfeatureaAds
-      // QuantityAds
-      const address =
-        requestBody.city +
-        ", " +
-        requestBody.neighborhood +
-        ", " +
-        requestBody.road;
-      for (const property in requestBody) {
-        if (requestBody.hasOwnProperty(property)) {
+    const excludedKeys = [
+      "user",
+      "type_aqar",
+      "category_aqar",
+      "interface_aqar",
+      "inputValues",
+      "selectedLocation",
+      "BoolFeaturea",
+      "aqarCategoryQuantity",
+      "selectedBooleansProperties",
+      "type_res",
+    ];
+
+    for (const property in requestBody) {
+      if (requestBody.hasOwnProperty(property)) {
+        if (!excludedKeys.includes(property)) {
+          // Check if the property is not in the excludedKeys array
           formDataSend.append(property, requestBody[property]);
         }
       }
-      formDataSend.append("address", address);
+    }
+    const address =
+      requestBody.city +
+      ", " +
+      requestBody.neighborhood +
+      ", " +
+      requestBody.road;
+    formDataSend.append("address", address);
 
-      try {
-        const response = await fetch(
-          "https://www.dashboard.aqartik.com/api/ads/store",
-          {
-            headers: {
-              // "Content-Type": "multipart/form-data",
-              authorization: `Bearer ${localStorage.getItem("user_token")}`,
-            },
-            method: "POST",
-            body: formDataSend,
-          }
-        );
-
-        const data = await response.json();
-        console.log("API response:", data);
-      } catch (error) {
-        console.error("Error sending FormData:", error);
-      }
-    } else if (type === 1) {
-      const formDataSend = new FormData();
-
-      // setLoadingSubmit(true);
-      const sendForm = new FormData();
-      // Iterate through properties of formData and append each property to sendForm
-      for (const property in formData) {
-        if (formData.hasOwnProperty(property)) {
-          sendForm.append(property, formData[property]);
+    try {
+      const response = await fetch(
+        `https://www.dashboard.aqartik.com/api/real-estate-request/update/${ad.id}`,
+        {
+          headers: {
+            // "Content-Type": "multipart/form-data",
+            authorization: `Bearer ${localStorage.getItem("user_token")}`,
+          },
+          method: "POST",
+          body: formDataSend,
         }
-      }
-      console.log(formData);
-      const requestBody = {};
+      );
 
-      for (const [key, value] of sendForm.entries()) {
-        if (key === "category_aqar") {
-          requestBody["category_id"] = formData.category_aqar.id;
-        } else if (key === "inputValues.price") {
-          requestBody["price"] = formData.inputValues.price;
-        } else if (key === "inputValues.area") {
-          requestBody["space"] = formData.inputValues.area;
-        } else if (key === "inputValues.height") {
-          requestBody["height"] = formData.inputValues.height;
-        } else if (key === "inputValues.width") {
-          requestBody["width"] = formData.inputValues.width;
-        } else if (key === "selectedLocation.lat") {
-          requestBody["lat"] = formData.selectedLocation.lat;
-        } else if (key === "selectedLocation.lng") {
-          requestBody["lng"] = formData.selectedLocation.lng;
-        } else if (key === "selectedLocation.zoom") {
-          requestBody["zoom"] = formData.selectedLocation.zoom;
-        } else if (key === "aqarCategoryQuantity") {
-          requestBody["QuantityAds"] = JSON.stringify(
-            formData.aqarCategoryQuantity
-          );
-        } else if (key === "selectedBooleansProperties") {
-          requestBody["BoolfeatureaAds"] = JSON.stringify(
-            formData.selectedBooleansProperties
-          );
-        } else {
-          requestBody[key] = value;
-        }
-      }
-      if (formData.images.length > 0) {
-        // Append the entire array of selected files to the formData
-        selectedImages.forEach((file) => {
-          formDataSend.append("images[]", file);
-        });
-      }
-      console.log(requestBody);
-      //   BoolfeatureaAds
-      // QuantityAds
-      const excludedKeys = [
-        "images",
-        "user",
-        "gallery",
-        "type_aqar",
-        "category_aqar",
-        "thumbnail",
-        "interface_aqar",
-        "inputValues",
-        "selectedLocation",
-        "BoolFeaturea",
-      ];
-      if (deletedImages.length > 0) {
-        formDataSend.append("removed_images", deletedImages.join(","));
-      }
-
-      // Handle the thumbnail property separately
-      const thumbnailValue = requestBody.thumbnail;
-
-      if (thumbnailValue instanceof File) {
-        formDataSend.append("thumbnail", thumbnailValue);
-      } else if (
-        typeof thumbnailValue === "object" &&
-        thumbnailValue !== null
-      ) {
-        formDataSend.append("thumbnail", JSON.stringify(thumbnailValue));
-      }
-      for (const property in requestBody) {
-        if (requestBody.hasOwnProperty(property)) {
-          if (!excludedKeys.includes(property)) {
-            // Check if the property is not in the excludedKeys array
-            formDataSend.append(property, requestBody[property]);
-          }
-        }
-      }
-
-      try {
-        const response = await fetch(
-          `https://www.dashboard.aqartik.com/api/ads/update/${ad.id}`,
-          {
-            headers: {
-              // "Content-Type": "multipart/form-data",
-              authorization: `Bearer ${localStorage.getItem("user_token")}`,
-            },
-            method: "POST",
-            body: formDataSend,
-          }
-        );
-
-        const data = await response.json();
-        console.log("API response:", data);
-      } catch (error) {
-        console.error("Error sending FormData:", error);
-      }
+      const data = await response.json();
+      console.log("API response:", data);
+    } catch (error) {
+      console.error("Error sending FormData:", error);
     }
   };
 
@@ -693,7 +539,7 @@ const Addads = ({ type = 0, ad = null }) => {
       switch (step) {
         case 1:
           return (
-            <CatgouryAds
+            <OrderInfo
               formData={formData}
               setFormData={setFormData}
               selectedCategoryId={selectedCategoryId}
@@ -706,7 +552,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <HomeInformation
+            <OrderDetails
               formData={formData}
               setFormData={setFormData}
               inputErrors={inputErrors}
@@ -719,7 +565,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <HomeDetails
+            <OrderRoomsNum
               formData={formData}
               setFormData={setFormData}
               categoryQuantity={category_quantity}
@@ -731,7 +577,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <AddFeatureComponent
+            <OrderInputs
               formData={formData}
               setFormData={setFormData}
               category_bool={category_bool}
@@ -741,7 +587,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <HomeDescroption
+            <OrderDescripton
               formData={formData}
               setFormData={setFormData}
               setError={setError}
@@ -752,7 +598,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <MapAds
+            <OrderMap
               formData={formData}
               setFormData={setFormData}
               setError={setError}
@@ -765,35 +611,13 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <ConfimLocation
+            <OrderLocation
               formData={formData}
               setFormData={setFormData}
               interfaces={interfaces}
               mapData={mapData}
               setError={setError}
               error={error}
-            />
-          );
-        case 8:
-          return isInfoLoading ? (
-            "loading"
-          ) : (
-            <HomeImagesAdd
-              formData={formData}
-              setFormData={setFormData}
-              images={images}
-              setImages={setImages}
-              selectedImage={selectedImage}
-              setSelectedImage={setSelectedImage}
-              thumbnail={thumbnail}
-              setThumbnail={setThumbnail}
-              selectedImages={selectedImages}
-              setSelectedImages={setSelectedImages}
-              type={type}
-              deletedImages={deletedImages}
-              setDeletedImages={setDeletedImages}
-              readyImages={readyImages}
-              setReadyImages={setReadyImages}
             />
           );
         // Render other steps...
@@ -804,7 +628,7 @@ const Addads = ({ type = 0, ad = null }) => {
       switch (step) {
         case 1:
           return (
-            <CatgouryAds
+            <OrderInfo
               formData={formData}
               setFormData={setFormData}
               selectedCategoryId={selectedCategoryId}
@@ -817,7 +641,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <HomeInformation
+            <OrderDetails
               formData={formData}
               setFormData={setFormData}
               inputErrors={inputErrors}
@@ -830,7 +654,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <AddFeatureComponent
+            <OrderInputs
               formData={formData}
               setFormData={setFormData}
               category_bool={category_bool}
@@ -841,7 +665,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <HomeDescroption
+            <OrderDescripton
               formData={formData}
               setFormData={setFormData}
               setError={setError}
@@ -852,7 +676,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <MapAds
+            <OrderMap
               formData={formData}
               setFormData={setFormData}
               setError={setError}
@@ -865,36 +689,13 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <ConfimLocation
+            <OrderLocation
               formData={formData}
               setFormData={setFormData}
               interfaces={interfaces}
               mapData={mapData}
               setError={setError}
               error={error}
-            />
-          );
-        case 7:
-          return isInfoLoading ? (
-            "loading"
-          ) : (
-            <HomeImagesAdd
-              formData={formData}
-              setFormData={setFormData}
-              step={step}
-              images={images}
-              setImages={setImages}
-              selectedImage={selectedImage}
-              setSelectedImage={setSelectedImage}
-              thumbnail={thumbnail}
-              setThumbnail={setThumbnail}
-              selectedImages={selectedImages}
-              setSelectedImages={setSelectedImages}
-              type={type}
-              deletedImages={deletedImages}
-              setDeletedImages={setDeletedImages}
-              readyImages={readyImages}
-              setReadyImages={setReadyImages}
             />
           );
         // Render other steps...
@@ -905,7 +706,7 @@ const Addads = ({ type = 0, ad = null }) => {
       switch (step) {
         case 1:
           return (
-            <CatgouryAds
+            <OrderInfo
               formData={formData}
               setFormData={setFormData}
               selectedCategoryId={selectedCategoryId}
@@ -918,7 +719,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <HomeInformation
+            <OrderDetails
               formData={formData}
               setFormData={setFormData}
               inputErrors={inputErrors}
@@ -931,7 +732,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <HomeDetails
+            <OrderRoomsNum
               formData={formData}
               setFormData={setFormData}
               categoryQuantity={category_quantity}
@@ -944,7 +745,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <HomeDescroption
+            <OrderDescripton
               formData={formData}
               setFormData={setFormData}
               setError={setError}
@@ -955,7 +756,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <MapAds
+            <OrderMap
               formData={formData}
               setFormData={setFormData}
               setError={setError}
@@ -968,36 +769,13 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <ConfimLocation
+            <OrderLocation
               formData={formData}
               setFormData={setFormData}
               interfaces={interfaces}
               mapData={mapData}
               setError={setError}
               error={error}
-            />
-          );
-        case 7:
-          return isInfoLoading ? (
-            "loading"
-          ) : (
-            <HomeImagesAdd
-              formData={formData}
-              setFormData={setFormData}
-              step={step}
-              images={images}
-              setImages={setImages}
-              selectedImage={selectedImage}
-              setSelectedImage={setSelectedImage}
-              thumbnail={thumbnail}
-              setThumbnail={setThumbnail}
-              selectedImages={selectedImages}
-              setSelectedImages={setSelectedImages}
-              type={type}
-              deletedImages={deletedImages}
-              setDeletedImages={setDeletedImages}
-              readyImages={readyImages}
-              setReadyImages={setReadyImages}
             />
           );
         // Render other steps...
@@ -1008,7 +786,7 @@ const Addads = ({ type = 0, ad = null }) => {
       switch (step) {
         case 1:
           return (
-            <CatgouryAds
+            <OrderInfo
               formData={formData}
               setFormData={setFormData}
               selectedCategoryId={selectedCategoryId}
@@ -1021,7 +799,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <HomeInformation
+            <OrderDetails
               formData={formData}
               setFormData={setFormData}
               inputErrors={inputErrors}
@@ -1035,7 +813,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <HomeDescroption
+            <OrderDescripton
               formData={formData}
               setFormData={setFormData}
               setError={setError}
@@ -1046,7 +824,7 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <MapAds
+            <OrderMap
               formData={formData}
               setFormData={setFormData}
               setError={setError}
@@ -1059,36 +837,13 @@ const Addads = ({ type = 0, ad = null }) => {
           return isInfoLoading ? (
             "loading"
           ) : (
-            <ConfimLocation
+            <OrderLocation
               formData={formData}
               setFormData={setFormData}
               interfaces={interfaces}
               mapData={mapData}
               setError={setError}
               error={error}
-            />
-          );
-        case 6:
-          return isInfoLoading ? (
-            "loading"
-          ) : (
-            <HomeImagesAdd
-              formData={formData}
-              setFormData={setFormData}
-              step={step}
-              images={images}
-              setImages={setImages}
-              selectedImage={selectedImage}
-              setSelectedImage={setSelectedImage}
-              thumbnail={thumbnail}
-              setThumbnail={setThumbnail}
-              selectedImages={selectedImages}
-              setSelectedImages={setSelectedImages}
-              type={type}
-              deletedImages={deletedImages}
-              setDeletedImages={setDeletedImages}
-              readyImages={readyImages}
-              setReadyImages={setReadyImages}
             />
           );
         // Render other steps...
@@ -1099,7 +854,7 @@ const Addads = ({ type = 0, ad = null }) => {
       switch (step) {
         default:
           return (
-            <CatgouryAds
+            <OrderInfo
               formData={formData}
               setFormData={setFormData}
               selectedCategoryId={selectedCategoryId}
@@ -1114,26 +869,18 @@ const Addads = ({ type = 0, ad = null }) => {
 
   return (
     <>
-      <Box
-        sx={{
-          display: { xs: "none", lg: "block" },
-          backgroundColor: "var(--green-color)",
-          height: { xs: "calc(100vh - 125px)", md: "100vh" },
-          position: "fixed",
-          right: "0",
-          top: " 0",
-          width: "33%",
-        }}
-      ></Box>
       <Container
-        sx={{ padding: { xs: "0" }, marginTop: { xs: "0rem", sm: "2rem" } }}
+        sx={{
+          padding: { xs: "0" },
+          marginTop: { xs: "0rem", sm: "2rem" },
+        }}
       >
         {/* {isLicenseModalOpen && (
-          <LicenseModal
-            isOpen={isLicenseModalOpen}
-            onClose={handleCloseLicenseModal}
-          />
-        )} */}
+            <LicenseModal
+              isOpen={isLicenseModalOpen}
+              onClose={handleCloseLicenseModal}
+            />
+          )} */}
         <Box
           sx={{
             position: "relative",
@@ -1154,19 +901,9 @@ const Addads = ({ type = 0, ad = null }) => {
                 display: "flex",
                 flexDirection: "column",
                 overflow: "hidden auto",
-                height: { xs: "100vh", sm: "calc(-40px + 100vh)" },
+                height: { xs: "100vh", sm: "calc(-40px + 88vh)" },
               }}
             >
-              <Link
-                to={"/"}
-                style={{
-                  textDecoration: "none",
-                  color: "var(--green-color)",
-                  textAlign: lang === "ar" ? "left" : "right",
-                }}
-              >
-                الرئيسية
-              </Link>
               {/* Render the current step */}
               {renderStep()}
             </Box>
@@ -1320,4 +1057,4 @@ const Addads = ({ type = 0, ad = null }) => {
   );
 };
 
-export default Addads;
+export default EditOrder;

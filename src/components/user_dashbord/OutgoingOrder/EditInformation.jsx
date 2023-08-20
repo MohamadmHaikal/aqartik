@@ -11,13 +11,13 @@ import {
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../../api/useDataFetcher ";
 
-const EditInformation = ({ ad, onCancel }) => {
-  const { data, isLoading, post } = useDataFetcher();
+const EditInformation = ({ type, ad, onCancel }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
-  const [selectedValue, setSelectedValue] = useState(ad.category_aqar.id);
   const [title, setTitle] = useState(ad.title);
   const [updatedValues, setUpdatedValues] = useState();
+  const { data, isLoading, post } = useDataFetcher();
+
   useEffect(() => {
     setUpdatedValues(ad);
   }, [ad]);
@@ -30,40 +30,47 @@ const EditInformation = ({ ad, onCancel }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formDataSend = new FormData();
-
     // Verify that updatedValues is populated
-    console.log("updatedValues:", updatedValues);
-
-    // Iterate through properties of updatedValues and append each property to formDataSend
-    // for (const property in updatedValues) {
-    //   if (updatedValues.hasOwnProperty(property)) {
-    //     console.log(`Appending ${property}: ${updatedValues[property]}`);
-    //     formDataSend.append(property, updatedValues[property]);
-    //   }
-    // }
-
-    // const filteredValues = Object.fromEntries(
-    //   Object.entries(updatedValues).filter(([key]) => key === "thumbnail")
-    // );
-    // console.log(filteredValues);
-    // fetch(`https://www.dashboard.aqartik.com/api/ads/update/${ad.id}`, {
-    //   headers: {
-    //     authorization: `Bearer ${localStorage.getItem("user_token")}`,
-    //   },
-    //   method: "POST",
-    //   body: JSON.stringify(updatedValues),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log("API response:", data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error sending FormData:", error);
-    //   });
+    formDataSend.append("title", title);
+    if (type === 0) {
+      try {
+        const res = await fetch(
+          `https://www.dashboard.aqartik.com/api/ads/update/${ad.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            body: JSON.stringify({ title }),
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    if (type === 1) {
+      try {
+        const res = await fetch(
+          `https://www.dashboard.aqartik.com/api/real-estate-request/update/${ad.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            body: JSON.stringify({ title }),
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
   return (
     <Box>

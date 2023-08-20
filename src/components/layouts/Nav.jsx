@@ -58,7 +58,6 @@ export default function Nav({
   setShowMessages,
   isUserSelected,
   setIsUserSelected,
-  setUserData,
 }) {
   const { t, i18n } = useTranslation();
 
@@ -284,10 +283,7 @@ export default function Nav({
                   sx={{ display: "flex", justifyContent: "center" }}
                 />
                 {showMessages && (
-                  <ChatsHeader
-                    setIsUserSelected={setIsUserSelected}
-                    setUserData={setUserData}
-                  />
+                  <ChatsHeader setIsUserSelected={setIsUserSelected} />
                 )}
               </div>
             </Header>

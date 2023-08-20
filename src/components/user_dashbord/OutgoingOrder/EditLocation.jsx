@@ -13,7 +13,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useTranslation } from "react-i18next";
 
-const EditLocation = ({ ad, onCancel, interfaces }) => {
+const EditLocation = ({ type, ad, onCancel, interfaces }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
@@ -26,7 +26,48 @@ const EditLocation = ({ ad, onCancel, interfaces }) => {
   const handleInterfaceChange = (event) => {
     setSelectedInterface(event.target.value);
   };
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formDataSend = new FormData();
+    // Verify that updatedValues is populated
+    formDataSend.append("interface_id", selectedInterface);
+    if (type === 0) {
+      try {
+        const res = await fetch(
+          `https://www.dashboard.aqartik.com/api/ads/update/${ad.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            body: JSON.stringify({ interface_id: selectedInterface }),
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    if (type === 1) {
+      try {
+        const res = await fetch(
+          `https://www.dashboard.aqartik.com/api/real-estate-request/update/${ad.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            body: JSON.stringify({ interface_id: selectedInterface }),
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
   return (
     <Box>
       <form>
@@ -80,7 +121,9 @@ const EditLocation = ({ ad, onCancel, interfaces }) => {
                       : ""
                   }
                 >
-                  {interface_item.en_name}
+                  {lang === "ar"
+                    ? interface_item.ar_name
+                    : interface_item.en_name}
                 </MenuItem>
               ))}
             </Select>
@@ -107,6 +150,7 @@ const EditLocation = ({ ad, onCancel, interfaces }) => {
         >
           <Button
             type="submit"
+            onClick={handleSubmit}
             sx={{
               fontWeight: "600",
               borderRadius: "8px",

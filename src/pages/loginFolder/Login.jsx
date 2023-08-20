@@ -8,12 +8,14 @@ import {
   TextField,
   Modal,
   Link,
+  InputAdornment,
 } from "@mui/material";
 import { Logo } from "../../assets";
 import { useTranslation } from "react-i18next";
 import { myAxios } from "../../api/myAxios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router";
+import { KSA } from "../../assets";
 
 const Login = () => {
   const { t } = useTranslation();
@@ -22,14 +24,31 @@ const Login = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCounterActive, setIsCounterActive] = useState(true);
-  const [timer, setTimer] = useState(120);
+  const [timer, setTimer] = useState(180);
   const [enteredPhoneNumber, setEnteredPhoneNumber] = useState("");
+  const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
 
-  const handlePhoneNumberChange = (event) => {
-    const inputPhoneNumber = event.target.value.replace(/\D/g, "");
-    setPhoneNumber(inputPhoneNumber);
-    setEnteredPhoneNumber(inputPhoneNumber);
+  useEffect(() => {
+    validatePhoneNumber();
+  }, [phoneNumber]);
+
+  const validatePhoneNumber = () => {
+    const saudiNumberRegex = /^(05[0-9]{8}|5[0-9]{8})$/;
+    const isValid = saudiNumberRegex.test(phoneNumber);
+    setIsValidPhoneNumber(isValid);
   };
+
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    setPhoneNumber(newValue);
+    //  setTimeout(validatePhoneNumber, 300); // Call the debounceValidation after a delay when adding characters
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  console.log(isValidPhoneNumber);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -53,10 +72,9 @@ const Login = () => {
         phone: phoneNumber,
         code: otp,
       });
-      console.log(res.data.status);
       if (res.data.status === 0) {
         toast.error(res.data.message);
-        navigate("/userDashbored");
+        // navigate("/userDashbored");
       } else {
         toast.success(res.data.message);
         navigate("/userDashbored");
@@ -70,6 +88,15 @@ const Login = () => {
     let countdown = setInterval(() => {
       setTimer((prevTimer) => {
         if (prevTimer === 0) {
+          //console.log("finished");
+          try {
+            const res = myAxios.post("/api/changeCode", {
+              phone: phoneNumber,
+            });
+            console.log(res);
+          } catch (err) {
+            console.log(err);
+          }
           setIsCounterActive(false);
           clearInterval(countdown);
           return 0;
@@ -80,9 +107,21 @@ const Login = () => {
 
     return () => {
       clearInterval(countdown);
-      setTimer(120);
+      setTimer(180);
     };
   }, [isModalOpen, isCounterActive]);
+
+  const handleResend = async () => {
+    setIsCounterActive(true);
+    try {
+      const res = await myAxios.post("/api/login", {
+        phone: phoneNumber,
+      });
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const formattedTime = `${Math.floor(timer / 60)
     .toString()
@@ -101,7 +140,6 @@ const Login = () => {
                 paddingX: "2.5rem",
                 paddingY: "3rem",
                 display: "flex",
-
                 flexDirection: "column",
                 justifyContent: "center",
                 wordWrap: "break-word",
@@ -113,8 +151,8 @@ const Login = () => {
             >
               <Box
                 sx={{
-                  width: "250px",
-                  height: "60px",
+                  width: "auto",
+                  height: "80px",
                   position: "relative",
                   margin: "auto",
                   marginTop: "2rem",
@@ -137,17 +175,54 @@ const Login = () => {
                   >
                     {t("login.label")}
                   </label>
-                  <TextField
-                    id="phoneNumberInput"
-                    type="text"
-                    placeholder={t("login.placeholder")}
-                    required
-                    value={phoneNumber}
-                    onChange={handlePhoneNumberChange}
-                  />
+                  <Box
+                    sx={{
+                      border: "1px solid #999",
+                      borderRadius: ".5rem",
+                      position: "relative",
+                      zIndex: "1",
+                      textAlign: "right",
+                    }}
+                  >
+                    <img
+                      src={KSA}
+                      alt="ksa"
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        borderRadius: "50%",
+                        position: "absolute",
+                        left: "1rem",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                      }}
+                    />
+                    <TextField
+                      id="phoneNumber"
+                      type="text"
+                      placeholder="051 2345 678"
+                      value={phoneNumber}
+                      onChange={handleChange}
+                      sx={{
+                        direction: "ltr",
+                        border: "none",
+                        width: "100%",
+                        paddingLeft: "1.8rem",
+                        "& fieldset": { border: "none" },
+                        "& input[type=number]": {
+                          MozAppearance: "textfield",
+                        },
+                        "& ::placeholder": {
+                          fontSize: "20px",
+                          fontWeight: "700",
+                        },
+                      }}
+                    />
+                  </Box>
                 </Box>
                 <Button
                   type="submit"
+                  disabled={!isValidPhoneNumber}
                   sx={{
                     backgroundColor: "var(--green-color)",
                     color: "white",
@@ -161,6 +236,10 @@ const Login = () => {
                     "&:hover": {
                       backgroundColor: "var(--green-color)",
                       color: "white",
+                    },
+                    "&:disabled": {
+                      backgroundColor: "gray",
+                      color: "#ddd",
                     },
                   }}
                 >
@@ -187,7 +266,7 @@ const Login = () => {
         </Grid>
         <Modal
           open={isModalOpen}
-          // onClose={handleCloseModal}
+          onClose={handleCloseModal}
           aria-labelledby="otp-modal"
           aria-describedby="enter-otp"
         >
@@ -197,9 +276,8 @@ const Login = () => {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              maxWidth: "300px",
+              maxWidth: "350px",
               bgcolor: "background.paper",
-
               boxShadow: 24,
               padding: "1rem 1.5rem",
               borderRadius: "0.5rem",
@@ -230,7 +308,14 @@ const Login = () => {
                 <span>{enteredPhoneNumber}</span>
               </Typography>
             </Box>
-            <Box sx={{ display: "flex", marginY: "1rem", direction: "ltr" }}>
+            <Box
+              sx={{
+                display: "flex",
+                marginY: "1rem",
+                justifyContent: "center",
+                direction: "ltr",
+              }}
+            >
               {Array.from({ length: 4 }).map((_, index) => {
                 const inputIndex = index;
                 return (
@@ -255,23 +340,16 @@ const Login = () => {
                     autoFocus={index === 0}
                     id={`otp-input-${index}`}
                     sx={{
-                      width: "55px",
-                      height: "55px",
-                      borderRadius: "8px",
-                      backgroundColor: "#ffffff",
-                      fontSize: "24px",
-                      textAlign: "center",
-                      fontWeight: 400,
-                      display: "flex",
-                      placeItems: "center",
-                      color: "#3c3c3c",
-                      margin: "0 2px",
-                      border: "1px solid #e2e1e1",
-                      boxShadow: "0px 1px 5px rgba(0, 0, 0, 0.15)",
-
+                      width: "60px",
+                      marginLeft: "0.5rem", // Adjust the margin to create the desired spacing
+                      "& input": {
+                        textAlign: "center",
+                        fontSize: "20px",
+                      },
                       "& .MuiOutlinedInput-root": {
                         "&:hover fieldset": {
                           borderColor: "#14b183",
+                          paddingLeft: "30px",
                         },
                         "&.Mui-focused fieldset": {
                           borderColor: "#14b183",
@@ -327,7 +405,7 @@ const Login = () => {
                     borderRadius: "2rem",
                     width: "100%",
                   }}
-                  onClick={() => setIsCounterActive(true)}
+                  onClick={handleResend}
                 >
                   {t("login.re_btn")}
                 </Button>

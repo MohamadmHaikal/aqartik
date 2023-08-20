@@ -89,6 +89,19 @@ const HomeInformation = ({
     }));
   };
 
+  useEffect(() => {
+    if (formData) {
+      setRadioSelected(formData.advertiser_relationship);
+      setAdditionalRadioSelected(formData.advertiser_relationship_type);
+
+      if (formData.advertiser_relationship === "option3") {
+        setShowAdditionalBox(true);
+      } else {
+        setShowAdditionalBox(false);
+      }
+    }
+  }, []);
+
   const homedata = [
     {
       title: t("user_dashboard.order_details.label1"),
@@ -119,9 +132,8 @@ const HomeInformation = ({
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      radioSelected,
-      showAdditionalBox,
-      additionalRadioSelected,
+      advertiser_relationship: radioSelected,
+      advertiser_relationship_type: additionalRadioSelected,
     }));
   }, [radioSelected, showAdditionalBox, additionalRadioSelected, setFormData]);
 
@@ -360,11 +372,11 @@ const HomeInformation = ({
             >
               {[
                 {
-                  value: "exclusive",
+                  value: "حصري",
                   label: t("user_dashboard.order_details.option3_opt1"),
                 },
                 {
-                  value: "non-exclusive",
+                  value: "غير حصري",
                   label: t("user_dashboard.order_details.option3_opt2"),
                 },
               ].map((option, index) => (

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { Typography, Box, Container, Button, Grid, Link } from "@mui/material";
 
 import StarIcon from "@mui/icons-material/Star";
@@ -24,11 +24,13 @@ import { SpecialAds, PaginationAds } from "../components";
 import { List, ListItem, ListItemText, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../api/useDataFetcher ";
+import ChatContext from "../context/chatContext";
 
 const Details = () => {
   const adInfo = useLocation().state.ad;
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+
   const [per_page, set_per_page] = useState();
   const [current_page, set_current_page] = useState();
   const [ads, setAds] = useState([]);
@@ -67,6 +69,7 @@ const Details = () => {
   const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const [copied, setCopied] = useState(false);
+
   const icons = [
     {
       icon: <FavoriteIcons />,
@@ -98,6 +101,7 @@ const Details = () => {
       setTimeout(() => setCopied(false), 1500);
     });
   };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleOutsideClick);
 

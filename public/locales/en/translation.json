@@ -274,7 +274,7 @@
         "new_order": {
             "main_btn1": "next",
             "main_btn2": "Previous",
-            "main_btn3": "done",
+            "main_btn3": "send",
             "order_info": {
                 "main_title": " information",
                 "title": "Property classification",

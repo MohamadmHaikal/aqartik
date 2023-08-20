@@ -10,10 +10,13 @@ import {
 
 import { KSA } from "../../assets";
 import { useTranslation } from "react-i18next";
+import { myAxios } from "../../api/myAxios";
+import { toast } from "react-hot-toast";
+import { Navigate } from "react-router";
 
 const LogInModal = ({ open, onClose }) => {
-  const { t } = useTranslation();
-
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [step, setStep] = useState(1); // Step 1: Phone number input, Step 2: OTP verification
@@ -23,30 +26,48 @@ const LogInModal = ({ open, onClose }) => {
   const [resendDisabled, setResendDisabled] = useState(true);
   const [resendCountdown, setResendCountdown] = useState(0);
   const [codeReceived, setCodeReceived] = useState(false);
-  const [countdownFinished, setCountdownFinished] = useState(false);
+
+  const [timer, setTimer] = useState(180);
+  const [isCounterActive, setIsCounterActive] = useState(true);
+
+  useEffect(() => {
+    validatePhoneNumber();
+  }, [phoneNumber]);
 
   const validatePhoneNumber = () => {
-    const saudiNumberRegex = /^05[0-9]{8}$/;
-    setIsValidPhoneNumber(saudiNumberRegex.test(phoneNumber));
+    const saudiNumberRegex = /^(05[0-9]{8}|5[0-9]{8})$/;
+    const isValid = saudiNumberRegex.test(phoneNumber);
+    setIsValidPhoneNumber(isValid);
   };
 
-  const verifyOTP = () => {
-    const expectedOTP = "1234";
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    setPhoneNumber(newValue);
+    //  setTimeout(validatePhoneNumber, 300); // Call the debounceValidation after a delay when adding characters
+  };
 
-    if (otp === expectedOTP) {
-      // OTP is valid
-      console.log("OTP is valid"); // Replace this with your desired logic
-      setIsOTPInvalid(false); // Reset the OTP error state
-    } else {
-      // OTP is invalid
-      console.log("OTP is invalid"); // Replace this with your desired logic
-      setIsOTPInvalid(true); // Set the OTP error state to true
+  const verifyOTP = async (e) => {
+    // e.target.disabled = true;
+    try {
+      const res = await myAxios.post("/api/CheckCode", {
+        phone: phoneNumber,
+        code: otp,
+      });
+      if (res.data.status === 0) {
+        toast.error(res.data.message);
+        // navigate("/userDashbored");
+      } else {
+        toast.success(res.data.message);
+        Navigate("/userDashbored");
+        localStorage.setItem("user_token", res.data.access_token);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (step === 1) {
       // Handle logic for step 1 (phone number input)
       setStep(2); // Move to step 2 (OTP verification)
@@ -55,6 +76,14 @@ const LogInModal = ({ open, onClose }) => {
       setResendDisabled(true); // Disable "Resend" button
       setResendCountdown(5); // Start the countdown
       setCodeReceived(false); // Reset the code received state
+      try {
+        const res = await myAxios.post("/api/login", {
+          phone: phoneNumber,
+        });
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
     } else if (step === 2) {
       // Handle logic for step 2 (OTP verification)
       verifyOTP();
@@ -66,28 +95,50 @@ const LogInModal = ({ open, onClose }) => {
     setOTP("");
   };
 
-  const handleResendOTP = () => {
-    if (countdownFinished && resendDisabled) {
-      setResendDisabled(false);
-      setCountdownFinished(false);
-      setResendCountdown(5); // Restart the countdown
-      setCodeReceived(false); // Reset the code received state
-      setResendDisabled(true);
-    } else if (!countdownFinished && !resendDisabled) {
-      setResendCountdown(0); // Stop the current countdown
+  useEffect(() => {
+    let countdown = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer === 0) {
+          //console.log("finished");
+          try {
+            const res = myAxios.post("/api/changeCode", {
+              phone: phoneNumber,
+            });
+            console.log(res);
+          } catch (err) {
+            console.log(err);
+          }
+          setIsCounterActive(false);
+          clearInterval(countdown);
+          return 0;
+        }
+        return prevTimer - 1;
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(countdown);
+      setTimer(180);
+    };
+  }, [step, isCounterActive]);
+
+  const handleResend = async () => {
+    setIsCounterActive(true);
+    //console.log(resend a gain)
+    try {
+      const res = await myAxios.post("/api/login", {
+        phone: phoneNumber,
+      });
+      console.log(res);
+    } catch (err) {
+      console.log(err);
     }
   };
 
-  useEffect(() => {
-    if (resendCountdown > 0) {
-      const timer = setTimeout(() => {
-        setResendCountdown((prevCountdown) => prevCountdown - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    } else {
-      setCountdownFinished(true);
-    }
-  }, [resendCountdown]);
+  const formattedTime = `${Math.floor(timer / 60)
+    .toString()
+    .padStart(2, "0")}:${(timer % 60).toString().padStart(2, "0")}`;
+
   return (
     <Modal open={open} onClose={onClose}>
       <Box
@@ -105,7 +156,15 @@ const LogInModal = ({ open, onClose }) => {
         }}
       >
         {step === 2 && (
-          <Button onClick={handleBack} sx={{ color: "black" }}>
+          <Button
+            onClick={handleBack}
+            sx={{
+              color: "black",
+              display: "block",
+              padding: "8px 0",
+              textAlign: lang === "ar" ? "right" : "left",
+            }}
+          >
             {t("loginmodal.back_btn")}
           </Button>
         )}
@@ -167,10 +226,7 @@ const LogInModal = ({ open, onClose }) => {
                   type="text"
                   placeholder="051 2345 678"
                   value={phoneNumber}
-                  onChange={(e) => {
-                    setPhoneNumber(e.target.value);
-                    validatePhoneNumber();
-                  }}
+                  onChange={handleChange}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -257,6 +313,16 @@ const LogInModal = ({ open, onClose }) => {
                           textAlign: "center",
                           fontSize: "20px",
                         },
+                        "& .MuiOutlinedInput-root": {
+                          "&:hover fieldset": {
+                            borderColor: "#14b183",
+                            paddingLeft: "30px",
+                          },
+                          "&.Mui-focused fieldset": {
+                            borderColor: "#14b183",
+                            color: "#171718",
+                          },
+                        },
                       }}
                     />
                   );
@@ -332,12 +398,13 @@ const LogInModal = ({ open, onClose }) => {
 
           {step === 2 && (
             <Box>
-              {resendCountdown > 0 ? (
+              {isCounterActive && (
                 <Typography>
-                  ({resendCountdown} {t("loginmodal.seconds")})
+                  ({formattedTime} {t("loginmodal.seconds")})
                 </Typography>
-              ) : (
-                <Button onClick={handleResendOTP} sx={{ color: "black" }}>
+              )}
+              {!isCounterActive && (
+                <Button onClick={handleResend} sx={{ color: "black" }}>
                   {t("loginmodal.message")}
                 </Button>
               )}

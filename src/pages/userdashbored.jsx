@@ -54,7 +54,7 @@ const UserDashbored = () => {
       content = <PersonalInfo />;
       break;
     case 1:
-      content = <OutgoingOrder userData={userData} />; // my ads section
+      content = <OutgoingOrder type={0} userData={userData} />; // my ads section
       break;
     case 2:
       switch (selectedSubitem) {
@@ -62,16 +62,11 @@ const UserDashbored = () => {
           content = <NewRequests />; /// add new request
           break;
         case 1:
-          content = <MyAds userData={userData} />; /// my outgoing requests section
+          content = <OutgoingOrder type={1} userData={userData} />; // my outgoing requests section
           break;
         case 2:
-          content = (
-            <OutgoingOrder /// my icoming requests section
-              userData={userData}
-            />
-          );
+          content = <OutgoingOrder type={2} userData={userData} />; // my icoming requests section
           break;
-
         default:
           content = null;
           break;

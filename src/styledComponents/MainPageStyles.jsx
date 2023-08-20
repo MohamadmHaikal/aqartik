@@ -150,32 +150,46 @@ export const ChatDialogStyle = styled.div`
   }
 
   footer {
-    height: 60px;
+    /* height: 60px; */
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 32px 16px;
+    padding: 8px 16px;
+    flex-direction: column;
 
-    textarea {
-      background-color: transparent;
-      border: 1px solid #c9c6c6;
-      /* border: none; */
-      outline: none;
-      padding: 10px 12px;
-      border-radius: 24px;
-      resize: none;
-      flex: 1;
+    .selected-file {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: space-between;
     }
-    button {
-      background-color: transparent;
-      border: none;
-      outline: none;
-      color: white;
-      cursor: pointer;
 
-      svg {
-        color: #14b183;
-        /* color: #e3af22; */
+    .footer-container {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      gap: 8px;
+      textarea {
+        background-color: transparent;
+        border: 1px solid #c9c6c6;
+        /* border: none; */
+        outline: none;
+        padding: 10px 12px;
+        border-radius: 24px;
+        resize: none;
+        flex: 1;
+      }
+      button {
+        background-color: transparent;
+        border: none;
+        outline: none;
+        color: white;
+        cursor: pointer;
+
+        svg {
+          color: #14b183;
+          /* color: #e3af22; */
+        }
       }
     }
   }

@@ -10,6 +10,8 @@ import {
   Fade,
   CircularProgress,
 } from "@mui/material";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import Star from "../Star";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { OrderTitles } from "../NewOrder";
@@ -28,6 +30,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import useDataFetcher from "../../../api/useDataFetcher ";
+import { myAxios } from "../../../api/myAxios";
 // import './Incoming.module.css'
 
 const CircleIconButton = styled(IconButton)({
@@ -55,26 +58,40 @@ const CustomAccordionDetails = styled(AccordionDetails)({
   borderRadius: "12px",
   padding: { xs: "0rem", md: "2rem" },
 });
+const googleMapsApiKey = "AIzaSyCUSxdxRLpvkegxpk9-82sUjCylgekfGUk";
 
-const OutGoingOrders = ({ userData }) => {
+const OutGoingOrders = ({ userData, type }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
   const { data, isLoading, get } = useDataFetcher();
+
   const {
     data: CategoryData,
     isLoading: isLoadingCategoryData,
     get: getCategoryData,
   } = useDataFetcher();
+
   const [myAds, setMyAds] = useState([]);
 
   useEffect(() => {
-    get("/api/user/get_user_ads");
-  }, []);
+    if (type === 0) {
+      get("/api/user/get_user_ads");
+    } else if (type === 1) {
+      get("/api/real-estate-request/get_all_requests");
+    } else if (type === 2) {
+      get("/api/real-estate-request/get_all_requests?type=incoming");
+    }
+  }, [type]);
 
   useEffect(() => {
-    console.log(data);
-    if (data) setMyAds(data.ads.data);
+    if (type === 0) {
+      if (data) setMyAds(data.ads.data);
+    } else if (type === 1) {
+      if (data) setMyAds(data.requests.data);
+    } else if (type === 2) {
+      if (data) setMyAds(data.requests.data);
+    }
   }, [data]);
 
   const [edditInfo, setEditInfo] = useState(false);
@@ -83,47 +100,99 @@ const OutGoingOrders = ({ userData }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [MapEdit, setMapEdit] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const [adCategoryData, setAdCategoryData] = useState();
+  const [imageUrl, setImageUrl] = useState();
 
   const handleChange = (panel, ad) => async (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
     await getCategoryData(
       `https://www.dashboard.aqartik.com/api/ads/info/${ad.category_aqar.id}`
     );
+    const apiKey = googleMapsApiKey;
+    const lat = ad.lat; // Example latitude
+    const lng = ad.lng; // Example longitude
+    const zoom = ad.zoom; // Example zoom level
+    const size = "400x400"; // Example size of the image
+    setImageUrl(
+      `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${size}&markers=color:red%7Clabel:C%7C${lat},${lng}&key=${apiKey}`
+    );
   };
-
-  console.log(CategoryData);
 
   const handleEditInformation = () => {
     setEditInfo(true);
   };
+
   const handleEditLocation = () => {
     setEditLoc(true);
   };
+
   const onCancel = () => {
     setEditInfo(!edditInfo);
   };
   // const onCancelMapEdit = () => {
   //   setMapEdit(!MapEdit);
   // };
+
   const handleCloseEditLocation = () => {
     setEditLoc(!edditLoc);
   };
+
   const handleCloseEditMap = () => {
     setMapEdit(!MapEdit);
   };
+
   const handleModalOpen = () => {
     setModalOpen(true);
   };
+
   const handleModalClose = () => {
     setModalOpen(false);
   };
+
   const handleMapEdit = () => {
     setMapEdit(true);
   };
+
+  const handleRefreshing = async (id) => {
+    try {
+      const res = await myAxios.get(`/api/ads/refresh_ads/${id}`);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSpecialAd = async (id) => {
+    try {
+      const res = await myAxios.get(`/api/ads/make_ads_special/${id}`);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return !isLoading ? (
     <Box sx={{ padding: { xs: "16px 5px", sm: "16px 56px" } }}>
-      <OrderTitles title={t("user_dashboard.incoming_orders.page_title")} />
+      <Typography
+        variant="h4"
+        sx={{
+          fontWeight: "600",
+          marginBottom: "24px",
+          marginTop: "8px",
+          fontSize: { xs: "1.2rem", md: "1.5rem" },
+        }}
+      >
+        {type === 0
+          ? lang === "ar"
+            ? "اعلاناتي"
+            : "my ads"
+          : type === 1
+          ? lang === "ar"
+            ? "الطلبات الصادرة"
+            : "outgoing orders"
+          : lang === "ar"
+          ? "الطلبات الواردة"
+          : "incoming orders"}
+      </Typography>
       <Box
         sx={{
           overflowY: "auto",
@@ -171,6 +240,13 @@ const OutGoingOrders = ({ userData }) => {
                       ? t("user_dashboard.incoming_orders.ad_expanded.one")
                       : t("user_dashboard.incoming_orders.ad_expanded.two")}
                   </Typography>
+                  <Link
+                    to="/EditAds"
+                    state={{ ad: ad }}
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
+                    {lang === "ar" ? "تعديل" : "edit"}
+                  </Link>
                 </Box>
               </CustomAccordionSummary>
             </Box>
@@ -214,7 +290,11 @@ const OutGoingOrders = ({ userData }) => {
                     {edditInfo && (
                       <Fade in={edditInfo}>
                         <Box>
-                          <EditInformation ad={ad} onCancel={onCancel} />
+                          <EditInformation
+                            type={type}
+                            ad={ad}
+                            onCancel={onCancel}
+                          />
                         </Box>
                       </Fade>
                     )}
@@ -286,6 +366,7 @@ const OutGoingOrders = ({ userData }) => {
                       <Fade in={edditLoc}>
                         <Box>
                           <EditLocation
+                            type={type}
                             ad={ad}
                             onCancel={handleCloseEditLocation}
                             interfaces={CategoryData.interfaces}
@@ -361,6 +442,7 @@ const OutGoingOrders = ({ userData }) => {
                       <Fade in={descriptionEdit}>
                         <Box>
                           <EditDescription
+                            type={type}
                             ad={ad}
                             onCancel={() => {
                               setDescriptionEdit(false);
@@ -419,17 +501,6 @@ const OutGoingOrders = ({ userData }) => {
                       >
                         {t("user_dashboard.incoming_orders.card3.title")}
                       </Typography>
-
-                      <Typography
-                        sx={{
-                          color: "var(--green-color)",
-                          fontWeight: "600",
-                          cursor: "pointer",
-                        }}
-                        onClick={handleModalOpen}
-                      >
-                        {t("user_dashboard.outgoing_requests.state_btn")}
-                      </Typography>
                     </Box>
                     <Box
                       sx={{
@@ -441,15 +512,27 @@ const OutGoingOrders = ({ userData }) => {
                         {" "}
                         {t("user_dashboard.incoming_orders.card3.label1")}
                       </Typography>
-                      <Typography
-                        sx={{
-                          color: "rgb(244, 67, 54)",
-                          fontWeight: "600",
-                          marginBottom: "1rem",
-                        }}
-                      >
-                        غير معروض
-                      </Typography>
+                      {ad?.status === 0 ? (
+                        <Typography
+                          sx={{
+                            color: "rgb(244, 67, 54)",
+                            fontWeight: "600",
+                            marginBottom: "1rem",
+                          }}
+                        >
+                          غير معروض
+                        </Typography>
+                      ) : (
+                        <Typography
+                          sx={{
+                            color: "var(--main-color)",
+                            fontWeight: "600",
+                            marginBottom: "1rem",
+                          }}
+                        >
+                          معروض
+                        </Typography>
+                      )}
                     </Box>
                   </OrderCard>
                   <OrderCard>
@@ -481,7 +564,11 @@ const OutGoingOrders = ({ userData }) => {
                     {MapEdit && (
                       <Fade in={MapEdit}>
                         <Box>
-                          <EditMap ad={ad} onCancel={handleCloseEditMap} />
+                          <EditMap
+                            type={type}
+                            ad={ad}
+                            onCancel={handleCloseEditMap}
+                          />
                         </Box>
                       </Fade>
                     )}
@@ -491,8 +578,11 @@ const OutGoingOrders = ({ userData }) => {
                           <Typography
                             sx={{ color: "rgb(132, 132, 132)", width: "35%" }}
                           >
-                            8070 العويقلة، 2709، صلاح الدين، الرياض 12434،
-                            السعودية
+                            {ad?.city +
+                              ", " +
+                              ad?.neighborhood +
+                              ", " +
+                              ad?.road}
                           </Typography>
                           <Box
                             sx={{
@@ -505,7 +595,7 @@ const OutGoingOrders = ({ userData }) => {
                             }}
                           >
                             <img
-                              src={Map}
+                              src={imageUrl}
                               alt="My Image"
                               style={{
                                 position: "absolute",
@@ -520,59 +610,25 @@ const OutGoingOrders = ({ userData }) => {
                     )}
                   </OrderCard>
                 </Box>
-              </Box>
-              <OrderCard title="وحدات هذا العقار ">
-                <Link
-                  to="/EditAds"
-                  state={{ ad: ad }}
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                    "&:hover": {
-                      backgroundColor: "rgba(56, 31, 118, 0.04)",
-                    },
-                  }}
-                >
+                <Box sx={{ display: "flex", justifyContent: "left" }}>
                   <Box
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      paddingY: "2rem",
-                    }}
+                    onClick={() => handleRefreshing(ad.id)} // Corrected prop name here
+                    sx={{ display: "flex", alignItems: "center" }}
                   >
-                    <Box
+                    <Typography>تحديث</Typography>
+                    <RefreshIcon
                       sx={{
-                        display: { xs: "block", md: "flex" },
-                        alignItems: "center",
-                        justifyContent: "space-between",
+                        cursor: "pointer",
+                        marginX: "10px",
+                        fontSize: "2rem",
                       }}
-                    >
-                      <img
-                        src={Logo}
-                        alt=""
-                        style={{ width: "80px", objectFit: "cover" }}
-                      />
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          marginInlineStart: "1rem",
-                          alignItems: "start",
-                        }}
-                      >
-                        <Typography>fkfjg</Typography>
-                        <Typography sx={{ color: "red" }}>
-                          {" "}
-                          غير معروض (أوف لابن)
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <ChevronLeftIcon sx={{ color: "gray" }} />
+                    />
                   </Box>
-                </Link>
-              </OrderCard>
+                  <Box onClick={() => handleSpecialAd(ad.id)}>
+                    <Star isSpecial={ad.is_special} />
+                  </Box>
+                </Box>
+              </Box>
             </CustomAccordionDetails>
           </CustomAccordion>
         ))}

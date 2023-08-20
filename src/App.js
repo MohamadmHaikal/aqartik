@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet";
 import useDataFetcher from "./api/useDataFetcher ";
 import { Maintence } from "./assets";
+import EditOrder from "./components/user_dashbord/OutgoingOrder/EditOrder";
 
 function App() {
   const isMediumScreen = useMediaQuery("(min-width:900px)");
@@ -198,6 +199,14 @@ function App() {
             element={
               <Layout showNavFooter={false}>
                 <EditAds />
+              </Layout>
+            }
+          />
+          <Route
+            path="/EditOrder"
+            element={
+              <Layout showNavFooter={false}>
+                <EditOrder />
               </Layout>
             }
           />

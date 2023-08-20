@@ -10,10 +10,12 @@ const HomeDetails = ({ formData, setFormData, categoryQuantity, setError }) => {
     formData.aqarCategoryQuantity || []
   );
   useEffect(() => {
-    if (formData.QuantityAds && aqarCategoryQuantity.length === 0) {
+    const is = aqarCategoryQuantity.every((item) => item?.quantity == 0);
+    console.log(is);
+    if (formData.QuantityAds && is) {
       setAqarCategoryQuantity(formData.QuantityAds);
     }
-  }, []);
+  }, [aqarCategoryQuantity]);
   useEffect(() => {
     if (aqarCategoryQuantity.length === 0) {
       categoryQuantity.map((ele, index) => {

@@ -10,23 +10,45 @@ import {
   Radio,
   Modal,
   Link,
+  CircularProgress,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
-import { event } from "jquery";
+import { toast } from "react-hot-toast";
 
 const PersonalInfo = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const { data, isLoading, error, get, post } = useDataFetcher();
+  const {
+    data: membershipsData,
+    isLoading: isGettingMemberships,
+    get: getMembershipsData,
+  } = useDataFetcher();
+
+  const [formData, setFormData] = useState({});
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+
+  const [memberships, setMemberShips] = useState([]);
   const [userData, setUserdata] = useState([]);
-  const [username, setUserName] = useState(userData.username);
-  const [phoneNumber, setPhoneNumber] = useState(userData.phone);
-  const [compayName, setCompanyName] = useState(userData.company_name);
-  const [officeName, setOfficeName] = useState(userData.office_name);
-  const [email, setEmail] = useState(userData.email);
-  const [membershipId, setMembershipId] = useState(userData.membershipId);
-  const [about, setAbout] = useState(userData.about);
+  const [username, setUserName] = useState();
+  const [phoneNumber, setPhoneNumber] = useState();
+  const [compayName, setCompanyName] = useState();
+  const [officeName, setOfficeName] = useState();
+  const [email, setEmail] = useState();
+  const [about, setAbout] = useState();
+  const [nationalID, setNationalID] = useState();
+
+  const [membershipId, setMembershipId] = useState("");
+
+  const [license, setLicense] = useState("");
+  const [link, setLink] = useState("");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imageFile, setImageFile] = useState();
+  const [linkError, setLinkError] = useState("");
 
   useEffect(() => {
     get(`api/user/get_user_data`);
@@ -34,30 +56,36 @@ const PersonalInfo = () => {
   useEffect(() => {
     if (data) {
       setUserdata(data.user);
-      setPhoneNumber(userData.phone);
-      console.log(data.user);
     }
   }, [data]);
 
-  const [formData, setFormData] = useState({
-    fullname: "",
-    email: "",
-    nationalId: "",
-    phoneNumber: "",
-    description: "",
-  });
+  useEffect(() => {
+    setUserName(userData.username);
+    setPhoneNumber(userData.phone);
+    setOfficeName(userData.office_name);
+    setCompanyName(userData.company_name);
+    setEmail(userData.email);
+    setNationalID(userData.IdNumber);
+    setAbout(userData.about);
+    setMembershipId(userData.type_id);
+    setLink(userData.licenseLink);
+    if (userData.licenseLink) {
+      setLicense("yes");
+    }
+  }, [userData]);
 
-  const [errors, setErrors] = useState({});
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [link, setLink] = useState("");
-  const [linkError, setLinkError] = useState("");
-  const [license, setLicense] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [membershipType, setMembershipType] = useState("");
+  useEffect(() => {
+    getMembershipsData(`/api/user/get_user_types`);
+  }, []);
+
+  useEffect(() => {
+    if (membershipsData) {
+      setMemberShips(membershipsData.types);
+    }
+  }, [membershipsData]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-
     // Validate name input
     if (id === "fullname") {
       if (/^[A-Za-z\s]+$/.test(value)) {
@@ -118,6 +146,7 @@ const PersonalInfo = () => {
         }));
       }
     }
+
     switch (id) {
       case "fullname":
         setUserName(value);
@@ -132,7 +161,7 @@ const PersonalInfo = () => {
         setEmail(value);
         break;
       case "nationalId":
-        setMembershipId(value);
+        setNationalID(value);
         break;
       case "phoneNumber":
         setPhoneNumber(value);
@@ -143,12 +172,81 @@ const PersonalInfo = () => {
       default:
         break;
     }
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: value,
-    }));
   };
+
+  useEffect(() => {
+    if (username) {
+      setFormData((prev) => ({
+        ...prev,
+        username: username,
+      }));
+    }
+    if (compayName) {
+      setFormData((prev) => ({
+        ...prev,
+        company_name: compayName,
+      }));
+    }
+    if (officeName) {
+      setFormData((prev) => ({
+        ...prev,
+        office_name: officeName,
+      }));
+    }
+    if (imageFile) {
+      setFormData((prev) => ({
+        ...prev,
+        logo: imageFile,
+      }));
+    }
+    if (email) {
+      setFormData((prev) => ({
+        ...prev,
+        email: email,
+      }));
+    }
+    if (nationalID) {
+      setFormData((prev) => ({
+        ...prev,
+        IdNumber: nationalID,
+      }));
+    }
+    if (membershipId) {
+      setFormData((prev) => ({
+        ...prev,
+        type_id: membershipId,
+      }));
+    }
+    if (link) {
+      setFormData((prev) => ({
+        ...prev,
+        licenseLink: link,
+      }));
+    }
+    if (about) {
+      setFormData((prev) => ({
+        ...prev,
+        about: about,
+      }));
+    }
+    if (phoneNumber) {
+      setFormData((prev) => ({
+        ...prev,
+        phone: phoneNumber,
+      }));
+    }
+  }, [
+    username,
+    compayName,
+    officeName,
+    about,
+    email,
+    imageFile,
+    nationalID,
+    membershipId,
+    link,
+    phoneNumber,
+  ]);
 
   const handleLicenseChange = (e) => {
     setLicense(e.target.value);
@@ -162,11 +260,12 @@ const PersonalInfo = () => {
     setIsModalOpen(false);
   };
   const handleMembershipTypeChange = (e) => {
-    setMembershipType(e.target.value);
+    setMembershipId(e.target.value);
   };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
+    setImageFile(file);
     if (file && file.size <= 2 * 1024 * 1024) {
       setSelectedImage(URL.createObjectURL(file));
     } else {
@@ -189,31 +288,58 @@ const PersonalInfo = () => {
       setLinkError("");
     }
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Check if fullname, nationalId, and link are empty
-    if (
-      formData.fullname.trim() === "" ||
-      formData.nationalId.trim() === "" ||
-      link.trim() === ""
-    ) {
-      setErrors({
-        fullname: lang === "ar" ? "هذا الحقل مطلوب" : "this field in required",
-        nationalId:
-          lang === "ar" ? "هذا الحقل مطلوب" : "this field in required",
-        link: lang === "ar" ? "هذا الحقل مطلوب" : "this field in required",
-      });
-      return;
+    setIsFormSubmitting(true);
+    const formDataSend = new FormData();
+    for (const key in formData) {
+      if (formData.hasOwnProperty(key)) {
+        formDataSend.append(key, formData[key]);
+      }
     }
-
-    // Handle form submission here
-    console.log("Form submitted successfully!");
+    try {
+      const response = await fetch(
+        `https://www.dashboard.aqartik.com/api/user/save_user_data`,
+        {
+          headers: {
+            // "Content-Type": "multipart/form-data",
+            authorization: `Bearer ${localStorage.getItem("user_token")}`,
+          },
+          method: "POST",
+          body: formDataSend,
+        }
+      );
+      const data = await response.json();
+      if (data) {
+        setIsFormSubmitting(false);
+        toast.success(
+          lang === "ar" ? "تمت العملية بنجاح" : "The operation was successful"
+        );
+      }
+    } catch (error) {
+      console.error("Error sending FormData:", error);
+      toast.error(
+        lang === "ar"
+          ? "فشل في اتمام العملية"
+          : "Failed to complete the operation"
+      );
+      setIsFormSubmitting(false);
+    }
   };
-  const radioOptions = [
-    ["Option 1", "Option 2", "option3", "Option 4", "option5"],
-  ];
-  return (
+
+  return isLoading || isFormSubmitting ? (
+    <Box
+      sx={{
+        minHeight: "80vh",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <CircularProgress color="success" />
+    </Box>
+  ) : (
     <Box sx={{ marginTop: "10rem", width: "90%", margin: "auto" }}>
       <form onSubmit={handleSubmit}>
         <Box
@@ -239,7 +365,7 @@ const PersonalInfo = () => {
               color: "gray",
               backgroundImage: selectedImage
                 ? `url(${selectedImage})`
-                : `https://www.dashboard.aqartik.com//images/avatar/${userData.image}`,
+                : `url(https://www.dashboard.aqartik.com/assets/images/users/logo/${userData?.image?.name})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               alignItems: "center",
@@ -344,7 +470,7 @@ const PersonalInfo = () => {
             </label>
             <TextField
               id="nationalId"
-              value={membershipId}
+              value={nationalID}
               type="text"
               fullWidth
               sx={{
@@ -401,8 +527,8 @@ const PersonalInfo = () => {
               {t("user_dashboard.personal_info.label9")}
             </label>
             <RadioGroup
-              name={userData.type_id}
-              value={membershipType}
+              // name={userData.type_id}
+              value={membershipId}
               onChange={handleMembershipTypeChange}
               sx={{
                 display: "flex",
@@ -410,45 +536,35 @@ const PersonalInfo = () => {
                 marginTop: "1rem",
               }}
             >
-              {radioOptions.map((row, rowIndex) => (
-                <div
-                  key={rowIndex}
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    flexWrap: "wrap",
-                    marginBottom: "1rem",
+              {memberships.map((membership, index) => (
+                <FormControlLabel
+                  key={membership.id}
+                  value={membership.id}
+                  control={<Radio sx={{ opacity: "0" }} />}
+                  label={
+                    lang === "ar" ? membership.ar_name : membership.en_name
+                  }
+                  sx={{
+                    backgroundColor:
+                      membershipId == membership.id
+                        ? "var(--green-color)"
+                        : "white",
+                    color: membershipId == membership.id ? "white" : "black",
+                    border: "1px solid #cdcdcd",
+                    width: "8rem",
+                    marginBottom: "0.5rem",
+                    borderRadius: "0",
+                    padding: "0.3rem",
+                    position: "relative",
+                    "& .MuiFormControlLabel-label": {
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                    },
                   }}
-                >
-                  {row.map((value, index) => (
-                    <FormControlLabel
-                      key={value}
-                      value={value}
-                      control={<Radio sx={{ opacity: "0" }} />}
-                      label={value}
-                      sx={{
-                        backgroundColor:
-                          membershipType === value
-                            ? "var(--green-color)"
-                            : "white",
-                        color: membershipType === value ? "white" : "black",
-                        border: "1px solid #cdcdcd",
-                        width: "8rem",
-                        marginBottom: "0.5rem",
-                        borderRadius: "0",
-                        padding: "0.3rem",
-                        position: "relative",
-                        "& .MuiFormControlLabel-label": {
-                          position: "absolute",
-                          top: "50%",
-                          left: "50%",
-                          transform: "translate(-50%, -50%)",
-                        },
-                      }}
-                      name={`custom-radio-${rowIndex}-${index}`}
-                    />
-                  ))}
-                </div>
+                  name={`custom-radio-${index}`}
+                />
               ))}
             </RadioGroup>
           </Grid>

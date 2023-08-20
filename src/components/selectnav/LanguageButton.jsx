@@ -11,11 +11,10 @@ const LanguageButton = ({ isMenuButton }) => {
   };
 
   const arButtonView = i18n.language === "en" ? true : false;
-  const enButtonView = i18n.language === "ar" ? true : false;
 
   return (
     <>
-      {arButtonView && (
+      {arButtonView ? (
         <Button
           onClick={() => handleLanguageChange("ar")}
           sx={{
@@ -48,8 +47,7 @@ const LanguageButton = ({ isMenuButton }) => {
             </Typography>
           </Typography>
         </Button>
-      )}
-      {enButtonView && (
+      ) : (
         <Button
           onClick={() => handleLanguageChange("en")}
           sx={{

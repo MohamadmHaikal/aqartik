@@ -20,6 +20,8 @@ const CropeerImage = ({
   setImages,
   selectedImage,
   setSelectedImage,
+  thumbnail,
+  setThumbnail,
 }) => {
   const { t } = useTranslation();
   const [isImageSelected, setIsImageSelected] = useState();
@@ -27,8 +29,6 @@ const CropeerImage = ({
   const cropperRef = useRef(null);
 
   const [open, setOpen] = useState(false);
-
-  const [thumbnail, setThumbnail] = useState();
 
   useEffect(() => {
     const button = document.getElementById("cropper-button");
@@ -55,45 +55,59 @@ const CropeerImage = ({
 
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
-
     if (type === 1) {
       if (file) {
         const reader = new FileReader();
         reader.onload = () => {
           setSelectedImage(reader.result);
-          setThumbnail(reader.result);
           handleOpen();
         };
         reader.readAsDataURL(file);
       }
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        thumbnail: file,
-      }));
     }
     if (type === 2) {
       if (file) {
         const reader = new FileReader();
         reader.onload = () => {
-          setImages((prev) => [...prev, reader.result]);
           setIsImageSelected(reader.result);
+
           handleOpen();
         };
         reader.readAsDataURL(file);
       }
-      setSelectedImages((prevImages) => [...prevImages, file]);
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        images: prevFormData?.images ? [...prevFormData?.images, file] : [file], // Append new blob to the array
-      }));
     }
   };
 
-  const handleCrop = () => {
+  const handleCrop = async () => {
     if (cropperRef.current) {
+      const counter = 0;
       const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas();
       if (croppedCanvas) {
         const croppedImageUrl = croppedCanvas.toDataURL();
+
+        const blob = await (await fetch(croppedImageUrl)).blob();
+
+        const file = new File([blob], `croppedImage${counter}.png`, {
+          type: blob.type,
+        });
+
+        if (type === 1) {
+          setThumbnail(croppedImageUrl);
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            thumbnail: file,
+          }));
+        }
+        if (type === 2) {
+          setImages((prev) => [...prev, croppedImageUrl]);
+          setSelectedImages((prevImages) => [...prevImages, file]);
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            images: prevFormData?.images
+              ? [...prevFormData?.images, file]
+              : [file], // Append new blob to the array
+          }));
+        }
       }
     }
     handleClose();
@@ -133,7 +147,10 @@ const CropeerImage = ({
         {hasBackground && thumbnail ? (
           <>
             <img
-              src={thumbnail}
+              src={
+                `https://www.dashboard.aqartik.com/assets/images/ads/image/${formData?.thumbnail?.name}` ||
+                thumbnail
+              }
               alt="Selected Image"
               style={{ display: "none" }}
             />

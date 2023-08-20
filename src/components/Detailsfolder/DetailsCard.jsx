@@ -17,6 +17,9 @@ const customLinkStyles = {
 const DetailsCard = ({ adInfo }) => {
   const [modalReportOpen, setModalReportOpen] = useState(false);
   const { isUserSelected, setIsUserSelected } = useContext(ChatContext);
+  const { userKlickedData, setUserKlickedData } = useContext(ChatContext);
+  const isMyAd = JSON.parse(localStorage.getItem("user")).id === adInfo.user.id;
+
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
@@ -220,35 +223,40 @@ const DetailsCard = ({ adInfo }) => {
           />
           {t("details_page.details_card.report_button")}
         </Button>
-        <Button
-          sx={{
-            backgroundColor: "white",
-            color: "var(--green-color)",
-            borderRadius: "15px",
-            paddingX: "2.5rem",
-            fontSize: "15px",
-            minWidth: "64px",
-            width: "45%",
-            padding: "0.8rem",
-
-            border: "1px solid var(--green-color)",
-            "&:hover": {
+        {!isMyAd && (
+          <Button
+            sx={{
               backgroundColor: "white",
               color: "var(--green-color)",
-              boxShadow: "none",
-            },
-          }}
-          onClick={() => setIsUserSelected(true)}
-        >
-          <ChatIcon
-            sx={{
-              color: "var(--green-color)",
-              marginLeft: lang === "ar" && "15px",
-              marginRight: lang === "en" && "15px",
+              borderRadius: "15px",
+              paddingX: "2.5rem",
+              fontSize: "15px",
+              minWidth: "64px",
+              width: "45%",
+              padding: "0.8rem",
+
+              border: "1px solid var(--green-color)",
+              "&:hover": {
+                backgroundColor: "white",
+                color: "var(--green-color)",
+                boxShadow: "none",
+              },
             }}
-          />
-          {t("details_page.details_card.chat_button")}
-        </Button>
+            onClick={() => {
+              setIsUserSelected(true);
+              setUserKlickedData(adInfo?.user);
+            }}
+          >
+            <ChatIcon
+              sx={{
+                color: "var(--green-color)",
+                marginLeft: lang === "ar" && "15px",
+                marginRight: lang === "en" && "15px",
+              }}
+            />
+            {t("details_page.details_card.chat_button")}
+          </Button>
+        )}
         <ReportModal open={modalReportOpen} onClose={handleReportCloseModal} />
       </Box>
     </>
