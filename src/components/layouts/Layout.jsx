@@ -11,6 +11,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import ChatContext from "../../context/chatContext";
 import { useTranslation } from "react-i18next";
 import { Toaster } from "react-hot-toast";
+import DownloadingIcon from "@mui/icons-material/Downloading";
 import ClearIcon from "@mui/icons-material/Clear";
 const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
   const location = useLocation();
@@ -63,16 +64,19 @@ const ChatDialog = () => {
     setFile,
     userKlickedData,
     setUserKlickedData,
+    fileData,
+    setFileData,
   } = useContext(ChatContext);
 
   const { i18n } = useTranslation();
   const lang = i18n.language;
   const fileInputRef = useRef(null);
+
   const handleSend = async () => {
     const formData = new FormData();
     formData.append("message", message);
     formData.append("to_user_id", recipientId);
-    formData.append("attachment", file);
+    formData.append("file", file);
     setIsSendMessage((prev) => !prev);
     await fetch("https://www.dashboard.aqartik.com/api/chat/sendMessage", {
       method: "POST",
@@ -83,7 +87,6 @@ const ChatDialog = () => {
     });
   };
   const handleAttachFile = () => {
-    // Trigger the click event of the file input when the icon is clicked
     fileInputRef.current.click();
   };
 
@@ -123,17 +126,29 @@ const ChatDialog = () => {
                     : "recieved-message"
                 }`}
               >
-                {/* {ele.file ||
-                  (ele.attachment && (
-                    <a
-                      href={ele.file.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {ele.file.name}
-                    </a>
-                  ))} */}
                 <p>{ele?.message || ele.body}</p>
+
+                {ele?.attachment && (
+                  <a
+                    style={{
+                      textDecoration: "none",
+                      color: "white",
+                      backgroundColor: "rgba(200,200,200,.5)",
+                      padding: "8px 4px",
+                      borderRadius: "8px",
+                      display: "flex",
+                      gap: "8px",
+                      alignItems: "center",
+                      marginTop: ".5rem",
+                    }}
+                    href={`https://www.dashboard.aqartik.com/assets/chat/attachment/${ele.attachment}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>{ele.attachment}</span>
+                    <DownloadingIcon />
+                  </a>
+                )}
               </div>
               <span
                 style={{
@@ -181,7 +196,15 @@ const ChatDialog = () => {
               // Handle the selected file
               const selectedFile = e.target.files[0];
               setFile(selectedFile);
-              // Do something with the selected file, e.g., attach it to the message
+              const reader = new FileReader();
+              reader.onload = () => {
+                const fileData = {
+                  filename: selectedFile.name,
+                  content: reader.result,
+                };
+                setFileData(fileData);
+              };
+              reader.readAsArrayBuffer(selectedFile);
             }}
           />
           <button onClick={handleSend}>

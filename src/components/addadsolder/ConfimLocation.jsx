@@ -153,6 +153,10 @@ const ConfimLocation = ({ formData, setFormData, interfaces, mapData }) => {
           width: "100%",
           borderRadius: "12px",
           textAlign: lang === "ar" ? "right" : "left",
+          "&[readonly]": {
+            backgroundColor: "lightgray",
+            color: "darkgray",
+          },
         }}
       />
       <InputLabel sx={{ color: "black", fontWeight: "500", marginTop: "1rem" }}>
@@ -170,20 +174,15 @@ const ConfimLocation = ({ formData, setFormData, interfaces, mapData }) => {
         className={`${styles.select} select`}
         classes={lang === "ar" && { icon: styles.selectIcon }}
         sx={{
-          borderRadius: "12px !important",
-          boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
-          border: "1px solid rgba(0, 0, 0, 0.06) !important",
-          paddingBlock: "5px",
-          height: "48px",
           width: "100%",
-          marginBlock: "4px 12px",
-        }}
-        MenuProps={{
-          PaperProps: {
-            style: {
-              borderRadius: "1rem",
+          marginTop: ".2rem",
+          padding: 0,
+          borderRadius: "6px",
+          textAlign: lang === "ar" ? "right" : "left",
+          "& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+            {
+              padding: "10px 4px", // Remove padding from the input element
             },
-          },
         }}
       >
         {interfaces.map((interface_item) => (
@@ -195,7 +194,7 @@ const ConfimLocation = ({ formData, setFormData, interfaces, mapData }) => {
                 : ""
             }
           >
-            {interface_item.en_name}
+            {lang === "ar" ? interface_item.ar_name : interface_item.en_name}
           </MenuItem>
         ))}
       </Select>

@@ -38,33 +38,38 @@ const HomeInformation = ({
   const [inputValues, setInputValues] = useState(formData.inputValues || {});
 
   useEffect(() => {
-    if (formData.price && formData.space && formData.width && formData.height) {
-      setInputValues((prev) => ({
-        ...prev,
-        price: formData.price,
-      }));
-    }
-    if (formData.space) {
-      setInputValues((prev) => ({
-        ...prev,
-        area: formData.space,
-        price: formData.price,
-      }));
-    }
-    if (formData.width) {
-      setInputValues((prev) => ({
-        ...prev,
-        width: formData.width,
-      }));
-    }
-    if (formData.height) {
-      setInputValues((prev) => ({
-        ...prev,
-        height: formData.height,
-      }));
-    }
-    if (formData.type_aqar) {
-      setSelectedtype(formData.type_aqar.id);
+    if (Object.keys(inputValues).length > 0) {
+      return;
+    } else {
+      if (
+        formData.price &&
+        formData.space &&
+        formData.width &&
+        formData.height
+      ) {
+        setInputValues((prev) => ({
+          ...prev,
+          price: formData.price,
+        }));
+        if (formData.space) {
+          setInputValues((prev) => ({
+            ...prev,
+            area: formData.space,
+          }));
+        }
+        if (formData.width) {
+          setInputValues((prev) => ({
+            ...prev,
+            width: formData.width,
+          }));
+        }
+        if (formData.height) {
+          setInputValues((prev) => ({
+            ...prev,
+            height: formData.height,
+          }));
+        }
+      }
     }
   }, []);
 
@@ -241,15 +246,18 @@ const HomeInformation = ({
               type="text"
               name={item.name}
               placeholder={item.placeholder}
+              size="small"
               value={inputValues[`${item.name}`] || ""}
               onChange={handleInputChange}
-              error={inputErrors[`input-${index}`]}
-              helperText={inputErrors[`input-${index}`] ? "قيمة غير صحيحة" : ""}
+              // error={inputErrors[`input-${index}`]}
+              // helperText={inputErrors[`input-${index}`] ? "قيمة غير صحيحة" : ""}
               sx={{
+                width: "100%",
                 borderRadius: "12px",
-                textAlign: "right",
-                "& input[type=number]": {
-                  " WebkitAppearance": "textfield",
+                textAlign: lang === "ar" ? "right" : "left",
+                "&[readonly]": {
+                  backgroundColor: "lightgray",
+                  color: "darkgray",
                 },
               }}
             />
@@ -261,7 +269,13 @@ const HomeInformation = ({
           {lang === "ar" ? "سكني أو تجاري" : "Residential or commercial"}
         </InputLabel>
         <Select
-          value={selectedtype}
+          value={
+            selectedtype
+              ? selectedtype
+              : formData.type_aqar
+              ? formData.type_aqar.id
+              : ""
+          }
           onChange={handleCityChange}
           label=""
           required
@@ -269,20 +283,15 @@ const HomeInformation = ({
           className={`${styles.select} select`}
           classes={lang === "ar" && { icon: styles.selectIcon }}
           sx={{
-            borderRadius: "12px !important",
-            boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
-            border: "1px solid rgba(0, 0, 0, 0.06) !important",
-            paddingBlock: "5px",
-            height: "48px",
             width: "100%",
-            marginBlock: "4px 16px",
-          }}
-          MenuProps={{
-            PaperProps: {
-              style: {
-                borderRadius: "1rem",
+            marginTop: ".2rem",
+            padding: 0,
+            borderRadius: "6px",
+            textAlign: lang === "ar" ? "right" : "left",
+            "& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+              {
+                padding: "10px 4px", // Remove padding from the input element
               },
-            },
           }}
         >
           {type_aqar?.map((type) => (
@@ -340,7 +349,8 @@ const HomeInformation = ({
                     radioSelected === value ? "var(--green-color)" : "white",
                   color: radioSelected === value ? "white" : "black",
                   border: "1px solid #cdcdcd",
-                  width: "30%",
+                  // width: "30%",
+                  flex: "1",
                   marginX: "0",
                   borderRadius: value === "option3" ? "4px" : "0",
                   padding: "0.3rem",

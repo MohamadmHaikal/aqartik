@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, TextField, Button } from "@mui/material";
-import { OrderTitles } from ".";
+import { Box, Typography, Button, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-const OrderRoomsNum = ({
+const EditHomeDetails = ({
   formData,
   setFormData,
   categoryQuantity,
@@ -18,11 +17,10 @@ const OrderRoomsNum = ({
   useEffect(() => {
     const is = aqarCategoryQuantity.every((item) => item?.quantity == 0);
     console.log(is);
-    if (formData.QuantityRequest && is) {
-      setAqarCategoryQuantity(formData.QuantityRequest);
+    if (formData.QuantityAds && is) {
+      setAqarCategoryQuantity(formData.QuantityAds);
     }
   }, [aqarCategoryQuantity]);
-
   useEffect(() => {
     if (aqarCategoryQuantity.length === 0) {
       categoryQuantity.map((ele, index) => {
@@ -241,4 +239,4 @@ const OrderRoomsNum = ({
   );
 };
 
-export default OrderRoomsNum;
+export default EditHomeDetails;

@@ -1,26 +1,17 @@
 import { createContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import useDataFetcher from "../api/useDataFetcher ";
 
 const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [recipientId, setRecipientId] = useState();
-  const { data: userData, isLoading, get } = useDataFetcher();
+
   useEffect(() => {
-    if (!localStorage.getItem("user")) {
-      get("/api/user/get_user_data");
-    } else {
+    if (localStorage.getItem("user")) {
       setUser(JSON.parse(localStorage.getItem("user")));
     }
   }, []);
-  useEffect(() => {
-    if (userData) {
-      localStorage.setItem("user", JSON.stringify(userData.user));
-      setUser(userData.user);
-    }
-  }, [userData]);
 
   const [isUserSelected, setIsUserSelected] = useState(false);
   const [socket, setSocket] = useState(null);
@@ -28,21 +19,23 @@ export const ChatProvider = ({ children }) => {
   const [message, setMessage] = useState();
   const [isSendMessage, setIsSendMessage] = useState();
   const [file, setFile] = useState();
+  const [fileData, setFileData] = useState();
 
   useEffect(() => {
-    if (socket === null && user) {
+    if (user) {
       const newSocket = io("http://localhost:3001");
       setSocket(newSocket);
       return () => {
         newSocket.disconnect();
       };
     }
-  }, [socket, user]);
-
+  }, [user]);
   useEffect(() => {
     if (socket === null) return;
-    user && socket.emit("addNewUser", user?.id);
+    socket && socket.emit("addNewUser", user.id);
   }, [socket]);
+
+  console.log(socket);
 
   //send message
   useEffect(() => {
@@ -51,6 +44,7 @@ export const ChatProvider = ({ children }) => {
       message: message,
       senderId: user.id,
       recipientId,
+      fileData: fileData,
     });
     setMessage("");
     setMessages((prev) => [
@@ -59,7 +53,7 @@ export const ChatProvider = ({ children }) => {
         message: message,
         recipientId,
         senderId: user.id,
-        file: file,
+        fileData,
       },
     ]);
   }, [isSendMessage]);
@@ -68,7 +62,6 @@ export const ChatProvider = ({ children }) => {
 
   useEffect(() => {
     if (socket === null) return;
-
     // Listen for "getMessage" event
     socket.on("getMessage", (res) => {
       const isInChat = recipientId === res.senderId;
@@ -116,6 +109,8 @@ export const ChatProvider = ({ children }) => {
         setFile,
         userKlickedData,
         setUserKlickedData,
+        fileData,
+        setFileData,
       }}
     >
       {children}

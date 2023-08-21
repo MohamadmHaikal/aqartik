@@ -29,6 +29,20 @@ function App() {
   const [generalData, setGeneralData] = useState([]);
   const [website_status, set_website_status] = useState(null);
 
+  const { data: userData, get: getUserData } = useDataFetcher();
+  useEffect(() => {
+    if (!localStorage.getItem("user")) {
+      getUserData("/api/user/get_user_data");
+    }
+  }, []);
+  useEffect(() => {
+    if (localStorage.getItem("user_token")) {
+      if (userData) {
+        localStorage.setItem("user", JSON.stringify(userData.user));
+      }
+    }
+  }, [userData]);
+
   useEffect(() => {
     get("/api/settings/genral");
   }, []);

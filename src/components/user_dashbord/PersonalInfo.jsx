@@ -15,6 +15,7 @@ import {
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
 import { toast } from "react-hot-toast";
+import Loader from "../Loading/Loader";
 
 const PersonalInfo = () => {
   const { t, i18n } = useTranslation();
@@ -328,17 +329,7 @@ const PersonalInfo = () => {
   };
 
   return isLoading || isFormSubmitting ? (
-    <Box
-      sx={{
-        minHeight: "80vh",
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <CircularProgress color="success" />
-    </Box>
+    <Loader />
   ) : (
     <Box sx={{ marginTop: "10rem", width: "90%", margin: "auto" }}>
       <form onSubmit={handleSubmit}>

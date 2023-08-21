@@ -12,9 +12,10 @@ import { KSA } from "../../assets";
 import { useTranslation } from "react-i18next";
 import { myAxios } from "../../api/myAxios";
 import { toast } from "react-hot-toast";
-import { Navigate } from "react-router";
+import { useNavigate } from "react-router";
 
 const LogInModal = ({ open, onClose }) => {
+  const nav = useNavigate();
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -57,9 +58,9 @@ const LogInModal = ({ open, onClose }) => {
         toast.error(res.data.message);
         // navigate("/userDashbored");
       } else {
-        toast.success(res.data.message);
-        Navigate("/userDashbored");
         localStorage.setItem("user_token", res.data.access_token);
+        nav("/userDashbored");
+        toast.success(res.data.message);
       }
     } catch (err) {
       console.log(err);
@@ -100,14 +101,14 @@ const LogInModal = ({ open, onClose }) => {
       setTimer((prevTimer) => {
         if (prevTimer === 0) {
           //console.log("finished");
-          try {
-            const res = myAxios.post("/api/changeCode", {
-              phone: phoneNumber,
-            });
-            console.log(res);
-          } catch (err) {
-            console.log(err);
-          }
+          // try {
+          //   const res = myAxios.post("/api/changeCode", {
+          //     phone: phoneNumber,
+          //   });
+          //   console.log(res);
+          // } catch (err) {
+          //   console.log(err);
+          // }
           setIsCounterActive(false);
           clearInterval(countdown);
           return 0;

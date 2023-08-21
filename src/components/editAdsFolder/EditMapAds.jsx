@@ -1,18 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Typography } from "@mui/material";
-import { OrderTitles } from ".";
-import {
-  GoogleMap,
-  LoadScript,
-  Marker,
-  InfoWindow,
-} from "@react-google-maps/api";
 import { useTranslation } from "react-i18next";
-// import Map from "../../addadsolder/Map";
-import { EditMap } from "../OutgoingOrder";
-import EditMapAd from "../../editAdsFolder/EditMapAd";
-
-const OrderMap = ({ formData, setFormData, setError, mapData, setMapData }) => {
+import EditMapAd from "./EditMapAd";
+const EditMapAds = ({
+  formData,
+  setFormData,
+  setError,
+  mapData,
+  setMapData,
+}) => {
   const { t } = useTranslation();
   return (
     <Box>
@@ -53,4 +49,4 @@ const OrderMap = ({ formData, setFormData, setError, mapData, setMapData }) => {
   );
 };
 
-export default OrderMap;
+export default EditMapAds;

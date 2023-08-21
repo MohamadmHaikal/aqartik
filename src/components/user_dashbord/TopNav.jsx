@@ -4,6 +4,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Avatar from "@mui/material/Avatar";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
+import { useNavigate } from "react-router";
 
 const TopNav = () => {
   const { t, i18n } = useTranslation();
@@ -12,6 +13,9 @@ const TopNav = () => {
 
   const [username, setUserName] = useState();
   const { data, isLoading, error, get, post } = useDataFetcher();
+
+  const nav = useNavigate();
+
   useEffect(() => {
     get(`api/user/get_user_data`);
   }, []);
@@ -41,6 +45,13 @@ const TopNav = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+  const handleSignOut = () => {
+    localStorage.removeItem("user_token");
+    localStorage.removeItem("user");
+    nav("/login");
+  };
+
   return (
     <Box
       sx={{
@@ -115,6 +126,7 @@ const TopNav = () => {
             }}
           >
             <li
+              onClick={handleSignOut}
               style={{
                 borderBottom: "none",
                 padding: "0.3rem 1rem 0rem 0rem",

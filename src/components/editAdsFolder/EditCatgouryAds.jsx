@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
-import { OrderTitles } from ".";
 import { useTranslation } from "react-i18next";
+
 const categories = [
   {
     id: 1,
@@ -163,7 +163,7 @@ const main_array = [
   },
 ];
 
-const OrderInfo = ({
+const EditCatgouryAds = ({
   formData,
   setFormData,
   selectedCategoryId,
@@ -267,7 +267,6 @@ const OrderInfo = ({
     }
   }, [formData]);
   console.log(selectedCatId);
-
   return (
     <Box>
       <Typography
@@ -292,11 +291,20 @@ const OrderInfo = ({
           id="my-text-field"
           type="text"
           value={formData.title || ""}
+          size="small"
           onChange={handleNameChange}
           error={nameError}
           helperText={nameError ? "الرجاء ادخال اسم عقار صحيح" : ""}
           placeholder={t("user_dashboard.new_order.order_info.placeholder1")}
-          sx={{ borderRadius: "12px" }}
+          sx={{
+            width: "100%",
+            borderRadius: "12px",
+            textAlign: lang === "ar" ? "right" : "left",
+            "&[readonly]": {
+              backgroundColor: "lightgray",
+              color: "darkgray",
+            },
+          }}
         />
       </Box>
       <Typography sx={{ fontWeight: "500", marginTop: "18px" }}>
@@ -438,4 +446,4 @@ const OrderInfo = ({
   );
 };
 
-export default OrderInfo;
+export default EditCatgouryAds;

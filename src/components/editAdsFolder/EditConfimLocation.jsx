@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
+  Typography,
   Select,
   MenuItem,
   InputLabel,
-  Typography,
   TextField,
 } from "@mui/material";
+
+import styles from "./confirmLocation.module.css";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import styles from "../../addadsolder/confirmLocation.module.css";
 import { useTranslation } from "react-i18next";
 
-const OrderLocation = ({ formData, setFormData, interfaces, mapData }) => {
+const EditConfimLocation = ({ formData, setFormData, interfaces, mapData }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
@@ -24,19 +25,30 @@ const OrderLocation = ({ formData, setFormData, interfaces, mapData }) => {
   const [selectedRoad, setSelectedRoad] = useState(formData.road || null);
 
   const [selectedInterface, setSelectedInterface] = useState(
-    formData.interface_id || null
+    formData.interface_aqar.id || null
   );
 
   useEffect(() => {
-    setSelectedCity(mapData.cityName);
-    setSelectedNeighborhood(mapData.neighborhoodName);
-    setSelectedRoad(mapData.rood);
-    setFormData((prevData) => ({
-      ...prevData,
-      city: mapData.cityName,
-      neighborhood: mapData.neighborhoodName,
-      road: mapData.rood,
-    }));
+    if (Object.keys(mapData).length > 0) {
+      setSelectedCity(mapData.cityName);
+      setSelectedNeighborhood(mapData.neighborhoodName);
+      setSelectedRoad(mapData.rood);
+      setFormData((prevData) => ({
+        ...prevData,
+        city: mapData.cityName,
+        neighborhood: mapData.neighborhoodName,
+        road: mapData.rood,
+      }));
+    } else if (
+      formData.city &&
+      formData.neighborhood &&
+      formData.road &&
+      formData.interface_aqar
+    ) {
+      setSelectedCity(formData.city);
+      setSelectedNeighborhood(formData.neighborhood);
+      setSelectedRoad(formData.road);
+    }
   }, []);
 
   const handleCityChange = (event) => {
@@ -141,8 +153,8 @@ const OrderLocation = ({ formData, setFormData, interfaces, mapData }) => {
         sx={{
           color: "black",
           fontWeight: "500",
-          marginBottom: ".2rem",
           marginTop: "1rem",
+          marginBottom: ".2rem",
         }}
       >
         {lang === "ar" ? "اسم الشارع" : "road name"}
@@ -161,21 +173,20 @@ const OrderLocation = ({ formData, setFormData, interfaces, mapData }) => {
           textAlign: lang === "ar" ? "right" : "left",
         }}
       />
-      <InputLabel
-        sx={{
-          color: "black",
-          fontWeight: "500",
-          marginBottom: ".2rem",
-          marginTop: "1rem",
-        }}
-      >
+      <InputLabel sx={{ color: "black", fontWeight: "500", marginTop: "1rem" }}>
         {t("user_dashboard.property_location.label3")}
       </InputLabel>
       <Typography sx={{ color: "gray", fontSize: "14px" }}>
         {t("user_dashboard.property_location.hint")}
       </Typography>
       <Select
-        value={selectedInterface}
+        value={
+          selectedInterface
+            ? selectedInterface
+            : formData.interface_aqar
+            ? formData.interface_aqar.id
+            : ""
+        }
         onChange={handleInterfaceChange}
         label=""
         required
@@ -213,4 +224,4 @@ const OrderLocation = ({ formData, setFormData, interfaces, mapData }) => {
   );
 };
 
-export default OrderLocation;
+export default EditConfimLocation;

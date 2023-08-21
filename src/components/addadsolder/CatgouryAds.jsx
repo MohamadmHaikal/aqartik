@@ -292,10 +292,19 @@ const CatgouryAds = ({
           type="text"
           value={formData.title || ""}
           onChange={handleNameChange}
+          size="small"
           error={nameError}
           helperText={nameError ? "الرجاء ادخال اسم عقار صحيح" : ""}
           placeholder={t("user_dashboard.new_order.order_info.placeholder1")}
-          sx={{ borderRadius: "12px" }}
+          sx={{
+            width: "100%",
+            borderRadius: "12px",
+            textAlign: lang === "ar" ? "right" : "left",
+            "&[readonly]": {
+              backgroundColor: "lightgray",
+              color: "darkgray",
+            },
+          }}
         />
       </Box>
       <Typography sx={{ fontWeight: "500", marginTop: "18px" }}>

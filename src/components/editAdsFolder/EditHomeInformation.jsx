@@ -24,7 +24,7 @@ const customFormControlClass = {
   width: "100%",
 };
 
-const OrderDetails = ({
+const EditHomeInformation = ({
   formData,
   setFormData,
   inputErrors,
@@ -71,18 +71,7 @@ const OrderDetails = ({
         }
       }
     }
-
-    if (formData.type_aqar) {
-      setSelectedtype(formData.type_aqar.id);
-    }
   }, []);
-
-  useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      inputValues,
-    }));
-  }, [inputValues]);
 
   const [radioSelected, setRadioSelected] = useState(
     formData.radioSelected || ""
@@ -104,33 +93,6 @@ const OrderDetails = ({
       type_aqar_id: event.target.value,
     }));
   };
-
-  const homedata = [
-    {
-      title: t("user_dashboard.order_details.label1"),
-      subtitle: t("user_dashboard.order_details.hint1"),
-      placeholder: t("user_dashboard.order_details.placeholder1"),
-      name: "price",
-    },
-    {
-      title: t("user_dashboard.order_details.label2"),
-      subtitle: t("user_dashboard.order_details.hint2"),
-      placeholder: t("user_dashboard.order_details.placeholder2"),
-      name: "area",
-    },
-    {
-      title: t("user_dashboard.order_details.label3"),
-      subtitle: t("user_dashboard.order_details.hint3"),
-      placeholder: t("user_dashboard.order_details.placeholder3"),
-      name: "width",
-    },
-    {
-      title: t("user_dashboard.order_details.label4"),
-      subtitle: t("user_dashboard.order_details.hint4"),
-      placeholder: t("user_dashboard.order_details.placeholder4"),
-      name: "height",
-    },
-  ];
 
   useEffect(() => {
     if (formData) {
@@ -170,25 +132,10 @@ const OrderDetails = ({
     const { name, value } = event.target;
 
     const formattedValue = formatNumber(value);
-    const newInputValues = {
-      ...inputValues,
-      [name]: formattedValue,
-    };
-    const allInputsFilled = Object.values(newInputValues).every(
-      (val) => val !== ""
-    );
-
-    setInputValues(newInputValues);
-
-    if (allInputsFilled) {
-      setInputErrors(false);
-    } else {
-      setInputErrors(true);
-    }
 
     setFormData((prevFormData) => ({
       ...prevFormData,
-      inputValues: newInputValues,
+      [name]: formattedValue,
     }));
   };
 
@@ -227,57 +174,195 @@ const OrderDetails = ({
         >
           {t("user_dashboard.new_order.order_info.main_title")}
         </Typography>
-        {homedata.map((item, index) => (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              marginBottom: "12px",
-            }}
-            key={index}
-          >
-            <Box sx={{ display: "flex", alignItems: "baseline" }}>
-              <label
-                htmlFor={`my-text-field-${index}`}
-                style={{ fontWeight: "500", marginBottom: "4px" }}
-              >
-                {item.title}
-              </label>
-              <span
-                style={{
-                  color: "#999",
-                  marginRight: "0.5rem",
-                  fontSize: "11px",
-                }}
-              >
-                ({item.subtitle}){" "}
-              </span>
-            </Box>
-            <TextField
-              type="text"
-              name={item.name}
-              placeholder={item.placeholder}
-              value={inputValues[`${item.name}`] || ""}
-              onChange={handleInputChange}
-              error={inputErrors[`input-${index}`]}
-              helperText={inputErrors[`input-${index}`] ? "قيمة غير صحيحة" : ""}
-              sx={{
-                borderRadius: "12px",
-                textAlign: "right",
-                "& input[type=number]": {
-                  " WebkitAppearance": "textfield",
-                },
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            marginBottom: "12px",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "baseline" }}>
+            <label
+              htmlFor={`my-text-field-${t(
+                "user_dashboard.order_details.label1"
+              )}`}
+              style={{ fontWeight: "500", marginBottom: "4px" }}
+            >
+              {t("user_dashboard.order_details.label1")}
+            </label>
+            <span
+              style={{
+                color: "#999",
+                marginRight: "0.5rem",
+                fontSize: "11px",
               }}
-            />
+            >
+              ({t("user_dashboard.order_details.hint1")}){" "}
+            </span>
           </Box>
-        ))}
+          <TextField
+            type="text"
+            size="small"
+            name={"price"}
+            placeholder={t("user_dashboard.order_details.placeholder1")}
+            value={formData.price}
+            onChange={handleInputChange}
+            // error={inputErrors[`input-${index}`]}
+            // helperText={inputErrors[`input-${index}`] ? "قيمة غير صحيحة" : ""}
+            sx={{
+              borderRadius: "12px",
+              textAlign: "right",
+              "& input[type=number]": {
+                " WebkitAppearance": "textfield",
+              },
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            marginBottom: "12px",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "baseline" }}>
+            <label
+              htmlFor={`my-text-field-${t(
+                "user_dashboard.order_details.label2"
+              )}`}
+              style={{ fontWeight: "500", marginBottom: "4px" }}
+            >
+              {t("user_dashboard.order_details.label2")}
+            </label>
+            <span
+              style={{
+                color: "#999",
+                marginRight: "0.5rem",
+                fontSize: "11px",
+              }}
+            >
+              ({t("user_dashboard.order_details.hint2")}){" "}
+            </span>
+          </Box>
+          <TextField
+            type="text"
+            size="small"
+            name={"space"}
+            placeholder={t("user_dashboard.order_details.placeholder2")}
+            value={formData.space}
+            onChange={handleInputChange}
+            // error={inputErrors[`input-${index}`]}
+            // helperText={inputErrors[`input-${index}`] ? "قيمة غير صحيحة" : ""}
+            sx={{
+              borderRadius: "12px",
+              textAlign: "right",
+              "& input[type=number]": {
+                " WebkitAppearance": "textfield",
+              },
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            marginBottom: "12px",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "baseline" }}>
+            <label
+              htmlFor={`my-text-field-${t(
+                "user_dashboard.order_details.label3"
+              )}`}
+              style={{ fontWeight: "500", marginBottom: "4px" }}
+            >
+              {t("user_dashboard.order_details.label3")}
+            </label>
+            <span
+              style={{
+                color: "#999",
+                marginRight: "0.5rem",
+                fontSize: "11px",
+              }}
+            >
+              ({t("user_dashboard.order_details.hint3")}){" "}
+            </span>
+          </Box>
+          <TextField
+            type="text"
+            size="small"
+            name={"width"}
+            placeholder={t("user_dashboard.order_details.placeholder3")}
+            value={formData.width}
+            onChange={handleInputChange}
+            // error={inputErrors[`input-${index}`]}
+            // helperText={inputErrors[`input-${index}`] ? "قيمة غير صحيحة" : ""}
+            sx={{
+              borderRadius: "12px",
+              textAlign: "right",
+              "& input[type=number]": {
+                " WebkitAppearance": "textfield",
+              },
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            marginBottom: "12px",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "baseline" }}>
+            <label
+              htmlFor={`my-text-field-${t(
+                "user_dashboard.order_details.label4"
+              )}`}
+              style={{ fontWeight: "500", marginBottom: "4px" }}
+            >
+              {t("user_dashboard.order_details.label4")}
+            </label>
+            <span
+              style={{
+                color: "#999",
+                marginRight: "0.5rem",
+                fontSize: "11px",
+              }}
+            >
+              ({t("user_dashboard.order_details.hint4")}){" "}
+            </span>
+          </Box>
+          <TextField
+            type="text"
+            size="small"
+            name={"height"}
+            placeholder={t("user_dashboard.order_details.placeholder4")}
+            value={formData.height}
+            onChange={handleInputChange}
+            // error={inputErrors[`input-${index}`]}
+            // helperText={inputErrors[`input-${index}`] ? "قيمة غير صحيحة" : ""}
+            sx={{
+              borderRadius: "12px",
+              textAlign: "right",
+              "& input[type=number]": {
+                " WebkitAppearance": "textfield",
+              },
+            }}
+          />
+        </Box>
       </Box>
       <Box>
         <InputLabel sx={{ color: "black", fontWeight: "500" }}>
           {lang === "ar" ? "سكني أو تجاري" : "Residential or commercial"}
         </InputLabel>
         <Select
-          value={selectedtype}
+          value={
+            selectedtype
+              ? selectedtype
+              : formData.type_aqar
+              ? formData.type_aqar.id
+              : ""
+          }
           onChange={handleCityChange}
           label=""
           required
@@ -285,20 +370,15 @@ const OrderDetails = ({
           className={`${styles.select} select`}
           classes={lang === "ar" && { icon: styles.selectIcon }}
           sx={{
-            borderRadius: "12px !important",
-            boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
-            border: "1px solid rgba(0, 0, 0, 0.06) !important",
-            paddingBlock: "5px",
-            height: "48px",
             width: "100%",
-            marginBlock: "4px 16px",
-          }}
-          MenuProps={{
-            PaperProps: {
-              style: {
-                borderRadius: "1rem",
+            marginTop: ".2rem",
+            padding: 0,
+            borderRadius: "6px",
+            textAlign: lang === "ar" ? "right" : "left",
+            "& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+              {
+                padding: "10px 4px", // Remove padding from the input element
               },
-            },
           }}
         >
           {type_aqar?.map((type) => (
@@ -356,7 +436,8 @@ const OrderDetails = ({
                     radioSelected === value ? "var(--green-color)" : "white",
                   color: radioSelected === value ? "white" : "black",
                   border: "1px solid #cdcdcd",
-                  width: "30%",
+                  // width: "30%",
+                  flex: "1",
                   marginX: "0",
                   borderRadius: value === "option3" ? "4px" : "0",
                   padding: "0.3rem",
@@ -436,4 +517,4 @@ const OrderDetails = ({
   );
 };
 
-export default OrderDetails;
+export default EditHomeInformation;

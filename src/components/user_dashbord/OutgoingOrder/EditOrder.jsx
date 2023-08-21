@@ -21,6 +21,7 @@ import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../../api/useDataFetcher ";
 import OrderInputs from "../NewOrder/OrderInputs";
 import { Link, useLocation } from "react-router-dom";
+import Loader from "../../Loading/Loader";
 const EditOrder = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -459,14 +460,14 @@ const EditOrder = () => {
       if (formData.inputValues.width) {
         requestBody["width"] = formData.inputValues.width;
       }
-      if (formData.selectedLocation.lat) {
-        requestBody["lat"] = formData.selectedLocation.lat;
+      if (formData.lat) {
+        requestBody["lat"] = formData.lat;
       }
-      if (formData.selectedLocation.lng) {
-        requestBody["lng"] = formData.selectedLocation.lng;
+      if (formData.lng) {
+        requestBody["lng"] = formData.lng;
       }
-      if (formData.selectedLocation.zoom) {
-        requestBody["zoom"] = formData.selectedLocation.zoom;
+      if (formData.zoom) {
+        requestBody["zoom"] = formData.zoom;
       }
       if (formData.aqarCategoryQuantity) {
         requestBody["QuantityRequest"] = JSON.stringify(
@@ -869,6 +870,7 @@ const EditOrder = () => {
 
   return (
     <>
+      {loadingSubmit && <Loader />}
       <Container
         sx={{
           padding: { xs: "0" },
@@ -901,7 +903,7 @@ const EditOrder = () => {
                 display: "flex",
                 flexDirection: "column",
                 overflow: "hidden auto",
-                height: { xs: "100vh", sm: "calc(-40px + 88vh)" },
+                height: { xs: "100vh", sm: "calc(-40px + 100vh)" },
               }}
             >
               {/* Render the current step */}

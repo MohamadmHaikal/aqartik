@@ -451,14 +451,14 @@ const NewRequests = () => {
       if (formData.inputValues.width) {
         requestBody["width"] = formData.inputValues.width;
       }
-      if (formData.selectedLocation.lat) {
-        requestBody["lat"] = formData.selectedLocation.lat;
+      if (formData.lat) {
+        requestBody["lat"] = formData.lat;
       }
-      if (formData.selectedLocation.lng) {
-        requestBody["lng"] = formData.selectedLocation.lng;
+      if (formData.lng) {
+        requestBody["lng"] = formData.lng;
       }
-      if (formData.selectedLocation.zoom) {
-        requestBody["zoom"] = formData.selectedLocation.zoom;
+      if (formData.zoom) {
+        requestBody["zoom"] = formData.zoom;
       }
       if (formData.aqarCategoryQuantity) {
         requestBody["QuantityRequest"] = JSON.stringify(
