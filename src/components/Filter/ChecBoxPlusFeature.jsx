@@ -35,37 +35,48 @@ const GreenCheckbox = styled(Checkbox)(({ theme }) => ({
   },
 }));
 
-const CheckBoxHome = ({ setFilterProps, FilterProps }) => {
+const ChecBoxPlusFeature = ({ setFilterProps, FilterProps }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const { data, isLoading, get } = useDataFetcher();
-  // const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItems] = useState([]);
 
   const [checkboxeshome, setcheckboxeshome] = useState([]);
   useEffect(() => {
-    get(`/api/ads/get_categories`);
-  }, []);
+    get(`/api/ads/info/${FilterProps?.category_id}`);
+  }, [FilterProps?.category_id]);
   useEffect(() => {
     if (data) {
-      setcheckboxeshome(data?.categories);
-      setFilterProps((prev) => ({
-        ...prev,
-        category_id: data.categories[0].id,
-      }));
+      setcheckboxeshome(data?.categoryBool);
     }
   }, [data]);
+  useEffect(() => {
+    if (!FilterProps?.categoryBool) {
+      setSelectedItems([]);
+    }
+  }, [!FilterProps?.categoryBool]);
 
   const handleChange = (event, id) => {
-    const { name } = event.target;
+    const { name, checked } = event.target;
 
-    // setSelectedItem((prevSelectedItem) =>
-    //   prevSelectedItem === name ? null : name
-    // );
-
+    if (checked) {
+      // Add the selected item to the array
+      setSelectedItems((prevSelectedItems) => [...prevSelectedItems, name]);
+    } else {
+      // Remove the unselected item from the array
+      setSelectedItems((prevSelectedItems) =>
+        prevSelectedItems.filter((item) => item !== name)
+      );
+    }
     setFilterProps((prev) => ({
       ...prev,
-      category_id: id,
+      categoryBool: selectedItem,
     }));
+
+    // setFilterProps((prev) => ({
+    //   ...prev,
+    //   category_id: id,
+    // }));
   };
   // useEffect(() => {
 
@@ -78,18 +89,24 @@ const CheckBoxHome = ({ setFilterProps, FilterProps }) => {
           key={checkbox?.id}
           control={
             <GreenCheckbox
-              checked={FilterProps.category_id === checkbox?.id}
-              onChange={(event) => handleChange(event, checkbox.id)}
-              name={checkbox?.en_name}
+              checked={selectedItem.includes(checkbox?.bool_featurea.en_name)}
+              onChange={(event) =>
+                handleChange(event, checkbox.bool_featurea.id)
+              }
+              name={checkbox?.bool_featurea.en_name}
               icon={<CheckIcon />}
               checkedIcon={<CheckIcon />}
             />
           }
-          label={lang === "ar" ? checkbox?.ar_name : checkbox?.en_name}
+          label={
+            lang === "ar"
+              ? checkbox?.bool_featurea.ar_name
+              : checkbox?.bool_featurea.en_name
+          }
         />
       ))}
     </div>
   );
 };
 
-export default CheckBoxHome;
+export default ChecBoxPlusFeature;

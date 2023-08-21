@@ -201,6 +201,11 @@
       "phone_button": "مكالمة",
       "report_button": "ابلاغ",
       "chat_button": "محادثة"
+    },
+    "time": {
+      "one_hour_ago": "منذ ساعة",
+      "two_hours_ago": "منذ ساعتين",
+      "hours_ago": "منذ {{count}} ساعة"
     }
   },
   "user_dashboard": {

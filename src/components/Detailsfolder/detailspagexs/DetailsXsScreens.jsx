@@ -26,6 +26,7 @@ const DetailsXsScreens = ({ adInfo }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   //  adInfo = useLocation().state.ad;
+  const AdID = adInfo.id;
 
   const [ShareListOpen, setShareListOpen] = useState(false);
   const handleCopyLink = () => {
@@ -99,7 +100,7 @@ const DetailsXsScreens = ({ adInfo }) => {
                   marginLeft: "0px",
                 }}
               >
-                <FavoriteButton />
+                <FavoriteButton adInfo={AdID} />
                 <Box>
                   <Button onClick={() => setShareListOpen(!ShareListOpen)}>
                     {<img src={Share} alt="sharicon" />}

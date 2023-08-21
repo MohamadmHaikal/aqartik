@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import useDataFetcher from "../api/useDataFetcher ";
 import { HomeFilter } from "../components";
 
-const Ads = () => {
+const Ads = ({ userLocation }) => {
   return (
     <>
-      <HomeFilter />
+      <HomeFilter userLocation={userLocation} />
     </>
   );
 };

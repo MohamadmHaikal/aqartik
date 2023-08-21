@@ -7,6 +7,7 @@ import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
 import "../../styles/detailsimages.css";
 import { Button, useMediaQuery, Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import screenfull from "screenfull";
 
 export default function DetailsImages({ adInfo }) {
   const { t, i18n } = useTranslation();
@@ -14,6 +15,7 @@ export default function DetailsImages({ adInfo }) {
   const galleryRef = useRef(null);
   const [showMore, setShowMore] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const gallery = lightGallery(galleryRef.current, {
@@ -89,7 +91,38 @@ export default function DetailsImages({ adInfo }) {
       });
     }
   };
+  const openVideoFullScreen = () => {
+    setShowVideo(true);
 
+    const video = videoRef.current;
+    if (video) {
+      if (screenfull.isEnabled) {
+        if (!screenfull.isFullscreen) {
+          screenfull.request(video);
+          setShowVideo(true);
+        }
+      }
+    }
+  };
+  useEffect(() => {
+    console.log(screenfull);
+    if (!screenfull.isFullscreen) {
+      setShowVideo(false);
+    }
+
+    // const handleFullscreenChange = () => {
+    //   if (!screenfull.isFullscreen) {
+    //     setShowVideo(false); // Exit full-screen, set showVideo to false
+    //   }
+    // };
+
+    // screenfull.on("fullscreenchange", handleFullscreenChange);
+
+    // return () => {
+    //   // Remove the listener when the component unmounts
+    //   screenfull.off("fullscreenchange", handleFullscreenChange);
+    // };
+  }, [screenfull.isFullscreen, screenfull]);
   return (
     <div style={{ marginBottom: "2rem", position: "relative" }}>
       <Box
@@ -137,8 +170,35 @@ export default function DetailsImages({ adInfo }) {
             />
           </a>
         ))}
+        {adInfo.video ? (
+          <a
+            className="gallery-item"
+            data-src={` https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
+          >
+            <video
+              ref={videoRef}
+              id="videoElement"
+              src={` https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
+              controls
+              style={{ width: "500px", height: "300px" }}
+            ></video>
+          </a>
+        ) : (
+          ""
+        )}
       </Box>
-      {!showVideo && (
+
+      {/* <Box sx={{ display: showVideo ? "block" : "none" }}>
+        <video
+          ref={videoRef}
+          id="videoElement"
+          src={` https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
+          controls
+          style={{ width: "500px", height: "300px" }}
+        ></video>
+      </Box> */}
+
+      {adInfo?.video ? (
         <Button
           style={{
             marginTop: "10px",
@@ -158,11 +218,13 @@ export default function DetailsImages({ adInfo }) {
             padding: "0rem 1rem ",
             alignItems: "center",
             display: "flex",
-            pointerEvents: "none",
           }}
+          onClick={openVideoFullScreen}
         >
           عرض الفيديو
         </Button>
+      ) : (
+        ""
       )}
       {!showMore && (
         <Button
@@ -192,6 +254,9 @@ export default function DetailsImages({ adInfo }) {
           عرض كل الصور
         </Button>
       )}
+      {/* {adInfo.video && (
+       
+      )} */}
     </div>
   );
 }

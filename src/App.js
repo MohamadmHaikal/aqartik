@@ -36,20 +36,26 @@ function App() {
   // this is for take user Location
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(success);
+    const storedLocation = JSON.parse(localStorage.getItem("userLocation"));
+    if (storedLocation) {
+      setUserLocation(storedLocation);
     } else {
-      console.log("Geolocation not supported");
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success);
+      } else {
+        console.log("Geolocation not supported");
+      }
     }
   }, []);
 
   function success(position) {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-    setUserLocation({ latitude, longitude });
+    const locationData = { latitude, longitude };
+    setUserLocation(locationData);
+    localStorage.setItem("userLocation", JSON.stringify(locationData));
     console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
   }
-
   //end  this is for take user Location
 
   return (
@@ -118,7 +124,7 @@ function App() {
               path="/ads"
               element={
                 <Layout showNavFooter={true}>
-                  <Ads />
+                  <Ads userLocation={userLocation} />
                 </Layout>
               }
             />
@@ -153,7 +159,7 @@ function App() {
                 }
               />
               <Route
-                path=":id"
+                path="/offices/office/:id"
                 element={
                   <Layout
                     showNavFooter={true}

@@ -1,15 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BgVideo } from "../../assets";
 import styles from "./undermaintence.module.css";
+import useDataFetcher from "../../api/useDataFetcher ";
+import generateCloseMessage from "./generateCloseMessage";
+import { Container, Box } from "@mui/material";
 
 const UnderMaintence = () => {
+  const { data, isLoading, error, get, post } = useDataFetcher();
+  const [mainData, setMainData] = useState([]);
+  useEffect(() => {
+    get(`/api/settings/genral`);
+  }, []);
+  useEffect(() => {
+    if (data) {
+      setMainData(data.settings.close_msg);
+    }
+  }, [data]);
+  console.log(mainData);
   return (
-    <>
+    <Box>
       <video autoPlay muted controls className={styles.video_Style}>
         <source src={BgVideo} type="video/mp4" />
       </video>
       <div className={styles.div_video_style}>
-        <div className={styles.div_video_content}>
+        {/* <div className={styles.div_video_content}>
           <h1 className={styles.heading1}>Soon back </h1>
           <h1 className={styles.heading2}>ستارتك العقاري</h1>
           <h5 className={styles.under_maintece}>
@@ -24,9 +38,24 @@ const UnderMaintence = () => {
               sta.sa
             </a>
           </p>
-        </div>
+        </div> */}
+        <div
+          className={styles.div_video_content}
+          dangerouslySetInnerHTML={{
+            __html: mainData,
+          }}
+        ></div>
       </div>
-    </>
+      {/* {mainData && (
+        <div className="{styles.div_video_style}">
+           
+          <div
+            className={styles.appendedContent}
+           
+          />
+        </div>
+      )} */}
+    </Box>
   );
 };
 

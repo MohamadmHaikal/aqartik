@@ -21,9 +21,12 @@ const useDataFetcher = () => {
     }
   };
 
-  const get = async (url) => {
+  const get = async (url , params) => {
     await fetchData(url, {
       method: "GET",
+      headers:{
+       params: params
+      }
     });
   };
 

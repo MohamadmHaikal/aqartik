@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
@@ -118,7 +118,7 @@ import CheckIcon from "@mui/icons-material/Check";
 // ];
 
 const DetailsFeaturesBox = ({ adInfo }) => {
-  console.log(adInfo);
+  // console.log(adInfo);
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const filteredFeatures =
@@ -130,6 +130,19 @@ const DetailsFeaturesBox = ({ adInfo }) => {
     adInfo?.QuantityAds?.filter((feature) =>
       Icons.some((icon) => icon.en_name === feature.quantity_feature.en_name)
     ) || [];
+
+  const [timeDifference, setTimeDifference] = useState(0);
+
+  useEffect(() => {
+    // Calculate the time difference in hours between adInfo.lastUpdate and current time
+    const lastUpdate = new Date(adInfo.lastUpdate);
+    const currentTime = new Date();
+    const timeDiffInMilliseconds = currentTime - lastUpdate;
+    const timeDiffInHours = Math.floor(
+      timeDiffInMilliseconds / (1000 * 60 * 60)
+    );
+    setTimeDifference(timeDiffInHours);
+  }, [adInfo.lastUpdate]);
 
   return (
     <Box
@@ -178,7 +191,11 @@ const DetailsFeaturesBox = ({ adInfo }) => {
             <HomeRooms
               key={feature.id}
               iconRoom={matchingIcon.icon}
-              titleRoom={ lang === "ar" ? feature.quantity_feature.ar_name : feature.quantity_feature.en_name  }
+              titleRoom={
+                lang === "ar"
+                  ? feature.quantity_feature.ar_name
+                  : feature.quantity_feature.en_name
+              }
               numRoom={feature.quantity}
               checkIcon=" "
             />
@@ -229,7 +246,13 @@ const DetailsFeaturesBox = ({ adInfo }) => {
           )}
           :
         </Typography>
-        <Typography sx={{ color: "gray", marginX: "5px" }}>منذ ساعة</Typography>
+        <Typography sx={{ color: "gray", marginX: "5px" }}>
+          {timeDifference === 1
+            ? t("details_page.time.one_hour_ago")
+            : timeDifference === 2
+            ? t("details_page.time.two_hours_ago")
+            : t("details_page.time.hours_ago", { count: timeDifference })}
+        </Typography>
       </Box>
     </Box>
   );

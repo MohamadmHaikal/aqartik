@@ -17,7 +17,7 @@ const SpecialAds = ({ ad }) => {
     const adCreatedAt = new Date(ad.created_at).getTime();
     setIsNewHome(adCreatedAt > TimeNew.getTime());
   }, [ad.created_at]);
-  console.log(isNewHome);
+  // console.log(isNewHome);
   const navigate = useNavigate();
 
   const handleAdClick = (ad) => {
@@ -137,6 +137,7 @@ const SpecialAds = ({ ad }) => {
                     fontWeight: "600",
                     marginX: "0.3rem",
                     fontSize: { xs: "16px", md: "20px" },
+                    width: "max-content",
                   }}
                 >
                   {ad.price} ر.س
@@ -200,7 +201,7 @@ const SpecialAds = ({ ad }) => {
                 <Typography
                   sx={{ color: "rgb(132, 132, 132)", marginTop: "2px" }}
                 >
-                  ({"ratings"})
+                  ( {ad.user_rate?.toFixed(2)})
                 </Typography>
               </Box>
               <Box sx={{ display: "flex" }}>

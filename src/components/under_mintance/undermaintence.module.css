@@ -24,7 +24,7 @@
 
 .div_video_style {
     /* width: 65vw; */
-
+    width: 100vw;
     min-height: 0;
     padding-bottom: 0;
     position: relative;
@@ -89,6 +89,8 @@
         width: 75vw;
         min-height: 0;
         padding-bottom: 0;
+        position: absolute;
+        left: 0;
     }
 
     .div_video_style::before {

@@ -28,8 +28,8 @@ const ContactUs = () => {
     setSelectedValue(event.target.value);
   };
   return (
-    <Box sx={{ marginTop: "17rem" }}>
-      <Container>
+    <Box sx={{ marginTop: "19rem" }}>
+      <Container maxWidth="lg">
         <Typography
           variant="h4"
           sx={{
@@ -43,7 +43,7 @@ const ContactUs = () => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: { md: "space-between" },
+            justifyContent: { md: "space-around" },
             flexDirection: { xs: "column", md: "row" },
           }}
         >
@@ -119,10 +119,12 @@ const ContactUs = () => {
 
           <Paper
             sx={{
-              minWidth: "500px",
-              margin: "auto",
+              minWidth: { xs: "100%", md: "500px" },
+              // margin: "auto",
               padding: "1rem",
               boxShadow: "2",
+              marginTop: { md: "-5rem" },
+              marginBottom: "4rem",
             }}
           >
             <FormControl sx={{ width: "100%" }}>

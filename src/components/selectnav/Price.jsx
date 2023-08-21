@@ -4,19 +4,29 @@ import Typography from "@mui/material/Typography";
 import CheckIcon from "@mui/icons-material/Check";
 import { useTranslation } from "react-i18next";
 
-const Price = ({ isOpen, onClose, onPriceSelect, selectedPrice }) => {
-  const prices = ["from 100 to 100000", "Price 2", "Price 3", "Price 4"];
+const Price = ({
+  isOpen,
+  onClose,
+  onPriceSelect,
+  handlePriceSelection,
+  selectedPrice,
+}) => {
+  const prices = [
+    [100, 1000],
+    [10000, 50000],
+    [50000, 1000000],
+  ];
 
-  const [selectedOptionPrice, setSelectedOptionPrice] = useState(selectedPrice);
+  // const [selectedOptionPrice, setSelectedOptionPrice] = useState(selectedPrice);
 
   const { i18n } = useTranslation();
   const lang = i18n.language;
 
-  const handlePriceSelection = (price) => {
-    setSelectedOptionPrice(price);
-    onPriceSelect(price);
-    onClose(); // Close the Price component when a price is selected
-  };
+  // const handlePriceSelection = ([min, max]) => {
+  //   setSelectedOptionPrice([min, max]);
+  //   onPriceSelect([min, max]);
+  //   onClose(); // Close the Price component when a price is selected
+  // };
 
   return (
     <Box
@@ -34,9 +44,9 @@ const Price = ({ isOpen, onClose, onPriceSelect, selectedPrice }) => {
         borderRadius: "32px",
       }}
     >
-      {prices.map((price) => (
+      {prices.map(([min, max]) => (
         <Typography
-          key={price}
+          key={`${min}-${max}`}
           sx={{
             position: "relative",
             padding: "15px 28px",
@@ -46,23 +56,29 @@ const Price = ({ isOpen, onClose, onPriceSelect, selectedPrice }) => {
               backgroundColor: "rgb(243, 244, 251)",
             },
             backgroundColor:
-              selectedOptionPrice === price ? "rgb(243, 244, 251)" : "",
+              selectedPrice &&
+              selectedPrice[0] === min &&
+              selectedPrice[1] === max
+                ? "rgb(243, 244, 251)"
+                : "",
           }}
-          onClick={() => handlePriceSelection(price)}
+          onClick={() => handlePriceSelection([min, max])}
         >
-          {price}
-          {selectedOptionPrice === price && (
-            <CheckIcon
-              sx={{
-                position: "absolute",
-                left: lang === "ar" && "20px",
-                right: lang === "en" && "20px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                color: "var( --green-color)",
-              }}
-            />
-          )}
+          {`From ${min} to ${max}`}
+          {selectedPrice &&
+            selectedPrice[0] === min &&
+            selectedPrice[1] === max && (
+              <CheckIcon
+                sx={{
+                  position: "absolute",
+                  left: lang === "ar" && "20px",
+                  right: lang === "en" && "20px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: "var( --green-color)",
+                }}
+              />
+            )}
         </Typography>
       ))}
     </Box>

@@ -31,10 +31,19 @@ const Details = () => {
   const lang = i18n.language;
   const [per_page, set_per_page] = useState();
   const [current_page, set_current_page] = useState();
+  const [FavAdsArray, setFavAdsArray] = useState([]);
+  const [isInFavorites, setIsInFavorites] = useState(false);
   const [ads, setAds] = useState([]);
   const [last_page, set_last_page] = useState();
   const { data, isLoading, get } = useDataFetcher();
+  const {
+    data: favData,
+    isLoading: FavIsLoading,
+    get: getFav,
+  } = useDataFetcher();
   const createdDate = new Date(adInfo.created_at);
+  // check if there is no token dont shown somthing
+  const userToken = localStorage.getItem("user_token");
   const options = {
     year: "numeric",
     month: "short",
@@ -60,6 +69,24 @@ const Details = () => {
   const handlePageChange = (event, new_page) => {
     set_current_page(new_page);
   };
+
+  // this for check if user click fav or not
+  useEffect(() => {
+    getFav(`/api/user/get_user_fav_ads`);
+  }, []);
+  useEffect(() => {
+    if (favData) {
+      setFavAdsArray(favData?.ads.data);
+      setIsInFavorites(FavAdsArray?.some((favAd) => favAd.id === adInfo.id));
+    }
+  }, []);
+  console.log(FavAdsArray);
+  console.log(isInFavorites);
+
+  // useEffect(() => {
+
+  // }, [FavAdsArray, adInfo]);
+
   const TimechangeTheNewAds = 48;
   const [isNewHome, setIsNewHome] = useState(false);
   const TimeNew = new Date();
@@ -68,7 +95,7 @@ const Details = () => {
     const adCreatedAt = new Date(adInfo.created_at).getTime();
     setIsNewHome(adCreatedAt > TimeNew.getTime());
   }, [adInfo.created_at]);
-  console.log(isNewHome);
+  // console.log(isNewHome);
 
   // const isNewHome = localStorage.getItem("isNewHome") === "true";
   const [isListOpen, setListOpen] = useState(false);
@@ -115,6 +142,7 @@ const Details = () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
+  // console.log(userToken);
   return (
     <>
       {/* this section for md and above screens  */}
@@ -145,7 +173,7 @@ const Details = () => {
                 {t("details_page.ad_num")}:
               </Typography>{" "}
               <Typography sx={{ marginX: "0.5rem", fontSize: "12px" }}>
-                0989
+                {adInfo.ref_number}
               </Typography>
             </Box>
             <Box
@@ -195,7 +223,7 @@ const Details = () => {
                     fomtSize: "1.2rem",
                   }}
                 />
-                (لا يوجد تقييمات) 0
+                {adInfo.user_rate?.toFixed(2)}
               </Typography>
               <Typography
                 sx={{
@@ -257,6 +285,7 @@ const Details = () => {
                 flexDirection: { xs: "column", md: "row" },
               }}
             >
+              {" "}
               <Box
                 sx={{
                   display: "flex",
@@ -266,7 +295,10 @@ const Details = () => {
                   fontSize: { xs: "13px", md: "15px" },
                 }}
               >
-                <FavoriteIcons></FavoriteIcons>
+                <FavoriteIcons
+                  adInfo={adInfo.id}
+                  isInFavorites={isInFavorites}
+                ></FavoriteIcons>
                 {t("details_page.fav_button")}
               </Box>
               <Button
@@ -445,9 +477,24 @@ const Details = () => {
                 last_page={last_page}
               />
             )}
+            {/* {adInfo.video && (
+              <video
+                id="videoElement"
+                src={` https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
+                controls
+                style={{ width: "500px", height: "300px" }}
+              ></video>
+            )} */}
           </Box>
         </Container>
       </Box>
+      {/* {adInfo.video && (
+        <video
+          src={` https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
+          controls
+          style={{ width: "500px", height: "300px" }}
+        ></video>
+      )} */}
 
       {/* this section page for xs screens */}
       <DetailsXsScreens adInfo={adInfo} />

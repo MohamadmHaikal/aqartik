@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "@mui/material/Slider";
 import { styled } from "@mui/system";
 import { useTranslation } from "react-i18next";
+import _debounce from "lodash/debounce";
 
 // Custom styles for the range slider
 const CustomSlider = styled(Slider)(({ theme }) => ({
@@ -67,16 +68,34 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
   },
 }));
 
-function PriceSlider() {
+function PriceSlider({ setFilterProps, FilterProps }) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
-  const [range, setRange] = useState([20, 80]);
+  const [range, setRange] = useState([]);
 
   const handleChange = (event, newValue) => {
     setRange(newValue);
   };
+  useEffect(() => {
+    const debounceHandler = _debounce(() => {
+      setFilterProps((prev) => ({
+        ...prev,
+        min_price: range[0],
+        max_price: range[1],
+      }));
+    }, 2000);
 
+    debounceHandler();
+
+    return () => {
+      debounceHandler.cancel();
+    };
+  }, [range, 2000]);
+
+  useEffect(() => {
+    setRange([FilterProps?.min_price, FilterProps?.max_price]);
+  }, [FilterProps?.min_price, FilterProps?.max_price]);
   const formatLabel = (value) => {
     return lang === "ar" ? `${value} ر.س` : ` ${value} SAR`;
   };
@@ -93,10 +112,10 @@ function PriceSlider() {
         valueLabelDisplay="auto"
         valueLabelFormat={valueLabelFormat}
         min={0}
-        max={4000}
+        max={5000}
         marks={[
-          { value: 0, label: `${formatLabel(range[0])}` },
-          { value: 4000, label: `${formatLabel(range[1])}` },
+          { value: range[0], label: `${formatLabel(range[0])}` },
+          { value: range[1], label: `${formatLabel(range[1])}` },
         ]}
         aria-labelledby="range-slider"
       />

@@ -80,6 +80,21 @@ const DetailsImagesXs = ({ adInfo }) => {
               />
             </a>
           ))}
+          {adInfo.video ? (
+            <a
+              data-src={` https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
+              className="swiper-slide"
+            >
+              <video
+                id="videoElement"
+                src={` https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
+                controls
+                style={{ width: "500px", height: "300px" }}
+              ></video>
+            </a>
+          ) : (
+            ""
+          )}
         </Box>
         <Box className={`swiper-pagination ${styles.details_pagination}`}></Box>
       </Box>

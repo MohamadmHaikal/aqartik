@@ -7,13 +7,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import CheckBoxHome from "../Filter/CheckBoxHome";
 import { Price, Search } from "../../assets";
 import PriceSlider from "../Filter/PriceSlider";
+import { Link } from "react-router-dom";
 
 const checkboxesextra = [
   { id: 1, label: "أظهر لي العروض فقط" },
   { id: 2, label: "اظهر لي المتاح فقط" },
   { id: 3, label: "أظهر لي الوحدات بدون تأمين فقط" },
 ];
-const MapFilter = ({ isOpen, handleClose }) => {
+const MapFilter = ({ isOpen, handleClose, FilterProps, setFilterProps }) => {
   return (
     <div>
       <Modal
@@ -25,7 +26,7 @@ const MapFilter = ({ isOpen, handleClose }) => {
         <Box
           sx={{
             maxWidth: "848px",
-            width: "100%",
+            width: { xs: "98%", md: "100%" },
             height: "calc(-224px + 100vh)",
             backgroundColor: "rgb(255, 255, 255)",
             zIndex: "99",
@@ -87,7 +88,7 @@ const MapFilter = ({ isOpen, handleClose }) => {
                 }}
               >
                 <Box>
-                  <Box sx={{ paddingTop: "40px", paddingBottom: "50px" }}>
+                  <Box sx={{ paddingTop: "20px", paddingBottom: "10px" }}>
                     <Box
                       sx={{
                         display: "flex",
@@ -101,8 +102,19 @@ const MapFilter = ({ isOpen, handleClose }) => {
                         البحث المتقدم
                       </Typography>
                     </Box>
-                    <Box sx={{ marginTop: "15px", marginRight: "-25px" }}>
-                      <CheckBoxHome checkboxes={checkboxesextra} />
+                    <Box
+                      sx={{
+                        marginTop: "15px",
+                        marginRight: "-25px",
+                        height: { xs: "250px", md: "160px" },
+                        overflowY: "scroll",
+                      }}
+                    >
+                      <CheckBoxHome
+                        checkboxes={checkboxesextra}
+                        FilterProps={FilterProps}
+                        setFilterProps={setFilterProps}
+                      />
                     </Box>
                   </Box>
                 </Box>
@@ -115,7 +127,7 @@ const MapFilter = ({ isOpen, handleClose }) => {
                 ></Box>
                 <Box
                   sx={{
-                    marginTop: { sm: "15px", md: "40px" },
+                    marginTop: { sm: "15px", md: "10px" },
                     marginBottom: "50px",
                   }}
                 >
@@ -132,12 +144,20 @@ const MapFilter = ({ isOpen, handleClose }) => {
                       alt="price"
                       style={{ marginLeft: "16px" }}
                     />
-                    <Typography sx={{ fontSize: "17px", fontWeight: " 800" }}>
+                    <Typography
+                      sx={{
+                        fontSize: "17px",
+                        fontWeight: " 800",
+                      }}
+                    >
                       السعر
                     </Typography>
                   </Box>
-                  <Box sx={{ marginTop: "20px" }}>
-                    <PriceSlider></PriceSlider>
+                  <Box sx={{ marginTop: "10px" }}>
+                    <PriceSlider
+                      FilterProps={FilterProps}
+                      setFilterProps={setFilterProps}
+                    ></PriceSlider>
                   </Box>
                 </Box>
               </Box>
@@ -153,9 +173,7 @@ const MapFilter = ({ isOpen, handleClose }) => {
               <Box
                 sx={{
                   display: "flex",
-
                   alignItems: "center",
-
                   justifyContent: "space-between",
                   flexDirection: "row",
                   width: "100%",
@@ -163,19 +181,36 @@ const MapFilter = ({ isOpen, handleClose }) => {
                   paddingX: "60px",
                 }}
               >
-                <Button
-                  sx={{
+                <Link
+                  to="/mappage"
+                  state={{
+                    lat: "",
+                    lng: "",
+                    zoom: "",
+                    category_id: "",
+                    min_price: "",
+                    max_price: "",
+                  }}
+                  style={{
                     height: "48px",
                     fontSize: "16px",
                     fontWeight: "700",
                     borderRadius: "12px",
                     color: "var(--green-color)",
+                    textDecoration: "none",
                   }}
+                  onClick={handleClose}
                 >
                   مسح الكل
-                </Button>
-                <Button
-                  sx={{
+                </Link>
+                <Link
+                  to="/mappage"
+                  state={{
+                    category_id: FilterProps?.category_id,
+                    min_price: FilterProps?.min_price,
+                    max_price: FilterProps?.max_price,
+                  }}
+                  style={{
                     height: "48px",
                     fontSize: "16px",
                     fontWeight: "700",
@@ -183,15 +218,20 @@ const MapFilter = ({ isOpen, handleClose }) => {
                     backgroundColor: "var(--green-color)",
                     color: "white",
                     paddingX: "18px",
+                    alignItems: "center",
+                    display: "flex",
+                    textDecoration: "none",
+                    padding: "0px 10px",
                     "&:hover": {
                       backgroundColor: "var(--green-color)",
                       color: "white",
                     },
                   }}
+                  onClick={handleClose}
                 >
                   {" "}
-                  اظهر بيوت العطلات
-                </Button>
+                  اظهر النتائج
+                </Link>
               </Box>
             </Box>
           </Box>

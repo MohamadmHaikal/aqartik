@@ -47,6 +47,7 @@ const Layout = ({
       setNotificationData(data);
     }
   }, [data]);
+  console.log(notificationData);
 
   return (
     <div>

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import SearchIcon from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
+import useDataFetcher from "../../api/useDataFetcher ";
 // import { styled } from "@mui/system";
 
 // const StyledBox = styled(Box)(({ theme }) => ({
@@ -13,31 +14,38 @@ import { useTranslation } from "react-i18next";
 //   },
 // }));
 
-const SelectStreet = ({ isOpen, onClose, onStreetSelect, selectedStreet }) => {
+const SelectStreet = ({
+  isOpen,
+  onClose,
+  onStreetSelect,
+  selectedStreet,
+  streets,
+}) => {
+  const { data, isLoading, get } = useDataFetcher();
   const { i18n } = useTranslation();
   const lang = i18n.language;
 
-  const streets = [
-    "حي اول",
-    "شارع اول",
-    "شارع ثاني",
-    "المدينة المنورة",
-    "جدة",
-    "رياض",
-    "أبها",
-  ];
+  // const streets = [
+  //   "حي اول",
+  //   "شارع اول",
+  //   "شارع ثاني",
+  //   "المدينة المنورة",
+  //   "جدة",
+  //   "رياض",
+  //   "أبها",
+  // ];
   const [searchTextstreet, setSearchTextstreet] = useState("");
 
   const handleStreetSelection = (street) => {
     onStreetSelect(street);
-    onClose(); // Close the SelectStreet component when a street is selected
+    onClose();
   };
 
   const handleStreetSearchChange = (event) => {
     setSearchTextstreet(event.target.value);
   };
 
-  const filteredStreets = streets.filter((street) =>
+  const filteredStreets = streets?.filter((street) =>
     street.includes(searchTextstreet.trim())
   );
 
@@ -119,37 +127,39 @@ const SelectStreet = ({ isOpen, onClose, onStreetSelect, selectedStreet }) => {
           fullWidth
         />
       </Box>
-      {filteredStreets.map((street) => (
-        <Typography
-          key={street}
-          sx={{
-            position: "relative",
-            padding: "15px 28px",
-            borderRadius: "25px",
-            fontSize: "1.2rem",
-            "&:hover": {
-              backgroundColor: "rgb(243, 244, 251)",
-            },
-            backgroundColor:
-              selectedStreet === street ? "rgb(243, 244, 251)" : "",
-          }}
-          onClick={() => handleStreetSelection(street)}
-        >
-          {street}
-          {selectedStreet === street && (
-            <CheckIcon
+      {filteredStreets.length > 0
+        ? filteredStreets?.map((street) => (
+            <Typography
+              key={street}
               sx={{
-                position: "absolute",
-                left: lang === "ar" && "20px",
-                right: lang === "en" && "20px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                color: "var( --green-color)",
+                position: "relative",
+                padding: "15px 28px",
+                borderRadius: "25px",
+                fontSize: "1.2rem",
+                "&:hover": {
+                  backgroundColor: "rgb(243, 244, 251)",
+                },
+                backgroundColor:
+                  selectedStreet === street ? "rgb(243, 244, 251)" : "",
               }}
-            />
-          )}
-        </Typography>
-      ))}
+              onClick={() => handleStreetSelection(street)}
+            >
+              {street}
+              {selectedStreet === street && (
+                <CheckIcon
+                  sx={{
+                    position: "absolute",
+                    left: lang === "ar" && "20px",
+                    right: lang === "en" && "20px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    color: "var( --green-color)",
+                  }}
+                />
+              )}
+            </Typography>
+          ))
+        : ""}
     </Box>
   );
 };

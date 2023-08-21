@@ -1,68 +1,112 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import PaginationAds from "../Filter/PaginationAds";
 import DeleteIcon from "@mui/icons-material/Delete";
+import useDataFetcher from "../../api/useDataFetcher ";
 
 const columns = [
   { label: "معرف", width: "10%" },
-  { label: "من قبل", width: "20%" },
+
   { label: "عنوان الشعار", width: "20%" },
   { label: "وصف الشعار", width: "40%" },
   { label: "الخيارات", width: "10%" },
 ];
 
-const dataRows = [
-  {
-    id: 1,
-    from: "rama",
-    title: "update your ads",
-    description: "Description 11jbjhbvjhbhjk",
-  },
-  {
-    id: 2,
-    from: "rama",
-    title: "update your ads",
-    description: "Description 11jbghjgbiugb khkjbhujbubhouklnjlk lhnlikhbn ",
-  },
-  {
-    id: 1,
-    from: "rama",
-    title: "update your ads",
-    description: "Description 11jbjhbvjhbhjk",
-  },
-  {
-    id: 2,
-    from: "rama",
-    title: "update your ads",
-    description: "Description 11jbghjgbiugb khkjbhujbubhouklnjlk lhnlikhbn ",
-  },
-  {
-    id: 1,
-    from: "rama",
-    title: "update your ads",
-    description: "Description 11jbjhbvjhbhjk",
-  },
-  {
-    id: 2,
-    from: "rama",
-    title: "update your ads",
-    description: "Description 11jbghjgbiugb khkjbhujbubhouklnjlk lhnlikhbn ",
-  },
-];
+// const dataRows = [
+//   {
+//     id: 1,
+//     from: "rama",
+//     title: "update your ads",
+//     description: "Description 11jbjhbvjhbhjk",
+//   },
+//   {
+//     id: 2,
+//     from: "rama",
+//     title: "update your ads",
+//     description: "Description 11jbghjgbiugb khkjbhujbubhouklnjlk lhnlikhbn ",
+//   },
+//   {
+//     id: 1,
+//     from: "rama",
+//     title: "update your ads",
+//     description: "Description 11jbjhbvjhbhjk",
+//   },
+//   {
+//     id: 2,
+//     from: "rama",
+//     title: "update your ads",
+//     description: "Description 11jbghjgbiugb khkjbhujbubhouklnjlk lhnlikhbn ",
+//   },
+//   {
+//     id: 1,
+//     from: "rama",
+//     title: "update your ads",
+//     description: "Description 11jbjhbvjhbhjk",
+//   },
+//   {
+//     id: 2,
+//     from: "rama",
+//     title: "update your ads",
+//     description: "Description 11jbghjgbiugb khkjbhujbubhouklnjlk lhnlikhbn ",
+//   },
+// ];
 
 const Notification = () => {
+  const { data, isLoading, get } = useDataFetcher();
+  const {
+    data: deleteData,
+    isLoading: deleteisLoading,
+    get: deleteGet,
+  } = useDataFetcher();
+  const [NotiData, setNotiData] = useState([]);
+  const [per_page, set_per_page] = useState();
+  const [current_page, set_current_page] = useState();
+
+  useEffect(() => {
+    get(`api/user/get_user_notifications`);
+  }, []);
+  useEffect(() => {
+    if (data) {
+      setNotiData(data.notifications.data);
+    }
+  }, [data]);
+  console.log(data);
+  const [last_page, set_last_page] = useState();
+  useEffect(() => {
+    if (data) {
+      set_current_page(data.notifications.current_page);
+      set_per_page(data.notifications.per_page);
+      // setAds(data.ads.data);
+      set_last_page(data.notifications.last_page);
+    }
+  }, [data]);
+
+  const handlePageChange = (event, new_page) => {
+    set_current_page(new_page);
+  };
+  const DeleteNotification = (event, id) => {
+    console.log(event);
+    // console.log("DeleteNotification called with id:", id);
+    if (id) {
+      deleteGet(`api/user/delete_user_notification/${id}`);
+      // console.log("Deleting notification with id:", id);
+      get(`api/user/get_user_notifications`);
+    }
+  };
+
   return (
     <>
       <Box
         sx={{
-          width: { xs: "100%", md: "95%", overflowX: "scroll" },
+          width: { xs: "100%", md: "100%", overflowX: "scroll" },
+          marginRight: { xs: "0", lg: "-40px" },
           backgroundColor: "white",
           padding: "1rem",
           borderRadius: "15px",
           margin: "auto",
         }}
       >
-        <Box sx={{ minWidth: "500px" }}>
+        <Box sx={{ minWidth: "500px", minHeight: "600px" }}>
           <Box
             sx={{
               display: "flex",
@@ -85,7 +129,7 @@ const Notification = () => {
             ))}
           </Box>
 
-          {dataRows.map((row) => (
+          {NotiData?.map((row, i) => (
             <Box
               key={row.id}
               sx={{
@@ -98,23 +142,29 @@ const Notification = () => {
               <Typography sx={{ width: "10%", textAlign: "center" }}>
                 {row.id}
               </Typography>
+
               <Typography sx={{ width: "20%", textAlign: "center" }}>
-                {row.from}
-              </Typography>
-              <Typography sx={{ width: "20%", textAlign: "center" }}>
-                {row.title}
+                {row.ar_title}
               </Typography>
               <Typography sx={{ width: "40%", textAlign: "center" }}>
-                {row.description}
+                {row.ar_body}
               </Typography>
               <Typography sx={{ width: "10%", textAlign: "center" }}>
-                <DeleteIcon sx={{ color: "red", cursor: "pointer" }} />
+                <DeleteIcon
+                  sx={{ color: "red", cursor: "pointer" }}
+                  onClick={(event) => DeleteNotification(event, row.id)}
+                />
               </Typography>
             </Box>
           ))}
         </Box>
       </Box>
-      <PaginationAds />
+      <PaginationAds
+        handlePageChange={handlePageChange}
+        current_page={current_page}
+        per_page={per_page}
+        last_page={last_page}
+      />
     </>
   );
 };

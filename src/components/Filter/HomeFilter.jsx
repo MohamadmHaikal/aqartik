@@ -14,11 +14,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import SelectCity from "../selectnav/SelectCity";
 import HomeType from "./HomeType";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Location } from "../../assets";
 import useDataFetcher from "../../api/useDataFetcher ";
 import { AdsClick } from "@mui/icons-material";
 import SkeleltonSpeacialAds from "../Loading/SkeleltonSpeacialAds";
+import { myAxios } from "../../api/myAxios";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 // Create a custom styled component
 const StyledContainer = styled(Container)(({ theme }) => ({
@@ -31,39 +33,165 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   margin: "3rem auto",
 }));
 
-const HomeFilter = () => {
+const HomeFilter = ({ userLocation }) => {
   const [per_page, set_per_page] = useState();
-  const [current_page, set_current_page] = useState();
-  const [ads, setAds] = useState([]);
+  const location = useLocation();
+  const linkParams = new URLSearchParams(location.search);
+  // const [current_page, set_current_page] = useState();
+  // const [ads, setAds] = useState([]);
   const [maplat, setLat] = useState();
   const [maplng, setLng] = useState();
   const [mapzoom, setZoom] = useState();
   const [last_page, set_last_page] = useState();
-  const { data, isLoading, get } = useDataFetcher();
-
+  // const { data, isLoading, get } = useDataFetcher();
+  const [FilterProps, setFilterProps] = useState({ page: 1 });
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  // this for filter or xs screens small screens
+  const {
+    data: filterData,
+    isLoading: filterIsLoading,
+    get: getFilterData,
+  } = useDataFetcher();
+  const [cities, setCities] = useState([]);
+  const [homes, setHomes] = useState([]);
   useEffect(() => {
-    get(`/api/ads/get_all_ads?page=${current_page}`);
-  }, [current_page]);
-
+    getFilterData(`api/settings/search_data`);
+  }, []);
   useEffect(() => {
-    if (data) {
-      set_current_page(data.ads.current_page);
-      set_per_page(data.ads.per_page);
-      setAds(data.ads.data);
-      set_last_page(data.ads.last_page);
-
-      if (data.ads.data.length > 0) {
-        const firstAd = data.ads.data[0];
-        setLat(firstAd.lat);
-        setLng(firstAd.lng);
-        setZoom(firstAd.zoom);
-        console.log(firstAd.lng);
-      }
+    if (linkParams) {
+      setFilterProps((prev) => ({
+        ...prev,
+        city: linkParams.get("city") || cities[0],
+        neighborhood: linkParams.get("neighborhood"),
+        category_id: linkParams.get("category_id"),
+        min_price: linkParams.get("min_price"),
+        max_price: linkParams.get("max_price"),
+      }));
     }
-  }, [data]);
+  }, []);
+  useEffect(() => {
+    if (filterData) {
+      setCities(filterData?.cities);
+      setSelectedCity(filterData?.cities[0]);
+      const categoriesArray = Object.values(filterData?.categories);
+      setHomes(categoriesArray);
+      setSelectedHome(categoriesArray[0].id);
+    }
+  }, [filterData]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+    myAxios
+      .get(`/api/ads/get_all_ads`, { params: FilterProps })
+      .then((res) => {
+        // console.log(res)
+        setData(res.data.ads.data);
+        if (res.data) {
+          set_per_page(res.data.ads.per_page);
+          // setAds(data.ads.data);
+          set_last_page(res.data.ads.last_page);
+
+          if (res.data.ads.data.length > 0) {
+            const firstAd = data.ads.data[0];
+            setLat(firstAd.lat);
+            setLng(firstAd.lng);
+            setZoom(firstAd.zoom);
+            console.log(firstAd.lng);
+          }
+        }
+
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setError(err.message || "Something went wrong");
+      });
+  }, [
+    FilterProps.page,
+    FilterProps?.topView,
+    FilterProps?.topPrice,
+    FilterProps?.minPrice,
+    FilterProps?.topRate,
+    FilterProps?.lat,
+    FilterProps?.lng,
+    FilterProps?.title,
+    FilterProps?.space,
+    FilterProps?.min_price,
+    FilterProps?.max_price,
+    FilterProps?.category_id,
+    FilterProps?.city,
+    FilterProps?.neighborhood,
+    FilterProps?.interface_id,
+    FilterProps?.categoryBool,
+  ]);
+  const renderFilterSection = (FilterProps) => {
+    let counter = 0;
+    if (FilterProps?.title) {
+      counter++;
+    }
+    if (FilterProps?.space) {
+      counter++;
+    }
+    if (FilterProps?.city) {
+      counter++;
+    }
+    if (FilterProps?.min_price) {
+      counter++;
+    }
+    if (FilterProps?.category_id) {
+      counter++;
+    }
+    if (FilterProps?.neighborhood) {
+      counter++;
+    }
+    if (FilterProps?.interface_id) {
+      counter++;
+    }
+    if (FilterProps?.interface_id) {
+      counter++;
+    }
+    if (FilterProps?.categoryBool) {
+      counter++;
+    }
+    if (
+      FilterProps?.topView ||
+      FilterProps?.topPrice ||
+      FilterProps?.minPrice ||
+      FilterProps?.topRate ||
+      FilterProps?.lat
+    ) {
+      counter++;
+    }
+    return counter;
+  };
+  const handleFiltertoDefault = () => {
+    setFilterProps({ page: 1 });
+  };
+  //dashboard.aqartik.com/api/ads/get_all_ads?lat=10000&lng=000&topView=true&topPrice=true&minPrice=true&topRate=true&title&space=10&city&neighborhood&interface_id&min_price&max_price&category_id
+  // useEffect(() => {
+  //   if (data) {
+  //     // set_current_page(data.ads.current_page);
+  //     setFilterProps((prev) => ({ ...prev, page: data.ads.current_page }));
+  //     set_per_page(data.ads.per_page);
+  //     setAds(data.ads.data);
+  //     set_last_page(data.ads.last_page);
+
+  //     if (data.ads.data.length > 0) {
+  //       const firstAd = data.ads.data[0];
+  //       setLat(firstAd.lat);
+  //       setLng(firstAd.lng);
+  //       setZoom(firstAd.zoom);
+  //       console.log(firstAd.lng);
+  //     }
+  //   }
+  // }, [data]);
 
   const handlePageChange = (event, new_page) => {
-    set_current_page(new_page);
+    // set_current_page(new_page);
+    setFilterProps((prev) => ({ ...prev, page: new_page }));
   };
 
   const { t, i18n } = useTranslation();
@@ -78,11 +206,26 @@ const HomeFilter = () => {
   const handleCitySelection = (city) => {
     setSelectedCity(city);
     setCityIsOpen(false);
+    setFilterProps((prev) => ({
+      ...prev,
+      city: city,
+    }));
   };
   const handleHomeSelection = (home) => {
     setSelectedHome(home);
     setHomeIsOpen(false);
+    setFilterProps((prev) => ({
+      ...prev,
+      category_id: home,
+    }));
   };
+  // useEffect(() => {
+  //   setFilterProps((prev) => ({
+  //     ...prev,
+  //     city: selectedHome,
+  //   }));
+  // }, [selectedHome]);
+
   const handleBoxClick = () => {
     setCityIsOpen(true);
   };
@@ -121,11 +264,13 @@ const HomeFilter = () => {
                 sx={{
                   fontWeight: "bold",
                   fontSize: { xs: "1.5rem", md: "2.25rem" },
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
-                الرياض
+                {FilterProps?.city}
               </Typography>
-              <Typography>الكل من 19 يونيو - 20 يونيو (ليلة واحدة)</Typography>
+              {/* <Typography>الكل من 19 يونيو - 20 يونيو (ليلة واحدة)</Typography> */}
             </Box>
           </Grid>
           <Grid
@@ -186,7 +331,7 @@ const HomeFilter = () => {
                   }}
                 />
                 {t("advertisements_page.filter_sec.title")}
-                <Typography>(1)</Typography>
+                <Typography> {renderFilterSection(FilterProps)}</Typography>
               </Box>
               <Typography sx={{ marginX: "0.5rem" }}>|</Typography>
               <Button
@@ -196,22 +341,26 @@ const HomeFilter = () => {
                   fontEeight: "normal",
                   fontSize: "inherit",
                 }}
+                onClick={handleFiltertoDefault}
               >
                 {t("advertisements_page.filter_sec.delete_button")}
               </Button>
             </Box>
             <Box>
-              <AccordinFilters />
+              <AccordinFilters
+                setFilterProps={setFilterProps}
+                FilterProps={FilterProps}
+              />
             </Box>
           </Grid>
           <Grid item xs={12} md={8}>
-            {isLoading ? (
-              Array.from({ length: 5 }).map((_, index) => (
-                <SkeleltonSpeacialAds key={index} />
-              ))
-            ) : (
-              <TabsFilter data={ads} />
-            )}
+            <TabsFilter
+              data={data}
+              setFilterProps={setFilterProps}
+              userLocation={userLocation}
+              FilterProps={FilterProps}
+              isLoading={isLoading}
+            />
           </Grid>
         </Grid>
         {/* <PaginationAds></PaginationAds> */}
@@ -312,7 +461,7 @@ const HomeFilter = () => {
                         fontSize: "20px",
                       }}
                     />
-                    <Typography>الرياض</Typography>
+                    <Typography>{selectedCity}</Typography>
                   </Box>
                 </Box>
               </Box>
@@ -385,7 +534,7 @@ const HomeFilter = () => {
                       المدينة
                     </Typography>
                     <Typography sx={{ fontWeight: "bold" }}>
-                      {selectedCity || "الرياض"}
+                      {selectedCity}
                     </Typography>
                   </Box>
 
@@ -395,6 +544,7 @@ const HomeFilter = () => {
                       onClose={() => setCityIsOpen(false)}
                       onCitySelect={handleCitySelection}
                       selectedCity={selectedCity}
+                      cities={cities}
                     />
                   )}
 
@@ -414,14 +564,15 @@ const HomeFilter = () => {
                     </Typography>
                     <Typography sx={{ fontWeight: "bold" }}>
                       {" "}
-                      {selectedHome || "الرياض"}{" "}
+                      {homes.find((item) => item.id === selectedHome).ar_name}
                     </Typography>
                     {homeIsOpen && (
                       <HomeType
                         isOpen={homeIsOpen}
                         onClose={() => setHomeIsOpen(false)}
                         onHomeSelect={handleHomeSelection}
-                        selectedHome={selectedHome} // Pass the selectedCity prop here
+                        selectedHome={selectedHome}
+                        homes={homes}
                       />
                     )}
                   </Box>
@@ -431,20 +582,49 @@ const HomeFilter = () => {
           )}
         </Box>
         <Box sx={{ width: "95%", margin: "auto" }}>
-          {isLoading
-            ? Array.from({ length: 5 }).map((_, index) => (
-                <SkeleltonSpeacialAds key={index} />
-              ))
-            : ads.map((ad, i) => <SpecialAds key={ad.id} ad={ad} />)}
+          {isLoading ? (
+            Array.from({ length: 5 }).map((_, index) => (
+              <SkeleltonSpeacialAds key={index} />
+            ))
+          ) : data.length > 0 ? (
+            data.map((ad, i) => <SpecialAds key={ad.id} ad={ad} />)
+          ) : (
+            <Box
+              sx={{
+                width: "90%",
+                backgroundColor: "rgb(253, 236, 234)",
+                display: "flex",
+                padding: "6px 16px",
+                margin: "auto",
+                borderRadius: "4px",
+              }}
+            >
+              <ErrorOutlineIcon sx={{ color: "red", marginLeft: "10px" }} />
+              <Box>
+                <Typography sx={{ color: "red", marginBottom: "10px" }}>
+                  {lang === "ar"
+                    ? " عذرا لايوجد نتائج"
+                    : " sorry there is no result"}
+                </Typography>
+                <Typography>
+                  {lang === "ar"
+                    ? " لا يوجد نتائج متاحة في الوقت الحالي، من فضلك حاول مرة أخري"
+                    : "sorry , there is no result now ... please try again"}
+                </Typography>
+              </Box>
+            </Box>
+          )}
+
+          {/* <PaginationAds /> */}
         </Box>
-        {/* <PaginationAds /> */}
       </Box>
+
       {isLoading ? (
         ""
       ) : (
         <PaginationAds
           handlePageChange={handlePageChange}
-          current_page={current_page}
+          current_page={FilterProps.page}
           per_page={per_page}
           last_page={last_page}
         />

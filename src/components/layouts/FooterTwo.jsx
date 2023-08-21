@@ -29,7 +29,7 @@ import useDataFetcher from "../../api/useDataFetcher ";
 const phoneNumber = "000000000000";
 
 const FooterTwo = () => {
-  const { generalData , website_status } = useContext(GeneralContext);
+  const { generalData, website_status } = useContext(GeneralContext);
   const [FooterData, setFooterData] = useState([]);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ const FooterTwo = () => {
     <>
       {/* footer for larger screen */}
       <Box sx={{ display: { xs: "none", md: "block" } }}>
-        <Container sx={{ marginTop: "2rem", maxWidth: "1350px !important" }}>
+        <Container sx={{ marginTop: "4rem", maxWidth: "1350px !important" }}>
           <Grid container spacing={2}>
             <Grid
               item
@@ -500,7 +500,7 @@ const FooterTwo = () => {
               marginTop: "25px",
             }}
           >
-            &#9400; {t("footer.copy_right")} 2023
+            &#9400; {t("footer.copy_right")} {new Date().getFullYear()}
           </Typography>
         </Box>
       </Box>

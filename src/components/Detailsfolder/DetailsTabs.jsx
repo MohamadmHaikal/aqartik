@@ -28,9 +28,12 @@ const DetailsTabs = ({ adInfo }) => {
   const lang = i18n.language;
   const [selectedTab, setSelectedTab] = useState(0);
   const [showCommentForm, setShowCommentForm] = useState(false);
+  const [adId, setAdId] = useState(adInfo.id);
+  // console.log(adId);
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
+
   const tabStyles = {
     color: "black",
     fontSize: { xs: "12px", md: "15px" },
@@ -167,7 +170,7 @@ const DetailsTabs = ({ adInfo }) => {
                   }}
                 />
               </Box>
-              <FiveStars />
+              <FiveStars adInfo={adId}  />
             </Box>
             <Box>
               <TextField
@@ -216,7 +219,7 @@ const DetailsTabs = ({ adInfo }) => {
             <Typography sx={{ fontWeight: "bold", color: "gray" }}>
               {t("details_page.details_tabs.guest_reviews_tab.review_title")}..
             </Typography>
-            <FiveStars />
+            <FiveStars adInfo={adId} />
           </Box>
         )}
         {/* Render the FiveStars component if showCommentForm is false */}

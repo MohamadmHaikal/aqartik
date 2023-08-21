@@ -15,6 +15,7 @@ import useDataFetcher from "../../api/useDataFetcher ";
 import { Skeleton } from "@mui/material";
 import SkeleltonSpeacialAds from "../Loading/SkeleltonSpeacialAds";
 import LoaderHome from "../Loading/LoaderHome";
+import { myAxios } from "../../api/myAxios";
 
 const Home = ({ userLocation }) => {
   const [per_page, set_per_page] = useState();
@@ -22,26 +23,59 @@ const Home = ({ userLocation }) => {
   const [ads, setAds] = useState([]);
   const [last_page, set_last_page] = useState();
   const [dataLoading, setDataLoading] = useState(true);
-  const { data, isLoading, error, get, post } = useDataFetcher();
+  // const { data, isLoading, error, get, post } = useDataFetcher();
+  const [FilterProps, setFilterProps] = useState({ page: 1 });
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  // useEffect(() => {
+  //   get(`/api/ads/get_all_ads?page=${current_page}`);
+  // }, [current_page]);
+
+  // useEffect(() => {
+  //   if (data) {
+  //     set_current_page(data.ads.current_page);
+  //     set_per_page(data.ads.per_page);
+  //     setAds(data.ads.data);
+  //     set_last_page(data.ads.last_page);
+  //   }
+  //   // console.log(current_page);
+  // }, [data]);
   useEffect(() => {
-    get(`/api/ads/get_all_ads?page=${current_page}`);
-  }, [current_page]);
+    setIsLoading(true);
+    setError(null);
+    myAxios
+      .get(`/api/ads/get_all_ads`, { params: FilterProps })
+      .then((res) => {
+        // console.log(res)
+        setData(res.data.ads.data);
+        if (res.data) {
+          set_per_page(res.data.ads.per_page);
+          // setAds(data.ads.data);
+          set_last_page(res.data.ads.last_page);
+        }
 
-  useEffect(() => {
-    if (data) {
-      set_current_page(data.ads.current_page);
-      set_per_page(data.ads.per_page);
-      setAds(data.ads.data);
-      set_last_page(data.ads.last_page);
-    }
-    // console.log(current_page);
-  }, [data]);
-
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setError(err.message || "Something went wrong");
+      });
+  }, [
+    FilterProps.page,
+    FilterProps?.topView,
+    FilterProps?.topPrice,
+    FilterProps?.minPrice,
+    FilterProps?.topRate,
+    FilterProps?.lat,
+    FilterProps?.lng,
+  ]);
   const { t } = useTranslation();
 
   const handlePageChange = (event, new_page) => {
-    set_current_page(new_page);
+    // set_current_page(new_page);
+    setFilterProps((prev) => ({ ...prev, page: new_page }));
   };
 
   return (
@@ -65,10 +99,15 @@ const Home = ({ userLocation }) => {
               ))
             ) : (
               <>
-                <TabsFilter data={ads} userLocation={userLocation} />
+                <TabsFilter
+                  data={data}
+                  userLocation={userLocation}
+                  FilterProps={FilterProps}
+                  setFilterProps={setFilterProps}
+                />
                 <PaginationAds
                   handlePageChange={handlePageChange}
-                  current_page={current_page}
+                  current_page={FilterProps.page}
                   per_page={per_page}
                   last_page={last_page}
                 />
