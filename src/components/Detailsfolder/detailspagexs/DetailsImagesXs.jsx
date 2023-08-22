@@ -8,6 +8,7 @@ import lightGallery from "lightgallery";
 import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
 import "lightgallery/css/lg-thumbnail.css";
+
 // import { house, boat, abha } from "../../../assets";
 
 SwiperCore.use([Pagination]);
@@ -85,12 +86,12 @@ const DetailsImagesXs = ({ adInfo }) => {
               data-src={` https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
               className="swiper-slide"
             >
-              <video
+              <img
                 id="videoElement"
                 src={` https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
                 controls
                 style={{ width: "500px", height: "300px" }}
-              ></video>
+              ></img>
             </a>
           ) : (
             ""

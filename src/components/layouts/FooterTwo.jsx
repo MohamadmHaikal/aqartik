@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 
-import { Box, Container, Grid, Link, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import {
   Googleplay,
   Appstore,
@@ -11,6 +11,7 @@ import {
   Mada,
   Logo,
 } from "../../assets";
+import { Link } from "react-router-dom";
 import styles from "./footer.module.css";
 import PhoneIcon from "@mui/icons-material/Phone";
 import YouTubeIcon from "@mui/icons-material/YouTube";
@@ -178,8 +179,8 @@ const FooterTwo = () => {
                   </li>
                   <li className={styles.aboutus}>
                     <Link
-                      href="#"
-                      sx={{ textDecoration: "none", color: "gray" }}
+                      to="/about"
+                      style={{ textDecoration: "none", color: "gray" }}
                     >
                       {t("footer.first_list.about")}
                     </Link>
@@ -197,17 +198,14 @@ const FooterTwo = () => {
                   </li>
                   <li style={{ marginBottom: "10px" }}>
                     <Link
-                      href="#"
-                      sx={{ textDecoration: "none", color: "gray" }}
+                      href="/contact_us"
+                      style={{ textDecoration: "none", color: "gray" }}
                     >
                       {t("footer.second_list.contact_us")}
                     </Link>
                   </li>
                   <li style={{ marginBottom: "10px" }}>
-                    <Link
-                      href="#"
-                      sx={{ textDecoration: "none", color: "gray" }}
-                    >
+                    <Link to="#" sx={{ textDecoration: "none", color: "gray" }}>
                       {t("footer.second_list.frequently_asked_questions")}
                     </Link>
                   </li>
@@ -225,16 +223,16 @@ const FooterTwo = () => {
                   </li>
                   <li style={{ marginBottom: "10px" }}>
                     <Link
-                      href="#"
-                      sx={{ textDecoration: "none", color: "gray" }}
+                      to="#"
+                      style={{ textDecoration: "none", color: "gray" }}
                     >
                       {t("footer.third_list.terms_and_conditions")}
                     </Link>
                   </li>
                   <li style={{ marginBottom: "10px" }}>
                     <Link
-                      href="#"
-                      sx={{ textDecoration: "none", color: "gray" }}
+                      to="/privacy"
+                      style={{ textDecoration: "none", color: "gray" }}
                     >
                       {t("footer.third_list.privacy_policy")}
                     </Link>

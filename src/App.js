@@ -25,6 +25,7 @@ import ContactUs from "./pages/ContactUs";
 import LoaderHome from "./components/Loading/LoaderHome";
 import GeneralContext from "./context/generalContext";
 
+
 function App() {
   const { generalData, website_status } = useContext(GeneralContext);
 
