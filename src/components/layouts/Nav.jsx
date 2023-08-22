@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import {
   AppBar,
@@ -30,6 +30,8 @@ import SmallNavLoginMenu from "./SmallNavLoginMenu";
 import SideNavXsScreens from "./SideNavXsScreens";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./layout.module.css";
+import useDataFetcher from "../../api/useDataFetcher ";
+import GeneralContext from "../../context/generalContext";
 
 // import Link from "next/link";
 // import { Link } from "@mui/material";
@@ -60,15 +62,54 @@ export default function Nav({
   setIsUserSelected,
   notificationData,
 }) {
+  const { generalData, website_status } = useContext(GeneralContext);
   const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+  const { data, isLoading, get } = useDataFetcher();
+  // this section tp get filter api
+  const {
+    data: filterData,
+    isLoading: filterIsLoading,
+    get: getFilterData,
+  } = useDataFetcher();
+  const [cities, setCities] = useState([]);
+  const [streets, setstreets] = useState([]);
+  const [realEstates, setRealEstate] = useState([]);
+  useEffect(() => {
+    getFilterData(`api/settings/search_data`);
+  }, []);
+  useEffect(() => {
+    if (filterData) {
+      setCities(filterData?.cities);
+      setSelectedCity(filterData?.cities[0]);
+      setstreets(filterData?.neighborhoods);
+      setSelectedStreet(filterData?.neighborhoods[0]);
+      const categoriesArray = Object.values(filterData?.categories);
+      setRealEstate(categoriesArray);
+      setSelectedRealEstate(categoriesArray[0]);
+    }
+  }, [filterData]);
+  const [navLinkss, setNavLinks] = useState([]);
+  useEffect(() => {
+    get(`api/settings/menu`);
+  }, []);
+  useEffect(() => {
+    if (data) {
+      setNavLinks(data.menu);
+    }
+  }, [data]);
+  const navItems = navLinkss.map((item) => ({
+    label: lang === "ar" ? item.title_ar : item.title_en,
+    url: item.link,
+  }));
 
-  const navItems = [
-    { label: `${t("nav.navlinks.home_page")}`, url: "/" },
-    { label: t("nav.navlinks.advertisements"), url: "/ads" },
-    { label: t("nav.navlinks.special_advertisements"), url: "/userdashbored" },
-    { label: t("nav.navlinks.about_us"), url: "/about" },
-    { label: t("nav.navlinks.contact_us"), url: "/" },
-  ];
+  // const navItems = [
+  //   { label: `${t("nav.navlinks.home_page")}`, url: "/" },
+  //   { label: t("nav.navlinks.advertisements"), url: "/ads" },
+  //   { label: t("nav.navlinks.special_advertisements"), url: "/userdashbored" },
+  //   { label: t("nav.navlinks.about_us"), url: "/about" },
+  //   { label: t("nav.navlinks.contact_us"), url: "/" },
+  // ];
 
   const location = useLocation();
   const isHome = location.pathname === "/";
@@ -96,34 +137,6 @@ export default function Nav({
   // to detect language
   const language = i18n.language;
 
-  // Hide the <Box> component on the home page and special ads page
-  // const drawer = (
-  //   <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-  //     <Divider />
-  //     <List>
-  //       {navItems.map((item) => (
-  //         <Link
-  //           key={item.id}
-  //           href={item.url}
-  //           underline="none"
-  //           sx={{
-  //             color: "black",
-  //             "&:hover": {
-  //               color: "var(--green-color)",
-  //             },
-  //           }}
-  //         >
-  //           <ListItem disablePadding>
-  //             <ListItemButton sx={{ textAlign: "center" }}>
-  //               <ListItemText primary={item.label} />
-  //             </ListItemButton>
-  //           </ListItem>
-  //         </Link>
-  //       ))}
-  //     </List>
-  //   </Box>
-  // );
-
   // this for selectCities
   const [cityIsOpen, setCityIsOpen] = useState(false);
 
@@ -136,8 +149,9 @@ export default function Nav({
   const priceRef = useRef(null);
   const [selectedStreet, setSelectedStreet] = useState(null);
   const [isSelectRealEstateOpen, setIsSelectRealEstateOpen] = useState(false);
-  const [selectedRealEstate, setSelectedRealEstate] = useState(null);
-  const [selectedPrice, setSelectedPrice] = useState(null);
+  // const [selectedRealEstateIndex, setSelectedRealEstateIndex] = useState(0);
+  const [selectedRealEstate, setSelectedRealEstate] = useState(realEstates[0]);
+  const [selectedPrice, setSelectedPrice] = useState([100, 1000]);
 
   const handleBoxClick = () => {
     setCityIsOpen(true);
@@ -177,6 +191,7 @@ export default function Nav({
     }
     // event.stopPropagation();
   };
+
   useEffect(() => {
     document.addEventListener("click", handleOutsideClick);
 
@@ -192,11 +207,25 @@ export default function Nav({
     setSelectedStreet(street);
     setStreetIsOpen(false);
   };
+  const handleCatgoreySelection = (realEstate) => {
+    console.log(realEstate);
+    setSelectedRealEstate(realEstate);
+    // setSelectedRealEstateIndex(index);
+    setIsSelectRealEstateOpen(false);
+  };
   // const handlePriceSelection = (price) => {
   //   setSelectedPrice(price);
   //   onPriceSelect(price); // Call the onPriceSelect callback with the selected price
   //   onClose(); // Close the Price component when a price is selected
   // };
+  const [selectedOptionPrice, setSelectedOptionPrice] = useState(selectedPrice);
+  const handlePriceSelection = ([min, max]) => {
+    setSelectedOptionPrice([min, max]);
+    setSelectedPrice([min, max]);
+    // onClose();
+    // onPriceSelect([min, max]);
+    // onClose(); // Close the Price component when a price is selected
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -234,11 +263,22 @@ export default function Nav({
             )}
           </IconButton>
           <Link to="/">
-            <img src={Logo} alt="logo" style={{ width: "120px" }} />
+            <Box sx={{ width: "100px" }}>
+              <img
+                src={
+                  lang === "ar" && generalData
+                    ? `https://www.dashboard.aqartik.com/uploads/settings/${generalData.style_logo_ar}`
+                    : `https://www.dashboard.aqartik.com/uploads/settings/${generalData.style_logo_en}`
+                }
+                alt="logo"
+                style={{ width: "100%" }}
+              />
+            </Box>
           </Link>
           <Box
             sx={{
               display: { xs: "none", md: "flex", marginLeft: { lg: "10%" } },
+              marginRight: { md: "0px", lg: "-170px" },
             }}
           >
             {navItems.map((item) => (
@@ -413,7 +453,7 @@ export default function Nav({
                       fontWeight: "bold",
                     }}
                   >
-                    {selectedCity || "الرياض"}
+                    {selectedCity}
                   </Typography>
                   {cityIsOpen && (
                     <SelectCity
@@ -421,6 +461,7 @@ export default function Nav({
                       onClose={() => setCityIsOpen(false)}
                       onCitySelect={handleCitySelection}
                       selectedCity={selectedCity} // Pass the selectedCity prop here
+                      cities={cities}
                     />
                   )}
                 </Box>
@@ -446,7 +487,7 @@ export default function Nav({
                       fontWeight: "bold",
                     }}
                   >
-                    {selectedStreet || "حي اول"}
+                    {selectedStreet}
                   </Typography>
                   {streetIsOpen && (
                     <SelectStreet
@@ -454,6 +495,7 @@ export default function Nav({
                       onClose={() => setStreetIsOpen(false)}
                       onStreetSelect={handleStreetSelection}
                       selectedStreet={selectedStreet} // Pass the selectedStreet prop here
+                      streets={streets}
                     />
                   )}
                 </Box>
@@ -470,7 +512,7 @@ export default function Nav({
                   <Typography
                     sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.2rem" }}
                   >
-                    {t("subnav.neighborhood_filter")}
+                    {t("subnav.property_filter")}
                   </Typography>
                   <Typography
                     sx={{
@@ -479,17 +521,21 @@ export default function Nav({
                       fontWeight: "bold",
                     }}
                   >
-                    {selectedRealEstate || "مزارع"}
+                    {selectedRealEstate
+                      ? lang === "ar"
+                        ? selectedRealEstate.ar_name
+                        : selectedRealEstate.en_name
+                      : ""}
                   </Typography>
                   {isSelectRealEstateOpen && (
                     <SelectRealEstate
                       isOpen={isSelectRealEstateOpen}
                       onClose={() => setIsSelectRealEstateOpen(false)}
-                      onRealEstateSelect={(realEstate) => {
-                        setSelectedRealEstate(realEstate);
-                        setIsSelectRealEstateOpen(false);
-                      }}
                       selectedRealEstate={selectedRealEstate}
+                      onRealEstateSelect={(realEstate) =>
+                        handleCatgoreySelection(realEstate)
+                      }
+                      realEstates={realEstates}
                     />
                   )}
                 </Box>
@@ -513,19 +559,22 @@ export default function Nav({
                       color: "var( --green-color)",
                       fontSize: "1rem",
                       fontWeight: "bold",
+                      direction: lang === "ar" ? "rtl" : "ltr",
                     }}
                   >
-                    {selectedPrice || "1000"}
+                    {selectedPrice &&
+                      `${selectedPrice[0]} - ${selectedPrice[1]}`}
                   </Typography>
                   {isPriceOpen && (
                     <Price
                       isOpen={isPriceOpen}
                       onClose={() => setIsPriceOpen(false)}
-                      onPriceSelect={(price) => {
-                        setSelectedPrice(price); // Set the selected price value in the state variable
+                      onPriceSelect={([min, max]) => {
+                        setSelectedPrice([min, max]);
                         setIsPriceOpen(false);
                       }}
-                      selectedPrice={selectedPrice} // Pass the selectedPrice prop here
+                      handlePriceSelection={handlePriceSelection}
+                      selectedPrice={selectedPrice}
                     />
                   )}
                 </Box>
@@ -543,14 +592,17 @@ export default function Nav({
                     right: language === "ar" ? "" : "6px",
                   }}
                 >
-                  <Button href="/ads">
+                  <Link
+                    to={`/ads?city=${selectedCity}&neighborhood=${selectedStreet}&category_id=${selectedRealEstate?.id}&min_price=${selectedPrice[0]}&max_price=${selectedPrice[1]}`}
+                    style={{ display: "block", margin: "auto" }}
+                  >
                     <SearchIcon
                       sx={{
                         fontSize: "2.5rem",
                         color: "#fff",
                       }}
                     />
-                  </Button>
+                  </Link>
                 </Box>
               </Box>
               {/* this box only on small screen */}
@@ -590,27 +642,6 @@ export default function Nav({
         )}
       </AppBar>
       {/* this for LoginNav in small screesns */}
-
-      {/* <Box></Box>
-      <Box component="nav">
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", md: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </Box> */}
     </Box>
   );
 }

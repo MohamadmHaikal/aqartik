@@ -12,7 +12,7 @@ export const OfficeContainer = styled.div`
     text-align: center;
     border-radius: 16px;
     padding: 16px;
-    box-shadow: 0px 0px 12px rgba(110, 110, 110, 0.4);
+    box-shadow: 0px 0px 4px rgba(110, 110, 110, 0.4);
 
     .logo {
       border-radius: 50%;

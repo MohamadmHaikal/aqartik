@@ -90,8 +90,8 @@ const CarsouelCity = () => {
         // loop={true}
         rtl={true}
         responsive={Responsive}
-        autoplay={true}
-        autoplayTimeout={7000}
+        // autoplay={true}
+        // autoplayTimeout={7000}
         autoplayHoverPause={true}
         dots={false}
         nav={false}

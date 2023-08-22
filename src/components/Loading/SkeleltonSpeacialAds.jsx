@@ -9,8 +9,7 @@ const SkeleltonSpeacialAds = () => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-
-          marginTop: "-1rem",
+          marginTop: "-1.5rem",
           flexDirection: {
             xs: "column",
             md: "row",
@@ -19,8 +18,8 @@ const SkeleltonSpeacialAds = () => {
       >
         <Skeleton
           sx={{
-            width: { xs: "100%", md: "400px" },
-            height: "300px",
+            width: { xs: "100%", md: "450px" },
+            height: { xs: "350px", md: "350px" },
             borderRadius: "16px",
             margin: "auto",
             marginLeft: "10px",
@@ -32,7 +31,7 @@ const SkeleltonSpeacialAds = () => {
             justifyContent: "space-between",
             flexDirection: "row",
             width: "100%",
-            height: "168px",
+            height: "200px",
             margin: "auto",
           }}
         >

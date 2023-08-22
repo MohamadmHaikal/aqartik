@@ -40,7 +40,11 @@ import Special from "./special.svg";
 import Maintence from "./maintence.png";
 // import MapMarker from "./mapMarker.svg";
 import DefaultImage from "./defaulthome.jpg";
+import BgVideo from "./bg.mp4";
+
+// import MapMarker from "./mapMarker.svg";
 export {
+  BgVideo,
   DefaultImage,
   Maintence,
   Special,

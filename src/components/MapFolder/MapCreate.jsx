@@ -4,6 +4,7 @@ import {
   LoadScript,
   Marker,
   OverlayView,
+  useJsApiLoader,
 } from "@react-google-maps/api";
 import AdsListSmall from "./AdsListSmall";
 import AdsList from "./AdsList";
@@ -46,6 +47,11 @@ const CustomMarker = ({ price, isActive, onClick }) => {
   );
 };
 const MapCreate = (props) => {
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyCUSxdxRLpvkegxpk9-82sUjCylgekfGUk",
+    // libraries: ['geometry', 'drawing'],
+  });
   const { locations, state, isBoxVisible, setBoxVisible, setSelectedAd } =
     props;
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -83,6 +89,7 @@ const MapCreate = (props) => {
       setOverlayViews(loadedOverlayViews);
     }
   }, [mapLoaded, locations, activeMarkerIndex]);
+
   const handleMarkerClick = (id, loc) => {
     setActiveMarkerIndex(id);
     setMarkerClicked(true);
@@ -114,7 +121,7 @@ const MapCreate = (props) => {
 
   return (
     <>
-      <LoadScript googleMapsApiKey="AIzaSyCUSxdxRLpvkegxpk9-82sUjCylgekfGUk">
+      {isLoaded && (
         <GoogleMap
           mapContainerStyle={mapStyles}
           zoom={state.zoom}
@@ -124,7 +131,7 @@ const MapCreate = (props) => {
         >
           {overlayViews}
         </GoogleMap>
-      </LoadScript>
+      )}
       {isMarkerClicked && (
         <AdsListSmall
           data={locations}

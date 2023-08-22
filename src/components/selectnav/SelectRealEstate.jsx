@@ -1,29 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import { useTranslation } from "react-i18next";
+import useDataFetcher from "../../api/useDataFetcher ";
 
 const SelectRealEstate = ({
   isOpen,
   onClose,
   onRealEstateSelect,
   selectedRealEstate,
+  realEstates,
 }) => {
   const { i18n } = useTranslation();
   const lang = i18n.language;
 
-  const realEstates = [
-    "Real Estate 1",
-    "Real Estate 2",
-    "Real Estate 3",
-    "Real Estate 4",
-  ];
+  // const realEstates = [
+  //   "Real Estate 1",
+  //   "Real Estate 2",
+  //   "Real Estate 3",
+  //   "Real Estate 4",
+  // ];
   const [selectedOption, setSelectedOption] = useState(selectedRealEstate);
 
   const handleRealEstateSelection = (realEstate) => {
+    // const index = realEstates.findIndex(
+    //   (item) => (lang === "ar" ? item.ar_name : item.en_name) === realEstate
+    // );
     setSelectedOption(realEstate);
     onRealEstateSelect(realEstate);
-    onClose(); // Close the SelectRealEstate component when a real estate is selected
+    onClose();
   };
 
   return (
@@ -42,9 +47,9 @@ const SelectRealEstate = ({
         borderRadius: "32px",
       }}
     >
-      {realEstates.map((realEstate) => (
+      {realEstates?.map((realEstate, i) => (
         <Typography
-          key={realEstate}
+          key={i}
           sx={{
             position: "relative",
             padding: "15px 28px",
@@ -54,12 +59,14 @@ const SelectRealEstate = ({
               backgroundColor: "rgb(243, 244, 251)",
             },
             backgroundColor:
-              selectedOption === realEstate ? "rgb(243, 244, 251)" : "",
+              realEstate?.id === selectedRealEstate?.id
+                ? "rgb(243, 244, 251)"
+                : "#fff",
           }}
           onClick={() => handleRealEstateSelection(realEstate)}
         >
-          {realEstate}
-          {selectedOption === realEstate && (
+          {lang === "ar" ? realEstate.ar_name : realEstate.en_name}
+          {realEstate?.id === selectedRealEstate?.id && (
             <CheckIcon
               sx={{
                 position: "absolute",

@@ -20,6 +20,9 @@ const UserDashbored = () => {
   const { t } = useTranslation();
   const [selectedItem, setSelectedItem] = useState(0);
   const [selectedSubitem, setSelectedSubitem] = useState(0);
+
+  const [showNotification, setShowNotification] = useState(false);
+
   const [userData, setUserData] = useState();
   const { data, get } = useDataFetcher();
 
@@ -29,7 +32,6 @@ const UserDashbored = () => {
   useEffect(() => {
     if (data) setUserData(data?.user);
   }, [data]);
-  const [showNotification, setShowNotification] = useState(false);
 
   // useEffect(() => {
   //   if (data) {

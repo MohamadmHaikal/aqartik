@@ -15,6 +15,7 @@ const customLinkStyles = {
 };
 
 const DetailsCard = ({ adInfo }) => {
+  const userToken = localStorage.getItem("user_token");
   const [modalReportOpen, setModalReportOpen] = useState(false);
   const { isUserSelected, setIsUserSelected } = useContext(ChatContext);
   const { userKlickedData, setUserKlickedData } = useContext(ChatContext);
@@ -70,7 +71,7 @@ const DetailsCard = ({ adInfo }) => {
           <Typography sx={{ fontWeight: "bold", marginLeft: "0.5rem" }}>
             {t("details_page.details_card.advertiser_name")}:
           </Typography>
-          <Typography> {adInfo.user.username}</Typography>
+          <Typography> {adInfo.user?.username}</Typography>
         </Box>
         <Box
           sx={{
@@ -98,7 +99,7 @@ const DetailsCard = ({ adInfo }) => {
           <Typography sx={{ fontWeight: "bold", marginLeft: "0.5rem" }}>
             {t("details_page.details_card.ad_reference_number")}:
           </Typography>
-          <Typography> 098978</Typography>
+          <Typography> {adInfo.ref_number}</Typography>
         </Box>
 
         <Box
@@ -213,6 +214,7 @@ const DetailsCard = ({ adInfo }) => {
             },
           }}
           onClick={handleReportOpenModal}
+          disabled={!userToken}
         >
           <WarningIcon
             sx={{
@@ -247,6 +249,8 @@ const DetailsCard = ({ adInfo }) => {
               setUserKlickedData(adInfo?.user);
             }}
           >
+            {t("details_page.details_card.chat_button")}
+
             <ChatIcon
               sx={{
                 color: "var(--green-color)",
@@ -257,7 +261,12 @@ const DetailsCard = ({ adInfo }) => {
             {t("details_page.details_card.chat_button")}
           </Button>
         )}
-        <ReportModal open={modalReportOpen} onClose={handleReportCloseModal} />
+        {/* <ReportModal open={modalReportOpen} onClose={handleReportCloseModal} /> */}
+        <ReportModal
+          open={modalReportOpen}
+          onClose={handleReportCloseModal}
+          adID={adInfo.id}
+        />
       </Box>
     </>
   );

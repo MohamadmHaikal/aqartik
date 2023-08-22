@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -21,38 +21,107 @@ import PriceSlider from "./PriceSlider";
 import CheckBoxHome from "./CheckBoxHome";
 import RoomsNumber from "./RoomsNumber";
 import { useTranslation } from "react-i18next";
+import useDebounce from "../Loading/useDebounce";
+import useDataFetcher from "../../api/useDataFetcher ";
+import ChecBoxPlusFeature from "./ChecBoxPlusFeature";
 // import styles from "../../styles/Accordinfilter.module.css";
 
-const checkboxeshome = [
-  { id: 1, label: "مزرعة" },
-  { id: 2, label: "فيلا" },
-  { id: 3, label: "بيت" },
+// const checkboxeshome = [
+//   { id: 1, label: "مزرعة" },
+//   { id: 2, label: "فيلا" },
+//   { id: 3, label: "بيت" },
 
-  // Add more checkboxes as needed
-];
+//   // Add more checkboxes as needed
+// ];
 const checkboxesextra = [
   { id: 1, label: "انترنت" },
   { id: 2, label: "سماعات" },
   { id: 3, label: "Choice C" },
 ];
-const SearchBoxHome = () => {
+const SearchBoxHome = ({ setFilterProps, FilterProps }) => {
+  console.log("FilterProps", FilterProps?.city);
+  const {
+    data: dataFilterCities,
+    isLoading: isLoadingFilterCities,
+    get: getFilterCities,
+  } = useDataFetcher();
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
-
-  const [selectedValue1, setSelectedValue1] = useState("");
+  const [title, setTitle] = useState("");
+  const debouncedTitle = useDebounce(title, 500);
+  const [spaceValue2, setSpaceValue] = useState("");
+  const debouncedInputValue2 = useDebounce(spaceValue2, 500);
   const [selectedValue2, setSelectedValue2] = useState("");
   const [selectedValue3, setSelectedValue3] = useState("");
+  const [FilterCities, setFilterCities] = useState([]);
+  const [FilterNeighborhoods, setFilterNeighborhoods] = useState([]);
+  useEffect(() => {
+    getFilterCities(`/api/settings/search_data`);
+  }, []);
+  useEffect(() => {
+    console.log("dataFilterCities", dataFilterCities);
+    if (dataFilterCities) {
+      setFilterCities(dataFilterCities?.cities);
+      setFilterNeighborhoods(dataFilterCities?.neighborhoods ?? []);
+      console.log(dataFilterCities);
+    }
+  }, [dataFilterCities]);
 
-  const handleChange1 = (event) => {
-    setSelectedValue1(event.target.value);
-  };
+  useEffect(() => {
+    setFilterProps((prev) => ({
+      ...prev,
+      title: debouncedTitle,
+    }));
+  }, [debouncedTitle, setFilterProps]);
+  useEffect(() => {
+    if (!FilterProps?.title) {
+      setTitle("");
+    }
+  }, [FilterProps?.title]);
+  useEffect(() => {
+    if (!FilterProps?.space) {
+      setSpaceValue("");
+    }
+  }, [FilterProps?.space]);
+
+  useEffect(() => {
+    if (!FilterProps?.neighborhood) {
+      setSelectedValue2("");
+    }
+  }, [FilterProps?.neighborhood]);
+  useEffect(() => {
+    if (!FilterProps?.interface_id) {
+      setSelectedValue3("");
+    }
+  }, [FilterProps?.interface_id]);
+  useEffect(() => {
+    setFilterProps((prev) => ({
+      ...prev,
+      space: debouncedInputValue2,
+    }));
+  }, [debouncedInputValue2, setFilterProps]);
 
   const handleChange2 = (event) => {
     setSelectedValue2(event.target.value);
+    const neighborhood = event.target.value;
+    setFilterProps((prev) => ({
+      ...prev,
+      neighborhood: neighborhood,
+    }));
   };
   const handleChange3 = (event) => {
     setSelectedValue3(event.target.value);
+    const categoryId = event.target.value;
+
+    // Call setFilterProps with the updated category_id
+    setFilterProps((prev) => ({
+      ...prev,
+      interface_id: categoryId,
+    }));
   };
+  if (isLoadingFilterCities) {
+    return "load";
+  }
   return (
     <>
       <Box>
@@ -64,6 +133,8 @@ const SearchBoxHome = () => {
             "advertisements_page.filter_sec.filter1_info.placeholder1"
           )}
           sx={{ width: "100%" }}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
       </Box>
       <Box
@@ -73,20 +144,25 @@ const SearchBoxHome = () => {
           marginTop: "1rem",
         }}
       >
-        <Box sx={{ marginX: "0.2rem" }}>
+        <Box sx={{ marginX: "0.2rem", width: "100%" }}>
           <InputLabel sx={{ color: "black" }}>
             {" "}
             {t("advertisements_page.filter_sec.filter1_info.input2")}
           </InputLabel>
-          <Input placeholder="400" sx={{ width: "100%" }} />
+          <Input
+            placeholder="400"
+            sx={{ width: "100%" }}
+            value={spaceValue2}
+            onChange={(e) => setSpaceValue(e.target.value)}
+          />
         </Box>
-        <Box sx={{ marginX: "0.2rem" }}>
+        {/* <Box sx={{ marginX: "0.2rem" }}>
           <InputLabel sx={{ color: "black" }}>
             {" "}
             {t("advertisements_page.filter_sec.filter1_info.input3")}
           </InputLabel>
           <Input placeholder="2" sx={{ width: "100%", marginX: "0.2rem" }} />
-        </Box>
+        </Box> */}
       </Box>
       <Box
         sx={{
@@ -105,9 +181,14 @@ const SearchBoxHome = () => {
             {t("advertisements_page.filter_sec.filter1_info.input4")}
           </InputLabel>
           <Select
-            value={selectedValue1}
-            onChange={handleChange1}
-            displayEmpty
+            value={FilterProps?.city ? FilterProps.city : ""}
+            onChange={(event) => {
+              setFilterProps((prev) => ({
+                ...prev,
+                city: event.target.value,
+              }));
+            }}
+            // displayEmpty
             sx={{
               borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
 
@@ -126,10 +207,11 @@ const SearchBoxHome = () => {
                 {t("advertisements_page.filter_sec.filter1_info.placeholder4")}
               </em>
             </MenuItem>
-            <MenuItem value="Option 1">Option 1</MenuItem>
-            <MenuItem value="Option 2">Option 2</MenuItem>
-            <MenuItem value="Option 3">Option 3</MenuItem>
-            <MenuItem value="Option 4">Option 4</MenuItem>
+            {FilterCities?.map((city, index) => (
+              <MenuItem key={index} value={city}>
+                {city}
+              </MenuItem>
+            ))}
           </Select>
         </Box>
         <Box>
@@ -140,8 +222,13 @@ const SearchBoxHome = () => {
             {t("advertisements_page.filter_sec.filter1_info.input5")}
           </InputLabel>
           <Select
-            value={selectedValue2}
-            onChange={handleChange2}
+            value={FilterProps?.neighborhood ? FilterProps?.neighborhood : ""}
+            onChange={(event) => {
+              setFilterProps((prev) => ({
+                ...prev,
+                neighborhood: event.target.value,
+              }));
+            }}
             displayEmpty
             sx={{
               borderBottom: "1px solid rgba(0, 0, 0, 0.42) !important",
@@ -162,10 +249,11 @@ const SearchBoxHome = () => {
                 {t("advertisements_page.filter_sec.filter1_info.placeholder5")}
               </em>
             </MenuItem>
-            <MenuItem value="Option A">Option A</MenuItem>
-            <MenuItem value="Option B">Option B</MenuItem>
-            <MenuItem value="Option C">Option C</MenuItem>
-            <MenuItem value="Option D">Option D</MenuItem>
+            {FilterNeighborhoods?.map((neigh, index) => (
+              <MenuItem key={index} value={neigh}>
+                {neigh}
+              </MenuItem>
+            ))}
           </Select>
         </Box>
       </Box>
@@ -186,8 +274,13 @@ const SearchBoxHome = () => {
             {t("advertisements_page.filter_sec.filter1_info.input6")}
           </InputLabel>
           <Select
-            value={selectedValue3}
-            onChange={handleChange3}
+            value={FilterProps?.interface_id ? FilterProps.interface_id : ""}
+            onChange={(event) => {
+              setFilterProps((prev) => ({
+                ...prev,
+                interface_id: event.target.value,
+              }));
+            }}
             displayEmpty
             sx={{
               borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
@@ -200,6 +293,14 @@ const SearchBoxHome = () => {
                 paddingLeft: "32px",
                 paddingRight: "10px !important",
               },
+              "& .MuiSelect-selectMenu": {
+                maxHeight: "100px",
+                overflowY: "scroll",
+
+                "& .MuiList-root": {
+                  maxHeight: "100px",
+                },
+              },
             }}
           >
             <MenuItem value="" disabled>
@@ -207,10 +308,31 @@ const SearchBoxHome = () => {
                 {t("advertisements_page.filter_sec.filter1_info.placeholder6")}
               </em>
             </MenuItem>
-            <MenuItem value="Option 1">Option 1</MenuItem>
-            <MenuItem value="Option 2">Option 2</MenuItem>
-            <MenuItem value="Option 3">Option 3</MenuItem>
-            <MenuItem value="Option 4">Option 4</MenuItem>
+            <MenuItem value="1">
+              {lang === "ar" ? "غير محدد " : "...."}
+            </MenuItem>
+            <MenuItem value="2">{lang === "ar" ? " شمال " : "North"}</MenuItem>
+            <MenuItem value="3">{lang === "ar" ? " شرق " : "Eeast"}</MenuItem>
+            <MenuItem value="4">{lang === "ar" ? " غرب " : "Weast"}</MenuItem>
+            <MenuItem value="5">{lang === "ar" ? " جنوب " : "South"}</MenuItem>
+            <MenuItem value="6">
+              {lang === "ar" ? " شمال شرقي " : "North-East"}
+            </MenuItem>
+            <MenuItem value="7">
+              {lang === "ar" ? " جنوب شرقي " : "South-East"}
+            </MenuItem>
+            <MenuItem value="8">
+              {lang === "ar" ? " جنوب غربي " : "South-Weast"}
+            </MenuItem>
+            <MenuItem value="9">
+              {lang === "ar" ? " شمال غربي " : "North-Weast"}
+            </MenuItem>
+            <MenuItem value="10">
+              {lang === "ar" ? " شوارع 3  " : "3 Streets"}
+            </MenuItem>
+            <MenuItem value="11">
+              {lang === "ar" ? " شوارع 4  " : "4 Streets"}
+            </MenuItem>
           </Select>
         </Box>
       </Box>
@@ -218,11 +340,21 @@ const SearchBoxHome = () => {
   );
 };
 
-const AccordinFilters = () => {
+const AccordinFilters = ({ setFilterProps, FilterProps }) => {
+  const { data, isLoading, get } = useDataFetcher();
   const [expanded, setExpanded] = useState(false);
   const handleAccordionChange = (accordionId) => {
     setExpanded(accordionId === expanded ? null : accordionId);
   };
+  // const [checkboxeshome, setcheckboxeshome] = useState([]);
+  // useEffect(() => {
+  //   get(`/api/ads/get_categories`);
+  // }, []);
+  // useEffect(() => {
+  //   if (data) {
+  //     setcheckboxeshome(data?.categories);
+  //   }
+  // }, [checkboxeshome]);
 
   const { t, i18n } = useTranslation();
 
@@ -231,32 +363,52 @@ const AccordinFilters = () => {
       id: 1,
       icon: <SearchIcon />,
       title: t("advertisements_page.filter_sec.filter1"),
-      content: <SearchBoxHome />,
+      content: (
+        <SearchBoxHome
+          setFilterProps={setFilterProps}
+          FilterProps={FilterProps}
+        />
+      ),
     },
     {
       id: 2,
       icon: <PaymentIcon />,
       title: t("advertisements_page.filter_sec.filter2"),
-      content: <PriceSlider />,
+      content: (
+        <PriceSlider
+          setFilterProps={setFilterProps}
+          FilterProps={FilterProps}
+        />
+      ),
     },
     {
       id: 3,
       icon: <ApartmentIcon />,
       title: t("advertisements_page.filter_sec.filter3"),
-      content: <CheckBoxHome checkboxes={checkboxeshome} />,
+      content: (
+        <CheckBoxHome
+          setFilterProps={setFilterProps}
+          FilterProps={FilterProps}
+        />
+      ),
     },
     {
       id: 4,
       icon: <WifiIcon />,
       title: t("advertisements_page.filter_sec.filter4"),
-      content: <CheckBoxHome checkboxes={checkboxesextra} />,
+      content: (
+        <ChecBoxPlusFeature
+          setFilterProps={setFilterProps}
+          FilterProps={FilterProps}
+        />
+      ),
     },
-    {
-      id: 5,
-      icon: <BedIcon />,
-      title: t("advertisements_page.filter_sec.filter5"),
-      content: <RoomsNumber />,
-    },
+    // {
+    //   id: 4,
+    //   icon: <BedIcon />,
+    //   title: t("advertisements_page.filter_sec.filter5"),
+    //   content: <RoomsNumber />,
+    // },
   ];
 
   return (

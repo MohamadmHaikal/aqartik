@@ -9,7 +9,15 @@ import { useNavigate } from "react-router";
 import Icons from "./Icons";
 
 const SpecialAds = ({ ad }) => {
-  const isNewHome = localStorage.getItem("isNewHome") === "true";
+  const TimechangeTheNewAds = 48;
+  const [isNewHome, setIsNewHome] = useState(false);
+  const TimeNew = new Date();
+  TimeNew.setHours(TimeNew.getHours() - TimechangeTheNewAds);
+  useEffect(() => {
+    const adCreatedAt = new Date(ad.created_at).getTime();
+    setIsNewHome(adCreatedAt > TimeNew.getTime());
+  }, [ad.created_at]);
+  // console.log(isNewHome);
   const navigate = useNavigate();
 
   const handleAdClick = (ad) => {
@@ -129,6 +137,7 @@ const SpecialAds = ({ ad }) => {
                     fontWeight: "600",
                     marginX: "0.3rem",
                     fontSize: { xs: "16px", md: "20px" },
+                    width: "max-content",
                   }}
                 >
                   {ad.price} ر.س
@@ -192,7 +201,7 @@ const SpecialAds = ({ ad }) => {
                 <Typography
                   sx={{ color: "rgb(132, 132, 132)", marginTop: "2px" }}
                 >
-                  ({"ratings"})
+                  ( {ad.user_rate?.toFixed(2)})
                 </Typography>
               </Box>
               <Box sx={{ display: "flex" }}>

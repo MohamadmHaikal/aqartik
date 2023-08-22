@@ -328,7 +328,7 @@ const DetailsXsTabs = ({ adInfo }) => {
                   )}
                   ..
                 </Typography>
-                <FiveStars />
+                <FiveStars adInfo={adInfo.id}/>
               </Box>
             )}
           </Box>

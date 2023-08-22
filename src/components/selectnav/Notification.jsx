@@ -3,6 +3,7 @@ import { Box, Typography } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { isBefore, subDays } from "date-fns";
 
 const Notification = ({ notificationData }) => {
   const notificationRef = useRef(null);
@@ -53,7 +54,9 @@ const Notification = ({ notificationData }) => {
             position: "absolute",
             left: "-120px",
             top: " 3rem",
-            overflow: "hidden",
+            overflow: "scroll",
+            height: "320px",
+            padding: "10px",
           }}
         >
           <Box
@@ -67,56 +70,65 @@ const Notification = ({ notificationData }) => {
             <Typography
               sx={{
                 color: "black",
-                padding: " 1rem",
+                padding: " 10px",
                 fontWeight: "600",
               }}
             >
               {t("notifications.title")}
             </Typography>
             <Link to="/userdashbored" style={{ textDecoration: "none" }}>
-              <Typography
-                sx={{ color: "var(--green-color)", marginLeft: "5px" }}
-              >
+              <Typography sx={{ color: "var(--green-color)", marginX: "5px" }}>
                 عرض الكل
               </Typography>
             </Link>
           </Box>
-          <Box>
-            <Box sx={{ borderBottom: "1px solid #eee", padding: "1rem" }}>
-              <Link
-                href="#"
-                style={{
-                  textDecoration: "none",
-                  color: "black",
-                }}
-              >
-                <Typography sx={{ color: "var(--green-color)" }}>
-                  طلبات العضوية
-                </Typography>
-                <Typography>jdv jdfvnd dfjvkdjv </Typography>
-                <Typography sx={{ color: "gray", textAlign: "left" }}>
-                  منذ 14 ساعة
-                </Typography>
-              </Link>
-            </Box>
-            <Box sx={{ borderBottom: "1px solid #eee", padding: "1rem" }}>
-              <Link
-                href="#"
-                style={{
-                  textDecoration: "none",
-                  color: "black",
-                }}
-              >
-                <Typography sx={{ color: "var(--green-color)" }}>
-                  طلبات العضوية
-                </Typography>
-                <Typography>jdv jdfvnd dfjvkdjv </Typography>
-                <Typography sx={{ color: "gray", textAlign: "left" }}>
-                  منذ 14 ساعة
-                </Typography>
-              </Link>
-            </Box>
-          </Box>
+
+          {notificationData.notifications.data?.map((notification, i) => {
+            const createdAt = new Date(notification.created_at);
+            const now = new Date();
+            const isMoreThanADayAgo = isBefore(createdAt, subDays(now, 1));
+
+            return (
+              notification.seen === 0 && (
+                <Box
+                  key={notification.id}
+                  sx={{ borderBottom: "1px solid #eee", padding: "0.5rem" }}
+                >
+                  <Link
+                    to={notification.url}
+                    style={{
+                      textDecoration: "none",
+                      color: "black",
+                    }}
+                  >
+                    <Typography sx={{ color: "var(--green-color)" }}>
+                      {lang === "ar"
+                        ? notification.ar_title
+                        : notification.en_title}
+                    </Typography>
+                    <Typography>
+                      {lang === "ar"
+                        ? notification.ar_body
+                        : notification.en_body}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "left",
+                        color: "gray",
+                        fontSize: "11px",
+                      }}
+                    >
+                      {isMoreThanADayAgo
+                        ? new Date(notification.created_at).toLocaleDateString()
+                        : new Date(
+                            notification.created_at
+                          ).toLocaleTimeString()}
+                    </Typography>
+                  </Link>
+                </Box>
+              )
+            );
+          })}
         </Box>
       )}
     </Box>

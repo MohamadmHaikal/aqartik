@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import SearchIcon from "@mui/icons-material/Search";
@@ -13,22 +13,40 @@ import { useTranslation } from "react-i18next";
 //   },
 // }));
 
-const HomeType = ({ isOpen, onClose, onHomeSelect, selectedHome }) => {
-  const homes = ["استراحة", "عطلة", "فيلا", "مزرعة "];
+const HomeType = ({
+  isOpen,
+  onClose,
+  onHomeSelect,
+  selectedHome,
+  homes,
+  setFilterProps,
+}) => {
+  console.log(homes);
+  console.log(selectedHome);
+  // const homes = ["استراحة", "عطلة", "فيلا", "مزرعة "];
   const [searchText, setSearchText] = useState("");
   const { i18n } = useTranslation();
   const lang = i18n.language;
   const handleHomeSelection = (home) => {
     onHomeSelect(home);
     onClose(); // Close the SelectCity component when a city is selected
+    // console.log("this home" ,home)
   };
+  // useEffect(() => {
+  //   setFilterProps((prev) => ({
+  //     ...prev,
+  //     city: selectedHome,
+  //   }));
+  // }, [selectedHome]);
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
   };
 
-  const filteredCities = homes.filter((home) =>
-    home.includes(searchText.trim())
+  const filteredCities = homes.filter(
+    (home) =>
+      home.ar_name.includes(searchText.trim()) ||
+      home.en_name.includes(searchText.trim())
   );
 
   return (
@@ -105,15 +123,15 @@ const HomeType = ({ isOpen, onClose, onHomeSelect, selectedHome }) => {
               },
             },
           }}
-          label="ابحث عن مدينة"
+          label="ابحث عن عقار"
           variant="outlined"
           margin="normal"
           fullWidth
         />
       </Box>
-      {filteredCities.map((home) => (
+      {homes.map((home) => (
         <Typography
-          key={home}
+          key={home.id}
           sx={{
             position: "relative",
             padding: "15px 28px",
@@ -122,12 +140,13 @@ const HomeType = ({ isOpen, onClose, onHomeSelect, selectedHome }) => {
             "&:hover": {
               backgroundColor: "rgb(243, 244, 251)",
             },
-            backgroundColor: selectedHome === home ? "rgb(243, 244, 251)" : "",
+            backgroundColor:
+              selectedHome === home.id ? "rgb(243, 244, 251)" : "",
           }}
-          onClick={() => handleHomeSelection(home)}
+          onClick={() => handleHomeSelection(home.id)}
         >
-          {home}
-          {selectedHome === home && (
+          {lang === "ar" ? home.ar_name : home.en_name}
+          {selectedHome === home.id && (
             <CheckIcon
               sx={{
                 position: "absolute",

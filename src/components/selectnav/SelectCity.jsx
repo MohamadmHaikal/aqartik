@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import SearchIcon from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
+import useDataFetcher from "../../api/useDataFetcher ";
+
 // import { styled } from "@mui/system";
 
 // const StyledBox = styled(Box)(({ theme }) => ({
@@ -13,11 +15,19 @@ import { useTranslation } from "react-i18next";
 //   },
 // }));
 
-const SelectCity = ({ isOpen, onClose, onCitySelect, selectedCity }) => {
-  const cities = ["الرياض", "جدة", "مكة", "المدينة المنورة", "رياض", "أبها"];
+const SelectCity = ({
+  isOpen,
+  onClose,
+  onCitySelect,
+  selectedCity,
+  cities,
+}) => {
+  // const cities = ["الرياض", "جدة", "مكة", "المدينة المنورة", "رياض", "أبها"];
   const [searchText, setSearchText] = useState("");
+
   const { i18n } = useTranslation();
   const lang = i18n.language;
+
   const handleCitySelection = (city) => {
     onCitySelect(city);
     onClose(); // Close the SelectCity component when a city is selected

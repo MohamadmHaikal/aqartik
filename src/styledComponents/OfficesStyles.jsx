@@ -13,7 +13,7 @@ export const OfficesContainer = styled.div`
       input {
         border-radius: 40px;
         border: 1px solid #999;
-        max-width: 150px;
+        max-width: 250px;
         outline: none;
         padding: 8px 16px;
       }

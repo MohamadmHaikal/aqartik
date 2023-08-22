@@ -8,19 +8,43 @@ import { boat, exciting_experience, house } from "../../assets";
 import { Box, Typography, Button, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
+
 import { AnimatePresence, motion } from "framer-motion";
-const MainSection = () => {
+const MainSection = ({ setDataLoading }) => {
   const { data, isLoading, error, get, post } = useDataFetcher();
   const [bannersData, setBannersData] = useState([]);
 
   useEffect(() => {
-    get("/api/settings/banners/all");
+    setDataLoading(true);
+    const storedData = localStorage.getItem("bannersData");
+    // console.log(storedData);
+    if (storedData) {
+      setBannersData(JSON.parse(storedData));
+    } else {
+      get("/api/settings/banners/all");
+    }
+    setDataLoading(false);
   }, []);
+
+  console.log(bannersData);
   useEffect(() => {
     if (data && data.banners) {
       localStorage.setItem("bannersData", JSON.stringify(data.banners));
     }
   }, [data]);
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("bannersData");
+    if (storedData) {
+      setBannersData(JSON.parse(storedData));
+    } else {
+    }
+  }, []);
+
+  const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
+
+  const csstransitionRef = useRef(null);
+
   useEffect(() => {
     const storedData = localStorage.getItem("bannersData");
     if (storedData) {
@@ -45,7 +69,7 @@ const MainSection = () => {
     }
   }, [i18n.language, prevLanguage]);
 
-  const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  // const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
@@ -79,8 +103,8 @@ const MainSection = () => {
         onSlideChange={handleSlideChange}
         sx={{ position: "relative", marginTop: "11rem" }}
       >
-        {data &&
-          data.banners.map((banner, index) => {
+        {bannersData &&
+          bannersData.map((banner, index) => {
             return (
               <SwiperSlide key={index}>
                 <Box
@@ -258,8 +282,8 @@ const MainSection = () => {
         }}
       >
         {/* Render pagination dots */}
-        {data &&
-          data.banners.map((image, index) => (
+        {bannersData &&
+          bannersData.map((image, index) => (
             <Box
               key={index}
               sx={{

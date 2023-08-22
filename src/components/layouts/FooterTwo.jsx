@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
-import { Box, Container, Grid, Link, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import {
   Googleplay,
   Appstore,
@@ -11,12 +11,14 @@ import {
   Mada,
   Logo,
 } from "../../assets";
+import { Link } from "react-router-dom";
 import styles from "./footer.module.css";
 import PhoneIcon from "@mui/icons-material/Phone";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import GeneralContext from "../../context/generalContext";
 import {
   Mail as MailIcon,
   LocationOn as LocationOnIcon,
@@ -28,16 +30,14 @@ import useDataFetcher from "../../api/useDataFetcher ";
 const phoneNumber = "000000000000";
 
 const FooterTwo = () => {
-  const { data, isLoading, error, get, post } = useDataFetcher();
+  const { generalData, website_status } = useContext(GeneralContext);
   const [FooterData, setFooterData] = useState([]);
+
   useEffect(() => {
-    get("/api/settings/genral");
-  }, []);
-  useEffect(() => {
-    if (data) {
-      setFooterData(data.settings);
+    if (generalData) {
+      setFooterData(generalData);
     }
-  }, [data]);
+  }, [generalData]);
 
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -89,7 +89,7 @@ const FooterTwo = () => {
     <>
       {/* footer for larger screen */}
       <Box sx={{ display: { xs: "none", md: "block" } }}>
-        <Container sx={{ marginTop: "2rem", maxWidth: "1350px !important" }}>
+        <Container sx={{ marginTop: "4rem", maxWidth: "1350px !important" }}>
           <Grid container spacing={2}>
             <Grid
               item
@@ -103,13 +103,13 @@ const FooterTwo = () => {
               }}
             >
               <Box
-                sx={{ position: "relative", width: "170px", height: "56px" }}
+                sx={{ position: "relative", width: "170px", height: "80px" }}
               >
                 <img
                   src={
                     lang === "ar"
-                      ? `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_ar}`
-                      : `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_en}`
+                      ? `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_ar}`
+                      : `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_en}`
                   }
                   alt="logo"
                   style={{
@@ -179,8 +179,8 @@ const FooterTwo = () => {
                   </li>
                   <li className={styles.aboutus}>
                     <Link
-                      href="#"
-                      sx={{ textDecoration: "none", color: "gray" }}
+                      to="/about"
+                      style={{ textDecoration: "none", color: "gray" }}
                     >
                       {t("footer.first_list.about")}
                     </Link>
@@ -198,16 +198,16 @@ const FooterTwo = () => {
                   </li>
                   <li style={{ marginBottom: "10px" }}>
                     <Link
-                      href="#"
-                      sx={{ textDecoration: "none", color: "gray" }}
+                      to="/contact_us"
+                      style={{ textDecoration: "none", color: "gray" }}
                     >
                       {t("footer.second_list.contact_us")}
                     </Link>
                   </li>
                   <li style={{ marginBottom: "10px" }}>
                     <Link
-                      href="#"
-                      sx={{ textDecoration: "none", color: "gray" }}
+                      to="#"
+                      style={{ textDecoration: "none", color: "gray" }}
                     >
                       {t("footer.second_list.frequently_asked_questions")}
                     </Link>
@@ -226,16 +226,16 @@ const FooterTwo = () => {
                   </li>
                   <li style={{ marginBottom: "10px" }}>
                     <Link
-                      href="#"
-                      sx={{ textDecoration: "none", color: "gray" }}
+                      to="#"
+                      style={{ textDecoration: "none", color: "gray" }}
                     >
                       {t("footer.third_list.terms_and_conditions")}
                     </Link>
                   </li>
                   <li style={{ marginBottom: "10px" }}>
                     <Link
-                      href="#"
-                      sx={{ textDecoration: "none", color: "gray" }}
+                      to="/privacy"
+                      style={{ textDecoration: "none", color: "gray" }}
                     >
                       {t("footer.third_list.privacy_policy")}
                     </Link>
@@ -357,8 +357,8 @@ const FooterTwo = () => {
                   <img
                     src={
                       lang === "ar"
-                        ? `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_ar}`
-                        : `https://aqar-plus.sta.sa/public/uploads/settings/${FooterData.style_logo_en}`
+                        ? `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_ar}`
+                        : `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_en}`
                     }
                     alt="logo"
                     style={{ width: "140px" }}
@@ -501,7 +501,7 @@ const FooterTwo = () => {
               marginTop: "25px",
             }}
           >
-            &#9400; {t("footer.copy_right")} 2023
+            &#9400; {t("footer.copy_right")} {new Date().getFullYear()}
           </Typography>
         </Box>
       </Box>

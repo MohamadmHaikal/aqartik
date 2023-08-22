@@ -27,19 +27,31 @@ const Mappage = () => {
   const [mapData, setMapData] = useState([]);
   const [isBoxVisible, setBoxVisible] = useState(false);
   const [selectedAd, setSelectedAd] = useState();
+  const [FilterProps, setFilterProps] = useState();
   const state = useLocation().state;
   useEffect(() => {
     get(
-      `api/ads/get_all_ads?lat=${state.lat}&lng=${state.lng}&zoom=${state.zoom}`
+      `api/ads/get_all_ads?lat=${state?.lat}&lng=${state?.lng}&zoom=${state?.zoom}&category_id=${state?.category_id}&min_price=${state?.min_price}&max_price=${state?.max_price}`
     );
-    // console.log(state)
-  }, []);
+  }, [state]);
   useEffect(() => {
     if (data) {
       setMapData(data.ads.data);
       // console.log(mapData);
     }
   }, [data]);
+  console.log(data);
+  const getFilterDataInXs = () => {
+    get(
+      `api/ads/get_all_ads?lat=""&lng=""&zoom=""&category_id=${FilterProps?.category_id}&max_price=${FilterProps?.max_price}&title=${FilterProps?.title}&neighborhood=${FilterProps?.neighborhood}&city=${FilterProps?.city}&space=${FilterProps?.space}&interface_id=${FilterProps?.interface_id}&min_price=${FilterProps?.min_price}}`
+    );
+    setShowFilter(false);
+  };
+  const deleteFilterinXsDataInXs = () => {
+    get(
+      `api/ads/get_all_ads?lat=""&lng=""&zoom=""&category_id=""&max_price=""&title=""&neighborhood=""&city=""&space=""&interface_id=""&min_price=""}}`
+    );
+  };
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -141,7 +153,7 @@ const Mappage = () => {
                 تصفية
               </Button>
               <Typography sx={{ fontWeight: "700", fontSize: "17px" }}>
-                50 إعلان{" "}
+                {mapData.length} إعلان{" "}
               </Typography>
             </Box>
             <AdsList
@@ -366,7 +378,7 @@ const Mappage = () => {
                 }}
               >
                 <Typography sx={{ marginLeft: "5px" }}>فلتر</Typography>
-                <Typography
+                {/* <Typography
                   sx={{
                     width: "24px",
                     height: "24px",
@@ -384,7 +396,7 @@ const Mappage = () => {
                   }}
                 >
                   0
-                </Typography>
+                </Typography> */}
               </Box>
               <Button
                 sx={{
@@ -392,6 +404,7 @@ const Mappage = () => {
                   fontWeight: "500",
                   color: "var(--green-color)",
                 }}
+                onClick={deleteFilterinXsDataInXs}
               >
                 مسح الكل
               </Button>
@@ -409,7 +422,10 @@ const Mappage = () => {
               ضمن احتياجاتك.
             </Typography>
             <Box>
-              <AccordinFilters />
+              <AccordinFilters
+                FilterProps={FilterProps}
+                setFilterProps={setFilterProps}
+              />
             </Box>
           </Box>
           <Box
@@ -429,6 +445,16 @@ const Mappage = () => {
             }}
           >
             <Button
+              to="/mappage"
+              state={{
+                lat: "",
+                lng: "",
+                zoom: "",
+                title: FilterProps?.title,
+                category_id: "",
+                min_price: "",
+                max_price: "",
+              }}
               sx={{
                 backgroundColor: "var(--green-color)",
                 height: "60px",
@@ -438,6 +464,7 @@ const Mappage = () => {
                 color: "white",
                 margin: "0px 20px",
               }}
+              onClick={getFilterDataInXs}
             >
               <Typography sx={{ fontWeight: "600", fontSize: "14px" }}>
                 +100 بيوت العطلات •
@@ -525,19 +552,23 @@ const Mappage = () => {
                 paddingX: "6px",
               }}
             >
-              <Box>
-                <SpecialAds
-                  title="شاليه بمسبح وشقة خارجية"
-                  price="20000"
-                  location="جدة"
-                  rate="10"
-                />
-              </Box>
+              {mapData.map((ad, index) => (
+                <>
+                  <Box key={ad.id}>
+                    <SpecialAds ad={ad}></SpecialAds>
+                  </Box>
+                </>
+              ))}
             </Box>
           </Box>
         </Box>
       )}
-      <MapFilter isOpen={isModalOpen} handleClose={handleCloseModal} />
+      <MapFilter
+        isOpen={isModalOpen}
+        handleClose={handleCloseModal}
+        FilterProps={FilterProps}
+        setFilterProps={setFilterProps}
+      />
     </>
   );
 };

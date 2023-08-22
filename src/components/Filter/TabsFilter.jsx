@@ -17,10 +17,12 @@ import NorthIcon from "@mui/icons-material/North";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
 import PaginationAds from "./PaginationAds";
+import SkeleltonSpeacialAds from "../Loading/SkeleltonSpeacialAds";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import { useTranslation } from "react-i18next";
 
 import "./tabs.module.css";
 
-import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
 
 const icons = [
@@ -50,8 +52,14 @@ const TabPanel = ({ children, value, index }) => {
   );
 };
 
-const TabsFilter = ({ data }) => {
-  // console.log(data);
+const TabsFilter = ({
+  data,
+  userLocation,
+  setFilterProps,
+  FilterProps,
+  isLoading,
+}) => {
+  // console.log(userLocation);
 
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [isListOrderOpen, setListOrderOpen] = React.useState(false);
@@ -59,6 +67,10 @@ const TabsFilter = ({ data }) => {
   const theme = useTheme();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [value, setValue] = React.useState(0);
+  console.log(userLocation);
+
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
   // const { data, isLoading, get } = useDataFetcher();
   // const [current_page, set_current_page] = useState();
@@ -76,8 +88,6 @@ const TabsFilter = ({ data }) => {
   // }, [data]);
 
   // console.log(current_page, pre_page);
-
-  const { t } = useTranslation();
 
   const tabData = [
     { label: t("filtersTab.default_btn"), content: "Content 1" },
@@ -98,6 +108,33 @@ const TabsFilter = ({ data }) => {
     setBoxShown(!isBoxShown);
   };
 
+  const commonButtonStyles = {
+    borderRadius: "26px",
+    padding: "13px 22px",
+    fontSize: "14px",
+    position: "relative",
+    "&:hover": {
+      backgroundColor: "white",
+      color: "black",
+    },
+    "&:before": {
+      content: '""',
+      display: "block",
+      width: "4px",
+      height: "4px",
+      backgroundColor: "rgba(0, 0, 0, 0.16)",
+      borderRadius: "50%",
+      position: "absolute",
+      right: "2px",
+      top: "50%",
+      transform: "translateX(50%)",
+    },
+  };
+  const firstButtonStyles = {
+    "&:before": {
+      content: "none",
+    },
+  };
   return (
     <>
       <div
@@ -180,7 +217,204 @@ const TabsFilter = ({ data }) => {
                 borderRadius: "30px",
               }}
             >
-              {tabData.map((tab, index) => (
+              <Button
+                sx={{
+                  ...commonButtonStyles,
+                  ...firstButtonStyles,
+                  backgroundColor:
+                    !FilterProps.lat &
+                    !FilterProps.lng &
+                    !FilterProps.topPrice &
+                    !FilterProps.minPrice &
+                    !FilterProps.topRate &
+                    !FilterProps.topView
+                      ? "var(--green-color)"
+                      : "white",
+                  color:
+                    !FilterProps.lat &
+                    !FilterProps.lng &
+                    !FilterProps.topPrice &
+                    !FilterProps.minPrice &
+                    !FilterProps.topRate &
+                    !FilterProps.topView
+                      ? "white"
+                      : "black",
+                }}
+                onClick={() =>
+                  setFilterProps((prev) => ({
+                    ...prev,
+                    lat: null,
+                    lng: null,
+                    topPrice: null,
+                    minPrice: null,
+                    topRate: null,
+                    topView: null,
+                  }))
+                }
+              >
+                الأفتراضي
+              </Button>
+              <Button
+                sx={{
+                  ...commonButtonStyles,
+                  backgroundColor: FilterProps.lat
+                    ? "var(--green-color)"
+                    : "white",
+                  color: FilterProps.lat ? "white" : "black",
+                  "&:hover": {
+                    backgroundColor: FilterProps.lat
+                      ? "var(--green-color)"
+                      : "white",
+                    color: FilterProps.lat ? "white" : "black",
+                  },
+                }}
+                onClick={() =>
+                  setFilterProps((prev) => ({
+                    ...prev,
+
+                    lat: userLocation.latitude,
+                    lng: userLocation.longitude,
+                    topPrice: null,
+                    minPrice: null,
+                    topRate: null,
+                    topView: null,
+                  }))
+                }
+              >
+                {" "}
+                الأقرب لموقعي
+              </Button>
+              <Button
+                sx={{
+                  ...commonButtonStyles,
+                  backgroundColor: FilterProps.topView
+                    ? "var(--green-color)"
+                    : "white",
+                  color: FilterProps.topView ? "white" : "black",
+                  "&:hover": {
+                    backgroundColor: FilterProps.topView
+                      ? "var(--green-color)"
+                      : "white",
+                    color: FilterProps.topView ? "white" : "black",
+                  },
+                }}
+                onClick={() =>
+                  setFilterProps((prev) => ({
+                    ...prev,
+
+                    topView: true,
+                    lat: null,
+                    lng: null,
+                    topPrice: null,
+                    minPrice: null,
+                    topRate: null,
+                  }))
+                }
+              >
+                الأعلى مشاهدة
+              </Button>
+              <Button
+                sx={{
+                  ...commonButtonStyles,
+                  backgroundColor: FilterProps.topRate
+                    ? "var(--green-color)"
+                    : "white",
+                  color: FilterProps.topRate ? "white" : "black",
+                  "&:hover": {
+                    backgroundColor: FilterProps.topRate
+                      ? "var(--green-color)"
+                      : "white",
+                    color: FilterProps.topRate ? "white" : "black",
+                  },
+                }}
+                onClick={() =>
+                  setFilterProps((prev) => ({
+                    ...prev,
+
+                    topRate: true,
+                    topView: null,
+                    lat: null,
+                    lng: null,
+                    topPrice: null,
+                    minPrice: null,
+                  }))
+                }
+              >
+                {" "}
+                الأكثر تقييم
+              </Button>
+              <Button
+                sx={{
+                  ...commonButtonStyles,
+                  backgroundColor: FilterProps.topPrice
+                    ? "var(--green-color)"
+                    : "white",
+                  color: FilterProps.topPrice ? "white" : "black",
+                  "&:hover": {
+                    backgroundColor: FilterProps.topPrice
+                      ? "var(--green-color)"
+                      : "white",
+                    color: FilterProps.topPrice ? "white" : "black",
+                  },
+                }}
+                onClick={() =>
+                  setFilterProps((prev) => ({
+                    ...prev,
+
+                    topPrice: true,
+                    topView: null,
+                    lat: null,
+                    lng: null,
+
+                    minPrice: null,
+                    topRate: null,
+                  }))
+                }
+              >
+                الأعلى سعر
+              </Button>
+              <Button
+                sx={{
+                  ...commonButtonStyles,
+                  backgroundColor: FilterProps.minPrice
+                    ? "var(--green-color)"
+                    : "white",
+                  color: FilterProps.minPrice ? "white" : "black",
+                  "&:hover": {
+                    backgroundColor: FilterProps.minPrice
+                      ? "var(--green-color)"
+                      : "white",
+                    color: FilterProps.minPrice ? "white" : "black",
+                  },
+                }}
+                onClick={() =>
+                  setFilterProps((prev) => ({
+                    ...prev,
+
+                    minPrice: true,
+                    topPrice: null,
+                    topView: null,
+                    lat: null,
+                    lng: null,
+                    topRate: null,
+                  }))
+                }
+              >
+                الأقل سعر
+              </Button>
+
+              {/* {tabData.map((tab, index) => (
+                <Button
+                  key={index}
+                  onClick={() =>
+                    setFilterProps((prev) => ({
+                      ...prev,
+                      page: new_page,
+                    }))
+                  }
+                >
+                  {tab.label}
+                </Button>
                 <Tab
                   key={index}
                   label={tab.label}
@@ -212,104 +446,42 @@ const TabsFilter = ({ data }) => {
                     },
                   }}
                 />
-              ))}
+              ))} */}
             </Tabs>
           </Box>
         )}
-
-        {data.map((ad, index) => (
-          <>
-            <TabPanel key={ad.id}>
-              <Box>
-                <SpecialAds ad={ad}></SpecialAds>
-              </Box>
-            </TabPanel>
-          </>
-        ))}
-        {isMdScreen && isListOrderOpen && isBoxShown && (
+        {isLoading ? (
+          Array.from({ length: 5 }).map((_, index) => (
+            <SkeleltonSpeacialAds key={index} />
+          ))
+        ) : data.length > 0 ? (
+          data.map((ad, i) => <SpecialAds key={ad.id} ad={ad} />)
+        ) : (
           <Box
             sx={{
-              position: "fixed",
-              top: "10rem",
-              left: "20px",
-              backgroundColor: "rgb(255, 255, 255)",
-              boxShadow: "rgba(0, 0, 0, 0.16) 0px 3px 3px",
-              width: "18rem",
-              maxWidth: "317px",
-              borderRadius: "24px",
-              zIndex: "220000000",
-              border: "1px solid rgb(90, 64, 155)",
-              padding: "1rem",
-            }}
-          >
-            <Typography variant="h6">رتب أماكن الاقامة حسب</Typography>
-
-            <ul
-              style={{
-                listStyle: "none",
-                padding: "1rem",
-                fontFamily: "Tajawal,Arial,sans-serif",
-              }}
-            >
-              {tabData.map((tab, index) => (
-                <li
-                  key={index}
-                  style={{
-                    padding: "0.5rem 0.3rem",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                  onClick={() => {
-                    setSelectedTab(index);
-                    setListOrderOpen(false);
-                  }}
-                  className={selectedTab === index ? "active" : ""}
-                >
-                  {tab.label}
-                  {selectedTab === index && (
-                    <CheckIcon
-                      sx={{
-                        marginLeft: "0.5rem",
-                        color: "var( --green-color)",
-                        position: "absoulte",
-                        right: "1rem",
-                      }}
-                    />
-                  )}
-                </li>
-              ))}
-            </ul>
-          </Box>
-        )}
-        {isMdScreen && (
-          <Button
-            onClick={() => {
-              toggleBox();
-              toggleOrderList();
-            }}
-            sx={{
+              width: "90%",
+              backgroundColor: "rgb(253, 236, 234)",
               display: "flex",
-              margin: "1rem auto",
-              padding: "0.5rem 1rem",
-              borderRadius: "25px",
-              backgroundColor: "var(--green-color)",
-              color: "white",
-              left: "50%",
-              transform: "translate(-50%,-50%)",
-              position: "absolute",
-              top: "-1rem",
-              zIndex: 11111,
-              "&:hover": {
-                backgroundColor: "var(--green-color)",
-              },
+              padding: "6px 16px",
+              margin: "auto",
+              borderRadius: "4px",
+              marginTop: "2rem",
             }}
           >
-            <NorthIcon />
-            <NorthIcon
-              sx={{ transform: "rotate(180deg)", marginRight: "-0.8rem" }}
-            />
-            ترتيب
-          </Button>
+            <ErrorOutlineIcon sx={{ color: "red", marginLeft: "10px" }} />
+            <Box>
+              <Typography sx={{ color: "red", marginBottom: "10px" }}>
+                {lang === "ar"
+                  ? " عذرا لايوجد نتائج"
+                  : " sorry there is no result"}
+              </Typography>
+              <Typography sx={{ marginBottom: "1rem" }}>
+                {lang === "ar"
+                  ? " لا يوجد نتائج متاحة في الوقت الحالي، من فضلك حاول مرة أخري"
+                  : "sorry , there is no result now ... please try again"}
+              </Typography>
+            </Box>
+          </Box>
         )}
       </div>
     </>

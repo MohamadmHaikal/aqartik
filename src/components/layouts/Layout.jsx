@@ -11,10 +11,16 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import ChatContext from "../../context/chatContext";
 import { useTranslation } from "react-i18next";
 import { Toaster } from "react-hot-toast";
+import useDataFetcher from "../../api/useDataFetcher ";
+
 import DownloadingIcon from "@mui/icons-material/Downloading";
 import ClearIcon from "@mui/icons-material/Clear";
-import useDataFetcher from "../../api/useDataFetcher ";
-const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
+const Layout = ({
+  children,
+  showNavFooter = true,
+  contentStyles = {},
+  generalData,
+}) => {
   const location = useLocation();
   const { pathname } = location;
   const hideFooter = location.pathname.includes("/mappage");
@@ -42,6 +48,7 @@ const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
       setNotificationData(data);
     }
   }, [data]);
+  console.log(notificationData);
 
   return (
     <div>
@@ -53,6 +60,7 @@ const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
           isUserSelected={isUserSelected}
           setIsUserSelected={setIsUserSelected}
           notificationData={notificationData}
+          generalData={generalData}
         />
       )}
       <main style={contentStyles}>{children}</main>
