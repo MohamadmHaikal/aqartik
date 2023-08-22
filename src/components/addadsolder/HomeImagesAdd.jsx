@@ -9,52 +9,80 @@ import { useTranslation } from "react-i18next";
 
 // import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-const HomeImagesAdd = ({ formData, setFormData }) => {
-  const { t } = useTranslation();
-
-  const [croppedImage, setCroppedImage] = useState(
-    formData.croppedImage || null
-  );
-  const [selectedImages, setSelectedImages] = useState(
-    formData.selectedImages || []
-  );
+const HomeImagesAdd = ({
+  formData,
+  setFormData,
+  images,
+  setImages,
+  selectedImage,
+  setSelectedImage,
+  thumbnail,
+  setThumbnail,
+  selectedImages,
+  setSelectedImages,
+  type,
+  deletedImages,
+  setDeletedImages,
+  readyImages,
+  setReadyImages,
+}) => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const [selectedVideoFile, setSelectedVideoFile] = useState(
     formData.selectedVideoFile || null
   );
+
   useEffect(() => {
     // Update the formData when selectedImages or selectedVideoFile changes
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      selectedImages,
-      selectedVideoFile,
-    }));
-  }, [selectedImages, selectedVideoFile, setFormData]);
-  const handleCroppedImage = (image) => {
-    setCroppedImage(image);
-  };
+    if (selectedVideoFile) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        video: selectedVideoFile,
+      }));
+    }
+  }, [selectedVideoFile]);
+
   const handleDeleteImage = (index) => {
     setSelectedImages((prevImages) => {
       const updatedImages = [...prevImages];
       updatedImages.splice(index, 1);
       return updatedImages;
     });
+    setImages((prevImages) => {
+      const updatedImages = [...prevImages];
+      updatedImages.splice(index, 1);
+      return updatedImages;
+    });
   };
-  const handleImageSelect = (image) => {
-    if (selectedImages.length < 9) {
-      setSelectedImages((prevImages) => [...prevImages, image]);
-    }
+
+  const handleDeleteReadyImages = (index) => {
+    setReadyImages((prevImages) => {
+      const updatedImages = prevImages.filter((image) => image.id !== index);
+      return updatedImages;
+    });
+    setDeletedImages((prev) => [
+      ...prev,
+       index,
+    ]);
   };
+
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      images: selectedImages, // Append new blob to the array
+    }));
+  }, [selectedImages]);
+
   const handleVideoSelect = (event) => {
     const file = event.target.files[0];
     const fileSize = file.size / 1024; // Size in KB
-
     if (fileSize <= 40000) {
       setSelectedVideoFile(file);
     } else {
       setSelectedVideoFile(null);
     }
-    console.log(selectedVideoFile);
   };
+
   const handleButtonClick = () => {
     document.getElementById("video-input").click();
     if (selectedVideoFile) {
@@ -62,15 +90,6 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
       setSelectedVideoFile(null);
     }
   };
-  // const dragStart = (e, position) => {
-  //   dragItem.current = position;
-  //   console.log(e.target.innerHTML);
-  // };
-
-  // const dragEnter = (e, position) => {
-  //   dragOverItem.current = position;
-  //   console.log(e.target.innerHTML);
-  // };
 
   return (
     <Box>
@@ -96,7 +115,6 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
       </Box>
       <Box sx={{ marginY: "8px", fontSize: "16px", fontWeight: "600" }}>
         <Typography variant="label">
-          {" "}
           {t("user_dashboard.property_images.label1")}
         </Typography>
         <Box>
@@ -149,6 +167,87 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
           </Button>
         </Box>
 
+        {type === 1 && (
+          <>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: "600",
+                marginBottom: "24px",
+                marginTop: "8px",
+                fontSize: { xs: "1.2rem", md: "1.5rem" },
+              }}
+            >
+              {" "}
+              {lang === "ar"
+                ? "الصور التي تم اضافتها"
+                : "images that been added"}
+            </Typography>
+            <Box sx={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+              {readyImages.map((image, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    width: { xs: "250px", sm: "200px" },
+                    height: "120px",
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    marginBottom: "1rem",
+                    position: "relative",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      position: "absolute",
+                      top: "0rem",
+                      left: "0rem",
+                      color: "white",
+                      padding: "0.2rem 0.4rem",
+                      borderRadius: "4px",
+                      background: "rgba(0, 0, 0, 0.5)",
+                      fontSize: "12px",
+                      fontWeight: "600",
+                      borderRadius: "12px 0px",
+                      backgroundColor: "rgba(17, 17, 17, 0.47)",
+                      width: "32px",
+                      height: "24px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {index + 1}
+                  </Typography>
+
+                  <img
+                    key={index}
+                    src={`https://www.dashboard.aqartik.com/assets/images/ads/image/${image.name}`}
+                    alt={`Selected Image ${index}`}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <DeleteIcon
+                    sx={{
+                      position: "absolute",
+                      top: "0rem",
+                      right: "0rem",
+                      color: "white",
+                      cursor: "pointer",
+                      // zIndex: 1,
+                      padding: "4px",
+                      borderRadius: "0px 0px 0px 12px",
+                      background:
+                        "radial-gradient(at left bottom, rgba(255, 0, 0, 0.67) 0%, rgba(255, 0, 0, 0.2) 75%)",
+                    }}
+                    onClick={() => handleDeleteReadyImages(image.id)}
+                  />
+                </Box>
+              ))}
+            </Box>
+          </>
+        )}
+
         <Typography variant="label">
           {" "}
           {t("user_dashboard.property_images.label2")}
@@ -157,10 +256,16 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
           {t("user_dashboard.property_images.hint1")}
         </Typography>
         <CropeerImage
-          onCrop={handleCroppedImage}
+          type={1}
           isFirstButton={true}
           formData={formData}
           setFormData={setFormData}
+          setSelectedImages={setSelectedImages}
+          setImages={setImages}
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
+          thumbnail={thumbnail}
+          setThumbnail={setThumbnail}
         />
 
         <Typography variant="label">
@@ -177,16 +282,22 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
           }}
         >
           <CropeerImage
-            onCrop={handleImageSelect}
+            type={2}
             width="200px"
             height="120px"
             maxImages={8}
             hasBackground={false} // Set hasBackground prop to false
             formData={formData}
             setFormData={setFormData}
+            setSelectedImages={setSelectedImages}
+            setImages={setImages}
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
+            thumbnail={thumbnail}
+            setThumbnail={setThumbnail}
           />
 
-          {selectedImages.map((image, index) => (
+          {images.map((image, index) => (
             <Box
               key={index}
               sx={{
@@ -244,20 +355,6 @@ const HomeImagesAdd = ({ formData, setFormData }) => {
                 }}
                 onClick={() => handleDeleteImage(index)}
               />
-              {/* <DragIndicatorIcon
-                sx={{
-                  position: "absolute",
-                  top: "0rem",
-                  right: "0rem",
-                  color: "white",
-                  cursor: "pointer",
-                  padding: "4px",
-                  borderRadius: "0px 12px 0px 0px",
-                  backgroundColor: "var(--green-color)",
-                  cursor: "grabbing",
-                }}
-                onDragStart={(e) => dragStart(e, index)}
-              /> */}
             </Box>
           ))}
         </Box>

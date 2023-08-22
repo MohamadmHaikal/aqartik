@@ -8,25 +8,37 @@ const AddFeatureComponent = ({ formData, setFormData, category_bool }) => {
   const lang = i18n.language;
 
   const [selectedBooleansProperties, setSelectedBooleansProperties] = useState(
-    formData.selectedPropertyIds || []
+    formData.selectedBooleansProperties || []
   );
+
+  useEffect(() => {
+    if (formData.BoolFeaturea && selectedBooleansProperties.length === 0) {
+      setSelectedBooleansProperties(formData.BoolFeaturea);
+    }
+  }, []);
 
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       selectedBooleansProperties,
     }));
-  }, [selectedBooleansProperties, setFormData]);
+  }, [selectedBooleansProperties]);
 
   const handlePropertyClick = (propertyId) => {
-    if (selectedBooleansProperties.includes(propertyId)) {
+    const isInArray = selectedBooleansProperties.some(
+      (item) => item.boolfeaturea_id === propertyId
+    );
+
+    if (isInArray) {
       setSelectedBooleansProperties(
-        selectedBooleansProperties.filter((id) => id !== propertyId)
+        selectedBooleansProperties.filter(
+          (item) => item.boolfeaturea_id !== propertyId
+        )
       );
     } else {
       setSelectedBooleansProperties([
         ...selectedBooleansProperties,
-        propertyId,
+        { boolfeaturea_id: propertyId },
       ]);
     }
   };
@@ -64,9 +76,13 @@ const AddFeatureComponent = ({ formData, setFormData, category_bool }) => {
               borderRadius: "12px",
               cursor: "pointer",
               marginBottom: "1rem",
-              backgroundColor: selectedBooleansProperties.includes(property.id)
-                ? "var(--green-color)"
-                : "transparent",
+              backgroundColor:
+                formData?.selectedBooleansProperties &&
+                formData?.selectedBooleansProperties.some(
+                  (item) => item.boolfeaturea_id === property.id
+                )
+                  ? "var(--green-color)"
+                  : "transparent",
               transition: "background-color 0.3s, color 0.3s",
             }}
           >
@@ -74,9 +90,13 @@ const AddFeatureComponent = ({ formData, setFormData, category_bool }) => {
               sx={{
                 width: "100%",
                 textAlign: "center",
-                color: selectedBooleansProperties.includes(property.id)
-                  ? "white"
-                  : "black",
+                color:
+                  formData?.selectedBooleansProperties &&
+                  formData?.selectedBooleansProperties.some(
+                    (item) => item.boolfeaturea_id === property.id
+                  )
+                    ? "white"
+                    : "black",
               }}
             >
               {lang === "ar"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -9,28 +9,68 @@ import {
   Button,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import useDataFetcher from "../../../api/useDataFetcher ";
 
-const EditInformation = ({ onCancel }) => {
-  const { t } = useTranslation();
+const EditInformation = ({ type, ad, onCancel }) => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+  const [title, setTitle] = useState(ad.title);
+  const [updatedValues, setUpdatedValues] = useState();
+  const { data, isLoading, post } = useDataFetcher();
 
-  const [selectedValue, setSelectedValue] = useState("");
-  const [title, setTitle] = useState("rama");
+  useEffect(() => {
+    setUpdatedValues(ad);
+  }, [ad]);
 
-  const radioOptions = [
-    { id: 1, label: "شقة" },
-    { id: 2, label: "شاليه" },
-    { id: 3, label: "استراحة" },
-    { id: 4, label: "مخيم" },
-    { id: 5, label: "فيلا" },
-    { id: 6, label: "منتجع فندقي" },
-    { id: 7, label: "غرفة" },
-    { id: 8, label: "مزرعة" },
-  ];
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
+    setUpdatedValues((prev) => ({
+      ...prev,
+      title: event.target.value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formDataSend = new FormData();
+    // Verify that updatedValues is populated
+    formDataSend.append("title", title);
+    if (type === 0) {
+      try {
+        const res = await fetch(
+          `https://www.dashboard.aqartik.com/api/ads/update/${ad.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            body: JSON.stringify({ title }),
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    if (type === 1) {
+      try {
+        const res = await fetch(
+          `https://www.dashboard.aqartik.com/api/real-estate-request/update/${ad.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            body: JSON.stringify({ title }),
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
   return (
     <Box>
@@ -49,7 +89,7 @@ const EditInformation = ({ onCancel }) => {
           <TextField
             type="text"
             name="title"
-            value={title}
+            value={updatedValues?.title}
             onChange={handleTitleChange}
             sx={{
               maxWidth: "340px",
@@ -72,53 +112,6 @@ const EditInformation = ({ onCancel }) => {
             }}
           ></TextField>
         </Box>
-        <Box sx={{ marginTop: "1rem" }}>
-          <Typography variant="label">
-            {t("user_dashboard.incoming_orders.card1.label2")}
-          </Typography>
-
-          <RadioGroup
-            value={selectedValue}
-            onChange={handleChange}
-            sx={{
-              display: "flex",
-              flexFlow: "row wrap",
-              gap: "1rem",
-              marginTop: "2rem",
-            }}
-          >
-            {radioOptions.map((option) => (
-              <FormControlLabel
-                key={option.id}
-                value={option.id.toString()}
-                control={<Radio />}
-                label={option.label}
-                sx={{
-                  minWidth: "23.3%",
-                  border: "2px solid transparent",
-                  padding: " 8px",
-                  paddingInlineEnd: "16px",
-                  filter: "drop-shadow(rgba(0, 0, 0, 0.16) 0px 1px 3px)",
-                  marginRight: "-11px",
-                  marginLeft: "16px",
-                  borderRadius: "12px",
-                  background: "rgb(255, 255, 255)",
-                  transition: "all 100ms ease-in-out 0s",
-                  ...(selectedValue === option.id.toString() && {
-                    border: "2px solid var(--green-color)",
-                    color: "var(--green-color)",
-                  }),
-                  "& .MuiRadio-root.Mui-checked": {
-                    color: "var(--green-color)",
-                  },
-                  "& .MuiFormControlLabel-label": {
-                    fontWeight: 600,
-                  },
-                }}
-              />
-            ))}
-          </RadioGroup>
-        </Box>
         <Box
           sx={{
             borderWidth: "0px 0px thin",
@@ -140,6 +133,7 @@ const EditInformation = ({ onCancel }) => {
         >
           <Button
             type="submit"
+            onClick={handleSubmit}
             sx={{
               fontWeight: "600",
               borderRadius: "8px",

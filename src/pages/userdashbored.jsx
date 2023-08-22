@@ -15,12 +15,23 @@ import Notification from "../components/user_dashbord/Notification";
 
 import { UserDashboradSpeacialAds } from "../components";
 import { useTranslation } from "react-i18next";
-
+import useDataFetcher from "../api/useDataFetcher ";
 const UserDashbored = () => {
   const { t } = useTranslation();
   const [selectedItem, setSelectedItem] = useState(0);
   const [selectedSubitem, setSelectedSubitem] = useState(0);
+
   const [showNotification, setShowNotification] = useState(false);
+
+  const [userData, setUserData] = useState();
+  const { data, get } = useDataFetcher();
+
+  useEffect(() => {
+    get("/api/user/get_user_data");
+  }, []);
+  useEffect(() => {
+    if (data) setUserData(data?.user);
+  }, [data]);
 
   // useEffect(() => {
   //   if (data) {
@@ -50,24 +61,19 @@ const UserDashbored = () => {
       content = <PersonalInfo />;
       break;
     case 1:
-      content = <MyAds />;
+      content = <OutgoingOrder type={0} userData={userData} />; // my ads section
       break;
     case 2:
       switch (selectedSubitem) {
         case 0:
-          content = <NewRequests />;
+          content = <NewRequests />; /// add new request
           break;
         case 1:
-          content = <OutgoingOrder />;
+          content = <OutgoingOrder type={1} userData={userData} />; // my outgoing requests section
           break;
         case 2:
-          content = (
-            <IcomingOrders
-              title={t("user_dashboard.incoming_orders.page_title2")}
-            />
-          );
+          content = <OutgoingOrder type={2} userData={userData} />; // my icoming requests section
           break;
-
         default:
           content = null;
           break;

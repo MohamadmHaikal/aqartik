@@ -59,6 +59,7 @@ const MapCreate = (props) => {
   const handleMapLoad = () => {
     setMapLoaded(true);
   };
+
   useEffect(() => {
     if (mapLoaded) {
       // Create an array of overlayViews for the custom markers
@@ -82,13 +83,17 @@ const MapCreate = (props) => {
       setOverlayViews(loadedOverlayViews);
     }
   }, [mapLoaded, locations, activeMarkerIndex]);
+
   const handleMarkerClick = (id, loc) => {
-    setActiveMarkerIndex(id);
-    setMarkerClicked(true);
-    setBoxVisible(true);
-    setSelectedAd(id);
-    setCityCenter({ lat: loc.lat, lng: loc.lng, zoom: loc.zoom });
-  };
+
+  // const handleMarkerClick = (id) => {
+
+  //   setActiveMarkerIndex(id);
+  //   setMarkerClicked(true);
+  //   setBoxVisible(true);
+  //   setSelectedAd(id);
+  //   setCityCenter({ lat: loc.lat, lng: loc.lng, zoom: loc.zoom });
+  // };
 
   const mapStyles = {
     height: "100vh",
@@ -135,5 +140,6 @@ const MapCreate = (props) => {
     </>
   );
 };
+}
 
 export default MapCreate;

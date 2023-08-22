@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Accordion,
@@ -8,11 +8,17 @@ import {
   IconButton,
   styled,
   Fade,
+  CircularProgress,
 } from "@mui/material";
-
+import RefreshIcon from "@mui/icons-material/Refresh";
+import Star from "../Star";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { OrderTitles } from "../NewOrder";
 import OrderCard from "../OrderConstant/OrderCard";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { Map, Logo } from "../../../assets";
+
 import {
   EditInformation,
   EditLocation,
@@ -21,9 +27,12 @@ import {
   EditDescription,
 } from "./index";
 
-import { Map } from "../../../assets";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import useDataFetcher from "../../../api/useDataFetcher ";
+import { myAxios } from "../../../api/myAxios";
+import Loader from "../../Loading/Loader";
+import { toast } from "react-hot-toast";
 // import './Incoming.module.css'
 
 const CircleIconButton = styled(IconButton)({
@@ -44,68 +53,181 @@ const CustomAccordion = styled(Accordion)({
     display: "none",
   },
 });
-
 const CustomAccordionSummary = styled(AccordionSummary)({
   borderRadius: "12px",
 });
-
 const CustomAccordionDetails = styled(AccordionDetails)({
   borderRadius: "12px",
   padding: { xs: "0rem", md: "2rem" },
 });
-const OutGoingOrders = () => {
-  const { t } = useTranslation();
+const googleMapsApiKey = "AIzaSyCUSxdxRLpvkegxpk9-82sUjCylgekfGUk";
 
-  const [isExpanded, setIsExpanded] = useState(false);
+const OutGoingOrders = ({ userData, type }) => {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
+  const { data, isLoading, get } = useDataFetcher();
+  const [stateLoading, setStateLoading] = useState();
+  const [getDataState, setGetDataState] = useState(false);
+
+  const {
+    data: CategoryData,
+    isLoading: isLoadingCategoryData,
+    get: getCategoryData,
+  } = useDataFetcher();
+
+  const [myAds, setMyAds] = useState([]);
+
+  useEffect(() => {
+    if (type === 0) {
+      get("/api/user/get_user_ads");
+    } else if (type === 1) {
+      get("/api/real-estate-request/get_all_requests");
+    } else if (type === 2) {
+      get("/api/real-estate-request/get_all_requests?type=incoming");
+    }
+  }, [type, getDataState]);
+
+  useEffect(() => {
+    if (type === 0) {
+      if (data) setMyAds(data.ads.data);
+    } else if (type === 1) {
+      if (data) setMyAds(data.requests.data);
+    } else if (type === 2) {
+      if (data) setMyAds(data.requests.data);
+    }
+  }, [data]);
+
   const [edditInfo, setEditInfo] = useState(false);
   const [descriptionEdit, setDescriptionEdit] = useState(false);
   const [edditLoc, setEditLoc] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [MapEdit, setMapEdit] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [imageUrl, setImageUrl] = useState();
 
-  const [accordions, setAccordions] = useState([
-    { id: 1, expanded: false },
-    { id: 2, expanded: false },
-  ]);
-  const handleAccordionChange = (accordionId) => (event, isExpanded) => {
-    setAccordions((prevAccordions) =>
-      prevAccordions.map((accordion) =>
-        accordion.id === accordionId
-          ? { ...accordion, expanded: isExpanded }
-          : accordion
-      )
+  const handleChange = (panel, ad) => async (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+    await getCategoryData(
+      `https://www.dashboard.aqartik.com/api/ads/info/${ad.category_aqar.id}`
+    );
+    const apiKey = googleMapsApiKey;
+    const lat = ad.lat; // Example latitude
+    const lng = ad.lng; // Example longitude
+    const zoom = ad.zoom; // Example zoom level
+    const size = "400x400"; // Example size of the image
+    setImageUrl(
+      `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${size}&markers=color:red%7Clabel:C%7C${lat},${lng}&key=${apiKey}`
     );
   };
+
   const handleEditInformation = () => {
     setEditInfo(true);
   };
+
   const handleEditLocation = () => {
     setEditLoc(true);
   };
+
   const onCancel = () => {
     setEditInfo(!edditInfo);
   };
   // const onCancelMapEdit = () => {
   //   setMapEdit(!MapEdit);
   // };
+
   const handleCloseEditLocation = () => {
     setEditLoc(!edditLoc);
   };
+
   const handleCloseEditMap = () => {
     setMapEdit(!MapEdit);
   };
+
   const handleModalOpen = () => {
     setModalOpen(true);
   };
+
   const handleModalClose = () => {
     setModalOpen(false);
   };
+
   const handleMapEdit = () => {
     setMapEdit(true);
   };
-  return (
+
+  const handleRefreshing = async (id) => {
+    try {
+      const res = await myAxios.get(`/api/ads/refresh_ads/${id}`);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSpecialAd = async (id) => {
+    try {
+      const res = await myAxios.get(`/api/ads/make_ads_special/${id}`);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleDeleteAd = async (id) => {
+    if (type === 0) {
+      setStateLoading(true);
+      try {
+        const res = await myAxios.get(`/api/ads/delete/${id}`);
+        console.log(res.data.status);
+        if (res.data.status === 1) {
+          toast.success("تم الحذف بنجاح");
+          setStateLoading(false);
+          setGetDataState((prev) => !prev);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    } else if (type === 1) {
+      setStateLoading(true);
+      try {
+        const res = await myAxios.get(`/api/real-estate-request/delete/${id}`);
+        console.log(res.data.status);
+        if (res.data.status === 1) {
+          toast.success("تم الحذف بنجاح");
+          setStateLoading(false);
+          setGetDataState((prev) => !prev);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  return isLoading || stateLoading ? (
+    <Loader />
+  ) : (
     <Box sx={{ padding: { xs: "16px 5px", sm: "16px 56px" } }}>
-      <OrderTitles title={t("user_dashboard.outgoing_requests.title")} />
+      <Typography
+        variant="h4"
+        sx={{
+          fontWeight: "600",
+          marginBottom: "24px",
+          marginTop: "8px",
+          fontSize: { xs: "1.2rem", md: "1.5rem" },
+        }}
+      >
+        {type === 0
+          ? lang === "ar"
+            ? "اعلاناتي"
+            : "my ads"
+          : type === 1
+          ? lang === "ar"
+            ? "الطلبات الصادرة"
+            : "outgoing orders"
+          : lang === "ar"
+          ? "الطلبات الواردة"
+          : "incoming orders"}
+      </Typography>
       <Box
         sx={{
           overflowY: "auto",
@@ -119,11 +241,12 @@ const OutGoingOrders = () => {
           // boxShadow: "2",
         }}
       >
-        {accordions.map((accordion) => (
+        {myAds.map((ad) => (
           <CustomAccordion
-            key={accordion.id}
-            expanded={accordion.expanded}
-            onChange={handleAccordionChange(accordion.id)}
+            key={ad.id}
+            TransitionProps={{ unmountOnExit: true }}
+            expanded={expanded === `panel${ad.id}`}
+            onChange={handleChange(`panel${ad.id}`, ad)}
           >
             <Box sx={{ paddingInline: "20px" }}>
               <CustomAccordionSummary
@@ -132,25 +255,37 @@ const OutGoingOrders = () => {
                     <ExpandMoreIcon sx={{ fontSize: "2rem" }} />
                   </CircleIconButton>
                 }
-                aria-controls={`panel${accordion.id}-content`}
-                id={`panel${accordion.id}-header`}
+                aria-controls={`panel${ad.id}-content`}
+                id={`panel${ad.id}-header`}
               >
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Typography sx={{ fontSize: "24px", fontWeight: "700" }}>
-                    rama
+                    {ad.title}
                   </Typography>
                   <Typography
                     sx={{
-                      color: accordion.expanded
-                        ? "var(--green-color)"
-                        : "rgb(244, 67, 54)",
+                      color:
+                        expanded === `panel${ad.id}`
+                          ? "var(--green-color)"
+                          : "rgb(244, 67, 54)",
                       marginX: "1rem",
                     }}
                   >
-                    {accordion.expanded
+                    {expanded === `panel${ad.id}`
                       ? t("user_dashboard.incoming_orders.ad_expanded.one")
                       : t("user_dashboard.incoming_orders.ad_expanded.two")}
                   </Typography>
+                  {type !== 2 && (
+                    <Link
+                      to={
+                        type === 0 ? "/EditAds" : type === 1 ? "/EditOrder" : ""
+                      }
+                      state={{ ad: ad }}
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
+                      {lang === "ar" ? "تعديل" : "edit"}
+                    </Link>
+                  )}
                 </Box>
               </CustomAccordionSummary>
             </Box>
@@ -179,22 +314,28 @@ const OutGoingOrders = () => {
                         {t("user_dashboard.incoming_orders.card1.label1")}
                       </Typography>
 
-                      <Typography
-                        sx={{
-                          color: "var(--green-color)",
-                          fontWeight: "600",
-                          cursor: "pointer",
-                        }}
-                        onClick={handleEditInformation}
-                      >
-                        {!edditInfo &&
-                          t("user_dashboard.outgoing_requests.edit_btn")}
-                      </Typography>
+                      {type !== 2 && (
+                        <Typography
+                          sx={{
+                            color: "var(--green-color)",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                          }}
+                          onClick={handleEditInformation}
+                        >
+                          {!edditInfo &&
+                            t("user_dashboard.outgoing_requests.edit_btn")}
+                        </Typography>
+                      )}
                     </Box>
                     {edditInfo && (
                       <Fade in={edditInfo}>
                         <Box>
-                          <EditInformation onCancel={onCancel} />
+                          <EditInformation
+                            type={type}
+                            ad={ad}
+                            onCancel={onCancel}
+                          />
                         </Box>
                       </Fade>
                     )}
@@ -211,7 +352,7 @@ const OutGoingOrders = () => {
                             <Typography>
                               {t("user_dashboard.incoming_orders.card1.label1")}
                             </Typography>
-                            <Typography>rama</Typography>
+                            <Typography>{ad.title}</Typography>
                           </Box>
                           <Box
                             sx={{
@@ -223,7 +364,11 @@ const OutGoingOrders = () => {
                             <Typography>
                               {t("user_dashboard.incoming_orders.card1.label2")}
                             </Typography>
-                            <Typography>شقة</Typography>
+                            <Typography>
+                              {lang === "ar"
+                                ? ad.category_aqar.ar_name
+                                : ad.category_aqar.en_name}
+                            </Typography>
                           </Box>
                         </Box>
                       </Fade>
@@ -246,22 +391,29 @@ const OutGoingOrders = () => {
                         {t("user_dashboard.incoming_orders.card2.title")}
                       </Typography>
 
-                      <Typography
-                        sx={{
-                          color: "var(--green-color)",
-                          fontWeight: "600",
-                          cursor: "pointer",
-                        }}
-                        onClick={handleEditLocation}
-                      >
-                        {!edditLoc &&
-                          t("user_dashboard.outgoing_requests.edit_btn")}
-                      </Typography>
+                      {type !== 2 && (
+                        <Typography
+                          sx={{
+                            color: "var(--green-color)",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                          }}
+                          onClick={handleEditLocation}
+                        >
+                          {!edditLoc &&
+                            t("user_dashboard.outgoing_requests.edit_btn")}
+                        </Typography>
+                      )}
                     </Box>
                     {edditLoc && (
                       <Fade in={edditLoc}>
                         <Box>
-                          <EditLocation onCancel={handleCloseEditLocation} />
+                          <EditLocation
+                            type={type}
+                            ad={ad}
+                            onCancel={handleCloseEditLocation}
+                            interfaces={CategoryData.interfaces}
+                          />
                         </Box>
                       </Fade>
                     )}
@@ -278,7 +430,7 @@ const OutGoingOrders = () => {
                             <Typography>
                               {t("user_dashboard.incoming_orders.card2.label1")}
                             </Typography>
-                            <Typography>جدة</Typography>
+                            <Typography>{ad.city}</Typography>
                           </Box>
                           <Box
                             sx={{
@@ -291,7 +443,19 @@ const OutGoingOrders = () => {
                               {" "}
                               {t("user_dashboard.incoming_orders.card2.label2")}
                             </Typography>
-                            <Typography>حي الزمرد</Typography>
+                            <Typography>{ad?.neighborhood}</Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              marginBottom: "1rem",
+                            }}
+                          >
+                            <Typography>
+                              {lang === "ar" ? "الشارع" : "road"}
+                            </Typography>
+                            <Typography>{ad?.road}</Typography>
                           </Box>
                           <Box
                             sx={{
@@ -306,7 +470,11 @@ const OutGoingOrders = () => {
                                 "user_dashboard.incoming_orders.card2.label3"
                               )}{" "}
                             </Typography>
-                            <Typography>شمال</Typography>
+                            <Typography>
+                              {lang === "ar"
+                                ? ad?.interface_aqar?.ar_name
+                                : ad?.interface_aqar?.en_name}
+                            </Typography>
                           </Box>
                         </Box>
                       </Fade>
@@ -317,6 +485,8 @@ const OutGoingOrders = () => {
                       <Fade in={descriptionEdit}>
                         <Box>
                           <EditDescription
+                            type={type}
+                            ad={ad}
                             onCancel={() => {
                               setDescriptionEdit(false);
                             }}
@@ -340,23 +510,25 @@ const OutGoingOrders = () => {
                               {t("user_dashboard.incoming_orders.card5.title")}
                             </Typography>
 
-                            <Typography
-                              sx={{
-                                color: "var(--green-color)",
-                                fontWeight: "600",
-                                cursor: "pointer",
-                              }}
-                              onClick={() => {
-                                setDescriptionEdit(true);
-                              }}
-                            >
-                              {!descriptionEdit &&
-                                t("user_dashboard.outgoing_requests.edit_btn")}
-                            </Typography>
+                            {type !== 2 && (
+                              <Typography
+                                sx={{
+                                  color: "var(--green-color)",
+                                  fontWeight: "600",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => {
+                                  setDescriptionEdit(true);
+                                }}
+                              >
+                                {!descriptionEdit &&
+                                  t(
+                                    "user_dashboard.outgoing_requests.edit_btn"
+                                  )}
+                              </Typography>
+                            )}
                           </Box>
-                          <Typography>
-                            jsdfnjsd lskdnfsd klsdnf,m sflksslkd
-                          </Typography>
+                          <Typography>{ad?.description}</Typography>
                         </Box>
                       </Fade>
                     )}
@@ -376,17 +548,6 @@ const OutGoingOrders = () => {
                       >
                         {t("user_dashboard.incoming_orders.card3.title")}
                       </Typography>
-
-                      <Typography
-                        sx={{
-                          color: "var(--green-color)",
-                          fontWeight: "600",
-                          cursor: "pointer",
-                        }}
-                        onClick={handleModalOpen}
-                      >
-                        {t("user_dashboard.outgoing_requests.state_btn")}
-                      </Typography>
                     </Box>
                     <Box
                       sx={{
@@ -398,15 +559,27 @@ const OutGoingOrders = () => {
                         {" "}
                         {t("user_dashboard.incoming_orders.card3.label1")}
                       </Typography>
-                      <Typography
-                        sx={{
-                          color: "rgb(244, 67, 54)",
-                          fontWeight: "600",
-                          marginBottom: "1rem",
-                        }}
-                      >
-                        غير معروض
-                      </Typography>
+                      {ad?.status === 0 ? (
+                        <Typography
+                          sx={{
+                            color: "rgb(244, 67, 54)",
+                            fontWeight: "600",
+                            marginBottom: "1rem",
+                          }}
+                        >
+                          غير معروض
+                        </Typography>
+                      ) : (
+                        <Typography
+                          sx={{
+                            color: "var(--main-color)",
+                            fontWeight: "600",
+                            marginBottom: "1rem",
+                          }}
+                        >
+                          معروض
+                        </Typography>
+                      )}
                     </Box>
                   </OrderCard>
                   <OrderCard>
@@ -423,22 +596,28 @@ const OutGoingOrders = () => {
                         {t("user_dashboard.incoming_orders.card4.title")}
                       </Typography>
 
-                      <Typography
-                        sx={{
-                          color: "var(--green-color)",
-                          fontWeight: "600",
-                          cursor: "pointer",
-                        }}
-                        onClick={handleMapEdit}
-                      >
-                        {!MapEdit &&
-                          t("user_dashboard.outgoing_requests.edit_btn")}
-                      </Typography>
+                      {type !== 2 && (
+                        <Typography
+                          sx={{
+                            color: "var(--green-color)",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                          }}
+                          onClick={handleMapEdit}
+                        >
+                          {!MapEdit &&
+                            t("user_dashboard.outgoing_requests.edit_btn")}
+                        </Typography>
+                      )}
                     </Box>
                     {MapEdit && (
                       <Fade in={MapEdit}>
                         <Box>
-                          <EditMap onCancel={handleCloseEditMap} />
+                          <EditMap
+                            type={type}
+                            ad={ad}
+                            onCancel={handleCloseEditMap}
+                          />
                         </Box>
                       </Fade>
                     )}
@@ -448,8 +627,11 @@ const OutGoingOrders = () => {
                           <Typography
                             sx={{ color: "rgb(132, 132, 132)", width: "35%" }}
                           >
-                            8070 العويقلة، 2709، صلاح الدين، الرياض 12434،
-                            السعودية
+                            {ad?.city +
+                              ", " +
+                              ad?.neighborhood +
+                              ", " +
+                              ad?.road}
                           </Typography>
                           <Box
                             sx={{
@@ -462,7 +644,7 @@ const OutGoingOrders = () => {
                             }}
                           >
                             <img
-                              src={Map}
+                              src={imageUrl}
                               alt="My Image"
                               style={{
                                 position: "absolute",
@@ -477,21 +659,38 @@ const OutGoingOrders = () => {
                     )}
                   </OrderCard>
                 </Box>
-              </Box>
-              <Box
-                sx={{
-                  borderRadius: "12px",
-                  border: "1px solid rgb(234, 234, 234)",
-                  paddingBlock: "1.5rem",
-                  paddingInline: "2rem",
-                }}
-              >
-                <Typography sx={{ fontWeight: "600", fontSize: "1.2rem" }}>
-                  {t("user_dashboard.outgoing_requests.units")}
-                </Typography>
-                <Typography sx={{ color: "rgb(132, 132, 132)" }}>
-                  1 وحدات
-                </Typography>
+                <Box sx={{ display: "flex", justifyContent: "left" }}>
+                  {type === 0 && (
+                    <>
+                      <Box
+                        onClick={() => handleRefreshing(ad.id)} // Corrected prop name here
+                        sx={{ display: "flex", alignItems: "center" }}
+                      >
+                        <Typography>تحديث</Typography>
+                        <RefreshIcon
+                          sx={{
+                            cursor: "pointer",
+                            marginX: "10px",
+                            fontSize: "2rem",
+                          }}
+                        />
+                      </Box>
+                      <Box onClick={() => handleSpecialAd(ad.id)}>
+                        <Star isSpecial={ad.is_special} />
+                      </Box>
+                    </>
+                  )}
+                  <Box onClick={() => handleDeleteAd(ad.id)}>
+                    <DeleteForeverIcon
+                      sx={{
+                        color: "black",
+                        marginLeft: "3px",
+                        fontSize: "2rem",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </Box>
+                </Box>
               </Box>
             </CustomAccordionDetails>
           </CustomAccordion>

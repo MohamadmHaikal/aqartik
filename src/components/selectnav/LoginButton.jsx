@@ -8,7 +8,7 @@ import SmallNavLoginMenu from "../layouts/SmallNavLoginMenu";
 import Collapse from "@mui/material/Collapse";
 import { useTranslation } from "react-i18next";
 
-const LoginButton = () => {
+const LoginButton = ({ isLoggedIn }) => {
   const [openModal, setOpenModal] = useState(false);
   const [islogIN, setIsLogIN] = useState(false);
   const { t } = useTranslation();
@@ -68,7 +68,9 @@ const LoginButton = () => {
             },
           }}
         >
-          {!islogIN ? t("nav.buttons.login_btn") : " Rama"}
+          {!isLoggedIn
+            ? t("nav.buttons.login_btn")
+            : JSON.parse(localStorage.getItem("user"))?.username}
         </Typography>
         <KeyboardArrowDownIcon
           sx={{

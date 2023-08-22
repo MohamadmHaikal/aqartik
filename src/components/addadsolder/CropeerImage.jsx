@@ -9,23 +9,26 @@ import "cropperjs/dist/cropper.css";
 import { useTranslation } from "react-i18next";
 
 const CropeerImage = ({
-  onCrop,
+  type,
   width,
   height,
   maxImages,
   hasBackground = true,
   formData,
   setFormData,
+  setSelectedImages,
+  setImages,
+  selectedImage,
+  setSelectedImage,
+  thumbnail,
+  setThumbnail,
 }) => {
   const { t } = useTranslation();
-
+  const [isImageSelected, setIsImageSelected] = useState();
   // Added hasBackground prop with default value
   const cropperRef = useRef(null);
-  const [selectedImage, setSelectedImage] = useState(
-    formData.selectedImage || null
-  );
+
   const [open, setOpen] = useState(false);
-  const [initialImage, setInitialImage] = useState(null);
 
   useEffect(() => {
     const button = document.getElementById("cropper-button");
@@ -37,45 +40,74 @@ const CropeerImage = ({
     }
   }, [selectedImage]);
 
-  useEffect(() => {
-    if (selectedImage) {
-      setInitialImage(selectedImage);
-    }
-  }, []);
-
   const handleOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    if (type === 1) {
+      setSelectedImage(null);
+    } else {
+      setIsImageSelected(null);
+    }
     setOpen(false);
   };
 
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setSelectedImage(reader.result);
-        handleOpen();
-      };
-      reader.readAsDataURL(file);
+    if (type === 1) {
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          setSelectedImage(reader.result);
+          handleOpen();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    if (type === 2) {
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          setIsImageSelected(reader.result);
+
+          handleOpen();
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
-  const handleCrop = () => {
+  const handleCrop = async () => {
     if (cropperRef.current) {
+      const counter = 0;
       const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas();
       if (croppedCanvas) {
         const croppedImageUrl = croppedCanvas.toDataURL();
-        const imageData = new FormData();
-        imageData.append("image", croppedImageUrl);
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          selectedImage: selectedImage,
-          imageData: imageData,
-        }));
-        onCrop(croppedImageUrl);
+
+        const blob = await (await fetch(croppedImageUrl)).blob();
+
+        const file = new File([blob], `croppedImage${counter}.png`, {
+          type: blob.type,
+        });
+
+        if (type === 1) {
+          setThumbnail(croppedImageUrl);
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            thumbnail: file,
+          }));
+        }
+        if (type === 2) {
+          setImages((prev) => [...prev, croppedImageUrl]);
+          setSelectedImages((prevImages) => [...prevImages, file]);
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            images: prevFormData?.images
+              ? [...prevFormData?.images, file]
+              : [file], // Append new blob to the array
+          }));
+        }
       }
     }
     handleClose();
@@ -108,14 +140,17 @@ const CropeerImage = ({
         }}
         style={{
           backgroundImage:
-            hasBackground && selectedImage ? `url(${selectedImage})` : "none", // Set selectedImage as the background image if hasBackground is true
+            hasBackground && thumbnail ? `url(${thumbnail})` : "none", // Set thumbnail as the background image if hasBackground is true
         }}
         onClick={handleChooseImage}
       >
-        {hasBackground && selectedImage ? (
+        {hasBackground && thumbnail ? (
           <>
             <img
-              src={selectedImage}
+              src={
+                `https://www.dashboard.aqartik.com/assets/images/ads/image/${formData?.thumbnail?.name}` ||
+                thumbnail
+              }
               alt="Selected Image"
               style={{ display: "none" }}
             />
@@ -196,10 +231,10 @@ const CropeerImage = ({
             textAlign: "center",
           }}
         >
-          {selectedImage && (
+          {selectedImage || isImageSelected ? (
             <>
               <Cropper
-                src={selectedImage}
+                src={selectedImage || isImageSelected}
                 style={{ height: 400, width: "100%" }}
                 initialAspectRatio={16 / 9}
                 guides={false}
@@ -226,6 +261,8 @@ const CropeerImage = ({
                 {t("user_dashboard.property_images.cut_btn")}
               </Button>
             </>
+          ) : (
+            ""
           )}
         </Box>
       </Modal>

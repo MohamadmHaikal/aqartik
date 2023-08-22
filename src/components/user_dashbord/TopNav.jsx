@@ -4,10 +4,28 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Avatar from "@mui/material/Avatar";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useTranslation } from "react-i18next";
+import useDataFetcher from "../../api/useDataFetcher ";
+import { useNavigate } from "react-router";
 
 const TopNav = ({ setShowNotification , showNotification }) => {
   const { t, i18n } = useTranslation();
+
   const lang = i18n.language;
+
+  const [username, setUserName] = useState();
+  const { data, isLoading, error, get, post } = useDataFetcher();
+
+  const nav = useNavigate();
+
+  useEffect(() => {
+    get(`api/user/get_user_data`);
+  }, []);
+  useEffect(() => {
+    if (data) {
+      setUserName(data.user.username);
+    }
+  }, [data]);
+
   const [showLoginList, setShowLoginList] = useState(false);
 
   const loginListRef = useRef(null);
@@ -31,6 +49,13 @@ const TopNav = ({ setShowNotification , showNotification }) => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+  const handleSignOut = () => {
+    localStorage.removeItem("user_token");
+    localStorage.removeItem("user");
+    nav("/login");
+  };
+
   return (
     <Box
       sx={{
@@ -68,7 +93,7 @@ const TopNav = ({ setShowNotification , showNotification }) => {
             backgroundColor: "var(--green-color)",
           }}
         />
-        <Typography sx={{ fontWeight: "700" }}>Rama</Typography>
+        <Typography sx={{ fontWeight: "700" }}>{username}</Typography>
         <KeyboardArrowDownIcon sx={{ marginRight: "10px" }} />
       </Button>
 
@@ -113,8 +138,8 @@ const TopNav = ({ setShowNotification , showNotification }) => {
               cursor: "pointer",
             }}
           >
-            <li>{t("user_dashboard.top_nav.title1")}</li>
             <li
+              onClick={handleSignOut}
               style={{
                 borderBottom: "none",
                 padding: "0.3rem 1rem 0rem 0rem",

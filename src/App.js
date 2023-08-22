@@ -4,7 +4,8 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import { Addads, Home } from "./components";
 import UserDashbored from "./pages/userdashbored";
-import Ads from "./pages/Ads";
+// import Ads from "./pages/Ads";
+import Ads from "./pages/ads";
 import Login from "./pages/loginFolder/Login";
 import Details from "./pages/details";
 import About from "./pages/about";
@@ -24,7 +25,7 @@ import PrivaceyRules from "./pages/PrivaceyRules";
 import ContactUs from "./pages/ContactUs";
 import LoaderHome from "./components/Loading/LoaderHome";
 import GeneralContext from "./context/generalContext";
-
+import EditOrder from "./components/user_dashbord/OutgoingOrder/EditOrder"
 
 function App() {
   const { generalData, website_status } = useContext(GeneralContext);
@@ -239,7 +240,15 @@ function App() {
               path="/contact_us"
               element={
                 <Layout showNavFooter={true}>
-                  <ContactUs generalData={generalData}/>
+                  <ContactUs />
+                </Layout>
+              }
+            />
+            <Route
+              path="/EditOrder"
+              element={
+                <Layout showNavFooter={false}>
+                  <EditOrder />
                 </Layout>
               }
             />

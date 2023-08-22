@@ -163,20 +163,21 @@ const main_array = [
   },
 ];
 
-const CatgouryAds = ({ formData, setFormData }) => {
+const CatgouryAds = ({
+  formData,
+  setFormData,
+  selectedCategoryId,
+  setSelectedCategoryId,
+  selectedType,
+  setSelectedType,
+}) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
   const [nameError, setNameError] = useState();
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-  const [selectedType, setSelectedType] = useState("sell"); // Default value
-  const [selectedCatName, setSelectedCatName] = useState();
-  const [filteredItems, setFilteredItems] = useState([]);
-  const [isSelected, setIsSelected] = useState();
 
-  useEffect(() => {
-    console.log();
-  }, [formData]);
+  const [selectedCatName, setSelectedCatName] = useState();
+  const [selectedCatId, setSelectedCatId] = useState();
 
   const handleNameChange = (event) => {
     const inputValue = event.target.value;
@@ -211,49 +212,61 @@ const CatgouryAds = ({ formData, setFormData }) => {
   };
 
   useEffect(() => {
-    if (selectedCatName && !selectedType) {
-      const filtered = main_array.filter((item) => {
-        return selectedCatName === item.en_name;
-      });
+    if (!formData.categort_aqar) {
+      if (selectedCatName && !selectedType) {
+        const filtered = main_array.filter((item) => {
+          return selectedCatName === item.en_name;
+        });
 
-      setFilteredItems(filtered);
-      if (filtered.length > 0) {
+        if (filtered.length > 0) {
+          if (filtered.length > 0) {
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              category_aqar: filtered["0"],
+            }));
+          }
+        }
+      } else if (selectedCatName && selectedType) {
+        const filtered = main_array.filter((item) => {
+          const [categoryName, forText, itemType] = item.en_name.split(" ");
+
+          if (selectedType) {
+            return (
+              categoryName === selectedCatName.trim() &&
+              forText.toLowerCase() === "for" &&
+              itemType.toLowerCase() === selectedType.toLowerCase()
+            );
+          }
+
+          return (
+            categoryName === selectedCatName.trim() &&
+            forText.toLowerCase() === "for"
+          );
+        });
+
         if (filtered.length > 0) {
           setFormData((prevFormData) => ({
             ...prevFormData,
-            category_id: filtered["0"]?.id,
-            category_name: filtered["0"]?.en_name,
+            category_aqar: filtered["0"],
           }));
         }
-      }
-    } else if (selectedCatName && selectedType) {
-      const filtered = main_array.filter((item) => {
-        const [categoryName, forText, itemType] = item.en_name.split(" ");
-
-        if (selectedType) {
-          return (
-            categoryName === selectedCatName.trim() &&
-            forText.toLowerCase() === "for" &&
-            itemType.toLowerCase() === selectedType.toLowerCase()
-          );
-        }
-
-        return (
-          categoryName === selectedCatName.trim() &&
-          forText.toLowerCase() === "for"
-        );
-      });
-      setFilteredItems(filtered);
-      if (filtered.length > 0) {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          category_id: filtered["0"]?.id,
-          category_name: filtered["0"]?.en_name,
-        }));
       }
     }
   }, [selectedCatName, selectedType]);
 
+  useEffect(() => {
+    if (formData.category_aqar) {
+      const selectedCatFullName = formData.category_aqar.en_name
+        .toLowerCase()
+        .split(" ");
+      setSelectedCatId(
+        categories.filter((item) =>
+          item.en_name.toLowerCase().includes(selectedCatFullName["0"])
+        )
+      );
+    }
+  }, [formData]);
+  console.log(selectedCatId);
   return (
     <Box>
       <Typography
@@ -279,10 +292,19 @@ const CatgouryAds = ({ formData, setFormData }) => {
           type="text"
           value={formData.title || ""}
           onChange={handleNameChange}
+          size="small"
           error={nameError}
           helperText={nameError ? "الرجاء ادخال اسم عقار صحيح" : ""}
           placeholder={t("user_dashboard.new_order.order_info.placeholder1")}
-          sx={{ borderRadius: "12px" }}
+          sx={{
+            width: "100%",
+            borderRadius: "12px",
+            textAlign: lang === "ar" ? "right" : "left",
+            "&[readonly]": {
+              backgroundColor: "lightgray",
+              color: "darkgray",
+            },
+          }}
         />
       </Box>
       <Typography sx={{ fontWeight: "500", marginTop: "18px" }}>
@@ -317,47 +339,15 @@ const CatgouryAds = ({ formData, setFormData }) => {
                 cursor: "pointer",
                 height: "2.5rem",
                 backgroundColor:
-                  (formData.category_name &&
-                    formData?.category_name
-                      .toLowerCase()
-                      .split(" ")
-                      .includes(category.en_name)) ||
-                  (selectedCategoryId === category.id && !selectedType) ||
-                  (selectedCategoryId === category.id &&
-                    selectedType &&
-                    main_array.some(
-                      (item) =>
-                        item.en_name.startsWith(category.en_name) &&
-                        item.en_name.toLowerCase().includes(selectedType)
-                    ))
+                  selectedCatId && selectedCatId["0"]?.id === category.id
                     ? "var(--green-color)"
                     : "transparent",
                 color:
-                  (selectedCategoryId === category.id && !selectedType) ||
-                  formData?.category_name
-                    ?.toLowerCase()
-                    .startsWith(category.en_name) ||
-                  (selectedCategoryId === category.id &&
-                    selectedType &&
-                    main_array.some(
-                      (item) =>
-                        item.en_name.startsWith(category.en_name) &&
-                        item.en_name.toLowerCase().includes(selectedType)
-                    ))
+                  selectedCatId && selectedCatId["0"]?.id === category.id
                     ? "white"
                     : "black",
                 border:
-                  (selectedCategoryId === category.id && !selectedType) ||
-                  formData?.category_name
-                    ?.toLowerCase()
-                    .startsWith(category.en_name) ||
-                  (selectedCategoryId === category.id &&
-                    selectedType &&
-                    main_array.some(
-                      (item) =>
-                        item.en_name.startsWith(category.en_name) &&
-                        item.en_name.toLowerCase().includes(selectedType)
-                    ))
+                  selectedCatId && selectedCatId["0"]?.id === category.id
                     ? ""
                     : "1px solid gray",
               }}

@@ -15,11 +15,18 @@ import AddFeatureComponent from "../components/addadsolder/AddFeatureComponent";
 
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../api/useDataFetcher ";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  ConstructionOutlined,
+  LocalConvenienceStoreOutlined,
+} from "@mui/icons-material";
+import { toast } from "react-hot-toast";
+import Loader from "../components/Loading/Loader";
 // import LicenseModal from "./LicenseModal";
 
-const Addads = () => {
+const Addads = ({ type = 0, ad = null }) => {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const lang = i18n.language;
 
   const {
@@ -28,26 +35,12 @@ const Addads = () => {
     post,
   } = useDataFetcher();
 
-  //for getting the categories
-  const { data, isLoading, get } = useDataFetcher();
-  const [categories, setCategories] = useState([]);
-
   //for getting the category information
   const {
     data: info,
     isLoading: isInfoLoading,
     get: getInfo,
   } = useDataFetcher();
-
-  useEffect(() => {
-    get("/api/ads/get_categories");
-  }, []);
-
-  useEffect(() => {
-    if (data) {
-      setCategories(data.categories);
-    }
-  }, [data]);
 
   //declaring the important arrays
   const [type_aqar, set_type_aqar] = useState([]);
@@ -75,6 +68,31 @@ const Addads = () => {
   const [error, setError] = useState(false);
   const [inputErrors, setInputErrors] = useState({});
 
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedType, setSelectedType] = useState();
+
+  const [images, setImages] = useState([]);
+  const [deletedImages, setDeletedImages] = useState([]);
+  const [readyImages, setReadyImages] = useState([]);
+  console.log(readyImages);
+  console.log(deletedImages);
+
+  const [selectedImages, setSelectedImages] = useState(formData.images || []);
+
+  const [selectedImage, setSelectedImage] = useState(
+    formData.thumbnail || null
+  );
+  const [thumbnail, setThumbnail] = useState();
+
+  console.log(thumbnail);
+  useEffect(() => {
+    if (type === 1) {
+      setFormData(ad);
+      setReadyImages(ad.gallery);
+    } else {
+      setFormData({});
+    }
+  }, [type]);
   console.log(formData);
 
   useEffect(() => {
@@ -105,7 +123,7 @@ const Addads = () => {
     if (category_bool?.length > 0 && category_quantity?.length > 0) {
       if (step === 1) {
         if (
-          formData.hasOwnProperty("category_id") &&
+          formData.hasOwnProperty("category_aqar") &&
           formData.hasOwnProperty("title") &&
           formData?.title !== ""
         ) {
@@ -116,8 +134,8 @@ const Addads = () => {
       } else if (step === 2) {
         if (
           formData.hasOwnProperty("inputValues") &&
-          formData.hasOwnProperty("radioSelected") &&
-          formData.hasOwnProperty("aqar_type")
+          formData.hasOwnProperty("advertiser_relationship") &&
+          formData.hasOwnProperty("type_aqar_id")
         ) {
           const allInputsFilled = Object.values(formData?.inputValues).every(
             (val) => val !== ""
@@ -126,8 +144,8 @@ const Addads = () => {
           if (
             !allInputsFilled ||
             !isInputsFour ||
-            formData?.aqar_type === "" ||
-            formData?.radioSelected === ""
+            formData?.type_aqar_id === "" ||
+            formData?.advertiser_relationship === ""
           ) {
             setError(true);
           } else {
@@ -149,7 +167,7 @@ const Addads = () => {
           setError(true);
         }
       } else if (step === 4) {
-      } else if (step === 6) {
+      } else if (step === 5) {
         if (formData.hasOwnProperty("description")) {
           if (formData.description !== "") {
             setError(false);
@@ -180,8 +198,8 @@ const Addads = () => {
           setError(true);
         }
       } else if (step === 8) {
-        if (formData.hasOwnProperty("selectedImage")) {
-          if (formData.selectedImage !== "") {
+        if (formData.hasOwnProperty("thumbnail")) {
+          if (formData.thumbnail !== "") {
             setError(false);
           } else {
             setError(true);
@@ -193,7 +211,7 @@ const Addads = () => {
     } else if (category_bool?.length > 0 && category_quantity?.length === 0) {
       if (step === 1) {
         if (
-          formData.hasOwnProperty("category_id") &&
+          formData.hasOwnProperty("category_aqar") &&
           formData.hasOwnProperty("title") &&
           formData?.title !== ""
         ) {
@@ -204,8 +222,8 @@ const Addads = () => {
       } else if (step === 2) {
         if (
           formData.hasOwnProperty("inputValues") &&
-          formData.hasOwnProperty("radioSelected") &&
-          formData.hasOwnProperty("aqar_type")
+          formData.hasOwnProperty("advertiser_relationship") &&
+          formData.hasOwnProperty("type_aqar_id")
         ) {
           const allInputsFilled = Object.values(formData?.inputValues).every(
             (val) => val !== ""
@@ -214,8 +232,8 @@ const Addads = () => {
           if (
             !allInputsFilled ||
             !isInputsFour ||
-            formData?.aqar_type === "" ||
-            formData?.radioSelected === ""
+            formData?.type_aqar_id === "" ||
+            formData?.advertiser_relationship === ""
           ) {
             setError(true);
           } else {
@@ -224,7 +242,7 @@ const Addads = () => {
         } else {
           setError(true);
         }
-      } else if (step === 5) {
+      } else if (step === 4) {
         if (formData.hasOwnProperty("description")) {
           if (formData.description !== "") {
             setError(false);
@@ -255,8 +273,8 @@ const Addads = () => {
           setError(true);
         }
       } else if (step === 7) {
-        if (formData.hasOwnProperty("selectedImage")) {
-          if (formData.selectedImage !== "") {
+        if (formData.hasOwnProperty("thumbnail")) {
+          if (formData.thumbnail !== "") {
             setError(false);
           } else {
             setError(true);
@@ -268,7 +286,7 @@ const Addads = () => {
     } else if (category_bool?.length === 0 && category_quantity?.length > 0) {
       if (step === 1) {
         if (
-          formData.hasOwnProperty("category_id") &&
+          formData.hasOwnProperty("category_aqar") &&
           formData.hasOwnProperty("title") &&
           formData?.title !== ""
         ) {
@@ -279,8 +297,8 @@ const Addads = () => {
       } else if (step === 2) {
         if (
           formData.hasOwnProperty("inputValues") &&
-          formData.hasOwnProperty("radioSelected") &&
-          formData.hasOwnProperty("aqar_type")
+          formData.hasOwnProperty("advertiser_relationship") &&
+          formData.hasOwnProperty("type_aqar_id")
         ) {
           const allInputsFilled = Object.values(formData?.inputValues).every(
             (val) => val !== ""
@@ -289,8 +307,8 @@ const Addads = () => {
           if (
             !allInputsFilled ||
             !isInputsFour ||
-            formData?.aqar_type === "" ||
-            formData?.radioSelected === ""
+            formData?.type_aqar_id === "" ||
+            formData?.advertiser_relationship === ""
           ) {
             setError(true);
           } else {
@@ -311,7 +329,7 @@ const Addads = () => {
         } else {
           setError(true);
         }
-      } else if (step === 5) {
+      } else if (step === 4) {
         if (formData.hasOwnProperty("description")) {
           if (formData.description !== "") {
             setError(false);
@@ -342,8 +360,8 @@ const Addads = () => {
           setError(true);
         }
       } else if (step === 7) {
-        if (formData.hasOwnProperty("selectedImage")) {
-          if (formData.selectedImage !== "") {
+        if (formData.hasOwnProperty("thumbnail")) {
+          if (formData.thumbnail !== "") {
             setError(false);
           } else {
             setError(true);
@@ -355,7 +373,7 @@ const Addads = () => {
     } else if (category_bool?.length === 0 && category_quantity?.length === 0) {
       if (step === 1) {
         if (
-          formData.hasOwnProperty("category_id") &&
+          formData.hasOwnProperty("category_aqar") &&
           formData.hasOwnProperty("title") &&
           formData?.title !== ""
         ) {
@@ -366,8 +384,8 @@ const Addads = () => {
       } else if (step === 2) {
         if (
           formData.hasOwnProperty("inputValues") &&
-          formData.hasOwnProperty("radioSelected") &&
-          formData.hasOwnProperty("aqar_type")
+          formData.hasOwnProperty("advertiser_relationship") &&
+          formData.hasOwnProperty("type_aqar_id")
         ) {
           const allInputsFilled = Object.values(formData?.inputValues).every(
             (val) => val !== ""
@@ -376,8 +394,8 @@ const Addads = () => {
           if (
             !allInputsFilled ||
             !isInputsFour ||
-            formData?.aqar_type === "" ||
-            formData?.radioSelected === ""
+            formData?.type_aqar_id === "" ||
+            formData?.advertiser_relationship === ""
           ) {
             setError(true);
           } else {
@@ -386,7 +404,7 @@ const Addads = () => {
         } else {
           setError(true);
         }
-      } else if (step === 4) {
+      } else if (step === 3) {
         if (formData.hasOwnProperty("description")) {
           if (formData.description !== "") {
             setError(false);
@@ -417,8 +435,8 @@ const Addads = () => {
           setError(true);
         }
       } else if (step === 6) {
-        if (formData.hasOwnProperty("selectedImage")) {
-          if (formData.selectedImage !== "") {
+        if (formData.hasOwnProperty("thumbnail")) {
+          if (formData.thumbnail !== "") {
             setError(false);
           } else {
             setError(true);
@@ -430,7 +448,7 @@ const Addads = () => {
     } else {
       if (step === 1) {
         if (
-          formData.hasOwnProperty("category_id") &&
+          formData.hasOwnProperty("category_aqar") &&
           formData.hasOwnProperty("title") &&
           formData?.title !== ""
         ) {
@@ -441,11 +459,11 @@ const Addads = () => {
       }
     }
   }, [formData, step, category_quantity, category_bool]);
-  console.log(info);
+
   const handleNext = () => {
     // Perform form validation
     if (step === 1) {
-      getInfo(`/api/ads/info/${formData?.category_id}`);
+      getInfo(`/api/ads/info/${formData?.category_aqar?.id}`);
     }
     setStep(step + 1);
 
@@ -468,27 +486,213 @@ const Addads = () => {
   };
 
   const handleSubmit = async () => {
-    // setLoadingSubmit(true);
-    const sendForm = new FormData();
-    // Iterate through properties of formData and append each property to sendForm
-    for (const property in formData) {
-      if (formData.hasOwnProperty(property)) {
-        sendForm.append(property, formData[property]);
-      }
-    }
+    if (type === 0) {
+      const formDataSend = new FormData();
 
-    if (sendForm) {
-      fetch("https://aqar-plus.sta.sa/public/api/ads/store", {
-        method: "POST",
-        body: sendForm,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("API response:", data);
-        })
-        .catch((error) => {
-          console.error("Error sending FormData:", error);
+      setLoadingSubmit(true);
+      const sendForm = new FormData();
+      // Iterate through properties of formData and append each property to sendForm
+      for (const property in formData) {
+        if (formData.hasOwnProperty(property)) {
+          sendForm.append(property, formData[property]);
+        }
+      }
+      console.log(formData);
+      const requestBody = {};
+
+      // Loop through each key-value pair in sendForm and add to requestBody
+      for (const [key, value] of sendForm.entries()) {
+        if (formData.category_aqar) {
+          requestBody["category_id"] = formData.category_aqar.id;
+        }
+        if (formData.inputValues.price) {
+          requestBody["price"] = formData.inputValues.price;
+        }
+        if (formData.inputValues.area) {
+          requestBody["space"] = formData.inputValues.area;
+        }
+        if (formData.inputValues.height) {
+          requestBody["height"] = formData.inputValues.height;
+        }
+        if (formData.inputValues.width) {
+          requestBody["width"] = formData.inputValues.width;
+        }
+        if (formData.selectedLocation.lat) {
+          requestBody["lat"] = formData.selectedLocation.lat;
+        }
+        if (formData.selectedLocation.lng) {
+          requestBody["lng"] = formData.selectedLocation.lng;
+        }
+
+        if (formData.selectedLocation.zoom) {
+          requestBody["zoom"] = formData.selectedLocation.zoom;
+        }
+        if (formData.aqarCategoryQuantity) {
+          requestBody["QuantityAds"] = JSON.stringify(
+            formData.aqarCategoryQuantity
+          );
+        }
+        if (formData.selectedBooleansProperties) {
+          requestBody["BoolfeatureaAds"] = JSON.stringify(
+            formData.selectedBooleansProperties
+          );
+        }
+        if (formData.images) {
+        }
+        requestBody[key] = value;
+      }
+      if (formData.images.length > 0) {
+        // Append the entire array of selected files to the formData
+        selectedImages.forEach((file) => {
+          formDataSend.append("images[]", file);
         });
+      }
+      console.log(requestBody);
+      //   BoolfeatureaAds
+      // QuantityAds
+      const address =
+        requestBody.city +
+        ", " +
+        requestBody.neighborhood +
+        ", " +
+        requestBody.road;
+      for (const property in requestBody) {
+        if (requestBody.hasOwnProperty(property)) {
+          formDataSend.append(property, requestBody[property]);
+        }
+      }
+      formDataSend.append("address", address);
+
+      try {
+        const response = await fetch(
+          "https://www.dashboard.aqartik.com/api/ads/store",
+          {
+            headers: {
+              // "Content-Type": "multipart/form-data",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            method: "POST",
+            body: formDataSend,
+          }
+        );
+
+        const data = await response.json();
+        console.log("API response:", data);
+        if (data.status === 1) {
+          setLoadingSubmit(false);
+          toast.success("تمت اضافة الإعلان بنجاح");
+          navigate("/ads");
+        }
+      } catch (error) {
+        console.error("Error sending FormData:", error);
+        setLoadingSubmit(false);
+      }
+    } else if (type === 1) {
+      const formDataSend = new FormData();
+
+      // setLoadingSubmit(true);
+      const sendForm = new FormData();
+      // Iterate through properties of formData and append each property to sendForm
+      for (const property in formData) {
+        if (formData.hasOwnProperty(property)) {
+          sendForm.append(property, formData[property]);
+        }
+      }
+      console.log(formData);
+      const requestBody = {};
+
+      for (const [key, value] of sendForm.entries()) {
+        if (key === "category_aqar") {
+          requestBody["category_id"] = formData.category_aqar.id;
+        } else if (key === "inputValues.price") {
+          requestBody["price"] = formData.inputValues.price;
+        } else if (key === "inputValues.area") {
+          requestBody["space"] = formData.inputValues.area;
+        } else if (key === "inputValues.height") {
+          requestBody["height"] = formData.inputValues.height;
+        } else if (key === "inputValues.width") {
+          requestBody["width"] = formData.inputValues.width;
+        } else if (key === "selectedLocation.lat") {
+          requestBody["lat"] = formData.selectedLocation.lat;
+        } else if (key === "selectedLocation.lng") {
+          requestBody["lng"] = formData.selectedLocation.lng;
+        } else if (key === "selectedLocation.zoom") {
+          requestBody["zoom"] = formData.selectedLocation.zoom;
+        } else if (key === "aqarCategoryQuantity") {
+          requestBody["QuantityAds"] = JSON.stringify(
+            formData.aqarCategoryQuantity
+          );
+        } else if (key === "selectedBooleansProperties") {
+          requestBody["BoolfeatureaAds"] = JSON.stringify(
+            formData.selectedBooleansProperties
+          );
+        } else {
+          requestBody[key] = value;
+        }
+      }
+      if (formData.images.length > 0) {
+        // Append the entire array of selected files to the formData
+        selectedImages.forEach((file) => {
+          formDataSend.append("images[]", file);
+        });
+      }
+      console.log(requestBody);
+      //   BoolfeatureaAds
+      // QuantityAds
+      const excludedKeys = [
+        "images",
+        "user",
+        "gallery",
+        "type_aqar",
+        "category_aqar",
+        "thumbnail",
+        "interface_aqar",
+        "inputValues",
+        "selectedLocation",
+        "BoolFeaturea",
+      ];
+      if (deletedImages.length > 0) {
+        formDataSend.append("removed_images", deletedImages.join(","));
+      }
+
+      // Handle the thumbnail property separately
+      const thumbnailValue = requestBody.thumbnail;
+
+      if (thumbnailValue instanceof File) {
+        formDataSend.append("thumbnail", thumbnailValue);
+      } else if (
+        typeof thumbnailValue === "object" &&
+        thumbnailValue !== null
+      ) {
+        formDataSend.append("thumbnail", JSON.stringify(thumbnailValue));
+      }
+      for (const property in requestBody) {
+        if (requestBody.hasOwnProperty(property)) {
+          if (!excludedKeys.includes(property)) {
+            // Check if the property is not in the excludedKeys array
+            formDataSend.append(property, requestBody[property]);
+          }
+        }
+      }
+
+      try {
+        const response = await fetch(
+          `https://www.dashboard.aqartik.com/api/ads/update/${ad.id}`,
+          {
+            headers: {
+              // "Content-Type": "multipart/form-data",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            method: "POST",
+            body: formDataSend,
+          }
+        );
+
+        const data = await response.json();
+        console.log("API response:", data);
+      } catch (error) {
+        console.error("Error sending FormData:", error);
+      }
     }
   };
 
@@ -497,13 +701,14 @@ const Addads = () => {
     if (category_bool?.length > 0 && category_quantity?.length > 0) {
       switch (step) {
         case 1:
-          return isLoading ? (
-            "loading"
-          ) : (
+          return (
             <CatgouryAds
               formData={formData}
               setFormData={setFormData}
-              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              setSelectedCategoryId={setSelectedCategoryId}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
             />
           );
         case 2:
@@ -517,6 +722,7 @@ const Addads = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -585,8 +791,19 @@ const Addads = () => {
             <HomeImagesAdd
               formData={formData}
               setFormData={setFormData}
-              setError={setError}
-              error={error}
+              images={images}
+              setImages={setImages}
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
+              thumbnail={thumbnail}
+              setThumbnail={setThumbnail}
+              selectedImages={selectedImages}
+              setSelectedImages={setSelectedImages}
+              type={type}
+              deletedImages={deletedImages}
+              setDeletedImages={setDeletedImages}
+              readyImages={readyImages}
+              setReadyImages={setReadyImages}
             />
           );
         // Render other steps...
@@ -596,13 +813,14 @@ const Addads = () => {
     } else if (category_bool?.length > 0 && category_quantity?.length === 0) {
       switch (step) {
         case 1:
-          return isLoading ? (
-            "loading"
-          ) : (
+          return (
             <CatgouryAds
               formData={formData}
               setFormData={setFormData}
-              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              setSelectedCategoryId={setSelectedCategoryId}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
             />
           );
         case 2:
@@ -616,6 +834,7 @@ const Addads = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -673,8 +892,20 @@ const Addads = () => {
             <HomeImagesAdd
               formData={formData}
               setFormData={setFormData}
-              setError={setError}
-              error={error}
+              step={step}
+              images={images}
+              setImages={setImages}
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
+              thumbnail={thumbnail}
+              setThumbnail={setThumbnail}
+              selectedImages={selectedImages}
+              setSelectedImages={setSelectedImages}
+              type={type}
+              deletedImages={deletedImages}
+              setDeletedImages={setDeletedImages}
+              readyImages={readyImages}
+              setReadyImages={setReadyImages}
             />
           );
         // Render other steps...
@@ -684,13 +915,14 @@ const Addads = () => {
     } else if (category_bool?.length === 0 && category_quantity?.length > 0) {
       switch (step) {
         case 1:
-          return isLoading ? (
-            "loading"
-          ) : (
+          return (
             <CatgouryAds
               formData={formData}
               setFormData={setFormData}
-              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              setSelectedCategoryId={setSelectedCategoryId}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
             />
           );
         case 2:
@@ -704,6 +936,7 @@ const Addads = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -763,8 +996,20 @@ const Addads = () => {
             <HomeImagesAdd
               formData={formData}
               setFormData={setFormData}
-              setError={setError}
-              error={error}
+              step={step}
+              images={images}
+              setImages={setImages}
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
+              thumbnail={thumbnail}
+              setThumbnail={setThumbnail}
+              selectedImages={selectedImages}
+              setSelectedImages={setSelectedImages}
+              type={type}
+              deletedImages={deletedImages}
+              setDeletedImages={setDeletedImages}
+              readyImages={readyImages}
+              setReadyImages={setReadyImages}
             />
           );
         // Render other steps...
@@ -774,13 +1019,14 @@ const Addads = () => {
     } else if (category_bool?.length === 0 && category_quantity?.length === 0) {
       switch (step) {
         case 1:
-          return isLoading ? (
-            "loading"
-          ) : (
+          return (
             <CatgouryAds
               formData={formData}
               setFormData={setFormData}
-              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              setSelectedCategoryId={setSelectedCategoryId}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
             />
           );
         case 2:
@@ -794,6 +1040,7 @@ const Addads = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
 
@@ -841,8 +1088,20 @@ const Addads = () => {
             <HomeImagesAdd
               formData={formData}
               setFormData={setFormData}
-              setError={setError}
-              error={error}
+              step={step}
+              images={images}
+              setImages={setImages}
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
+              thumbnail={thumbnail}
+              setThumbnail={setThumbnail}
+              selectedImages={selectedImages}
+              setSelectedImages={setSelectedImages}
+              type={type}
+              deletedImages={deletedImages}
+              setDeletedImages={setDeletedImages}
+              readyImages={readyImages}
+              setReadyImages={setReadyImages}
             />
           );
         // Render other steps...
@@ -852,15 +1111,14 @@ const Addads = () => {
     } else {
       switch (step) {
         default:
-          return isLoading ? (
-            "loading"
-          ) : (
+          return (
             <CatgouryAds
               formData={formData}
               setFormData={setFormData}
-              categories={categories}
-              setError={setError}
-              error={error}
+              selectedCategoryId={selectedCategoryId}
+              setSelectedCategoryId={setSelectedCategoryId}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
             />
           );
       }
@@ -869,6 +1127,7 @@ const Addads = () => {
 
   return (
     <>
+      {loadingSubmit && <Loader />}
       <Box
         sx={{
           display: { xs: "none", lg: "block" },
@@ -1035,7 +1294,6 @@ const Addads = () => {
                         "&:hover": {
                           background: "var(--green-color)",
                           color: "white",
-                          transform: formData.name ? "scale(1.02)" : "none",
                           transition: "transform 0.2s ease-in-out",
                         },
                       }}

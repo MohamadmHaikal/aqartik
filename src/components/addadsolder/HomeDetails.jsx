@@ -9,7 +9,13 @@ const HomeDetails = ({ formData, setFormData, categoryQuantity, setError }) => {
   const [aqarCategoryQuantity, setAqarCategoryQuantity] = useState(
     formData.aqarCategoryQuantity || []
   );
-
+  useEffect(() => {
+    const is = aqarCategoryQuantity.every((item) => item?.quantity == 0);
+    console.log(is);
+    if (formData.QuantityAds && is) {
+      setAqarCategoryQuantity(formData.QuantityAds);
+    }
+  }, [aqarCategoryQuantity]);
   useEffect(() => {
     if (aqarCategoryQuantity.length === 0) {
       categoryQuantity.map((ele, index) => {
@@ -17,9 +23,9 @@ const HomeDetails = ({ formData, setFormData, categoryQuantity, setError }) => {
           const updatedValues = [...prevValues];
           updatedValues[index] = {
             ...updatedValues[index],
-            quantity_id: ele.quantity_feature.id,
+            feature_id: ele.quantity_feature.id,
             quantity_name: ele.quantity_feature.en_name,
-            value: ele.quantity_feature.min,
+            quantity: ele.quantity_feature.min,
           };
           return updatedValues;
         });
@@ -36,31 +42,31 @@ const HomeDetails = ({ formData, setFormData, categoryQuantity, setError }) => {
       ...prevFormData,
       aqarCategoryQuantity,
     }));
-  }, [aqarCategoryQuantity, setFormData]);
+  }, [aqarCategoryQuantity]);
 
   const handleIncrement = (index, quantity) => {
-    if (aqarCategoryQuantity[index]?.value < quantity.quantity_feature.max) {
+    if (aqarCategoryQuantity[index]?.quantity < quantity.quantity_feature.max) {
       setAqarCategoryQuantity((prevValues) => {
         const updatedValues = [...prevValues];
         updatedValues[index] = {
           ...updatedValues[index],
-          quantity_id: quantity.quantity_feature.id,
+          feature_id: quantity.quantity_feature.id,
           quantity_name: quantity.quantity_feature.en_name,
-          value:
-            updatedValues[index]?.value !== undefined
-              ? updatedValues[index]?.value + 1
+          quantity:
+            updatedValues[index]?.quantity !== undefined
+              ? updatedValues[index]?.quantity + 1
               : 1,
         };
         return updatedValues;
       });
-    } else if (aqarCategoryQuantity[index]?.value === undefined) {
+    } else if (aqarCategoryQuantity[index]?.quantity === undefined) {
       setAqarCategoryQuantity((prevValues) => {
         const updatedValues = [...prevValues];
         updatedValues[index] = {
           ...updatedValues[index],
-          quantity_id: quantity.quantity_feature.id,
+          feature_id: quantity.quantity_feature.id,
           quantity_name: quantity.quantity_feature.en_name,
-          value: updatedValues[index]?.value === undefined && 1,
+          quantity: updatedValues[index]?.quantity === undefined && 1,
         };
         return updatedValues;
       });
@@ -68,16 +74,16 @@ const HomeDetails = ({ formData, setFormData, categoryQuantity, setError }) => {
   };
 
   const handleDecrement = (index, quantity) => {
-    if (aqarCategoryQuantity[index]?.value > quantity.quantity_feature.min) {
+    if (aqarCategoryQuantity[index]?.quantity > quantity.quantity_feature.min) {
       setAqarCategoryQuantity((prevValues) => {
         const updatedValues = [...prevValues];
         updatedValues[index] = {
           ...updatedValues[index],
-          quantity_id: quantity.quantity_feature.id,
+          feature_id: quantity.quantity_feature.id,
           quantity_name: quantity.quantity_feature.en_name,
-          value:
-            updatedValues[index]?.value !== undefined
-              ? updatedValues[index]?.value - 1
+          quantity:
+            updatedValues[index]?.quantity !== undefined
+              ? updatedValues[index]?.quantity - 1
               : 0,
         };
         return updatedValues;
@@ -87,9 +93,9 @@ const HomeDetails = ({ formData, setFormData, categoryQuantity, setError }) => {
         const updatedValues = [...prevValues];
         updatedValues[index] = {
           ...updatedValues[index],
-          quantity_id: quantity.quantity_feature.id,
+          feature_id: quantity.quantity_feature.id,
           quantity_name: quantity.quantity_feature.en_name,
-          value: updatedValues[index]?.value === undefined && 0,
+          quantity: updatedValues[index]?.quantity === undefined && 0,
         };
         return updatedValues;
       });
@@ -111,9 +117,9 @@ const HomeDetails = ({ formData, setFormData, categoryQuantity, setError }) => {
       const updatedValues = [...prevValues];
       updatedValues[index] = {
         ...updatedValues[index],
-        quantity_id: event.target.id,
+        feature_id: event.target.id,
         quantity_name: event.target.name,
-        value: value,
+        quantity: value,
       };
       return updatedValues;
     });
@@ -174,7 +180,7 @@ const HomeDetails = ({ formData, setFormData, categoryQuantity, setError }) => {
               </Button>
               <TextField
                 type="number"
-                value={aqarCategoryQuantity[`${index}`]?.value}
+                value={aqarCategoryQuantity[`${index}`]?.quantity}
                 name={quantity.quantity_feature.en_name}
                 onChange={(event) => handleChange(event, index)}
                 variant="outlined"

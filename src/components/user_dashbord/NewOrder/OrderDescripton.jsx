@@ -4,20 +4,25 @@ import styles from "../../addadsolder/confirmLocation.module.css";
 import { OrderTitles } from ".";
 import { useTranslation } from "react-i18next";
 
-const OrderDescripton = ({ onChange, description }) => {
+const OrderDescripton = ({ formData, setFormData }) => {
+  const [description, setDescription] = useState(formData.description || "");
   const { t } = useTranslation();
-
   const handleDescriptionChange = (event) => {
-    const value = event.target.value;
-    onChange(value);
+    const inputValue = event.target.value;
+    setDescription(inputValue);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      description: inputValue,
+    }));
   };
+
   return (
     <Box>
       <OrderTitles title={t("user_dashboard.property_desc.title")} />
       <Typography
         sx={{
           color: "rgb(118, 118, 118)",
-          marginBottom: "2rem",
+          marginBottom: "8px",
         }}
       >
         {t("user_dashboard.property_desc.hint")}
@@ -92,7 +97,7 @@ const OrderDescripton = ({ onChange, description }) => {
       <TextField
         fullWidth
         multiline
-        rows={9}
+        rows={7}
         placeholder={t("user_dashboard.property_desc.placeholder")}
         required
         value={description}

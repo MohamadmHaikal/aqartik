@@ -6,6 +6,7 @@ import {
   LoadScript,
   Marker,
   InfoWindow,
+  useJsApiLoader,
 } from "@react-google-maps/api";
 import { toast } from "react-hot-toast";
 
@@ -17,6 +18,12 @@ const containerStyle = {
 const googleMapsApiKey = "AIzaSyCUSxdxRLpvkegxpk9-82sUjCylgekfGUk";
 
 const Map = ({ formData, setFormData, setError, mapData, setMapData }) => {
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: googleMapsApiKey,
+    // libraries: ['geometry', 'drawing'],
+  });
+
   const [userMarkers, setUserMarkers] = useState([]);
   const [cityName, setCityName] = useState();
   const [neighborhoodName, setNeighborhoodName] = useState();
@@ -34,6 +41,35 @@ const Map = ({ formData, setFormData, setError, mapData, setMapData }) => {
   const [selectedMarker, setSelectedMarker] = useState(
     formData.selectedLocation || null
   );
+  const [mapLoaded, setMapLoaded] = useState(false);
+
+  const handleMapLoad = () => {
+    setMapLoaded(true);
+  };
+  useEffect(() => {
+    if (mapLoaded) {
+      if (formData?.selectedLocation?.lat && formData?.selectedLocation?.lng) {
+        const clickedPosition = {
+          lat: formData.selectedLocation.lat,
+          lng: formData.selectedLocation.lng,
+          zoom: 10,
+        };
+        const newMarker = {
+          position: clickedPosition,
+          id: new Date().getTime(), // Generate a unique ID
+        };
+        setCenteredMap({ lat: clickedPosition.lat, lng: clickedPosition.lng });
+        setFormData((prevData) => ({
+          ...prevData,
+          selectedLocation: clickedPosition,
+        }));
+        setUserMarkers([newMarker]);
+        setError(false);
+      } else {
+        console.log("no");
+      }
+    }
+  }, [mapLoaded]);
 
   const handleCloseInfoWindow = () => {
     setSelectedMarker(null);
@@ -47,6 +83,7 @@ const Map = ({ formData, setFormData, setError, mapData, setMapData }) => {
     const clickedPosition = {
       lat: event.latLng.lat(),
       lng: event.latLng.lng(),
+      zoom: 10,
     };
 
     const newMarker = {
@@ -62,20 +99,24 @@ const Map = ({ formData, setFormData, setError, mapData, setMapData }) => {
     }));
 
     setUserMarkers([newMarker]);
-
+    let isSaudiArabia = false;
     //getting the country
     fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${clickedPosition.lat},${clickedPosition.lng}&key=${googleMapsApiKey}&language=en`
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${clickedPosition.lat},${clickedPosition.lng}&key=${googleMapsApiKey}&language=ar`
     )
       .then((response) => response.json())
       .then((data) => {
         if (data.status === "OK" && data.results.length > 0) {
-          let cityName = "";
-          let neighborhoodName = "";
-
           for (const result of data.results) {
             // Extract city name and neighborhood name from address components
             for (const component of result.address_components) {
+              if (component.types.includes("country")) {
+                const countryName = component.long_name;
+                if (countryName === "السعودية") {
+                  isSaudiArabia = true;
+                  setError(false);
+                }
+              }
               if (component.types.includes("locality")) {
                 setCityName(component.long_name);
               }
@@ -86,6 +127,10 @@ const Map = ({ formData, setFormData, setError, mapData, setMapData }) => {
                 setRood(component.long_name);
               }
             }
+          }
+          if (!isSaudiArabia) {
+            // The location is not in Saudi Arabia
+            toast.error("لايمكن الاختيار خارج حدود المملكة العربية السعودية");
           }
         } else {
           console.log("Unable to retrieve address details.");
@@ -105,22 +150,29 @@ const Map = ({ formData, setFormData, setError, mapData, setMapData }) => {
     }));
   }, [cityName, neighborhoodName, rood]);
 
-  console.log(mapData);
-
   return (
-    <LoadScript googleMapsApiKey={googleMapsApiKey}>
+    isLoaded && (
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={centeredMap}
         zoom={10}
         onClick={(event) => handleMapClick(event)}
+        onLoad={handleMapLoad}
       >
         {userMarkers.map((marker, index) => (
-          <Marker key={index} position={marker.position} />
+          <Marker
+            key={index}
+            position={marker.position}
+            icon={{
+              // path: google.maps.SymbolPath.CIRCLE,
+              url: require("./../../assets/mapMarker2.svg").default,
+              scale: 1,
+            }}
+          />
         ))}
-        {selectedMarker && (
+        {/* {selectedMarker && (
           <InfoWindow
-            position={selectedMarker.position}
+            // position={selectedMarker.position}
             onCloseClick={handleCloseInfoWindow}
           >
             <div>
@@ -128,9 +180,9 @@ const Map = ({ formData, setFormData, setError, mapData, setMapData }) => {
               <p>{selectedMarker.description}</p>
             </div>
           </InfoWindow>
-        )}
+        )} */}
       </GoogleMap>
-    </LoadScript>
+    )
   );
 };
 

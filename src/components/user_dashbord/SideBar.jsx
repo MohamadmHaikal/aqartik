@@ -144,8 +144,8 @@ const SideBar = ({
             t("user_dashboard.sidebar.ul_button2"),
             t("user_dashboard.sidebar.ul_button3"),
             t("user_dashboard.sidebar.ul_button4"),
-            t("user_dashboard.sidebar.ul_button5"),
-            t("user_dashboard.sidebar.ul_button6"),
+            // t("user_dashboard.sidebar.ul_button5"),
+            // t("user_dashboard.sidebar.ul_button6"),
           ].map((text, index) => (
             <React.Fragment key={text}>
               <ListItem

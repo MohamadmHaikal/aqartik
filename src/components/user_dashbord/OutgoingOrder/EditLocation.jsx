@@ -1,118 +1,133 @@
 import React, { useState } from "react";
-import { Box, Select, MenuItem, InputLabel, Button } from "@mui/material";
+import {
+  Box,
+  Select,
+  MenuItem,
+  InputLabel,
+  Button,
+  TextField,
+} from "@mui/material";
 import styles from "../../../components/addadsolder/confirmLocation.module.css";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useTranslation } from "react-i18next";
 
-const EditLocation = ({ onCancel }) => {
+const EditLocation = ({ type, ad, onCancel, interfaces }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
-  const defaultValues = {
-    المدينة: "Option 1",
-    الحي: "Option A",
-    الاتجاه: "Option X",
-  };
-  const [selectedValues, setSelectedValues] = useState(defaultValues);
+  const [selectedInterface, setSelectedInterface] = useState(
+    ad.interface_aqar.id || null
+  );
 
-  const selectDataLocation = [
-    {
-      label: t("user_dashboard.property_location.label1"),
-      options: ["Option 1", "Option 2", "Option 3"],
-    },
-    {
-      label: t("user_dashboard.property_location.label2"),
-      options: ["Option A", "Option B", "Option C"],
-    },
-    {
-      label: t("user_dashboard.property_location.label3"),
-      options: ["Option X", "Option Y", "Option Z"],
-    },
-  ];
-  const handleClearSelection = (label) => {
-    setSelectedValues((prevSelectedValues) => ({
-      ...prevSelectedValues,
-      [label]: "",
-    }));
-  };
+  console.log(selectedInterface);
 
+  const handleInterfaceChange = (event) => {
+    setSelectedInterface(event.target.value);
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formDataSend = new FormData();
+    // Verify that updatedValues is populated
+    formDataSend.append("interface_id", selectedInterface);
+    if (type === 0) {
+      try {
+        const res = await fetch(
+          `https://www.dashboard.aqartik.com/api/ads/update/${ad.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            body: JSON.stringify({ interface_id: selectedInterface }),
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    if (type === 1) {
+      try {
+        const res = await fetch(
+          `https://www.dashboard.aqartik.com/api/real-estate-request/update/${ad.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            body: JSON.stringify({ interface_id: selectedInterface }),
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
   return (
     <Box>
       <form>
-        <Box>
-          {selectDataLocation.map((select, index) => (
-            <div
-              key={index}
-              style={{
-                display: "flex",
-                alignItems: "baseline",
-                position: "relative",
+        <Box sx={{ marginY: "16px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              position: "relative",
+            }}
+          >
+            <InputLabel
+              sx={{
+                color: "black",
+                minWidth: { xs: "3rem", sm: "6rem" },
               }}
             >
-              <InputLabel
-                sx={{
-                  color: "black",
-
-                  minWidth: { xs: "3rem", sm: "6rem" },
-                }}
-              >
-                {select.label}
-              </InputLabel>
-              <ClearIcon
-                onClick={() => handleClearSelection(select.label)}
-                sx={{
-                  cursor: "pointer",
-                  position: "absolute",
-                  left: lang === "ar" && "11%",
-                  right: lang === "en" && "11%",
-                  top: "25px",
-                  fontSize: "16px",
-                  color: "rgba(0, 0, 0, 0.54)",
-                  zIndex: "1",
-                }}
-              />
-              <Select
-                label=""
-                required
-                IconComponent={ArrowDropDownIcon}
-                className={`${styles.select} select`}
-                classes={lang === "ar" && { icon: styles.selectIcon }}
-                sx={{
-                  borderRadius: "12px !important",
-                  boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
-                  border: "1px solid rgba(0, 0, 0, 0.06) !important",
-                  paddingBlock: "5px",
-                  height: "48px",
-                  width: { xs: "100%", md: "70%" },
-                  margin: "0.5rem 0rem",
-                  position: "relative",
-                }}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      borderRadius: "1rem",
-                      maxHeight: "150px",
-                    },
+              {lang === "ar" ? "الاتجاه" : "interface"}
+            </InputLabel>
+            <Select
+              value={selectedInterface}
+              onChange={handleInterfaceChange}
+              label=""
+              required
+              IconComponent={ArrowDropDownIcon}
+              className={`${styles.select} select`}
+              classes={lang === "ar" && { icon: styles.selectIcon }}
+              sx={{
+                borderRadius: "12px !important",
+                boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
+                border: "1px solid rgba(0, 0, 0, 0.06) !important",
+                paddingBlock: "5px",
+                height: "48px",
+                width: "100%",
+                marginBlock: "4px 12px",
+              }}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    borderRadius: "1rem",
                   },
-                }}
-                value={selectedValues[select.label] || ""}
-                onChange={(e) =>
-                  setSelectedValues((prevSelectedValues) => ({
-                    ...prevSelectedValues,
-                    [select.label]: e.target.value,
-                  }))
-                }
-              >
-                {select.options.map((option, optionIndex) => (
-                  <MenuItem key={optionIndex} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </div>
-          ))}
+                },
+              }}
+            >
+              {interfaces.map((interface_item) => (
+                <MenuItem
+                  value={interface_item.id}
+                  className={
+                    selectedInterface === interface_item.en_name
+                      ? styles.selectedMenuItem
+                      : ""
+                  }
+                >
+                  {lang === "ar"
+                    ? interface_item.ar_name
+                    : interface_item.en_name}
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
         </Box>
         <Box
           sx={{
@@ -135,6 +150,7 @@ const EditLocation = ({ onCancel }) => {
         >
           <Button
             type="submit"
+            onClick={handleSubmit}
             sx={{
               fontWeight: "600",
               borderRadius: "8px",
@@ -155,7 +171,6 @@ const EditLocation = ({ onCancel }) => {
             sx={{
               fontWeight: "600",
               borderRadius: "8px",
-
               border: "1px solid var(--green-color)",
               minWidth: "186px",
               padding: "0.75rem 2.5rem",

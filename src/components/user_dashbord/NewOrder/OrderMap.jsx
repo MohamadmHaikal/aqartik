@@ -8,63 +8,47 @@ import {
   InfoWindow,
 } from "@react-google-maps/api";
 import { useTranslation } from "react-i18next";
+// import Map from "../../addadsolder/Map";
+import { EditMap } from "../OutgoingOrder";
+import EditMapAd from "../../editAdsFolder/EditMapAd";
 
-const OrderMap = () => {
+const OrderMap = ({ formData, setFormData, setError, mapData, setMapData }) => {
   const { t } = useTranslation();
-
-  const containerStyle = {
-    width: "100%",
-    height: "400px",
-    borderRadius: "12px",
-  };
-
-  const mapCenter = { lat: 23.8859, lng: 45.0792 };
-  const markers = [
-    {
-      id: 1,
-      position: { lat: 37.7749, lng: -122.4194 },
-      title: "Marker 1",
-      description: "Details of Marker 1",
-    },
-  ];
   return (
     <Box>
-      <OrderTitles title={t("user_dashboard.property_location_map.title")} />
       <Typography
+        variant="h4"
         sx={{
-          color: "rgb(118, 118, 118)",
-          marginBottom: "2rem",
+          fontWeight: "600",
+          marginBottom: "24px",
+          marginTop: "8px",
+          fontSize: { xs: "1.2rem", md: "1.5rem" },
         }}
       >
-        {t("user_dashboard.property_location_map.desc")}{" "}
+        {t("user_dashboard.property_location_map.title")}
       </Typography>
-      <LoadScript googleMapsApiKey="AIzaSyDH04vPsEUMOgZT_yMXKQXptu01oSQnV-E">
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={mapCenter}
-          zoom={10}
-        >
-          {/* {markers.map((marker) => (
-          <Marker
-            key={marker.id}
-            position={marker.position}
-            onClick={() => handleMarkerClick(marker)}
-          />
-        ))} */}
-
-          {/* {selectedMarker && (
-          <InfoWindow
-            position={selectedMarker.position}
-            onCloseClick={handleCloseInfoWindow}
-          >
-            <div>
-              <h3>{selectedMarker.title}</h3>
-              <p>{selectedMarker.description}</p>
-            </div>
-          </InfoWindow>
-        )} */}
-        </GoogleMap>
-      </LoadScript>
+      <Typography sx={{ fontWeight: "500" }}>
+        {t("user_dashboard.property_location_map.desc")}
+      </Typography>
+      <Box
+        sx={{
+          maxWidth: "100%",
+          height: "300px",
+          borderRadius: "12px",
+          overflow: "hidden",
+          position: "relative",
+          border: "1px solid black",
+          marginTop: "1rem",
+        }}
+      >
+        <EditMapAd
+          formData={formData}
+          setFormData={setFormData}
+          setError={setError}
+          mapData={mapData}
+          setMapData={setMapData}
+        />
+      </Box>
     </Box>
   );
 };

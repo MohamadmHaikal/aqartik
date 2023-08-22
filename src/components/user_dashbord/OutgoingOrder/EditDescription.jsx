@@ -2,11 +2,54 @@ import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-const EditDescription = ({ onCancel }) => {
-  const [description, setDescription] = useState(" ");
+const EditDescription = ({ type, ad, onCancel }) => {
+  const [description, setDescription] = useState(ad?.description || " ");
   const { t } = useTranslation();
   const handleDescriptionChange = (event) => {
     const value = event.target.value;
+    setDescription(value);
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formDataSend = new FormData();
+    // Verify that updatedValues is populated
+    formDataSend.append("title", description);
+    if (type === 0) {
+      try {
+        const res = await fetch(
+          `https://www.dashboard.aqartik.com/api/ads/update/${ad.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            body: JSON.stringify({ description: description }),
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    if (type === 1) {
+      try {
+        const res = await fetch(
+          `https://www.dashboard.aqartik.com/api/real-estate-request/update/${ad.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("user_token")}`,
+            },
+            body: JSON.stringify({ description: description }),
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
   return (
     <Box>
@@ -42,6 +85,7 @@ const EditDescription = ({ onCancel }) => {
         }}
       >
         <Button
+          onClick={handleSubmit}
           type="submit"
           sx={{
             fontWeight: "600",
