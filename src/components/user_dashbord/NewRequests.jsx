@@ -21,6 +21,8 @@ import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
 import OrderInputs from "./NewOrder/OrderInputs";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import Loader from "../Loading/Loader";
 
 const NewRequests = () => {
   const { t, i18n } = useTranslation();
@@ -423,7 +425,7 @@ const NewRequests = () => {
   const handleSubmit = async () => {
     const formDataSend = new FormData();
 
-    // setLoadingSubmit(true);
+    setLoadingSubmit(true);
     const sendForm = new FormData();
     // Iterate through properties of formData and append each property to sendForm
     for (const property in formData) {
@@ -504,6 +506,13 @@ const NewRequests = () => {
 
       const data = await response.json();
       console.log("API response:", data);
+      if (data.status === 1) {
+        toast.success("تم اضافة الطلب بنجاح");
+        setStep(1);
+        setFormData({});
+        setAfterWidth(14)
+      }
+      setLoadingSubmit(false);
     } catch (error) {
       console.error("Error sending FormData:", error);
     }
@@ -535,6 +544,7 @@ const NewRequests = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -624,6 +634,7 @@ const NewRequests = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -702,6 +713,7 @@ const NewRequests = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -782,6 +794,7 @@ const NewRequests = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
 
@@ -843,7 +856,9 @@ const NewRequests = () => {
     }
   };
 
-  return (
+  return loadingSubmit ? (
+    <Loader />
+  ) : (
     <>
       <Container
         sx={{

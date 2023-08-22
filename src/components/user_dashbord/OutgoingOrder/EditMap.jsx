@@ -5,6 +5,7 @@ import {
   LoadScript,
   Marker,
   InfoWindow,
+  useJsApiLoader,
 } from "@react-google-maps/api";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import { useTranslation } from "react-i18next";
@@ -16,6 +17,11 @@ const containerStyle = {
   height: "400px",
 };
 const EditMap = ({ type, ad, onCancel }) => {
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: googleMapsApiKey,
+    // libraries: ['geometry', 'drawing'],
+  });
   const { t } = useTranslation();
   const [userMarkers, setUserMarkers] = useState([]);
   const [cityName, setCityName] = useState();
@@ -196,7 +202,7 @@ const EditMap = ({ type, ad, onCancel }) => {
             marginInline: "auto",
           }}
         >
-          <LoadScript googleMapsApiKey={googleMapsApiKey}>
+          {isLoaded && (
             <GoogleMap
               mapContainerStyle={containerStyle}
               center={centeredMap}
@@ -219,7 +225,7 @@ const EditMap = ({ type, ad, onCancel }) => {
                 </InfoWindow>
               )}
             </GoogleMap>
-          </LoadScript>
+          )}
         </Box>
         <Box
           sx={{

@@ -175,7 +175,13 @@ const OrderLocation = ({ formData, setFormData, interfaces, mapData }) => {
         {t("user_dashboard.property_location.hint")}
       </Typography>
       <Select
-        value={selectedInterface}
+        value={
+          selectedInterface
+            ? selectedInterface
+            : formData.interface_aqar
+            ? formData.interface_aqar.id
+            : ""
+        }
         onChange={handleInterfaceChange}
         label=""
         required
@@ -193,15 +199,6 @@ const OrderLocation = ({ formData, setFormData, interfaces, mapData }) => {
               padding: "10px 4px", // Remove padding from the input element
             },
         }}
-        MenuProps={
-          {
-            // PaperProps: {
-            //   style: {
-            //     borderRadius: "1rem",
-            //   },
-            // },
-          }
-        }
       >
         {interfaces.map((interface_item) => (
           <MenuItem value={interface_item.id}>

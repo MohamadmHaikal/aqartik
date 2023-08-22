@@ -31,6 +31,7 @@ const OrderDetails = ({
   setInputErrors,
   setError,
   type_aqar,
+  type_res,
 }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -97,11 +98,20 @@ const OrderDetails = ({
   );
   const [selectedtype, setSelectedtype] = useState(formData.type_aqar_id || "");
 
+  const [selectedRes, setSelectedRes] = useState(formData?.type_res_id || "");
+
   const handleCityChange = (event) => {
     setSelectedtype(event.target.value);
     setFormData((prevData) => ({
       ...prevData,
       type_aqar_id: event.target.value,
+    }));
+  };
+  const handleChangeRes = (event) => {
+    setSelectedRes(event.target.value);
+    setFormData((prevData) => ({
+      ...prevData,
+      type_res_id: event.target.value,
     }));
   };
 
@@ -255,6 +265,7 @@ const OrderDetails = ({
             </Box>
             <TextField
               type="text"
+              size="small"
               name={item.name}
               placeholder={item.placeholder}
               value={inputValues[`${item.name}`] || ""}
@@ -277,7 +288,13 @@ const OrderDetails = ({
           {lang === "ar" ? "سكني أو تجاري" : "Residential or commercial"}
         </InputLabel>
         <Select
-          value={selectedtype}
+          value={
+            selectedtype
+              ? selectedtype
+              : formData.type_aqar
+              ? formData.type_aqar.id
+              : ""
+          }
           onChange={handleCityChange}
           label=""
           required
@@ -285,25 +302,57 @@ const OrderDetails = ({
           className={`${styles.select} select`}
           classes={lang === "ar" && { icon: styles.selectIcon }}
           sx={{
-            borderRadius: "12px !important",
-            boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 3px",
-            border: "1px solid rgba(0, 0, 0, 0.06) !important",
-            paddingBlock: "5px",
-            height: "48px",
             width: "100%",
-            marginBlock: "4px 16px",
-          }}
-          MenuProps={{
-            PaperProps: {
-              style: {
-                borderRadius: "1rem",
+            marginTop: ".2rem",
+            padding: 0,
+            borderRadius: "6px",
+            textAlign: lang === "ar" ? "right" : "left",
+            "& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+              {
+                padding: "10px 4px", // Remove padding from the input element
               },
-            },
           }}
         >
           {type_aqar?.map((type) => (
             <MenuItem key={type.id} value={type.id}>
               {lang === "ar" ? type.ar_name : type.en_name}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
+      <Box>
+        <InputLabel sx={{ color: "black", fontWeight: "500" }}>
+          {lang === "ar" ? "نوع العقار" : "property type"}
+        </InputLabel>
+        <Select
+          value={
+            selectedRes
+              ? selectedRes
+              : formData.type_res
+              ? formData.type_res.id
+              : ""
+          }
+          onChange={handleChangeRes}
+          label=""
+          required
+          IconComponent={ArrowDropDownIcon}
+          className={`${styles.select} select`}
+          classes={lang === "ar" && { icon: styles.selectIcon }}
+          sx={{
+            width: "100%",
+            marginTop: ".2rem",
+            padding: 0,
+            borderRadius: "6px",
+            textAlign: lang === "ar" ? "right" : "left",
+            "& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+              {
+                padding: "10px 4px", // Remove padding from the input element
+              },
+          }}
+        >
+          {type_res?.map((type) => (
+            <MenuItem key={type?.id} value={type?.id}>
+              {lang === "ar" ? type?.ar_name : type?.en_name}
             </MenuItem>
           ))}
         </Select>

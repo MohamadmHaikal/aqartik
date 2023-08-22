@@ -607,6 +607,7 @@ const EditAds = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -718,6 +719,7 @@ const EditAds = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -819,6 +821,7 @@ const EditAds = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -922,6 +925,7 @@ const EditAds = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
 

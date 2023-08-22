@@ -722,6 +722,7 @@ const Addads = ({ type = 0, ad = null }) => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -833,6 +834,7 @@ const Addads = ({ type = 0, ad = null }) => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -934,6 +936,7 @@ const Addads = ({ type = 0, ad = null }) => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -1037,6 +1040,7 @@ const Addads = ({ type = 0, ad = null }) => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
 

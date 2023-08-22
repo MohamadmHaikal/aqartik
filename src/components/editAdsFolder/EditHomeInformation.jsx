@@ -31,6 +31,7 @@ const EditHomeInformation = ({
   setInputErrors,
   setError,
   type_aqar,
+  type_res,
 }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -86,11 +87,21 @@ const EditHomeInformation = ({
   );
   const [selectedtype, setSelectedtype] = useState(formData.type_aqar_id || "");
 
+  const [selectedRes, setSelectedRes] = useState(formData?.type_res_id || "");
+
   const handleCityChange = (event) => {
     setSelectedtype(event.target.value);
     setFormData((prevData) => ({
       ...prevData,
       type_aqar_id: event.target.value,
+    }));
+  };
+
+  const handleChangeRes = (event) => {
+    setSelectedRes(event.target.value);
+    setFormData((prevData) => ({
+      ...prevData,
+      type_res_id: event.target.value,
     }));
   };
 
@@ -384,6 +395,43 @@ const EditHomeInformation = ({
           {type_aqar?.map((type) => (
             <MenuItem key={type.id} value={type.id}>
               {lang === "ar" ? type.ar_name : type.en_name}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
+      <Box>
+        <InputLabel sx={{ color: "black", fontWeight: "500" }}>
+          {lang === "ar" ? "نوع العقار" : "property type"}
+        </InputLabel>
+        <Select
+          value={
+            selectedRes
+              ? selectedRes
+              : formData.type_res
+              ? formData.type_res.id
+              : ""
+          }
+          onChange={handleChangeRes}
+          label=""
+          required
+          IconComponent={ArrowDropDownIcon}
+          className={`${styles.select} select`}
+          classes={lang === "ar" && { icon: styles.selectIcon }}
+          sx={{
+            width: "100%",
+            marginTop: ".2rem",
+            padding: 0,
+            borderRadius: "6px",
+            textAlign: lang === "ar" ? "right" : "left",
+            "& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+              {
+                padding: "10px 4px", // Remove padding from the input element
+              },
+          }}
+        >
+          {type_res?.map((type) => (
+            <MenuItem key={type?.id} value={type?.id}>
+              {lang === "ar" ? type?.ar_name : type?.en_name}
             </MenuItem>
           ))}
         </Select>

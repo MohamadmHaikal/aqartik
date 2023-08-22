@@ -20,14 +20,15 @@ import {
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../../api/useDataFetcher ";
 import OrderInputs from "../NewOrder/OrderInputs";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Loader from "../../Loading/Loader";
+import { toast } from "react-hot-toast";
 const EditOrder = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
   const ad = useLocation().state.ad;
-
+  const nav = useNavigate();
   const {
     data: sendFormData,
     isLoading: isLoadingSendForm,
@@ -432,7 +433,7 @@ const EditOrder = () => {
   const handleSubmit = async () => {
     const formDataSend = new FormData();
 
-    // setLoadingSubmit(true);
+    setLoadingSubmit(true);
     const sendForm = new FormData();
     // Iterate through properties of formData and append each property to sendForm
     for (const property in formData) {
@@ -529,8 +530,14 @@ const EditOrder = () => {
 
       const data = await response.json();
       console.log("API response:", data);
+      if (data.status === 1) {
+        setLoadingSubmit(false);
+        toast.success("تم تعديل بيانات الطلب بنجاح");
+        nav("/userdashbored");
+      }
     } catch (error) {
       console.error("Error sending FormData:", error);
+      setLoadingSubmit(false);
     }
   };
 
@@ -560,6 +567,7 @@ const EditOrder = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -649,6 +657,7 @@ const EditOrder = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -727,6 +736,7 @@ const EditOrder = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
         case 3:
@@ -807,6 +817,7 @@ const EditOrder = () => {
               setInputErrors={setInputErrors}
               setError={setError}
               type_aqar={type_aqar}
+              type_res={type_res}
             />
           );
 
@@ -868,7 +879,9 @@ const EditOrder = () => {
     }
   };
 
-  return (
+  return loadingSubmit ? (
+    <Loader />
+  ) : (
     <>
       {loadingSubmit && <Loader />}
       <Container
