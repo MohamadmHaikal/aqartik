@@ -15,11 +15,14 @@ import Select from "@mui/material/Select";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
+import { useTranslation } from "react-i18next";
 
-const ContactUs = () => {
+const ContactUs = ({ generalData }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const [message, setMessage] = useState("");
 
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
@@ -27,6 +30,7 @@ const ContactUs = () => {
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
+  console.log(generalData);
   return (
     <Box sx={{ marginTop: "19rem" }}>
       <Container maxWidth="lg">
@@ -38,7 +42,7 @@ const ContactUs = () => {
             fontSize: { xs: "1.5rem", md: "2rem" },
           }}
         >
-          أرسل لنا رسالة لأي استفسار
+          {lang === "ar" ? "  أرسل لنا رسالة لأي استفسار" : "send message..."}
         </Typography>
         <Box
           sx={{
@@ -64,9 +68,13 @@ const ContactUs = () => {
               />
               <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <Typography sx={{ fontSize: "20px", color: "gray" }}>
-                  العنوان
+                  {lang === "ar" ? "  العنوان " : " address"}
                 </Typography>
-                <Typography>المملكة العربية السعودية / الرياض</Typography>
+                <Typography>
+                  {lang === "ar"
+                    ? generalData.contact_t1_ar
+                    : generalData.contact_t1_en}
+                </Typography>
               </Box>
             </Box>
             <Box sx={{ display: "flex", marginY: "2rem" }}>
@@ -79,7 +87,7 @@ const ContactUs = () => {
               />
               <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <Typography sx={{ fontSize: "20px", color: "gray" }}>
-                  البريد الالكتروني
+                  {lang === "ar" ? "  البريد الالكتروني" : " email"}
                 </Typography>
                 <Typography>
                   <a
@@ -87,7 +95,7 @@ const ContactUs = () => {
                     style={{ textDecoration: "none", color: "black" }}
                   >
                     {" "}
-                    info@tamed.sa
+                    {generalData.contact_t6}
                   </a>
                 </Typography>
               </Box>
@@ -110,7 +118,7 @@ const ContactUs = () => {
                     style={{ textDecoration: "none", color: "black" }}
                   >
                     {" "}
-                    05775559898
+                    {generalData.contact_t3}
                   </a>
                 </Typography>
               </Box>

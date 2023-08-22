@@ -198,14 +198,17 @@ const FooterTwo = () => {
                   </li>
                   <li style={{ marginBottom: "10px" }}>
                     <Link
-                      href="/contact_us"
+                      to="/contact_us"
                       style={{ textDecoration: "none", color: "gray" }}
                     >
                       {t("footer.second_list.contact_us")}
                     </Link>
                   </li>
                   <li style={{ marginBottom: "10px" }}>
-                    <Link to="#" sx={{ textDecoration: "none", color: "gray" }}>
+                    <Link
+                      to="#"
+                      style={{ textDecoration: "none", color: "gray" }}
+                    >
                       {t("footer.second_list.frequently_asked_questions")}
                     </Link>
                   </li>

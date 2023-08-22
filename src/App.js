@@ -239,7 +239,7 @@ function App() {
               path="/contact_us"
               element={
                 <Layout showNavFooter={true}>
-                  <ContactUs />
+                  <ContactUs generalData={generalData}/>
                 </Layout>
               }
             />
