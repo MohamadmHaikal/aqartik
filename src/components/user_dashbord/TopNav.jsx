@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { Box, Button, Typography, Paper } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Avatar from "@mui/material/Avatar";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
 import { useNavigate } from "react-router";
 
-const TopNav = () => {
+const TopNav = ({ setShowNotification , showNotification }) => {
   const { t, i18n } = useTranslation();
 
   const lang = i18n.language;
@@ -26,6 +27,7 @@ const TopNav = () => {
   }, [data]);
 
   const [showLoginList, setShowLoginList] = useState(false);
+
   const loginListRef = useRef(null);
 
   const toggleShowLoginList = (event) => {
@@ -38,7 +40,9 @@ const TopNav = () => {
       setShowLoginList(false);
     }
   };
-
+  const handleNotificationClick = () => {
+    setShowNotification(!showNotification);
+  };
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
     return () => {
@@ -68,6 +72,15 @@ const TopNav = () => {
         alignItems: "center",
       }}
     >
+      <NotificationsIcon
+        sx={{
+          fontSize: "28px",
+          color: "var(--green-color)",
+          marginLeft: "10px",
+          cursor: "pointer",
+        }}
+        onClick={handleNotificationClick}
+      />
       <Button
         sx={{ color: "var(--green-color)" }}
         onClick={toggleShowLoginList}

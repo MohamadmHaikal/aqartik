@@ -9,6 +9,7 @@ import styles from "../../styles/map.module.css";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { DefaultImage } from "../../assets";
 
 const HomeSliderMap = ({ ad }) => {
   // const homeImages = ad?.gallery;
@@ -64,15 +65,30 @@ const HomeSliderMap = ({ ad }) => {
   return (
     <Box sx={{ position: "relative", margin: { xs: "auto", lg: "0" } }}>
       <Slider {...settings}>
-        {img.map((image, index) => (
-          <img
-            key={index}
-            src={`https://www.dashboard.aqartik.com/assets/images/ads/image/${image.name}`}
-            alt={`Slide ${index + 1}`}
-            style={{ width: "100%", height: "219 !important" }}
-            className={styles.imageBorder}
-          />
-        ))}
+        {img.length === 0 ? (
+          <div className={styles.customSlide}>
+            <img
+              src={DefaultImage}
+              alt="default"
+              style={{
+                width: "100%",
+                height: "219px",
+                objectFit: "cover",
+              }}
+              className={styles.imageBorder}
+            />
+          </div>
+        ) : (
+          img.map((image, index) => (
+            <img
+              key={index}
+              src={`https://www.dashboard.aqartik.com/assets/images/ads/image/${image.name}`}
+              alt={`Slide ${index + 1}`}
+              style={{ width: "100%", height: "219 !important" }}
+              className={styles.imageBorder}
+            />
+          ))
+        )}
       </Slider>
       <Box
         sx={{

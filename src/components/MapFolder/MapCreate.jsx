@@ -52,7 +52,10 @@ const MapCreate = (props) => {
   const [overlayViews, setOverlayViews] = useState([]);
   const [activeMarkerIndex, setActiveMarkerIndex] = useState(null);
   const [isMarkerClicked, setMarkerClicked] = useState(false);
-
+  const [cityCenter, setCityCenter] = useState();
+  useEffect(() => {
+    setCityCenter({ lat: state.lat, lng: state.lng, zoom: state.zoom });
+  }, []);
   const handleMapLoad = () => {
     setMapLoaded(true);
   };
@@ -61,29 +64,31 @@ const MapCreate = (props) => {
     if (mapLoaded) {
       // Create an array of overlayViews for the custom markers
       const loadedOverlayViews = locations.map((location, index) => (
-        <OverlayView
-          key={index}
-          position={{ lat: location.lat, lng: location.lng }}
-          mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-        >
-          <CustomMarker
-            price={location.price}
-            isActive={activeMarkerIndex === location.id}
-            onClick={() => handleMarkerClick(location.id)}
-          />
-        </OverlayView>
+        <>
+          <OverlayView
+            key={index}
+            position={{ lat: location.lat, lng: location.lng }}
+            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+          >
+            <CustomMarker
+              price={location.price}
+              isActive={activeMarkerIndex === location.id}
+              onClick={() => handleMarkerClick(location.id, location)}
+            />
+          </OverlayView>
+        </>
       ));
 
       // Set the overlayViews state with the loaded overlayViews
       setOverlayViews(loadedOverlayViews);
     }
   }, [mapLoaded, locations, activeMarkerIndex]);
-
-  const handleMarkerClick = (id) => {
+  const handleMarkerClick = (id, loc) => {
     setActiveMarkerIndex(id);
     setMarkerClicked(true);
     setBoxVisible(true);
     setSelectedAd(id);
+    setCityCenter({ lat: loc.lat, lng: loc.lng, zoom: loc.zoom });
   };
 
   const mapStyles = {
@@ -91,10 +96,10 @@ const MapCreate = (props) => {
     width: "100%",
   };
 
-  const cityCenter = {
-    lat: state.lat,
-    lng: state.lng,
-  };
+  // const cityCenter = {
+  //   lat: state.lat,
+  //   lng: state.lng,
+  // };
 
   const mapOptions = {
     streetViewControl: false,

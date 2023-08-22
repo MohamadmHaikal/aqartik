@@ -11,6 +11,8 @@ import {
   Usersmangament,
   SubscribeDetails,
 } from "../components/user_dashbord";
+import Notification from "../components/user_dashbord/Notification";
+
 import { UserDashboradSpeacialAds } from "../components";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../api/useDataFetcher ";
@@ -27,6 +29,7 @@ const UserDashbored = () => {
   useEffect(() => {
     if (data) setUserData(data?.user);
   }, [data]);
+  const [showNotification, setShowNotification] = useState(false);
 
   // useEffect(() => {
   //   if (data) {
@@ -37,9 +40,11 @@ const UserDashbored = () => {
 
   const handleItemClick = (index) => {
     setSelectedItem(index);
+    setShowNotification(false);
   };
   const handleSubitemClick = (index) => {
     setSelectedSubitem(index);
+    setShowNotification(false);
   };
   useEffect(() => {
     document.body.style.backgroundColor = "#f5f5f5";
@@ -87,7 +92,10 @@ const UserDashbored = () => {
   }
   return (
     <Box>
-      <TopNav />
+      <TopNav
+        showNotification={showNotification}
+        setShowNotification={setShowNotification}
+      />
       <Grid container>
         <Grid item xs={12} lg={3}>
           <SideBar
@@ -99,7 +107,9 @@ const UserDashbored = () => {
         </Grid>
 
         <Grid item xs={12} lg={9}>
-          <Box sx={{ marginTop: "7rem" }}> {content}</Box>
+          <Box sx={{ marginTop: "7rem" }}>
+            {showNotification ? <Notification /> : content}
+          </Box>
         </Grid>
       </Grid>
     </Box>

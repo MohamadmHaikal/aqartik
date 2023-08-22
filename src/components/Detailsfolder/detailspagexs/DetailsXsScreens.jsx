@@ -20,10 +20,12 @@ import { Share } from "../../../assets";
 import DetailsImagesXs from "./DetailsImagesXs";
 import DetailsXsTabs from "./DetailsXsTabs";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router";
 
 const DetailsXsScreens = ({ adInfo }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  //  adInfo = useLocation().state.ad;
 
   const [ShareListOpen, setShareListOpen] = useState(false);
   const handleCopyLink = () => {

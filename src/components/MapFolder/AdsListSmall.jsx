@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { Box, Button, Link, Typography, IconButton } from "@mui/material";
+import { Box, Button, Typography, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import StarIcon from "@mui/icons-material/Star";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Styles from "./swipermap.module.css";
 import { house } from "../../assets";
 import FavoriteIcons from "../Filter/FavoriteIcons";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { DefaultImage } from "../../assets";
 
 const AdsListSmall = ({
   data,
@@ -14,6 +17,7 @@ const AdsListSmall = ({
   activeMarkerIndex,
 }) => {
   // const [isBoxVisible, setBoxVisible] = useState(true);
+  const navigate = useNavigate();
 
   const handleBoxClose = () => {
     setBoxVisible(false);
@@ -22,14 +26,14 @@ const AdsListSmall = ({
   if (!isBoxVisible) {
     return null; // Return null when the Box is not visible
   }
-   // Find the index of the ad that matches the activeMarkerIndex
-   const activeAdIndex = data.findIndex((ad) => ad.id === activeMarkerIndex);
+  // Find the index of the ad that matches the activeMarkerIndex
+  const activeAdIndex = data.findIndex((ad) => ad.id === activeMarkerIndex);
 
-   // Move the active ad to the beginning of the array
-   if (activeAdIndex !== -1) {
-     const [activeAd] = data.splice(activeAdIndex, 1);
-     data.unshift(activeAd);
-   }
+  // Move the active ad to the beginning of the array
+  if (activeAdIndex !== -1) {
+    const [activeAd] = data.splice(activeAdIndex, 1);
+    data.unshift(activeAd);
+  }
   console.log(data);
   return (
     <Box
@@ -85,8 +89,11 @@ const AdsListSmall = ({
                 }}
               >
                 <Link
-                  href="#"
-                  sx={{
+                  to={`/details/${ad.id}`}
+                  state={{
+                    ad,
+                  }}
+                  style={{
                     textDecoration: "none",
                     height: "130px",
                     boxShadow: "rgba(0, 0, 0, 0.16) 0px 2px 6px",
@@ -115,7 +122,7 @@ const AdsListSmall = ({
                       }}
                     >
                       <img
-                        // src={`https://www.dashboard.aqartik.com/${ad.thumbnail.name}`}
+                        src={ad.thumbnail? `https://www.dashboard.aqartik.com/assets/images/ads/image/${ad.thumbnail.name}` : DefaultImage}
                         alt="home"
                         style={{
                           position: "absolute",

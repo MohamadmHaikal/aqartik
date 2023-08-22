@@ -9,6 +9,7 @@ import styles from "../../styles/CarsouelHomeFilter.module.css";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { DefaultImage } from "../../assets";
 
 const HomeSlider = ({ ad }) => {
   const homeImages = ad.gallery;
@@ -56,21 +57,36 @@ const HomeSlider = ({ ad }) => {
   return (
     <Box sx={{ position: "relative", margin: { xs: "auto", lg: "0" } }}>
       <Slider {...settings}>
-        {homeImages.map((image, index) => (
-          <div key={index} className={styles.customSlide}>
+        {homeImages.length === 0 ? (
+          <div className={styles.customSlide}>
             <img
-              key={index}
-              src={`https://www.dashboard.aqartik.com/assets/images/ads/image/${image.name}`}
-              alt={`Slide ${index + 1}`}
+              src={DefaultImage}
+              alt="default"
               style={{
                 width: "100%",
-                height: "219 !important",
+                height: "219px",
                 objectFit: "cover",
               }}
               className={styles.imageBorder}
             />
           </div>
-        ))}
+        ) : (
+          homeImages.map((image, index) => (
+            <div key={index} className={styles.customSlide}>
+              <img
+                key={index}
+                src={`https://www.dashboard.aqartik.com/assets/images/ads/image/${image.name}`}
+                alt={`Slide ${index + 1}`}
+                style={{
+                  width: "100%",
+                  height: "219px",
+                  objectFit: "cover",
+                }}
+                className={styles.imageBorder}
+              />
+            </div>
+          ))
+        )}
       </Slider>
       <Box
         sx={{

@@ -335,11 +335,11 @@ const HomeFilter = () => {
             >
               <Link
                 to="/mappage"
-                // state={{
-                //   lat: data.ads.lat,
-                //   lng: data.ads.long,
-                //   zoom: data.ads.zoom,
-                // }}
+                state={{
+                  lat: 24.7136,
+                  lng: 46.6753,
+                  zoom: 10,
+                }}
                 style={{ display: "flex", alignItems: "center" }}
               >
                 {/* <img src={Location} alt="location" /> */}

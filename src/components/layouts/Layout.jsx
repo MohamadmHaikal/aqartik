@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { Toaster } from "react-hot-toast";
 import DownloadingIcon from "@mui/icons-material/Downloading";
 import ClearIcon from "@mui/icons-material/Clear";
+import useDataFetcher from "../../api/useDataFetcher ";
 const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
   const location = useLocation();
   const { pathname } = location;
@@ -29,6 +30,19 @@ const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
   const [showMessages, setShowMessages] = useState(false);
   // for socket states
 
+  // for notifiacetion
+  const { data, isLoading, get } = useDataFetcher();
+  const [notificationData, setNotificationData] = useState([]);
+
+  useEffect(() => {
+    get("api/user/get_user_notifications");
+  }, []);
+  useEffect(() => {
+    if (data) {
+      setNotificationData(data);
+    }
+  }, [data]);
+
   return (
     <div>
       <Toaster position="top-center" reverseOrder={false} />
@@ -38,6 +52,7 @@ const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
           setShowMessages={setShowMessages}
           isUserSelected={isUserSelected}
           setIsUserSelected={setIsUserSelected}
+          notificationData={notificationData}
         />
       )}
       <main style={contentStyles}>{children}</main>
