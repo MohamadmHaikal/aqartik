@@ -13,13 +13,14 @@ export const GeneralProvider = ({ children }) => {
   }, []);
   useEffect(() => {
     if (data) {
-      setGeneralData(data.settings);
-      set_website_status(data.settings.site_status);
+      setGeneralData(data?.settings);
+      set_website_status(data?.settings?.site_status);
 
       // Save fetched data to cookies
-      Cookies.set("generalData", JSON.stringify(data.settings));
-      Cookies.set("website_status", data.settings.site_status.toString());
+      // Cookies.set("generalData", JSON.stringify(data?.settings));
+      // Cookies.set("website_status", data?.settings?.site_status?.toString());
       // set_website_status(0);
+      console.log(website_status);
     }
   }, [data]);
 

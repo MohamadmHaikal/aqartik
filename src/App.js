@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 
 import "./App.css";
 import { Addads, Home } from "./components";
@@ -28,7 +33,12 @@ import GeneralContext from "./context/generalContext";
 import EditOrder from "./components/user_dashbord/OutgoingOrder/EditOrder";
 
 function App() {
-  const { generalData, website_status } = useContext(GeneralContext);
+  // const { generalData, website_status } = useContext(GeneralContext);
+  const { data, isLoading, error, get, post } = useDataFetcher();
+  const [generalData, setGeneralData] = useState([]);
+  const [website_status, set_website_status] = useState(null);
+
+  const isAuthenticated = localStorage.getItem("user_token");
 
   const isMediumScreen = useMediaQuery("(min-width:900px)");
   const { t, i18n } = useTranslation();
@@ -36,7 +46,21 @@ function App() {
 
   const [userLocation, setUserLocation] = useState(null);
   // this is for take user Location
+  useEffect(() => {
+    get("/api/settings/genral");
+  }, []);
+  useEffect(() => {
+    if (data) {
+      setGeneralData(data?.settings);
+      set_website_status(data?.settings?.site_status);
 
+      // Save fetched data to cookies
+      // Cookies.set("generalData", JSON.stringify(data?.settings));
+      // Cookies.set("website_status", data?.settings?.site_status?.toString());
+      // set_website_status(0);
+      console.log(website_status);
+    }
+  }, [data]);
   useEffect(() => {
     const storedLocation = JSON.parse(localStorage.getItem("userLocation"));
     if (storedLocation) {
@@ -65,51 +89,75 @@ function App() {
       <Helmet>
         <title>
           {lang === "ar"
-            ? generalData.site_title_ar
-            : generalData.site_title_en}
+            ? generalData?.site_title_ar
+            : generalData?.site_title_en}
         </title>
         <meta
           name="description"
           content={
-            lang === "ar" ? generalData.site_desc_ar : generalData.site_desc_en
+            lang === "ar"
+              ? generalData?.site_desc_ar
+              : generalData?.site_desc_en
           }
         />
         <meta
           name="keywords"
           content={
             lang === "ar"
-              ? generalData.site_keywords_ar
-              : generalData.site_keywords_en
+              ? generalData?.site_keywords_ar
+              : generalData?.site_keywords_en
           }
         />
       </Helmet>
       {/* {generalData.style_preload && <LoaderHome />} */}
-      {website_status === 1 && (
-        <Router basename="/">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Layout
-                  showNavFooter={true}
-                  contentStyles={{ marginTop: "12rem !important" }}
-                >
-                  <Home userLocation={userLocation} />
-                </Layout>
-              }
-            />
-            <Route
-              path="/addads"
-              element={
+
+      <Router basename="/">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Layout
+                showNavFooter={true}
+                contentStyles={{ marginTop: "12rem !important" }}
+                generalData={generalData}
+              >
+                <Home userLocation={userLocation} />
+              </Layout>
+            }
+          />
+          <Route
+            path="/addads"
+            element={
+              isAuthenticated ? (
                 <Layout
                   showNavFooter={false}
                   contentStyles={{ marginTop: "2rem !important" }}
                 >
                   <Addads />
                 </Layout>
-              }
-            />
-            <Route
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/userdashbored"
+            element={
+              isAuthenticated ? (
+                <Layout
+                  showNavFooter={false}
+                  contentStyles={{
+                    marginTop: "0rem ",
+                  }}
+                >
+                  <UserDashbored />
+                </Layout>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          {/* <Route
               path="/userdashbored"
               element={
                 <Layout
@@ -121,141 +169,141 @@ function App() {
                   <UserDashbored />
                 </Layout>
               }
-            />
-            <Route
-              path="/ads"
-              element={
-                <Layout showNavFooter={true}>
-                  <Ads userLocation={userLocation} />
-                </Layout>
-              }
-            />
+            /> */}
+          <Route
+            path="/ads"
+            element={
+              <Layout showNavFooter={true}>
+                <Ads userLocation={userLocation} />
+              </Layout>
+            }
+          />
 
+          <Route
+            path="/login"
+            element={
+              <Layout
+                showNavFooter={false}
+                contentStyles={{
+                  background:
+                    "linear-gradient(to bottom, #15b184, rgb(11, 79, 60))",
+                  height: "100vh",
+                  marginTop: "0rem ",
+                }}
+              >
+                <Login />
+              </Layout>
+            }
+          />
+          {/* here goes offices pages  */}
+          <Route path="/offices">
             <Route
-              path="/login"
-              element={
-                <Layout
-                  showNavFooter={false}
-                  contentStyles={{
-                    background:
-                      "linear-gradient(to bottom, #15b184, rgb(11, 79, 60))",
-                    height: "100vh",
-                    marginTop: "0rem ",
-                  }}
-                >
-                  <Login />
-                </Layout>
-              }
-            />
-            {/* here goes offices pages  */}
-            <Route path="/offices">
-              <Route
-                index
-                element={
-                  <Layout
-                    showNavFooter={true}
-                    contentStyles={{ margin: "8rem 2rem 0rem 2rem" }}
-                  >
-                    <Offices />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/offices/office/:id"
-                element={
-                  <Layout
-                    showNavFooter={true}
-                    contentStyles={{ margin: "8rem 2rem 0rem 2rem" }}
-                  >
-                    <Office />
-                  </Layout>
-                }
-              />
-            </Route>
-            {/* here goes offices pages  */}
-            <Route
-              path="/details/:id"
+              index
               element={
                 <Layout
                   showNavFooter={true}
-                  contentStyles={{ marginTop: "9rem " }}
+                  contentStyles={{ margin: "8rem 2rem 0rem 2rem" }}
                 >
-                  <Details />
+                  <Offices />
                 </Layout>
               }
             />
             <Route
-              path="/about"
+              path="/offices/office/:id"
               element={
                 <Layout
                   showNavFooter={true}
-                  contentStyles={{ marginTop: "9rem " }}
+                  contentStyles={{ margin: "8rem 2rem 0rem 2rem" }}
                 >
-                  <About />
+                  <Office />
                 </Layout>
               }
             />
-            <Route
-              path="/mappage"
-              element={
-                <Layout
-                  showNavFooter={isMediumScreen}
-                  contentStyles={{ marginTop: "9rem !important" }}
-                >
-                  <Mappage />
-                </Layout>
-              }
-            />
-            <Route
-              path="/memberships"
-              element={
-                <Layout
-                  showNavFooter={true}
-                  contentStyles={{ marginTop: "12rem !important" }}
-                >
-                  <Cards />
-                </Layout>
-              }
-            />
-            <Route
-              path="/EditAds"
-              element={
-                <Layout showNavFooter={false}>
-                  <EditAds />
-                </Layout>
-              }
-            />
-            <Route
-              path="/privacy"
-              element={
-                <Layout
-                  showNavFooter={true}
-                  contentStyles={{ marginTop: "12rem !important" }}
-                >
-                  <PrivaceyRules />
-                </Layout>
-              }
-            />
-            <Route
-              path="/contact_us"
-              element={
-                <Layout showNavFooter={true} generalData={generalData}>
-                  <ContactUs />
-                </Layout>
-              }
-            />
-            <Route
-              path="/EditOrder"
-              element={
-                <Layout showNavFooter={false}>
-                  <EditOrder />
-                </Layout>
-              }
-            />
-          </Routes>
-        </Router>
-      )}
-      {website_status === 0 && (
+          </Route>
+          {/* here goes offices pages  */}
+          <Route
+            path="/details/:id"
+            element={
+              <Layout
+                showNavFooter={true}
+                contentStyles={{ marginTop: "9rem " }}
+              >
+                <Details />
+              </Layout>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <Layout
+                showNavFooter={true}
+                contentStyles={{ marginTop: "9rem " }}
+              >
+                <About />
+              </Layout>
+            }
+          />
+          <Route
+            path="/mappage"
+            element={
+              <Layout
+                showNavFooter={isMediumScreen}
+                contentStyles={{ marginTop: "9rem !important" }}
+              >
+                <Mappage />
+              </Layout>
+            }
+          />
+          <Route
+            path="/memberships"
+            element={
+              <Layout
+                showNavFooter={true}
+                contentStyles={{ marginTop: "12rem !important" }}
+              >
+                <Cards />
+              </Layout>
+            }
+          />
+          <Route
+            path="/EditAds"
+            element={
+              <Layout showNavFooter={false}>
+                <EditAds />
+              </Layout>
+            }
+          />
+          <Route
+            path="/privacy"
+            element={
+              <Layout
+                showNavFooter={true}
+                contentStyles={{ marginTop: "12rem !important" }}
+              >
+                <PrivaceyRules />
+              </Layout>
+            }
+          />
+          <Route
+            path="/contact_us"
+            element={
+              <Layout showNavFooter={true} generalData={generalData}>
+                <ContactUs />
+              </Layout>
+            }
+          />
+          <Route
+            path="/EditOrder"
+            element={
+              <Layout showNavFooter={false}>
+                <EditOrder />
+              </Layout>
+            }
+          />
+        </Routes>
+      </Router>
+
+      {/* {website_status === 0 && (
         <UnderMaintence />
         // <div
         //   style={{ width: "100%", height: "100vh", backgroundColor: "#EEE" }}
@@ -273,7 +321,7 @@ function App() {
         //     }}
         //   />
         // </div>
-      )}
+      )} */}
     </>
   );
 }

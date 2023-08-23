@@ -33,7 +33,7 @@ const Mappage = () => {
   useEffect(() => {
     // Define the base API endpoint
     let apiUrl = "api/ads/get_all_ads?";
-  
+
     // Check if state values exist and add them to the API URL if they do
     if (state?.lat) {
       apiUrl += `lat=${state.lat}&`;
@@ -53,12 +53,12 @@ const Mappage = () => {
     if (state?.max_price) {
       apiUrl += `max_price=${state.max_price}&`;
     }
-  
+
     // Remove the trailing '&' if it exists
     if (apiUrl.endsWith("&")) {
       apiUrl = apiUrl.slice(0, -1);
     }
-  
+
     // Make the API call with the constructed URL
     get(apiUrl);
   }, [state]);

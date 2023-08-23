@@ -13,7 +13,7 @@ const UnderMaintence = () => {
   }, []);
   useEffect(() => {
     if (data) {
-      setMainData(data.settings.close_msg);
+      setMainData(data?.settings?.close_msg);
     }
   }, [data]);
   console.log(mainData);
