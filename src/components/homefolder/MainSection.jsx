@@ -111,7 +111,7 @@ const MainSection = ({ setDataLoading }) => {
                   sx={{
                     "& img": {
                       width: "100%",
-                      height: "450px !important",
+                      height: "500px !important",
                       objectFit: "cover",
                       position: "relative",
                     },
@@ -127,44 +127,22 @@ const MainSection = ({ setDataLoading }) => {
                 </Box>
                 <AnimatePresence>
                   {activeSlideIndex === index && (
-                    <motion.div
-                      key={index}
-                      classNames="slide"
-                      // timeout={{ enter: 10000, exit: 10000 }}
-                      // in={activeSlideIndex === index}
-                      // unmountOnExit
-                      // ref={csstransitionRef}
-                      // initial={{ opacity: 0 }}
-                      // animate={{
-                      //   opacity: 1,
-                      //   transition: { type: "spring", duration: ".5" },
-                      // }}
-                      // exit={{ opacity: 0 }}
-                    >
+                    <motion.div key={index} classNames="slide">
                       <Box
                         sx={{
                           position: "absolute",
-                          // top: "5rem",
                           top: { xs: "9rem", md: "8rem" },
                           textAlign: {
                             xs: " center",
                             md: lang === "ar" ? "right" : "left",
                           },
-                          // transform: {
-                          //   xs: "translate(-50%,-50%)",
-                          // },
                           width: { xs: "100%", md: "50%" },
 
-                          // right: { md: "5rem" },
                           right: { md: lang === "ar" ? "5rem" : "" },
                           left: { md: lang === "ar" ? "" : "3rem" },
 
-                          // left: { xs: "50%" },
-
                           zIndex: "1000",
                           color: "white",
-                          // transform: () => getBoxTransform(index),
-                          // transition: "transform 1s ease-out",
                         }}
                       >
                         <Box>
@@ -191,7 +169,7 @@ const MainSection = ({ setDataLoading }) => {
                               !isXsScreen && { x: lang === "ar" ? -100 : 100 }
                             }
                           >
-                            {banner.ar_title}
+                            {lang === "ar" ? banner.ar_title : banner.en_title}
                           </motion.h3>
                         </Box>
                         <motion.p
@@ -217,7 +195,9 @@ const MainSection = ({ setDataLoading }) => {
                             !isXsScreen && { x: lang === "ar" ? -150 : 150 }
                           }
                         >
-                          {banner.ar_description}
+                          {lang === "ar"
+                            ? banner.ar_description
+                            : banner.en_description}
                         </motion.p>
                         <motion.div
                           initial={
@@ -259,7 +239,9 @@ const MainSection = ({ setDataLoading }) => {
                               },
                             }}
                           >
-                            {banner.button_text_ar}
+                            {lang === "ar"
+                              ? banner.button_text_ar
+                              : banner.button_text_en}
                           </Button>
                         </motion.div>
                       </Box>
@@ -276,8 +258,10 @@ const MainSection = ({ setDataLoading }) => {
           marginTop: "1rem",
           position: "absolute",
           zIndex: 2,
-          left: { xs: "50%", md: "87%" },
-          bottom: { xs: "6rem", md: "6rem" },
+          // right: lang === "en" ? { xs: "50%", md: "87%" } : undefined,
+          left:
+            lang === "ar" ? { xs: "50%", md: "91%" } : { xs: "50%", md: "7%" },
+          bottom: { xs: "4rem", md: "4rem" },
           transform: { xs: "translate(-50%)" },
         }}
       >

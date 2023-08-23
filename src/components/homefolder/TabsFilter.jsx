@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   useTheme,
   useMediaQuery,
@@ -23,6 +22,7 @@ import NorthIcon from "@mui/icons-material/North";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import { useTranslation } from "react-i18next";
 
 const tabDataXs = [
   { label: "الجميع", content: "Content 1" },
@@ -32,8 +32,6 @@ const tabDataXs = [
   { label: "الأقل سعرا", content: "Content 5" },
   { label: "الأعلى سعرا", content: "Content 6" },
 ];
-
-import { useTranslation } from "react-i18next";
 
 const icons = [
   {

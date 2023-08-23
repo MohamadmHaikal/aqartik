@@ -318,57 +318,56 @@ export default function Nav({
             >
               <Notification notificationData={notificationData} />
             </Button>
-            <Header>
-              {isLoggedIn && (
-                <div className="messages-container">
-                  <ChatRoundedIcon
-                    onClick={() => setShowMessages((prev) => !prev)}
-                    className="message-icon"
-                    sx={{ display: "flex", justifyContent: "center" }}
+            <Header $dir={lang}>
+              <div className="messages-container">
+                <ChatRoundedIcon
+                  onClick={() => setShowMessages((prev) => !prev)}
+                  className="message-icon"
+                  sx={{ display: "flex", justifyContent: "center" }}
+                />
+                {showMessages && (
+                  <ChatsHeader
+                    setShowMessages={setShowMessages}
+                    setIsUserSelected={setIsUserSelected}
                   />
-                  {showMessages && (
-                    <ChatsHeader setIsUserSelected={setIsUserSelected} />
-                  )}
-                </div>
-              )}
+                )}
+              </div>
             </Header>
-            {isLoggedIn && (
-              <Link to="/addads" sx={{ display: { xs: "none", md: "block" } }}>
-                <Button
+            <Link to="/addads" sx={{ display: { xs: "none", md: "block" } }}>
+              <Button
+                sx={{
+                  border: "1px solid var(--green-color)",
+                  color: "var(--green-color)",
+                  borderRadius: "25px",
+                  // marginX: {}"0.8rem",
+                  minWidth: { xs: "0", lg: "8rem" },
+                  height: { md: "3rem" },
+                  padding: { xs: "5px", md: "6px 8px" },
+                }}
+              >
+                <AddIcon
                   sx={{
-                    border: "1px solid var(--green-color)",
-                    color: "var(--green-color)",
-                    borderRadius: "25px",
-                    // marginX: {}"0.8rem",
-                    minWidth: { xs: "0", lg: "8rem" },
-                    height: { md: "3rem" },
-                    padding: { xs: "5px", md: "6px 8px" },
+                    display: { xs: "block" },
+                    marginX: { xs: "0px", md: "5px" },
+                    width: "20px",
+                    height: "20px",
+                    position: { md: "absolute" },
+                    right: { md: "2px" },
+                  }}
+                />
+                <Typography
+                  sx={{
+                    width: "100%",
+                    fontSize: "15px",
+                    display: { xs: "none", lg: "block" },
+                    position: "absolute",
+                    right: "6px",
                   }}
                 >
-                  <AddIcon
-                    sx={{
-                      display: { xs: "block" },
-                      marginX: { xs: "0px", md: "5px" },
-                      width: "20px",
-                      height: "20px",
-                      position: { md: "absolute" },
-                      right: { md: "2px" },
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      width: "100%",
-                      fontSize: "15px",
-                      display: { xs: "none", lg: "block" },
-                      position: "absolute",
-                      right: "6px",
-                    }}
-                  >
-                    {t("nav.buttons.add_advertisement")}
-                  </Typography>
-                </Button>
-              </Link>
-            )}
+                  {t("nav.buttons.add_advertisement")}
+                </Typography>
+              </Button>
+            </Link>
             <LoginButton isLoggedIn={isLoggedIn} />
 
             <LanguageButton />

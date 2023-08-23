@@ -61,16 +61,16 @@ const PersonalInfo = () => {
   }, [data]);
 
   useEffect(() => {
-    setUserName(userData.username);
-    setPhoneNumber(userData.phone);
-    setOfficeName(userData.office_name);
-    setCompanyName(userData.company_name);
-    setEmail(userData.email);
-    setNationalID(userData.IdNumber);
-    setAbout(userData.about);
-    setMembershipId(userData.type_id);
-    setLink(userData.licenseLink);
-    if (userData.licenseLink) {
+    setUserName(userData?.username);
+    setPhoneNumber(userData?.phone);
+    setOfficeName(userData?.office_name);
+    setCompanyName(userData?.company_name);
+    setEmail(userData?.email);
+    setNationalID(userData?.IdNumber);
+    setAbout(userData?.about);
+    setMembershipId(userData?.type_id);
+    setLink(userData?.licenseLink);
+    if (userData?.licenseLink) {
       setLicense("yes");
     }
   }, [userData]);
@@ -81,7 +81,7 @@ const PersonalInfo = () => {
 
   useEffect(() => {
     if (membershipsData) {
-      setMemberShips(membershipsData.types);
+      setMemberShips(membershipsData?.types);
     }
   }, [membershipsData]);
 
@@ -364,7 +364,7 @@ const PersonalInfo = () => {
             }}
           >
             <input
-              id={userData.image_id}
+              id={userData?.image_id}
               type="file"
               accept="image/*"
               hidden
@@ -527,7 +527,7 @@ const PersonalInfo = () => {
                 marginTop: "1rem",
               }}
             >
-              {memberships.map((membership, index) => (
+              {memberships?.map((membership, index) => (
                 <FormControlLabel
                   key={membership.id}
                   value={membership.id}

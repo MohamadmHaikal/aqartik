@@ -18,8 +18,11 @@ const DetailsCard = ({ adInfo }) => {
   const userToken = localStorage.getItem("user_token");
   const [modalReportOpen, setModalReportOpen] = useState(false);
   const { isUserSelected, setIsUserSelected } = useContext(ChatContext);
-  const { userKlickedData, setUserKlickedData } = useContext(ChatContext);
-  const isMyAd = JSON.parse(localStorage.getItem("user")).id === adInfo.user.id;
+  const { userKlickedData, setUserKlickedData, setRecipientId } =
+    useContext(ChatContext);
+  const isMyAd =
+    localStorage.getItem("user") &&
+    JSON.parse(localStorage.getItem("user")).id === adInfo.user.id;
 
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -247,10 +250,10 @@ const DetailsCard = ({ adInfo }) => {
             onClick={() => {
               setIsUserSelected(true);
               setUserKlickedData(adInfo?.user);
+              setRecipientId(adInfo?.user.id);
             }}
           >
             {t("details_page.details_card.chat_button")}
-
             <ChatIcon
               sx={{
                 color: "var(--green-color)",
@@ -258,7 +261,6 @@ const DetailsCard = ({ adInfo }) => {
                 marginRight: lang === "en" && "15px",
               }}
             />
-            {t("details_page.details_card.chat_button")}
           </Button>
         )}
         {/* <ReportModal open={modalReportOpen} onClose={handleReportCloseModal} /> */}
