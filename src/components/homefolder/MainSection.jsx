@@ -8,6 +8,7 @@ import { boat, exciting_experience, house } from "../../assets";
 import { Box, Typography, Button, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
+import styled from "styled-components";
 
 import { AnimatePresence, motion } from "framer-motion";
 const MainSection = ({ setDataLoading }) => {
@@ -25,6 +26,7 @@ const MainSection = ({ setDataLoading }) => {
     }
     setDataLoading(false);
   }, []);
+
   console.log(bannersData);
   useEffect(() => {
     if (data && data.banners) {
@@ -32,13 +34,13 @@ const MainSection = ({ setDataLoading }) => {
     }
   }, [data]);
 
-  // useEffect(() => {
-  //   const storedData = localStorage.getItem("bannersData");
-  //   if (storedData) {
-  //     setBannersData(JSON.parse(storedData));
-  //   } else {
-  //   }
-  // }, []);
+  useEffect(() => {
+    const storedData = localStorage.getItem("bannersData");
+    if (storedData) {
+      setBannersData(JSON.parse(storedData));
+    } else {
+    }
+  }, []);
 
   const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
@@ -102,8 +104,8 @@ const MainSection = ({ setDataLoading }) => {
         onSlideChange={handleSlideChange}
         sx={{ position: "relative", marginTop: "11rem" }}
       >
-        {data &&
-          data.banners.map((banner, index) => {
+        {bannersData &&
+          bannersData.map((banner, index) => {
             return (
               <SwiperSlide key={index}>
                 <Box
@@ -144,7 +146,7 @@ const MainSection = ({ setDataLoading }) => {
                         sx={{
                           position: "absolute",
                           // top: "5rem",
-                          top: { xs: "9rem", md: "8rem" },
+                          top: { xs: "8rem", md: "8rem" },
                           textAlign: {
                             xs: " center",
                             md: lang === "ar" ? "right" : "left",
@@ -170,7 +172,7 @@ const MainSection = ({ setDataLoading }) => {
                           <motion.h3
                             style={{
                               marginBottom: "1rem",
-                              fontSize: "2.5rem",
+                              fontSize: "30px",
                               fontWeight: "bold",
                             }}
                             initial={
@@ -276,13 +278,13 @@ const MainSection = ({ setDataLoading }) => {
           position: "absolute",
           zIndex: 2,
           left: { xs: "50%", md: "87%" },
-          bottom: { xs: "6rem", md: "6rem" },
+          bottom: { xs: "3rem", md: "4rem" },
           transform: { xs: "translate(-50%)" },
         }}
       >
         {/* Render pagination dots */}
-        {data &&
-          data.banners.map((image, index) => (
+        {bannersData &&
+          bannersData.map((image, index) => (
             <Box
               key={index}
               sx={{

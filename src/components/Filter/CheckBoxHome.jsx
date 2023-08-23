@@ -50,7 +50,8 @@ const CheckBoxHome = ({ setFilterProps, FilterProps }) => {
       setcheckboxeshome(data?.categories);
       setFilterProps((prev) => ({
         ...prev,
-        category_id: data.categories[0].id,
+
+        category_id: data?.categories[0].id,
       }));
     }
   }, [data]);

@@ -126,7 +126,7 @@ const SpecialAds = ({ ad }) => {
                     sx={{ color: "rgb(132, 132, 132)" }}
                   />
                   <Typography sx={{ color: "rgb(132, 132, 132)" }}>
-                    {ad.city} , {ad.neighborhood} , {ad.road}
+                    {ad?.city} , {ad?.neighborhood} , {ad?.road}
                   </Typography>
                 </Box>
               </Box>
@@ -140,7 +140,7 @@ const SpecialAds = ({ ad }) => {
                     width: "max-content",
                   }}
                 >
-                  {ad.price} ر.س
+                  {ad?.price} ر.س
                 </Typography>
               </Box>
             </Box>

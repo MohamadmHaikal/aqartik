@@ -8,6 +8,8 @@ import lightGallery from "lightgallery";
 import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
 import "lightgallery/css/lg-thumbnail.css";
+import { Map } from "../../../assets";
+import lgVideo from "https://cdn.skypack.dev/lightgallery@2.3.0-beta.4/plugins/video";
 
 // import { house, boat, abha } from "../../../assets";
 
@@ -58,6 +60,8 @@ const DetailsImagesXs = ({ adInfo }) => {
     // Initialize LightGallery
     const gallery = lightGallery(galleryRef.current, {
       mode: "lg-fade",
+      video: true,
+      lgVideo,
     });
     return () => {
       gallery.destroy();
@@ -83,15 +87,23 @@ const DetailsImagesXs = ({ adInfo }) => {
           ))}
           {adInfo.video ? (
             <a
-              data-src={` https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
+              data-src={`https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
               className="swiper-slide"
             >
-              <img
-                id="videoElement"
-                src={` https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
+              <video
                 controls
-                style={{ width: "500px", height: "300px" }}
-              ></img>
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  backgroundColor: "black",
+                }}
+              >
+                <source
+                  src={`https://www.dashboard.aqartik.com/assets/images/ads/video/${adInfo.video.name}`}
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
             </a>
           ) : (
             ""

@@ -14,7 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SelectCity from "../selectnav/SelectCity";
 import HomeType from "./HomeType";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Location } from "../../assets";
 import useDataFetcher from "../../api/useDataFetcher ";
 import { AdsClick } from "@mui/icons-material";
@@ -36,6 +36,7 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 const HomeFilter = ({ userLocation }) => {
   const [per_page, set_per_page] = useState();
   const location = useLocation();
+  const navigate = useNavigate();
   const linkParams = new URLSearchParams(location.search);
   // const [current_page, set_current_page] = useState();
   // const [ads, setAds] = useState([]);
@@ -70,7 +71,7 @@ const HomeFilter = ({ userLocation }) => {
         max_price: linkParams.get("max_price"),
       }));
     }
-  }, []);
+  }, [location.search]);
   useEffect(() => {
     if (filterData) {
       setCities(filterData?.cities);
@@ -127,6 +128,28 @@ const HomeFilter = ({ userLocation }) => {
     FilterProps?.interface_id,
     FilterProps?.categoryBool,
   ]);
+  // useEffect(
+  //   () => {
+  //     console.log("dont play with me");
+  //     const queryParams = new URLSearchParams({
+  //       city: FilterProps?.city,
+  //       neighborhood: FilterProps?.neighborhood,
+  //       min_price: FilterProps?.min_price,
+  //       max_price: FilterProps?.max_price,
+  //       category_id: FilterProps?.category_id,
+  //     });
+  //     const newPath = `/ads?${queryParams.toString()}`;
+  //     navigate(newPath);
+  //   },
+  //   [
+
+  //     // FilterProps?.city,
+  //     // FilterProps?.neighborhood,
+  //     // FilterProps?.min_price,
+  //     // FilterProps?.max_price,
+  //     // FilterProps?.category_id,
+  //   ]
+  // );
   const renderFilterSection = (FilterProps) => {
     let counter = 0;
     if (FilterProps?.title) {
@@ -564,7 +587,7 @@ const HomeFilter = ({ userLocation }) => {
                     </Typography>
                     <Typography sx={{ fontWeight: "bold" }}>
                       {" "}
-                      {homes.find((item) => item.id === selectedHome).ar_name}
+                      {homes?.find((item) => item.id === selectedHome).ar_name}
                     </Typography>
                     {homeIsOpen && (
                       <HomeType

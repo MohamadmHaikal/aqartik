@@ -60,7 +60,7 @@ const Layout = ({
           setShowMessages={setShowMessages}
           isUserSelected={isUserSelected}
           setIsUserSelected={setIsUserSelected}
-      
+
           notificationData={notificationData}
           generalData={generalData}
         />

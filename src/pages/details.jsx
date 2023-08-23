@@ -226,7 +226,8 @@ const Details = () => {
                     fomtSize: "1.2rem",
                   }}
                 />
-                {adInfo.user_rate?.toFixed(2)}
+
+                {adInfo?.user_rate?.toFixed(2)}
               </Typography>
               <Typography
                 sx={{

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 
 import { Box, Container, Grid, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+
 import {
   Googleplay,
   Appstore,
@@ -11,7 +13,9 @@ import {
   Mada,
   Logo,
 } from "../../assets";
-import { Link } from "react-router-dom";
+
+// import { Link } from "react-router-dom";
+
 import styles from "./footer.module.css";
 import PhoneIcon from "@mui/icons-material/Phone";
 import YouTubeIcon from "@mui/icons-material/YouTube";
@@ -292,8 +296,8 @@ const FooterTwo = () => {
                 {t("footer.contact_phone")}
               </Typography>
               <Link
-                href={`tel:${FooterData.contact_t3}`}
-                sx={{ textDecoration: "none", color: "black" }}
+                to={`tel:${FooterData.contact_t3}`}
+                style={{ textDecoration: "none", color: "black" }}
               >
                 {FooterData.contact_t3}
               </Link>
@@ -389,7 +393,7 @@ const FooterTwo = () => {
                   <li className={styles.footer_xs_list}>
                     <Link
                       href="/ads"
-                      sx={{ textDecoration: "none", color: "black" }}
+                      style={{ textDecoration: "none", color: "black" }}
                     >
                       شاليهات، منتجعات، أستراحات
                     </Link>
@@ -458,8 +462,8 @@ const FooterTwo = () => {
                   </Typography>
                 </Box>
                 <Link
-                  href="#"
-                  sx={{
+                  to="#"
+                  style={{
                     textDecoration: "none",
                     color: "black",
                     marginRight: "25px",
@@ -484,7 +488,7 @@ const FooterTwo = () => {
             }}
           >
             {socialMediaLinksSmall.map((social, index) => (
-              <Link key={index} href={social.url} sx={{ color: "black" }}>
+              <Link key={index} to={social.url} style={{ color: "black" }}>
                 <Box>{social.icon}</Box>
               </Link>
             ))}

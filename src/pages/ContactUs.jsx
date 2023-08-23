@@ -8,6 +8,7 @@ import {
   MenuItem,
   Button,
   TextField,
+  styled,
 } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -16,7 +17,22 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { useTranslation } from "react-i18next";
+const StyledSelect = styled(Select)((props) => ({
+  "& .MuiSvgIcon-root": {
+    marginRight: "auto",
+    marginLeft: "0",
+    left: props.lang === "ar" ? "5px" : "",
 
+    // color:"red"
+  },
+  "& .MuiSelect-icon":{
+    marginRight: "auto",
+    marginLeft: "0",
+    left: props.lang === "ar" ? "5px !important" : "",
+    left:"5px",
+    // color:"red"
+  }
+}));
 const ContactUs = ({ generalData }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const [message, setMessage] = useState("");
@@ -31,6 +47,7 @@ const ContactUs = ({ generalData }) => {
     setSelectedValue(event.target.value);
   };
   console.log(generalData);
+ 
   return (
     <Box sx={{ marginTop: "19rem" }}>
       <Container maxWidth="lg">
@@ -72,8 +89,8 @@ const ContactUs = ({ generalData }) => {
                 </Typography>
                 <Typography>
                   {lang === "ar"
-                    ? generalData.contact_t1_ar
-                    : generalData.contact_t1_en}
+                    ? generalData?.contact_t1_ar
+                    : generalData?.contact_t1_en}
                 </Typography>
               </Box>
             </Box>
@@ -95,7 +112,7 @@ const ContactUs = ({ generalData }) => {
                     style={{ textDecoration: "none", color: "black" }}
                   >
                     {" "}
-                    {generalData.contact_t6}
+                    {generalData?.contact_t6}
                   </a>
                 </Typography>
               </Box>
@@ -118,7 +135,7 @@ const ContactUs = ({ generalData }) => {
                     style={{ textDecoration: "none", color: "black" }}
                   >
                     {" "}
-                    {generalData.contact_t3}
+                    {generalData?.contact_t3}
                   </a>
                 </Typography>
               </Box>
@@ -145,7 +162,7 @@ const ContactUs = ({ generalData }) => {
               >
                 نوع الرسالة
               </Typography>
-              <Select
+              <StyledSelect
                 id="select"
                 value={selectedValue}
                 onChange={handleChange}
@@ -154,7 +171,7 @@ const ContactUs = ({ generalData }) => {
                 <MenuItem value="option1">Option 1</MenuItem>
                 <MenuItem value="option2">Option 2</MenuItem>
                 <MenuItem value="option3">Option 3</MenuItem>
-              </Select>
+              </StyledSelect>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
               <Typography
@@ -166,7 +183,7 @@ const ContactUs = ({ generalData }) => {
               >
                 المنصة
               </Typography>
-              <Select
+              <StyledSelect
                 id="select"
                 value="option1"
                 onChange={handleChange}
@@ -177,7 +194,7 @@ const ContactUs = ({ generalData }) => {
                   {" "}
                   موقع
                 </MenuItem>
-              </Select>
+              </StyledSelect>
             </FormControl>
             <Typography
               sx={{

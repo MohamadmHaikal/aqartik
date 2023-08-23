@@ -102,7 +102,7 @@ const HomeSlider = ({ ad }) => {
         }}
       >
         <VisibilityIcon sx={{ width: "1rem" }} />
-        <Typography>{ad.views}K</Typography>
+        <Typography>{ad?.views}K</Typography>
       </Box>
     </Box>
   );

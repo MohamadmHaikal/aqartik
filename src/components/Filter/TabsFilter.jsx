@@ -252,7 +252,7 @@ const TabsFilter = ({
                   }))
                 }
               >
-                الأفتراضي
+                {t("filtersTab.default_btn")}
               </Button>
               <Button
                 sx={{
@@ -402,53 +402,191 @@ const TabsFilter = ({
               >
                 الأقل سعر
               </Button>
-
-              {/* {tabData.map((tab, index) => (
-                <Button
-                  key={index}
-                  onClick={() =>
-                    setFilterProps((prev) => ({
-                      ...prev,
-                      page: new_page,
-                    }))
-                  }
-                >
-                  {tab.label}
-                </Button>
-                <Tab
-                  key={index}
-                  label={tab.label}
-                  sx={{
-                    // Customize the tab button styles
-                    color: "black",
-                    fontSize: { md: "0.88rem", lg: "1rem" },
-                    justifyContent: "space-between",
-
-                    "&.Mui-selected": {
-                      backgroundColor: "var( --green-color)",
-                      color: "white",
-                      borderRadius: "25px",
-
-                      paddingX: { md: "1rem", lg: "2rem" },
-                    },
-
-                    "&::before": {
-                      content: '""',
-                      display: index !== 0 ? "block" : "none",
-                      width: "4px",
-                      height: "4px",
-                      backgroundColor: "rgba(0, 0, 0, 0.16)",
-                      borderRadius: "50%",
-                      position: "absolute",
-                      top: "50%",
-                      right: "2px",
-                      transform: "translateX(50%)",
-                    },
-                  }}
-                />
-              ))} */}
             </Tabs>
           </Box>
+        )}
+        {isMdScreen && isListOrderOpen && isBoxShown && (
+          <Box
+            sx={{
+              position: "fixed",
+              top: "10rem",
+              left: "20px",
+              backgroundColor: "rgb(255, 255, 255)",
+              boxShadow: "rgba(0, 0, 0, 0.16) 0px 3px 3px",
+              width: "18rem",
+              maxWidth: "317px",
+              borderRadius: "24px",
+              zIndex: "220000000",
+              border: "1px solid rgb(90, 64, 155)",
+              padding: "1rem",
+            }}
+          >
+            <Typography variant="h6">رتب أماكن الاقامة حسب</Typography>
+
+            <ul
+              style={{
+                listStyle: "none",
+                padding: "1rem",
+                fontFamily: "Tajawal,Arial,sans-serif",
+              }}
+            >
+              <li
+                style={{
+                  padding: "0.5rem 0.3rem",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() =>
+                  setFilterProps((prev) => ({
+                    ...prev,
+                    lat: null,
+                    lng: null,
+                    topPrice: null,
+                    minPrice: null,
+                    topRate: null,
+                    topView: null,
+                  }))
+                }
+              >
+                افتراضي
+              </li>
+              <li
+                style={{
+                  padding: "0.5rem 0.3rem",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() =>
+                  setFilterProps((prev) => ({
+                    ...prev,
+
+                    topView: true,
+                    lat: null,
+                    lng: null,
+                    topPrice: null,
+                    minPrice: null,
+                    topRate: null,
+                  }))
+                }
+              >
+                الأعلى مشاهدة
+              </li>
+              <li
+                style={{
+                  padding: "0.5rem 0.3rem",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() =>
+                  setFilterProps((prev) => ({
+                    ...prev,
+
+                    lat: userLocation.latitude,
+                    lng: userLocation.longitude,
+                    topPrice: null,
+                    minPrice: null,
+                    topRate: null,
+                    topView: null,
+                  }))
+                }
+              >
+                الأقرب الى موقعي
+              </li>
+              <li
+                style={{
+                  padding: "0.5rem 0.3rem",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() =>
+                  setFilterProps((prev) => ({
+                    ...prev,
+
+                    topView: null,
+                    lat: null,
+                    lng: null,
+                    topPrice: true,
+                    minPrice: null,
+                    topRate: null,
+                  }))
+                }
+              >
+                الأعلى سعر
+              </li>
+              <li
+                style={{
+                  padding: "0.5rem 0.3rem",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() =>
+                  setFilterProps((prev) => ({
+                    ...prev,
+
+                    topView: null,
+                    lat: null,
+                    lng: null,
+                    topPrice: null,
+                    minPrice: true,
+                    topRate: null,
+                  }))
+                }
+              >
+                الأقل سعر
+              </li>
+              <li
+                style={{
+                  padding: "0.5rem 0.3rem",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() =>
+                  setFilterProps((prev) => ({
+                    ...prev,
+
+                    topRate: true,
+                    topView: null,
+                    lat: null,
+                    lng: null,
+                    topPrice: null,
+                    minPrice: null,
+                  }))
+                }
+              >
+                الأكثر تقييم
+              </li>
+            </ul>
+          </Box>
+        )}
+        {isMdScreen && (
+          <Button
+            onClick={() => {
+              toggleBox();
+              toggleOrderList();
+            }}
+            sx={{
+              display: "flex",
+              margin: "1rem auto",
+              padding: "0.5rem 1rem",
+              borderRadius: "25px",
+              backgroundColor: "var(--green-color)",
+              color: "white",
+              left: "50%",
+              transform: "translate(-50%,-50%)",
+              position: "absolute",
+              top: "-1rem",
+              zIndex: 11111,
+              "&:hover": {
+                backgroundColor: "var(--green-color)",
+              },
+            }}
+          >
+            <NorthIcon />
+            <NorthIcon
+              sx={{ transform: "rotate(180deg)", marginRight: "-0.8rem" }}
+            />
+            ترتيب
+          </Button>
         )}
         {isLoading ? (
           Array.from({ length: 5 }).map((_, index) => (

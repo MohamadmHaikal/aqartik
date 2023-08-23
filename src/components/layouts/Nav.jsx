@@ -60,10 +60,7 @@ export default function Nav({
   setShowMessages,
   isUserSelected,
   setIsUserSelected,
-
-
   notificationData,
-
 }) {
   const { generalData, website_status } = useContext(GeneralContext);
   const { t, i18n } = useTranslation();
@@ -92,6 +89,8 @@ export default function Nav({
       setSelectedRealEstate(categoriesArray[0]);
     }
   }, [filterData]);
+  console.log(filterData);
+
   const [navLinkss, setNavLinks] = useState([]);
   useEffect(() => {
     get(`api/settings/menu`);
@@ -419,7 +418,7 @@ export default function Nav({
                 borderRadius: "100px",
                 width: "90%",
                 margin: "auto",
-                marginTop: "3rem",
+                marginTop: { xs: "2rem", md: "3rem" },
                 position: "relative",
                 backgroundColor: "white",
               }}
@@ -463,7 +462,7 @@ export default function Nav({
                       isOpen={cityIsOpen}
                       onClose={() => setCityIsOpen(false)}
                       onCitySelect={handleCitySelection}
-                      selectedCity={selectedCity} // Pass the selectedCity prop here
+                      selectedCity={selectedCity}
                       cities={cities}
                     />
                   )}

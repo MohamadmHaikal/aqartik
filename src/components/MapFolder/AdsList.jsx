@@ -241,8 +241,9 @@ const AdsList = ({ mapData, isBoxVisible, setBoxVisible, selectedAd }) => {
                           display: "flex",
                         }}
                       >
-                        <Typography>0.0</Typography>
-                        <Typography>(0)</Typography>
+                        <Typography>
+                          ({selectedAdData[0]?.user_rate?.toFixed(2)})
+                        </Typography>
                         <Typography>تقييم</Typography>
                       </Box>
                     </Box>
@@ -406,8 +407,7 @@ const AdsList = ({ mapData, isBoxVisible, setBoxVisible, selectedAd }) => {
                         display: "flex",
                       }}
                     >
-                      <Typography>0.0</Typography>
-                      <Typography>(0)</Typography>
+                      <Typography>({ad.user_rate?.toFixed(2)})</Typography>
                       <Typography>تقييم</Typography>
                     </Box>
                   </Box>

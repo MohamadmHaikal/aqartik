@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Link, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import Divider from "@mui/material/Divider";
 // import HomeSlider from "../components/Filter/HomeSlider";
 import MapMark from "../components/MapFolder/MapMark";
@@ -42,14 +43,50 @@ const Mappage = () => {
   }, [data]);
   console.log(data);
   const getFilterDataInXs = () => {
-    get(
-      `api/ads/get_all_ads?lat=""&lng=""&zoom=""&category_id=${FilterProps?.category_id}&max_price=${FilterProps?.max_price}&title=${FilterProps?.title}&neighborhood=${FilterProps?.neighborhood}&city=${FilterProps?.city}&space=${FilterProps?.space}&interface_id=${FilterProps?.interface_id}&min_price=${FilterProps?.min_price}}`
-    );
+    const queryParams = [];
+
+    if (FilterProps?.category_id) {
+      queryParams.push(`category_id=${FilterProps.category_id}`);
+    }
+
+    if (FilterProps?.max_price) {
+      queryParams.push(`max_price=${FilterProps.max_price}`);
+    }
+
+    if (FilterProps?.title) {
+      queryParams.push(`title=${FilterProps.title}`);
+    }
+
+    if (FilterProps?.neighborhood) {
+      queryParams.push(`neighborhood=${FilterProps.neighborhood}`);
+    }
+
+    if (FilterProps?.city) {
+      queryParams.push(`city=${FilterProps.city}`);
+    }
+
+    if (FilterProps?.space) {
+      queryParams.push(`space=${FilterProps.space}`);
+    }
+
+    if (FilterProps?.interface_id) {
+      queryParams.push(`interface_id=${FilterProps.interface_id}`);
+    }
+
+    if (FilterProps?.min_price) {
+      queryParams.push(`min_price=${FilterProps.min_price}`);
+    }
+
+    // Join the queryParams array into a single string with '&' separators
+    const queryString = queryParams.join("&");
+
+    // Add the queryString to the URL
+    get(`api/ads/get_all_ads?${queryString}`);
     setShowFilter(false);
   };
   const deleteFilterinXsDataInXs = () => {
     get(
-      `api/ads/get_all_ads?lat=""&lng=""&zoom=""&category_id=""&max_price=""&title=""&neighborhood=""&city=""&space=""&interface_id=""&min_price=""}}`
+      `api/ads/get_all_ads?lat=""&lng=""&zoom=""&category_id=""&max_price=""&min_price=""}}`
     );
   };
 
@@ -175,7 +212,7 @@ const Mappage = () => {
             }}
           >
             <Link
-              href="/ads"
+              to="/ads"
               sx={{
                 position: "absolute",
                 left: "1rem",
@@ -398,16 +435,25 @@ const Mappage = () => {
                   0
                 </Typography> */}
               </Box>
-              <Button
-                sx={{
+              <Link
+                to="/mappage"
+                state={{
+                  lat: "",
+                  lng: "",
+                  zoom: "",
+                  category_id: "",
+                  min_price: "",
+                  max_price: "",
+                }}
+                style={{
                   fontSize: "15px",
                   fontWeight: "500",
                   color: "var(--green-color)",
                 }}
-                onClick={deleteFilterinXsDataInXs}
+                // onClick={deleteFilterinXsDataInXs}
               >
                 مسح الكل
-              </Button>
+              </Link>
             </Box>
             <Typography
               sx={{

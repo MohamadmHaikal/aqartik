@@ -29,13 +29,16 @@ const DetailsXsScreens = ({ adInfo }) => {
   const AdID = adInfo.id;
 
   const [ShareListOpen, setShareListOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const handleCopyLink = () => {
-    const linkToCopy = "your_link_url";
+    const currentUrl = window.location.href;
 
-    navigator.clipboard.writeText(linkToCopy).then(() => {
-      console.log("Link copied!");
+    navigator.clipboard.writeText(currentUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
     });
   };
+
   const handleOutsideClick = (event) => {
     if (
       !event.target.closest(".list-container") &&
@@ -111,13 +114,13 @@ const DetailsXsScreens = ({ adInfo }) => {
                         zIndex: "1",
                         position: "absolute",
                         top: "0",
-                        left: lang === "ar" && "10px",
-                        right: lang === "en" && "10px",
+                        left: "0",
                         backgroundColor: "white",
                         width: "14rem",
                         boxShadow:
                           "0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12)",
                       }}
+                      className="list-container"
                     >
                       <ListItem
                         sx={{
@@ -133,11 +136,11 @@ const DetailsXsScreens = ({ adInfo }) => {
                             width: "100%",
                             display: "flex",
                           }}
-                          href="https://www.facebook.com/sharer/sharer.php?u=your_link_url"
+                          href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <FacebookIcon sx={{ color: "gray" }} />
+                          <FacebookIcon />
                           <ListItemText
                             primary={t("details_page.facebook_share")}
                           />
@@ -158,11 +161,13 @@ const DetailsXsScreens = ({ adInfo }) => {
                             width: "100%",
                             display: "flex",
                           }}
-                          href="https://twitter.com/intent/tweet?text=your_link_text&url=your_link_url"
+                          href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                            "Check out this link!"
+                          )}&url=${window.location.href}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <TwitterIcon sx={{ color: "gray" }} />
+                          <TwitterIcon />
                           <ListItemText
                             primary={t("details_page.twitter_share")}
                           />
@@ -177,7 +182,7 @@ const DetailsXsScreens = ({ adInfo }) => {
                         }}
                         onClick={handleCopyLink}
                       >
-                        <LinkIcon sx={{ color: "gray" }} />
+                        <LinkIcon />
                         <ListItemText primary={t("details_page.copy_url")} />
                       </ListItem>
                     </List>
@@ -209,7 +214,7 @@ const DetailsXsScreens = ({ adInfo }) => {
         }}
       >
         <Link
-          href="/"
+          href={`tel:${adInfo.phone}`}
           sx={{
             textDecoration: "none",
             backgroundColor: "var(--green-color)",

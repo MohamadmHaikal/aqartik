@@ -59,9 +59,9 @@ const SearchBoxHome = ({ setFilterProps, FilterProps }) => {
     getFilterCities(`/api/settings/search_data`);
   }, []);
   useEffect(() => {
-    console.log("dataFilterCities", dataFilterCities);
+    // console.log("dataFilterCities", dataFilterCities);
     if (dataFilterCities) {
-      setFilterCities(dataFilterCities?.cities);
+      setFilterCities(dataFilterCities?.cities ?? []);
       setFilterNeighborhoods(dataFilterCities?.neighborhoods ?? []);
       console.log(dataFilterCities);
     }
@@ -181,7 +181,7 @@ const SearchBoxHome = ({ setFilterProps, FilterProps }) => {
             {t("advertisements_page.filter_sec.filter1_info.input4")}
           </InputLabel>
           <Select
-            value={FilterProps?.city ? FilterProps.city : ""}
+            value={FilterProps?.city ? FilterProps?.city : ""}
             onChange={(event) => {
               setFilterProps((prev) => ({
                 ...prev,

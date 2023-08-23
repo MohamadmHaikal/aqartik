@@ -23,6 +23,9 @@ const SelectCity = ({
   cities,
 }) => {
   // const cities = ["الرياض", "جدة", "مكة", "المدينة المنورة", "رياض", "أبها"];
+
+  console.log(cities);
+
   const [searchText, setSearchText] = useState("");
 
   const { i18n } = useTranslation();
@@ -36,8 +39,8 @@ const SelectCity = ({
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
   };
-
-  const filteredCities = cities.filter((city) =>
+  console.log(cities);
+  const filteredCities = cities?.filter((city) =>
     city.includes(searchText.trim())
   );
 
@@ -120,7 +123,7 @@ const SelectCity = ({
           fullWidth
         />
       </Box>
-      {filteredCities.map((city) => (
+      {filteredCities?.map((city) => (
         <Typography
           key={city}
           sx={{

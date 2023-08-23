@@ -19,7 +19,7 @@ const DetailsCard = ({ adInfo }) => {
   const [modalReportOpen, setModalReportOpen] = useState(false);
   const { isUserSelected, setIsUserSelected } = useContext(ChatContext);
   const { userKlickedData, setUserKlickedData } = useContext(ChatContext);
-  const isMyAd = JSON.parse(localStorage.getItem("user")).id === adInfo.user.id;
+  // const isMyAd = JSON.parse(localStorage.getItem("user")).id === adInfo.user.id;
 
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -225,42 +225,42 @@ const DetailsCard = ({ adInfo }) => {
           />
           {t("details_page.details_card.report_button")}
         </Button>
-        {!isMyAd && (
-          <Button
-            sx={{
+
+        <Button
+          sx={{
+            backgroundColor: "white",
+            color: "var(--green-color)",
+            borderRadius: "15px",
+            paddingX: "2.5rem",
+            fontSize: "15px",
+            minWidth: "64px",
+            width: "45%",
+            padding: "0.8rem",
+
+            border: "1px solid var(--green-color)",
+            "&:hover": {
               backgroundColor: "white",
               color: "var(--green-color)",
-              borderRadius: "15px",
-              paddingX: "2.5rem",
-              fontSize: "15px",
-              minWidth: "64px",
-              width: "45%",
-              padding: "0.8rem",
+              boxShadow: "none",
+            },
+          }}
+          onClick={() => {
+            setIsUserSelected(true);
+            setUserKlickedData(adInfo?.user);
+          }}
+        >
+          {/* {t("details_page.details_card.chat_button")} */}
 
-              border: "1px solid var(--green-color)",
-              "&:hover": {
-                backgroundColor: "white",
-                color: "var(--green-color)",
-                boxShadow: "none",
-              },
+          <ChatIcon
+            sx={{
+              color: "var(--green-color)",
+              marginLeft: lang === "ar" && "15px",
+              marginRight: lang === "en" && "15px",
             }}
-            onClick={() => {
-              setIsUserSelected(true);
-              setUserKlickedData(adInfo?.user);
-            }}
-          >
-            {t("details_page.details_card.chat_button")}
+          />
+          {t("details_page.details_card.chat_button")}
+        </Button>
 
-            <ChatIcon
-              sx={{
-                color: "var(--green-color)",
-                marginLeft: lang === "ar" && "15px",
-                marginRight: lang === "en" && "15px",
-              }}
-            />
-            {t("details_page.details_card.chat_button")}
-          </Button>
-        )}
         {/* <ReportModal open={modalReportOpen} onClose={handleReportCloseModal} /> */}
         <ReportModal
           open={modalReportOpen}

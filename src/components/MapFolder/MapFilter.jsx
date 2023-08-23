@@ -106,7 +106,11 @@ const MapFilter = ({ isOpen, handleClose, FilterProps, setFilterProps }) => {
                       sx={{
                         marginTop: "15px",
                         marginRight: "-25px",
-                        height: { xs: "250px", md: "160px" },
+
+                        // height: { xs: "250px", md: "160px" },
+
+                        maxHeight: { md: "150px" },
+
                         overflowY: "scroll",
                       }}
                     >

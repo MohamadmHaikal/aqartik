@@ -118,7 +118,7 @@ const DetailsXsTabs = ({ adInfo }) => {
                 {/* Content for the first tab (المواصفات والميزات) */}
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Typography sx={{ fontSize: "17px", fontWeight: "700" }}>
-                    {adInfo.title}
+                    {adInfo?.title}
                   </Typography>
                   <Typography
                     sx={{
@@ -128,7 +128,7 @@ const DetailsXsTabs = ({ adInfo }) => {
                     }}
                   >
                     {" "}
-                    (97523)
+                    ( {adInfo?.ref_number})
                   </Typography>
                 </Box>
                 <Box
@@ -156,7 +156,7 @@ const DetailsXsTabs = ({ adInfo }) => {
                       }}
                     ></StarIcon>
                     <Typography sx={{ color: "rgb(132, 132, 132)" }}>
-                      9.6 (6) تقييم
+                      {adInfo?.user_rate?.toFixed(2)} تقييم
                     </Typography>
                   </Box>
                   <Box
@@ -198,7 +198,7 @@ const DetailsXsTabs = ({ adInfo }) => {
                     <Typography
                       sx={{ color: "rgb(132, 132, 132)", fontSize: "15px" }}
                     >
-                      مساحة {adInfo.space} م
+                      مساحة {adInfo?.space} م
                     </Typography>
                   </Box>
                   {/* <Box
@@ -242,7 +242,7 @@ const DetailsXsTabs = ({ adInfo }) => {
                     marginTop: "9px",
                   }}
                 >
-                  {adInfo.description}
+                  {adInfo?.description}
                   {/* {showMore ? "قريبه من جميع الخدمات" : " ..."}
                   <Button onClick={toggleShowMore} sx={{ color: "black" }}>
                     {showMore
@@ -283,7 +283,7 @@ const DetailsXsTabs = ({ adInfo }) => {
             {activeTab === 1 && (
               <Box>
                 <Typography sx={{ marginTop: "2rem" }}>
-                  الموقع فى مدينة الرياض ،حي الملقا
+                  {adInfo?.city} , {adInfo?.neighborhood} , {adInfo?.road}
                 </Typography>
                 {/* <Button
                   sx={{ marginTop: "1rem", color: "black", fontWeight: "500" }}
@@ -328,7 +328,8 @@ const DetailsXsTabs = ({ adInfo }) => {
                   )}
                   ..
                 </Typography>
-                <FiveStars adInfo={adInfo.id}/>
+
+                <FiveStars adInfo={adInfo?.id} />
               </Box>
             )}
           </Box>

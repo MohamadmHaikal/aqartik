@@ -25,7 +25,7 @@ import PrivaceyRules from "./pages/PrivaceyRules";
 import ContactUs from "./pages/ContactUs";
 import LoaderHome from "./components/Loading/LoaderHome";
 import GeneralContext from "./context/generalContext";
-import EditOrder from "./components/user_dashbord/OutgoingOrder/EditOrder"
+import EditOrder from "./components/user_dashbord/OutgoingOrder/EditOrder";
 
 function App() {
   const { generalData, website_status } = useContext(GeneralContext);
@@ -239,7 +239,7 @@ function App() {
             <Route
               path="/contact_us"
               element={
-                <Layout showNavFooter={true}>
+                <Layout showNavFooter={true} generalData={generalData}>
                   <ContactUs />
                 </Layout>
               }
