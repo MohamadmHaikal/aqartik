@@ -272,8 +272,8 @@ const TabsFilter = ({
                   setFilterProps((prev) => ({
                     ...prev,
 
-                    lat: userLocation.latitude,
-                    lng: userLocation.longitude,
+                    lat: userLocation?.latitude,
+                    lng: userLocation?.longitude,
                     topPrice: null,
                     minPrice: null,
                     topRate: null,
@@ -281,8 +281,7 @@ const TabsFilter = ({
                   }))
                 }
               >
-                {" "}
-                الأقرب لموقعي
+                {t("filtersTab.Closest_btn")}
               </Button>
               <Button
                 sx={{
@@ -311,7 +310,7 @@ const TabsFilter = ({
                   }))
                 }
               >
-                الأعلى مشاهدة
+                {t("filtersTab.top_viewings")}
               </Button>
               <Button
                 sx={{
@@ -340,8 +339,7 @@ const TabsFilter = ({
                   }))
                 }
               >
-                {" "}
-                الأكثر تقييم
+                {t("filtersTab.top_rated")}
               </Button>
               <Button
                 sx={{
@@ -371,7 +369,8 @@ const TabsFilter = ({
                   }))
                 }
               >
-                الأعلى سعر
+                {" "}
+                {t("filtersTab.highest_price")}
               </Button>
               <Button
                 sx={{
@@ -400,7 +399,7 @@ const TabsFilter = ({
                   }))
                 }
               >
-                الأقل سعر
+                {t("filtersTab.lowest_price")}
               </Button>
             </Tabs>
           </Box>
@@ -448,7 +447,7 @@ const TabsFilter = ({
                   }))
                 }
               >
-                افتراضي
+                {t("filtersTab.default_btn")}
               </li>
               <li
                 style={{
@@ -469,7 +468,7 @@ const TabsFilter = ({
                   }))
                 }
               >
-                الأعلى مشاهدة
+                {t("filtersTab.top_viewings")}
               </li>
               <li
                 style={{
@@ -490,7 +489,7 @@ const TabsFilter = ({
                   }))
                 }
               >
-                الأقرب الى موقعي
+                {t("filtersTab.Closest_btn")}
               </li>
               <li
                 style={{
@@ -511,7 +510,7 @@ const TabsFilter = ({
                   }))
                 }
               >
-                الأعلى سعر
+                {t("filtersTab.highest_price")}
               </li>
               <li
                 style={{
@@ -532,7 +531,7 @@ const TabsFilter = ({
                   }))
                 }
               >
-                الأقل سعر
+                {t("filtersTab.lowest_price")}
               </li>
               <li
                 style={{
@@ -553,7 +552,7 @@ const TabsFilter = ({
                   }))
                 }
               >
-                الأكثر تقييم
+                {t("filtersTab.top_rated")}
               </li>
             </ul>
           </Box>
