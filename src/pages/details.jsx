@@ -11,7 +11,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkIcon from "@mui/icons-material/Link";
 import ImagesTest from "../components/Detailsfolder/detailspagexs/ImagesTest";
-import { useLocation } from "react-router";
+import { useLocation, useParams } from "react-router";
 
 import {
   DetailsCard,
@@ -25,25 +25,48 @@ import { List, ListItem, ListItemText, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../api/useDataFetcher ";
 import ChatContext from "../context/chatContext";
+import { myAxios } from "../api/myAxios";
+import Loader from "../components/Loading/Loader";
+import LoaderHome from "../components/Loading/LoaderHome";
 
 const Details = () => {
-  const adInfo = useLocation().state.ad;
+  // const adInfo = useLocation().state.ad;
+  const id = useParams().id;
   const { t, i18n } = useTranslation();
+  const [isDataLoading, setIsDataLoading] = useState(true);
+  const [adInfo, setAdInfo] = useState();
   const lang = i18n.language;
+  useEffect(() => {
+    setIsDataLoading(true);
+    async function getData() {
+      try {
+        const response = await myAxios.get(`/api/ads/details/${id}`);
+        const data = response.data;
+        if (data) {
+          setAdInfo(data.ads);
+          setIsDataLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsDataLoading(false);
+      }
+    }
+    getData();
+  }, [id]);
 
   const [per_page, set_per_page] = useState();
   const [current_page, set_current_page] = useState();
+  const [last_page, set_last_page] = useState();
   const [FavAdsArray, setFavAdsArray] = useState([]);
   const [isInFavorites, setIsInFavorites] = useState(false);
   const [ads, setAds] = useState([]);
-  const [last_page, set_last_page] = useState();
   const { data, isLoading, get } = useDataFetcher();
   const {
     data: favData,
     isLoading: FavIsLoading,
     get: getFav,
   } = useDataFetcher();
-  const createdDate = new Date(adInfo.created_at);
+  const createdDate = new Date(adInfo?.created_at);
   // check if there is no token dont shown somthing
   const userToken = localStorage.getItem("user_token");
   const options = {
@@ -51,13 +74,15 @@ const Details = () => {
     month: "short",
     day: "numeric",
   };
-  const formattedDate = createdDate.toLocaleString("en-US", options);
+  const formattedDate =
+    createdDate && createdDate.toLocaleString("en-US", options);
 
   useEffect(() => {
-    get(
-      `/api/ads/get_all_ads?page=${current_page}&category_id=${adInfo.category_aqar.id}`
-    );
-  }, [current_page]);
+    adInfo &&
+      get(
+        `/api/ads/get_all_ads?page=${current_page}&category_id=${adInfo.category_aqar.id}`
+      );
+  }, [adInfo, current_page]);
 
   useEffect(() => {
     if (data) {
@@ -82,8 +107,6 @@ const Details = () => {
       setIsInFavorites(FavAdsArray?.some((favAd) => favAd.id === adInfo.id));
     }
   }, []);
-  console.log(FavAdsArray);
-  console.log(isInFavorites);
 
   // useEffect(() => {
 
@@ -93,10 +116,13 @@ const Details = () => {
   const [isNewHome, setIsNewHome] = useState(false);
   const TimeNew = new Date();
   TimeNew.setHours(TimeNew.getHours() - TimechangeTheNewAds);
+
   useEffect(() => {
-    const adCreatedAt = new Date(adInfo.created_at).getTime();
-    setIsNewHome(adCreatedAt > TimeNew.getTime());
-  }, [adInfo.created_at]);
+    if (adInfo) {
+      const adCreatedAt = new Date(adInfo?.created_at).getTime();
+      setIsNewHome(adCreatedAt > TimeNew.getTime());
+    }
+  }, [adInfo]);
   // console.log(isNewHome);
 
   // const isNewHome = localStorage.getItem("isNewHome") === "true";
@@ -146,7 +172,9 @@ const Details = () => {
     };
   }, []);
   // console.log(userToken);
-  return (
+  return isDataLoading ? (
+    <LoaderHome />
+  ) : (
     <>
       {/* this section for md and above screens  */}
       <Box sx={{ display: { xs: "none", md: "block" } }}>

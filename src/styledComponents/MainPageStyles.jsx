@@ -29,7 +29,8 @@ export const Header = styled.header`
     display: flex;
     flex-direction: column;
     gap: 8px;
-    left: -50px;
+    left: ${(prop) => (prop.$dir === "ar" ? "-50px" : "")};
+    right: ${(prop) => (prop.$dir === "en" ? "-50px" : "")};
     z-index: 10;
   }
 `;

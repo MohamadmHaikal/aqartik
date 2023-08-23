@@ -91,15 +91,6 @@ const MapCreate = (props) => {
   }, [mapLoaded, locations, activeMarkerIndex]);
 
   const handleMarkerClick = (id, loc) => {
-    // const handleMarkerClick = (id) => {
-
-    //   setActiveMarkerIndex(id);
-    //   setMarkerClicked(true);
-    //   setBoxVisible(true);
-    //   setSelectedAd(id);
-    //   setCityCenter({ lat: loc.lat, lng: loc.lng, zoom: loc.zoom });
-    // };
-
     setActiveMarkerIndex(id);
     setMarkerClicked(true);
     setBoxVisible(true);

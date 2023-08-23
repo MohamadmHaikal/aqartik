@@ -11,7 +11,6 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import ChatContext from "../../context/chatContext";
 import { useTranslation } from "react-i18next";
 import { Toaster } from "react-hot-toast";
-
 import useDataFetcher from "../../api/useDataFetcher ";
 
 import DownloadingIcon from "@mui/icons-material/Downloading";
@@ -60,7 +59,6 @@ const Layout = ({
           setShowMessages={setShowMessages}
           isUserSelected={isUserSelected}
           setIsUserSelected={setIsUserSelected}
-
           notificationData={notificationData}
           generalData={generalData}
         />

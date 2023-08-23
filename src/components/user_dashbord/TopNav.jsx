@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
 import { useNavigate } from "react-router";
 
-const TopNav = ({ setShowNotification , showNotification }) => {
+const TopNav = ({ setShowNotification, showNotification }) => {
   const { t, i18n } = useTranslation();
 
   const lang = i18n.language;
@@ -22,7 +22,7 @@ const TopNav = ({ setShowNotification , showNotification }) => {
   }, []);
   useEffect(() => {
     if (data) {
-      setUserName(data.user.username);
+      setUserName(data?.user?.username);
     }
   }, [data]);
 
