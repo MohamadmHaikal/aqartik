@@ -56,10 +56,10 @@ const Details = () => {
 
   const [per_page, set_per_page] = useState();
   const [current_page, set_current_page] = useState();
+  const [last_page, set_last_page] = useState();
   const [FavAdsArray, setFavAdsArray] = useState([]);
   const [isInFavorites, setIsInFavorites] = useState(false);
   const [ads, setAds] = useState([]);
-  const [last_page, set_last_page] = useState();
   const { data, isLoading, get } = useDataFetcher();
   const {
     data: favData,
@@ -116,6 +116,7 @@ const Details = () => {
   const [isNewHome, setIsNewHome] = useState(false);
   const TimeNew = new Date();
   TimeNew.setHours(TimeNew.getHours() - TimechangeTheNewAds);
+
   useEffect(() => {
     if (adInfo) {
       const adCreatedAt = new Date(adInfo?.created_at).getTime();

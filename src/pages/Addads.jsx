@@ -581,7 +581,7 @@ const Addads = ({ type = 0, ad = null }) => {
         if (data.status === 1) {
           setLoadingSubmit(false);
           toast.success("تمت اضافة الإعلان بنجاح");
-          navigate("/ads");
+          navigate("/userdashbored");
         }
       } catch (error) {
         console.error("Error sending FormData:", error);

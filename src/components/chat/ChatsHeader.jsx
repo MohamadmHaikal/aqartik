@@ -43,7 +43,11 @@ import { ListItemDiv } from "../../styledComponents/MainPageStyles";
 //   },
 // ];
 
-export const ChatsHeader = ({ setIsUserSelected, setShowMessages }) => {
+export const ChatsHeader = ({
+  setIsUserSelected,
+  setShowMessages,
+  showMessages,
+}) => {
   const { data, isLoading, get } = useDataFetcher();
 
   const [contacts, setContacts] = useState([]);
@@ -53,8 +57,11 @@ export const ChatsHeader = ({ setIsUserSelected, setShowMessages }) => {
   const { userKlickedData, setUserKlickedData } = useContext(ChatContext);
 
   useEffect(() => {
-    get("/api/chat/getContacts");
-  }, []);
+    if (showMessages === true) {
+      get("/api/chat/getContacts");
+    }
+  }, [showMessages]);
+
   useEffect(() => {
     if (data) {
       setContacts(data.contacts);
@@ -87,47 +94,50 @@ export const ChatsHeader = ({ setIsUserSelected, setShowMessages }) => {
   return (
     <div className="messages-wrapper">
       <h3>{t("messages_header.title")}</h3>
-      {contacts &&
-        contacts.map((ele) => (
-          <ListItemDiv
-            onClick={() => {
-              setIsUserSelected(true);
-              setUserKlickedData(ele);
-              setRecipientId(ele.id);
-            }}
-            key={ele.id}
-          >
-            <div
-              style={{
-                borderRadius: "50%",
-                width: "50px",
-                height: "50px",
+      {contacts?.length > 0
+        ? contacts.map((ele) => (
+            <ListItemDiv
+              onClick={() => {
+                setIsUserSelected(true);
+                setUserKlickedData(ele);
+                setRecipientId(ele.id);
               }}
+              key={ele.id}
             >
-              <img
-                src={ele?.image?.name}
-                alt=""
+              <div
                 style={{
                   borderRadius: "50%",
                   width: "50px",
                   height: "50px",
-                  objectFit: "cover",
                 }}
-              />
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "4px",
-                marginTop: "16px",
-              }}
-            >
-              <h5>{ele.username}</h5>
-              <p style={{ fontSize: "14px" }}>{ele?.lastMessage?.body}</p>
-            </div>
-          </ListItemDiv>
-        ))}
+              >
+                <img
+                  src={ele?.image?.name}
+                  alt=""
+                  style={{
+                    borderRadius: "50%",
+                    width: "50px",
+                    height: "50px",
+                    objectFit: "cover",
+                  }}
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "4px",
+                  marginTop: "16px",
+                }}
+              >
+                <h5>{ele.username}</h5>
+                <p style={{ fontSize: "14px" }}>{ele?.lastMessage?.body}</p>
+              </div>
+            </ListItemDiv>
+          ))
+        : lang === "ar"
+        ? "لايوجد رسائل لعرضها"
+        : "no messages to show"}
     </div>
   );
 };

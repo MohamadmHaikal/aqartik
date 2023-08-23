@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
 import {
   AppBar,
   Box,
@@ -62,6 +64,8 @@ export default function Nav({
   setIsUserSelected,
   notificationData,
 }) {
+  const nav = useNavigate();
+
   const { generalData, website_status } = useContext(GeneralContext);
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -313,62 +317,110 @@ export default function Nav({
               gap: "8px",
             }}
           >
-            <Button
-              sx={{ minWidth: "0", display: { xs: "none", md: "block" } }}
-            >
-              <Notification notificationData={notificationData} />
-            </Button>
-            <Header $dir={lang}>
-              <div className="messages-container">
-                <ChatRoundedIcon
-                  onClick={() => setShowMessages((prev) => !prev)}
-                  className="message-icon"
-                  sx={{ display: "flex", justifyContent: "center" }}
-                />
-                {showMessages && (
-                  <ChatsHeader
-                    setShowMessages={setShowMessages}
-                    setIsUserSelected={setIsUserSelected}
-                  />
-                )}
-              </div>
-            </Header>
-            <Link to="/addads" sx={{ display: { xs: "none", md: "block" } }}>
-              <Button
-                sx={{
-                  border: "1px solid var(--green-color)",
-                  color: "var(--green-color)",
-                  borderRadius: "25px",
-                  // marginX: {}"0.8rem",
-                  minWidth: { xs: "0", lg: "8rem" },
-                  height: { md: "3rem" },
-                  padding: { xs: "5px", md: "6px 8px" },
-                }}
-              >
-                <AddIcon
-                  sx={{
-                    display: { xs: "block" },
-                    marginX: { xs: "0px", md: "5px" },
-                    width: "20px",
-                    height: "20px",
-                    position: { md: "absolute" },
-                    right: { md: "2px" },
-                  }}
-                />
-                <Typography
-                  sx={{
-                    width: "100%",
-                    fontSize: "15px",
-                    display: { xs: "none", lg: "block" },
-                    position: "absolute",
-                    right: "6px",
-                  }}
+            {isLoggedIn ? (
+              <>
+                <Button
+                  sx={{ minWidth: "0", display: { xs: "none", md: "block" } }}
                 >
-                  {t("nav.buttons.add_advertisement")}
-                </Typography>
-              </Button>
-            </Link>
-            <LoginButton isLoggedIn={isLoggedIn} />
+                  <Notification notificationData={notificationData} />
+                </Button>
+                <Header $dir={lang}>
+                  <div className="messages-container">
+                    <ChatRoundedIcon
+                      onClick={() => setShowMessages((prev) => !prev)}
+                      className="message-icon"
+                      sx={{ display: "flex", justifyContent: "center" }}
+                    />
+                    {showMessages && (
+                      <ChatsHeader
+                        showMessages={showMessages}
+                        setShowMessages={setShowMessages}
+                        setIsUserSelected={setIsUserSelected}
+                      />
+                    )}
+                  </div>
+                </Header>
+                <Link
+                  to="/addads"
+                  sx={{ display: { xs: "none", md: "block" } }}
+                >
+                  <Button
+                    sx={{
+                      border: "1px solid var(--green-color)",
+                      color: "var(--green-color)",
+                      borderRadius: "25px",
+                      // marginX: {}"0.8rem",
+                      minWidth: { xs: "0", lg: "8rem" },
+                      height: { md: "3rem" },
+                      padding: { xs: "5px", md: "6px 8px" },
+                    }}
+                  >
+                    <AddIcon
+                      sx={{
+                        display: { xs: "block" },
+                        marginX: { xs: "0px", md: "5px" },
+                        width: "20px",
+                        height: "20px",
+                        position: { md: "absolute" },
+                        right: { md: "2px" },
+                      }}
+                    />
+                    <Typography
+                      sx={{
+                        width: "100%",
+                        fontSize: "15px",
+                        display: { xs: "none", lg: "block" },
+                        position: "absolute",
+                        right: "6px",
+                      }}
+                    >
+                      {t("nav.buttons.add_advertisement")}
+                    </Typography>
+                  </Button>
+                </Link>
+                {/* <Button
+                  sx={{
+                    backgroundColor: {
+                      xs: "transparent",
+                      lg: "var( --green-color)",
+                    },
+                    color: { xs: "var(--green-color)", lg: "white" },
+                    border: { xs: "none", lg: "1px solid var( --green-color)" },
+                    minWidth: "0",
+                    borderRadius: "25px",
+                    height: "3rem",
+                    "&:hover": {
+                      backgroundColor: "white",
+                      color: "var( --green-color)",
+                    },
+                  }}
+                  onClick={() => nav("../userdashbored")}
+                >
+                  <AccountCircleIcon
+                    sx={{
+                      width: { xs: "30px", md: "55px", lg: "30px" },
+                      height: { xs: "30px", md: "55px", lg: "30px" },
+                    }}
+                  />
+                  <Typography
+                    sx={{
+                      fontSize: { lg: "15px", xl: "1rem" },
+                      fontWeight: "500",
+                      marginX: { lg: "0.3rem", xl: "0.8rem" },
+                      display: {
+                        xs: "none",
+                        lg: "block",
+                      },
+                    }}
+                  >
+                    {lang === "ar" ? "الملف الشخصي" : "my profile"}
+                  </Typography>
+                </Button> */}
+                <LoginButton />
+              </>
+            ) : (
+              <LoginButton />
+            )}
 
             <LanguageButton />
           </Box>

@@ -33,6 +33,7 @@ import useDataFetcher from "../../../api/useDataFetcher ";
 import { myAxios } from "../../../api/myAxios";
 import Loader from "../../Loading/Loader";
 import { toast } from "react-hot-toast";
+import PaginationAds from "../../Filter/PaginationAds";
 // import './Incoming.module.css'
 
 const CircleIconButton = styled(IconButton)({
@@ -78,15 +79,21 @@ const OutGoingOrders = ({ userData, type }) => {
 
   const [myAds, setMyAds] = useState([]);
 
+  const [per_page, set_per_page] = useState();
+  const [current_page, set_current_page] = useState(1);
+  const [last_page, set_last_page] = useState();
+
   useEffect(() => {
     if (type === 0) {
-      get("/api/user/get_user_ads");
+      get(`/api/user/get_user_ads?page=${current_page}`);
     } else if (type === 1) {
-      get("/api/real-estate-request/get_all_requests");
+      get(`/api/real-estate-request/get_all_requests?page=${current_page}`);
     } else if (type === 2) {
-      get("/api/real-estate-request/get_all_requests?type=incoming");
+      get(
+        `/api/real-estate-request/get_all_requests?type=incoming&page=${current_page}`
+      );
     }
-  }, [type, getDataState]);
+  }, [type, getDataState, current_page]);
 
   useEffect(() => {
     if (type === 0) {
@@ -105,6 +112,31 @@ const OutGoingOrders = ({ userData, type }) => {
   const [MapEdit, setMapEdit] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [imageUrl, setImageUrl] = useState();
+
+  useEffect(() => {
+    if (data) {
+      if (type === 0) {
+        if (data) setMyAds(data?.ads.data);
+        set_current_page(data?.ads?.current_page);
+        set_per_page(data?.ads?.per_page);
+        set_last_page(data?.ads?.last_page);
+      } else if (type === 1) {
+        if (data) setMyAds(data?.requests.data);
+        set_current_page(data?.requests?.current_page);
+        set_per_page(data?.requests?.per_page);
+        set_last_page(data?.requests?.last_page);
+      } else if (type === 2) {
+        if (data) setMyAds(data?.requests.data);
+        set_current_page(data?.requests?.current_page);
+        set_per_page(data?.requests?.per_page);
+        set_last_page(data?.requests?.last_page);
+      }
+    }
+  }, [data]);
+
+  const handlePageChange = (event, new_page) => {
+    set_current_page(new_page);
+  };
 
   const handleChange = (panel, ad) => async (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -157,20 +189,33 @@ const OutGoingOrders = ({ userData, type }) => {
   };
 
   const handleRefreshing = async (id) => {
+    setStateLoading(true);
     try {
       const res = await myAxios.get(`/api/ads/refresh_ads/${id}`);
       console.log(res);
+      if (res) {
+        setStateLoading(false);
+        setGetDataState((prev) => !prev);
+      }
     } catch (err) {
       console.log(err);
+      setStateLoading(false);
     }
   };
 
   const handleSpecialAd = async (id) => {
+    setStateLoading(true);
+
     try {
       const res = await myAxios.get(`/api/ads/make_ads_special/${id}`);
       console.log(res);
+      if (res) {
+        setStateLoading(false);
+        setGetDataState((prev) => !prev);
+      }
     } catch (err) {
       console.log(err);
+      setStateLoading(false);
     }
   };
   const handleDeleteAd = async (id) => {
@@ -697,6 +742,12 @@ const OutGoingOrders = ({ userData, type }) => {
         ))}
         {modalOpen && <ShowHomeSatusModal onClose={handleModalClose} />}
       </Box>
+      <PaginationAds
+        handlePageChange={handlePageChange}
+        current_page={current_page}
+        per_page={per_page}
+        last_page={last_page}
+      />
     </Box>
   );
 };
