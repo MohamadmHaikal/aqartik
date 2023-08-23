@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -12,8 +12,20 @@ import { Profile, Favorite, Aqar, Call, Logout } from "../../assets";
 
 import Avatar from "@mui/material/Avatar";
 import { useTranslation } from "react-i18next";
-const SmallNavLoginMenu = () => {
+import useDataFetcher from "../../api/useDataFetcher ";
+const SmallNavLoginMenu = ({ isLoggedIn }) => {
   const { t } = useTranslation();
+
+  const [userInfoData, setUserInfoData] = useState();
+  const { data, isLoading, get } = useDataFetcher();
+  useEffect(() => {
+    get(`/api/user/get_user_data`);
+  }, []);
+  useEffect(() => {
+    if (data) {
+      setUserInfoData(data);
+    }
+  }, [data]);
 
   return (
     <Box sx={{ display: { xs: "block", md: "none" } }}>
@@ -85,14 +97,14 @@ const SmallNavLoginMenu = () => {
               }}
             >
               <Avatar sx={{ width: "40px", height: "40px", marginLeft: "5px" }}>
-                ر
+                {userInfoData?.username?.charAt(0)}
               </Avatar>
               <Box sx={{ marginRight: "16px" }}>
                 <Typography sx={{ fontSize: "20px", fontWeight: "700" }}>
-                  وائل
+                  {userInfoData?.username}
                 </Typography>
                 <Typography sx={{ fontSize: "14px" }}>
-                  support.comp@gmail.com
+                  {userInfoData?.email}
                 </Typography>
               </Box>
             </Box>
@@ -153,7 +165,7 @@ const SmallNavLoginMenu = () => {
                   <Typography> {t("profile_menu.favourite_btn")}</Typography>
                 </ListItem>
               </Link>
-          
+
               <ListItem
                 sx={{
                   width: "auto",

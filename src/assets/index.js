@@ -41,9 +41,13 @@ import Maintence from "./maintence.png";
 // import MapMarker from "./mapMarker.svg";
 import DefaultImage from "./defaulthome.jpg";
 import BgVideo from "./bg.mp4";
+import AlamOffice from "./Alarm.png";
+import Verrfird from "./verified-account.png";
 
 // import MapMarker from "./mapMarker.svg";
 export {
+  AlamOffice,
+  Verrfird,
   BgVideo,
   DefaultImage,
   Maintence,

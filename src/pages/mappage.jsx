@@ -31,9 +31,36 @@ const Mappage = () => {
   const [FilterProps, setFilterProps] = useState();
   const state = useLocation().state;
   useEffect(() => {
-    get(
-      `api/ads/get_all_ads?lat=${state?.lat}&lng=${state?.lng}&zoom=${state?.zoom}&category_id=${state?.category_id}&min_price=${state?.min_price}&max_price=${state?.max_price}`
-    );
+    // Define the base API endpoint
+    let apiUrl = "api/ads/get_all_ads?";
+  
+    // Check if state values exist and add them to the API URL if they do
+    if (state?.lat) {
+      apiUrl += `lat=${state.lat}&`;
+    }
+    if (state?.lng) {
+      apiUrl += `lng=${state.lng}&`;
+    }
+    if (state?.zoom) {
+      apiUrl += `zoom=${state.zoom}&`;
+    }
+    if (state?.category_id) {
+      apiUrl += `category_id=${state.category_id}&`;
+    }
+    if (state?.min_price) {
+      apiUrl += `min_price=${state.min_price}&`;
+    }
+    if (state?.max_price) {
+      apiUrl += `max_price=${state.max_price}&`;
+    }
+  
+    // Remove the trailing '&' if it exists
+    if (apiUrl.endsWith("&")) {
+      apiUrl = apiUrl.slice(0, -1);
+    }
+  
+    // Make the API call with the constructed URL
+    get(apiUrl);
   }, [state]);
   useEffect(() => {
     if (data) {
@@ -85,9 +112,7 @@ const Mappage = () => {
     setShowFilter(false);
   };
   const deleteFilterinXsDataInXs = () => {
-    get(
-      `api/ads/get_all_ads?lat=""&lng=""&zoom=""&category_id=""&max_price=""&min_price=""}}`
-    );
+    get(`api/ads/get_all_ads`);
   };
 
   const handleOpenModal = () => {
@@ -435,25 +460,25 @@ const Mappage = () => {
                   0
                 </Typography> */}
               </Box>
-              <Link
-                to="/mappage"
-                state={{
-                  lat: "",
-                  lng: "",
-                  zoom: "",
-                  category_id: "",
-                  min_price: "",
-                  max_price: "",
-                }}
+              <Button
+                // to="/mappage"
+                // state={{
+                //   lat: "",
+                //   lng: "",
+                //   zoom: "",
+                //   category_id: "",
+                //   min_price: "",
+                //   max_price: "",
+                // }}
                 style={{
                   fontSize: "15px",
                   fontWeight: "500",
                   color: "var(--green-color)",
                 }}
-                // onClick={deleteFilterinXsDataInXs}
+                onClick={deleteFilterinXsDataInXs}
               >
                 مسح الكل
-              </Link>
+              </Button>
             </Box>
             <Typography
               sx={{
@@ -492,15 +517,15 @@ const Mappage = () => {
           >
             <Button
               to="/mappage"
-              state={{
-                lat: "",
-                lng: "",
-                zoom: "",
-                title: FilterProps?.title,
-                category_id: "",
-                min_price: "",
-                max_price: "",
-              }}
+              // state={{
+              //   lat: "",
+              //   lng: "",
+              //   zoom: "",
+              //   title: FilterProps?.title,
+              //   category_id: "",
+              //   min_price: "",
+              //   max_price: "",
+              // }}
               sx={{
                 backgroundColor: "var(--green-color)",
                 height: "60px",

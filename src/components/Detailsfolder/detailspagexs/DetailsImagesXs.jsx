@@ -9,7 +9,7 @@ import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
 import "lightgallery/css/lg-thumbnail.css";
 import { Map } from "../../../assets";
-import lgVideo from "https://cdn.skypack.dev/lightgallery@2.3.0-beta.4/plugins/video";
+// import lgVideo from "https://cdn.skypack.dev/lightgallery@2.3.0-beta.4/plugins/video";
 
 // import { house, boat, abha } from "../../../assets";
 
@@ -61,7 +61,6 @@ const DetailsImagesXs = ({ adInfo }) => {
     const gallery = lightGallery(galleryRef.current, {
       mode: "lg-fade",
       video: true,
-      lgVideo,
     });
     return () => {
       gallery.destroy();

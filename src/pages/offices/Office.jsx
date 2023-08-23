@@ -9,6 +9,7 @@ import { Box, Typography } from "@mui/material";
 import { SpecialAds } from "../../components";
 import PaginationAds from "../../components/Filter/PaginationAds";
 import { useTranslation } from "react-i18next";
+import { AlamOffice, Verrfird, DefaultImage } from "../../assets";
 
 const Office = () => {
   const { t, i18n } = useTranslation();
@@ -51,7 +52,10 @@ const Office = () => {
         <main>
           <div className="logo" style={{ width: "100px", height: "100px" }}>
             <img
-              src={`https://www.dashboard.aqartik.com/assets/images/users/logo/${officeDetails?.image.name}`}
+              src={
+                `https://www.dashboard.aqartik.com/assets/images/users/logo/${officeDetails?.image.name}` ||
+                DefaultImage
+              }
               alt=""
               style={{ width: "100%", objectFit: "cover", height: "100%" }}
             />
@@ -79,11 +83,11 @@ const Office = () => {
         </button> */}
           <div className="specialities">
             <span className="speciality">
-              <img src={Special} alt="" className="icon" />
+              <img src={AlamOffice} alt="" className="icon" />
               <span>قبل ساعة</span>
             </span>
             <span className="speciality">
-              <img src="/subscribed-2.svg" alt="" className="icon" />
+              <img src={Verrfird} alt="" className="icon" />
               <span>عقاري متميز</span>
             </span>
           </div>
