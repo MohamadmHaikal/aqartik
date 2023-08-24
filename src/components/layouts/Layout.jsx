@@ -15,12 +15,7 @@ import useDataFetcher from "../../api/useDataFetcher ";
 
 import DownloadingIcon from "@mui/icons-material/Downloading";
 import ClearIcon from "@mui/icons-material/Clear";
-const Layout = ({
-  children,
-  showNavFooter = true,
-  contentStyles = {},
-  generalData,
-}) => {
+const Layout = ({ children, showNavFooter = true, contentStyles = {} }) => {
   const location = useLocation();
   const { pathname } = location;
   const hideFooter = location.pathname.includes("/mappage");
@@ -60,7 +55,6 @@ const Layout = ({
           isUserSelected={isUserSelected}
           setIsUserSelected={setIsUserSelected}
           notificationData={notificationData}
-          generalData={generalData}
         />
       )}
       <main style={contentStyles}>{children}</main>
@@ -100,6 +94,7 @@ const ChatDialog = () => {
     formData.append("message", message);
     formData.append("to_user_id", recipientId);
     formData.append("file", file);
+    cancelSelectedFile();
     setIsSendMessage((prev) => !prev);
     await fetch("https://www.dashboard.aqartik.com/api/chat/sendMessage", {
       method: "POST",
@@ -118,79 +113,165 @@ const ChatDialog = () => {
   const cancelSelectedFile = () => {
     setFile(null);
   };
+
+  console.log(messages);
+
+  function createBlobUrl(base64Data, contentType) {
+    // Extract base64-encoded data from the data URL
+    const cleanedBase64Data = base64Data.split(",")[1];
+    const byteCharacters = atob(cleanedBase64Data);
+    const byteArrays = [];
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+      const slice = byteCharacters.slice(offset, offset + 512);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+    const blob = new Blob(byteArrays, { type: contentType });
+    return URL.createObjectURL(blob);
+  }
+
   return (
     <ChatDialogStyle $dir={lang}>
       <header>
         <div className="header-data">
-          <img src={userKlickedData?.image?.name} alt="" />
+          <img
+            style={{
+              objectPosition: "center",
+            }}
+            src={`https://www.dashboard.aqartik.com/assets/images/users/logo/${userKlickedData?.image?.name}`}
+            alt=""
+          />
           <span>{userKlickedData?.username}</span>
         </div>
         <CloseRoundedIcon
           className="close-icon"
-          onClick={() => setIsUserSelected(false)}
+          onClick={() => {
+            setIsUserSelected(false);
+            setUserKlickedData(null);
+          }}
         />
       </header>
 
       <main>
-        {messages.map((ele, i) => (
-          <div
-            className={`message-container ${
-              ele?.senderId === user?.id || ele?.from_id === user?.id
-                ? "send-container"
-                : "recieve-container"
-            }`}
-            key={i}
-          >
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div
-                className={`message ${
-                  ele?.senderId === user?.id || ele?.from_id === user?.id
-                    ? "sended-message"
-                    : "recieved-message"
-                }`}
-              >
-                <p>{ele?.message || ele.body}</p>
+        {messages &&
+          messages.map((ele, i) => {
+            // Calculate the time difference
+            const backendDate = new Date(ele.created_at); // Assuming createdAt holds the message's creation date
+            const currentDate = new Date();
+            const timeDifference = currentDate - backendDate;
+            const secondsDifference = Math.floor(timeDifference / 1000);
 
-                {ele?.attachment && (
-                  <a
-                    style={{
-                      textDecoration: "none",
-                      color: "white",
-                      backgroundColor: "rgba(200,200,200,.5)",
-                      padding: "8px 4px",
-                      borderRadius: "8px",
-                      display: "flex",
-                      gap: "8px",
-                      alignItems: "center",
-                      marginTop: ".5rem",
-                    }}
-                    href={`https://www.dashboard.aqartik.com/assets/chat/attachment/${ele.attachment}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span>{ele.attachment}</span>
-                    <DownloadingIcon />
-                  </a>
-                )}
-              </div>
-              <span
-                style={{
-                  alignSelf:
-                    ele?.senderId === user?.id || ele?.from_id === user?.id
-                      ? "flex-start"
-                      : "flex-end",
-                  fontSize: "12px",
-                  padding: "2px",
-                }}
+            let timeAgo;
+            if (secondsDifference < 60) {
+              timeAgo =
+                lang === "en"
+                  ? `${secondsDifference} seconds ago`
+                  : `${secondsDifference} ثانية مضت`;
+            } else if (secondsDifference < 3600) {
+              const minutes = Math.floor(secondsDifference / 60);
+              timeAgo =
+                lang === "en"
+                  ? `${minutes} minutes ago`
+                  : `${minutes} دقيقة مضت`;
+            } else if (secondsDifference < 86400) {
+              const hours = Math.floor(secondsDifference / 3600);
+              timeAgo =
+                lang === "en" ? `${hours} hours ago` : `${hours} ساعة مضت`;
+            } else {
+              const days = Math.floor(secondsDifference / 86400);
+              timeAgo = lang === "en" ? `${days} days ago` : `${days} يوم مضى`;
+            }
+
+            return (
+              <div
+                className={`message-container ${
+                  ele?.senderId === user?.id || ele?.from_id === user?.id
+                    ? "send-container"
+                    : "recieve-container"
+                }`}
+                key={i}
               >
-                22/ 7/ 2023 20: 50
-              </span>
-            </div>
-            {/* {!(ele?.socketID == socket?.id) && (
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <div
+                    className={`message ${
+                      ele?.senderId === user?.id || ele?.from_id === user?.id
+                        ? "sended-message"
+                        : "recieved-message"
+                    }`}
+                  >
+                    <p>{ele?.message || ele.body}</p>
+
+                    {ele?.fileData && (
+                      <a
+                        style={{
+                          textDecoration: "none",
+                          color: "white",
+                          backgroundColor: "rgba(200,200,200,.5)",
+                          padding: "8px 4px",
+                          borderRadius: "8px",
+                          display: "flex",
+                          gap: "8px",
+                          alignItems: "center",
+                          marginTop: ".5rem",
+                        }}
+                        href={createBlobUrl(
+                          ele.fileData.fileData,
+                          "application/pdf"
+                        )}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download={ele.fileData.fileName}
+                      >
+                        <span>{ele.fileData.fileName}</span>
+                        <DownloadingIcon />
+                      </a>
+                    )}
+                    {ele?.attachment && (
+                      <a
+                        style={{
+                          textDecoration: "none",
+                          color: "white",
+                          backgroundColor: "rgba(200,200,200,.5)",
+                          padding: "8px 4px",
+                          borderRadius: "8px",
+                          display: "flex",
+                          gap: "8px",
+                          alignItems: "center",
+                          marginTop: ".5rem",
+                        }}
+                        href={`https://www.dashboard.aqartik.com/assets/chat/attachment/${ele.attachment}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        // download
+                      >
+                        <span>{ele.attachment}</span>
+                        <DownloadingIcon />
+                      </a>
+                    )}
+                  </div>
+                  <span
+                    style={{
+                      alignSelf:
+                        ele?.senderId === user?.id || ele?.from_id === user?.id
+                          ? "flex-start"
+                          : "flex-end",
+                      fontSize: "12px",
+                      padding: "2px",
+                    }}
+                  >
+                    {timeAgo}
+                  </span>
+                </div>
+                {/* {!(ele?.socketID == socket?.id) && (
               <img src={userData?.image?.name} alt="" />
             )} */}
-          </div>
-        ))}
+              </div>
+            );
+          })}
       </main>
 
       <footer>
@@ -220,14 +301,12 @@ const ChatDialog = () => {
               const selectedFile = e.target.files[0];
               setFile(selectedFile);
               const reader = new FileReader();
-              reader.onload = () => {
-                const fileData = {
-                  filename: selectedFile.name,
-                  content: reader.result,
-                };
-                setFileData(fileData);
+              reader.onload = (fileEvent) => {
+                const fileData = fileEvent.target.result;
+                const fileInfo = { fileName: selectedFile.name, fileData };
+                setFileData(fileInfo);
               };
-              reader.readAsArrayBuffer(selectedFile);
+              reader.readAsDataURL(selectedFile);
             }}
           />
           <button onClick={handleSend}>

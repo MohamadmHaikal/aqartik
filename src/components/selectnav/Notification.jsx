@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Box, Typography } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { isBefore, subDays } from "date-fns";
+import ChatContext from "../../context/chatContext";
 
 const Notification = ({ notificationData }) => {
   const notificationRef = useRef(null);
@@ -32,6 +33,20 @@ const Notification = ({ notificationData }) => {
       document.removeEventListener("click", handleOutsideClick);
     };
   }, []);
+
+  const { isUserSelected, setIsUserSelected, setRecipientId } =
+    useContext(ChatContext);
+
+  const openChat = (e, not) => {
+    e.preventDefault();
+    const notType = JSON.parse(not.url).type;
+    const notId = JSON.parse(not.url).user_id;
+    console.log(notType, notId);
+    if (notType === "message") {
+      setIsUserSelected(true);
+      setRecipientId(notId);
+    }
+  };
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -94,8 +109,9 @@ const Notification = ({ notificationData }) => {
                   key={notification.id}
                   sx={{ borderBottom: "1px solid #eee", padding: "0.5rem" }}
                 >
-                  <Link
-                    to={notification.url}
+                  <a
+                    onClick={(e) => openChat(e, notification)}
+                    href={notification.url}
                     style={{
                       textDecoration: "none",
                       color: "black",
@@ -124,7 +140,7 @@ const Notification = ({ notificationData }) => {
                             notification.created_at
                           ).toLocaleTimeString()}
                     </Typography>
-                  </Link>
+                  </a>
                 </Box>
               )
             );

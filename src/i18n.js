@@ -8,14 +8,14 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: "ar", // Default language fallback
+    lng: "ar", // Set the default language to Arabic
     debug: false, // Set to true to enable i18next debugging
     interpolation: {
       escapeValue: false, // React already escapes variables
     },
-    backend: {
-      loadPath: "/locales/{{lng}}/{{ns}}.json", // Change the path if necessary
-    },
+    // backend: {
+    //   loadPath: "/locales/{{lng}}/{{ns}}.json", // Change the path if necessary
+    // },
   });
 
 export default i18n;

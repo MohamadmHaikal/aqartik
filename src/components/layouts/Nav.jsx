@@ -85,12 +85,13 @@ export default function Nav({
   useEffect(() => {
     if (filterData) {
       setCities(filterData?.cities);
-      setSelectedCity(filterData?.cities[0]);
+      filterData?.cities[0] && setSelectedCity(filterData?.cities[0]);
       setstreets(filterData?.neighborhoods);
-      setSelectedStreet(filterData?.neighborhoods[0]);
+      filterData?.neighborhoods[0] &&
+        setSelectedStreet(filterData?.neighborhoods[0]);
       const categoriesArray = Object.values(filterData?.categories);
       setRealEstate(categoriesArray);
-      setSelectedRealEstate(categoriesArray[0]);
+      categoriesArray[0] && setSelectedRealEstate(categoriesArray[0]);
     }
   }, [filterData]);
   console.log(filterData);
@@ -273,8 +274,8 @@ export default function Nav({
               <img
                 src={
                   lang === "ar" && generalData
-                    ? `https://www.dashboard.aqartik.com/uploads/settings/${generalData.style_logo_ar}`
-                    : `https://www.dashboard.aqartik.com/uploads/settings/${generalData.style_logo_en}`
+                    ? `https://www.dashboard.aqartik.com/uploads/settings/${generalData?.style_logo_ar}`
+                    : `https://www.dashboard.aqartik.com/uploads/settings/${generalData?.style_logo_en}`
                 }
                 alt="logo"
                 style={{ width: "100%" }}

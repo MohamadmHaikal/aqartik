@@ -112,8 +112,8 @@ const FooterTwo = () => {
                 <img
                   src={
                     lang === "ar"
-                      ? `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_ar}`
-                      : `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_en}`
+                      ? `https://www.dashboard.aqartik.com/uploads/settings/${FooterData?.style_logo_ar}`
+                      : `https://www.dashboard.aqartik.com/uploads/settings/${FooterData?.style_logo_en}`
                   }
                   alt="logo"
                   style={{
@@ -361,8 +361,8 @@ const FooterTwo = () => {
                   <img
                     src={
                       lang === "ar"
-                        ? `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_ar}`
-                        : `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_en}`
+                        ? `https://www.dashboard.aqartik.com/uploads/settings/${FooterData?.style_logo_ar}`
+                        : `https://www.dashboard.aqartik.com/uploads/settings/${FooterData?.style_logo_en}`
                     }
                     alt="logo"
                     style={{ width: "140px" }}

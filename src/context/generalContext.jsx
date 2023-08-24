@@ -11,6 +11,7 @@ export const GeneralProvider = ({ children }) => {
   useEffect(() => {
     get("/api/settings/genral");
   }, []);
+
   useEffect(() => {
     if (data) {
       setGeneralData(data?.settings);

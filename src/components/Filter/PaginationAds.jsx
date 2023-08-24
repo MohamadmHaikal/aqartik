@@ -2,15 +2,7 @@ import React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { StyledEngineProvider } from "@mui/material/styles";
 import Pagination from "@mui/material/Pagination";
-
-const theme = createTheme({
-  direction: "rtl",
-  palette: {
-    primary: {
-      main: "#14b183",
-    },
-  },
-});
+import { useTranslation } from "react-i18next";
 
 const PaginationAds = ({
   handlePageChange,
@@ -18,6 +10,18 @@ const PaginationAds = ({
   per_page,
   last_page,
 }) => {
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
+
+  const theme = createTheme({
+    direction: lang === "ar" ? "rtl" : "ltr",
+    palette: {
+      primary: {
+        main: "#14b183",
+      },
+    },
+  });
+
   return (
     <ThemeProvider theme={theme}>
       <StyledEngineProvider injectFirst>

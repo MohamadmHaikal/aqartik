@@ -67,7 +67,7 @@ export const ChatDialogStyle = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  z-index: 99;
+  z-index: 100000;
   overflow: visible;
   header {
     display: flex;

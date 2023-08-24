@@ -112,13 +112,14 @@ export const ChatsHeader = ({
                 }}
               >
                 <img
-                  src={ele?.image?.name}
+                  src={`https://www.dashboard.aqartik.com/assets/images/users/logo/${ele?.image?.name}`}
                   alt=""
                   style={{
                     borderRadius: "50%",
                     width: "50px",
                     height: "50px",
                     objectFit: "cover",
+                    objectPosition: "center",
                   }}
                 />
               </div>

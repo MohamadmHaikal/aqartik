@@ -35,7 +35,7 @@ const CustomNextButton = ({ onClick }) => {
 
 const CarsouelCity = () => {
   const { t, i18n } = useTranslation();
-  const lang = i18n.language;
+  console.log(i18n.language);
   const owlCarouselRef = useRef(null);
   const [carouselKey, setCarouselKey] = useState(0);
   const [itemsArray, setItemsArray] = useState(cities);
@@ -61,17 +61,17 @@ const CarsouelCity = () => {
     0: {
       items: 1.5,
       margin: 5,
-      rtl: lang === "ar",
+      rtl: i18n.language === "ar",
     },
     768: {
       items: 2.5,
       margin: 10,
-      rtl: lang === "ar",
+      rtl: i18n.language === "ar",
     },
     1024: {
       items: 3,
       margin: 20,
-      rtl: lang === "ar",
+      rtl: i18n.language === "ar",
     },
   };
   const customNavText = [
@@ -82,6 +82,7 @@ const CarsouelCity = () => {
   useEffect(() => {
     setCarouselKey((prevKey) => prevKey + 1);
   }, [itemsArray]);
+
   return (
     <div style={{ position: "relative" }}>
       <OwlCarousel
@@ -125,7 +126,7 @@ const CarsouelCity = () => {
                     className={styles.ImgHeading}
                     sx={{ fontWeight: "600 !important" }}
                   >
-                    {lang === "ar" ? city.name_ar : city.name_en}
+                    {i18n.language === "ar" ? city.name_ar : city.name_en}
                   </Typography>
                 </div>
               </div>

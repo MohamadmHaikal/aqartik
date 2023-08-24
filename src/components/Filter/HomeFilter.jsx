@@ -75,10 +75,10 @@ const HomeFilter = ({ userLocation }) => {
   useEffect(() => {
     if (filterData) {
       setCities(filterData?.cities);
-      setSelectedCity(filterData?.cities[0]);
+      filterData?.cities[0] && setSelectedCity(filterData?.cities[0]);
       const categoriesArray = Object.values(filterData?.categories);
       setHomes(categoriesArray);
-      setSelectedHome(categoriesArray[0].id);
+      categoriesArray[0].id && setSelectedHome(categoriesArray[0].id);
     }
   }, [filterData]);
 

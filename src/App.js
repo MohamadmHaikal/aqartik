@@ -33,10 +33,7 @@ import GeneralContext from "./context/generalContext";
 import EditOrder from "./components/user_dashbord/OutgoingOrder/EditOrder";
 
 function App() {
-  // const { generalData, website_status } = useContext(GeneralContext);
-  const { data, isLoading, error, get, post } = useDataFetcher();
-  const [generalData, setGeneralData] = useState([]);
-  const [website_status, set_website_status] = useState(null);
+  const { generalData, website_status } = useContext(GeneralContext);
 
   const isAuthenticated = localStorage.getItem("user_token");
 
@@ -46,21 +43,7 @@ function App() {
 
   const [userLocation, setUserLocation] = useState(null);
   // this is for take user Location
-  useEffect(() => {
-    get("/api/settings/genral");
-  }, []);
-  useEffect(() => {
-    if (data) {
-      setGeneralData(data?.settings);
-      set_website_status(data?.settings?.site_status);
 
-      // Save fetched data to cookies
-      // Cookies.set("generalData", JSON.stringify(data?.settings));
-      // Cookies.set("website_status", data?.settings?.site_status?.toString());
-      // set_website_status(0);
-      console.log(website_status);
-    }
-  }, [data]);
   useEffect(() => {
     const storedLocation = JSON.parse(localStorage.getItem("userLocation"));
     if (storedLocation) {
@@ -119,7 +102,6 @@ function App() {
               <Layout
                 showNavFooter={true}
                 contentStyles={{ marginTop: "12rem !important" }}
-                generalData={generalData}
               >
                 <Home userLocation={userLocation} />
               </Layout>
@@ -157,19 +139,7 @@ function App() {
               )
             }
           />
-          {/* <Route
-              path="/userdashbored"
-              element={
-                <Layout
-                  showNavFooter={false}
-                  contentStyles={{
-                    marginTop: "0rem ",
-                  }}
-                >
-                  <UserDashbored />
-                </Layout>
-              }
-            /> */}
+
           <Route
             path="/ads"
             element={
@@ -178,7 +148,6 @@ function App() {
               </Layout>
             }
           />
-
           <Route
             path="/login"
             element={
@@ -268,9 +237,13 @@ function App() {
           <Route
             path="/EditAds"
             element={
-              <Layout showNavFooter={false}>
-                <EditAds />
-              </Layout>
+              isAuthenticated ? (
+                <Layout showNavFooter={false}>
+                  <EditAds />
+                </Layout>
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
@@ -287,7 +260,7 @@ function App() {
           <Route
             path="/contact_us"
             element={
-              <Layout showNavFooter={true} generalData={generalData}>
+              <Layout showNavFooter={true}>
                 <ContactUs />
               </Layout>
             }
@@ -295,9 +268,13 @@ function App() {
           <Route
             path="/EditOrder"
             element={
-              <Layout showNavFooter={false}>
-                <EditOrder />
-              </Layout>
+              isAuthenticated ? (
+                <Layout showNavFooter={false}>
+                  <EditOrder />
+                </Layout>
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
         </Routes>

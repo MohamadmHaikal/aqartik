@@ -9,8 +9,11 @@ import { Box, Typography, Button, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
 import styled from "styled-components";
-
+import SwiperCore from "swiper";
 import { AnimatePresence, motion } from "framer-motion";
+
+SwiperCore.use([Pagination]);
+
 const MainSection = ({ setDataLoading }) => {
   const { data, isLoading, error, get, post } = useDataFetcher();
   const [bannersData, setBannersData] = useState([]);
@@ -27,20 +30,11 @@ const MainSection = ({ setDataLoading }) => {
     setDataLoading(false);
   }, []);
 
-  console.log(bannersData);
   useEffect(() => {
     if (data && data.banners) {
       localStorage.setItem("bannersData", JSON.stringify(data.banners));
     }
   }, [data]);
-
-  useEffect(() => {
-    const storedData = localStorage.getItem("bannersData");
-    if (storedData) {
-      setBannersData(JSON.parse(storedData));
-    } else {
-    }
-  }, []);
 
   const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
@@ -58,49 +52,40 @@ const MainSection = ({ setDataLoading }) => {
   const lang = i18n.language;
 
   const [prevLanguage, setPrevLanguage] = useState(i18n.language);
-  const [swiperKey, setSwiperKey] = useState(0);
-  useEffect(() => {
-    // Check if the language has changed
-    if (prevLanguage !== i18n.language) {
-      setActiveSlideIndex(0);
-      setSwiperKey((prev) => prev + 1);
-      // Language has changed, you can perform any necessary actions here
-      // For example, update your Swiper slides or other content
-      setPrevLanguage(i18n.language); // Update the previous language
-    }
-  }, [i18n.language, prevLanguage]);
-
-  // const isXsScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
-
+  // const [swiperKey, setSwiperKey] = useState(0);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
+  const swiperRef = useRef(null);
+
+  useEffect(() => {
+    // setSwiperKey((prev) => prev + 1);
+    setActiveSlideIndex(0);
+    setPrevLanguage(i18n.language); // Update the previous language
+  }, [i18n, prevLanguage]);
+
   const handleSlideChange = (swiper) => {
-    console.log(swiper);
     setActiveSlideIndex(swiper.realIndex);
+    console.log(swiper.realIndex);
   };
-
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     setShowBox(false);
-  //   }, 5000);
-
-  //   return () => clearTimeout(timeout);
-  // }, [activeSlideIndex]);
-
-  // Unnecessary //
-
+  const handlePaginationDotClick = (index) => {
+    swiperRef.current.swiper.slideTo(index);
+    setActiveSlideIndex(index);
+  };
   return (
     <Box sx={{ position: "relative" }}>
       <Swiper
-        key={swiperKey}
+        dir={lang === "ar" ? "rtl" : "ltr"}
+        key={i18n.language}
         className="mySwiper"
+        ref={swiperRef}
         effect={"Cube"}
         autoplay={{
           delay: 8000,
-          // disableOnInteraction: false,
         }}
         modules={[EffectFade, Autoplay, Pagination]}
-        pagination={{ clickable: true }}
+        pagination={{
+          clickable: true,
+        }}
         onSlideChange={handleSlideChange}
         sx={{ position: "relative", marginTop: "11rem" }}
       >
@@ -118,143 +103,136 @@ const MainSection = ({ setDataLoading }) => {
                     },
                   }}
                 >
-                  {banner.image && (
-                    <img
-                      src={`https://www.dashboard.aqartik.com/assets/images/banners/${banner.image.name}`}
-                      alt={banner.ar_title}
-                      style={{ width: "100%", height: "100%" }}
-                    />
-                  )}
+                  <img
+                    src={`https://www.dashboard.aqartik.com/assets/images/banners/${banner.image.name}`}
+                    alt={banner.ar_title}
+                    style={{ width: "100%", height: "100%" }}
+                  />
                 </Box>
                 <AnimatePresence>
-                  {activeSlideIndex === index && (
-                    <motion.div key={index} classNames="slide">
-                      <Box
-                        sx={{
-                          position: "absolute",
-                          // top: "5rem",
-                          top: { xs: "8rem", md: "8rem" },
-                          textAlign: {
-                            xs: " center",
-                            md: lang === "ar" ? "right" : "left",
-                          },
-                          width: { xs: "100%", md: "50%" },
+                  <motion.div key={index} classNames="slide">
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        // top: "5rem",
+                        top: { xs: "8rem", md: "8rem" },
+                        textAlign: {
+                          xs: " center",
+                          md: lang === "ar" ? "right" : "left",
+                        },
+                        width: { xs: "100%", md: "50%" },
 
-                          right: { md: lang === "ar" ? "5rem" : "" },
-                          left: { md: lang === "ar" ? "" : "3rem" },
+                        right: { md: lang === "ar" ? "5rem" : "" },
+                        left: { md: lang === "ar" ? "" : "3rem" },
 
-                          zIndex: "1000",
-                          color: "white",
-                        }}
-                      >
-                        <Box>
-                          <motion.h3
-                            style={{
-                              marginBottom: "1rem",
-                              fontSize: "30px",
-                              fontWeight: "bold",
-                            }}
-                            initial={
-                              !isXsScreen && { x: lang === "ar" ? 100 : -100 }
-                            }
-                            animate={
-                              !isXsScreen && {
-                                x: 0,
-                                transition: {
-                                  delay: 0.3,
-                                  duration: 0.3,
-                                  type: "spring",
-                                },
-                              }
-                            }
-                            exit={
-                              !isXsScreen && { x: lang === "ar" ? -100 : 100 }
-                            }
-                          >
-                            {lang === "ar" ? banner.ar_title : banner.en_title}
-                          </motion.h3>
-                        </Box>
-                        <motion.p
+                        zIndex: "1000",
+                        color: "white",
+                      }}
+                    >
+                      <Box>
+                        <motion.h3
                           style={{
-                            width: { xs: "50%", md: "28rem" },
-                            fontSize: { xs: "1rem", md: "16px" },
-                            marginX: { xs: "auto", md: "0rem" },
+                            marginBottom: "1rem",
+                            fontSize: "30px",
+                            fontWeight: "bold",
                           }}
                           initial={
-                            !isXsScreen && { x: lang === "ar" ? 150 : -150 }
+                            !isXsScreen && { x: lang === "ar" ? 100 : -100 }
                           }
                           animate={
                             !isXsScreen && {
                               x: 0,
                               transition: {
                                 delay: 0.3,
-                                duration: 0.5,
+                                duration: 0.3,
                                 type: "spring",
                               },
                             }
                           }
                           exit={
-                            !isXsScreen && { x: lang === "ar" ? -150 : 150 }
+                            !isXsScreen && { x: lang === "ar" ? -100 : 100 }
                           }
+                        >
+                          {lang === "ar" ? banner.ar_title : banner.en_title}
+                        </motion.h3>
+                      </Box>
+                      <motion.p
+                        style={{
+                          width: { xs: "50%", md: "28rem" },
+                          fontSize: { xs: "1rem", md: "16px" },
+                          marginX: { xs: "auto", md: "0rem" },
+                        }}
+                        initial={
+                          !isXsScreen && { x: lang === "ar" ? 150 : -150 }
+                        }
+                        animate={
+                          !isXsScreen && {
+                            x: 0,
+                            transition: {
+                              delay: 0.3,
+                              duration: 0.5,
+                              type: "spring",
+                            },
+                          }
+                        }
+                        exit={!isXsScreen && { x: lang === "ar" ? -150 : 150 }}
+                      >
+                        {lang === "ar"
+                          ? banner.ar_description
+                          : banner.en_description}
+                      </motion.p>
+                      <motion.div
+                        initial={
+                          !isXsScreen && { x: lang === "ar" ? 200 : -200 }
+                        }
+                        animate={
+                          !isXsScreen && {
+                            x: 0,
+                            transition: {
+                              delay: 0.3,
+                              duration: 0.7,
+                              type: "spring",
+                            },
+                          }
+                        }
+                        exit={!isXsScreen && { x: lang === "ar" ? -200 : 200 }}
+                      >
+                        <Button
+                          variant="contained"
+                          href="/your-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          component="a"
+                          sx={{
+                            color: "rgb(255, 255, 255)",
+                            border: "2px solid white",
+                            minWidth: "250px",
+                            fontSize: "18px",
+                            marginTop: "48px",
+                            borderRadius: "24px",
+
+                            padding: "0.3rem 0.5rem",
+                            backgroundColor: "transparent",
+                            "&:hover": {
+                              backgroundColor: "white",
+                              color: "var( --green-color)",
+                            },
+                          }}
                         >
                           {lang === "ar"
-                            ? banner.ar_description
-                            : banner.en_description}
-                        </motion.p>
-                        <motion.div
-                          initial={
-                            !isXsScreen && { x: lang === "ar" ? 200 : -200 }
-                          }
-                          animate={
-                            !isXsScreen && {
-                              x: 0,
-                              transition: {
-                                delay: 0.3,
-                                duration: 0.7,
-                                type: "spring",
-                              },
-                            }
-                          }
-                          exit={
-                            !isXsScreen && { x: lang === "ar" ? -200 : 200 }
-                          }
-                        >
-                          <Button
-                            variant="contained"
-                            href="/your-link"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            component="a"
-                            sx={{
-                              color: "rgb(255, 255, 255)",
-                              border: "2px solid white",
-                              minWidth: "250px",
-                              fontSize: "18px",
-                              marginTop: "48px",
-                              borderRadius: "24px",
-
-                              padding: "0.3rem 0.5rem",
-                              backgroundColor: "transparent",
-                              "&:hover": {
-                                backgroundColor: "white",
-                                color: "var( --green-color)",
-                              },
-                            }}
-                          >
-                            {lang === "ar"
-                              ? banner.button_text_ar
-                              : banner.button_text_en}
-                          </Button>
-                        </motion.div>
-                      </Box>
-                    </motion.div>
-                  )}
+                            ? banner.button_text_ar
+                            : banner.button_text_en}
+                        </Button>
+                      </motion.div>
+                    </Box>
+                  </motion.div>
                 </AnimatePresence>
               </SwiperSlide>
             );
           })}
       </Swiper>
       <Box
+        className="swiper-pagination"
         sx={{
           textAlign: "center",
           marginTop: "1rem",
@@ -283,7 +261,7 @@ const MainSection = ({ setDataLoading }) => {
                 mx: "0.5rem",
                 cursor: "pointer",
               }}
-              onClick={() => setActiveSlideIndex(index)}
+              onClick={() => handlePaginationDotClick(index)}
             />
           ))}
       </Box>

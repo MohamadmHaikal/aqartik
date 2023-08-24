@@ -1,16 +1,20 @@
 import { createContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import { myAxios } from "../api/myAxios";
 
 const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [recipientId, setRecipientId] = useState();
-
   useEffect(() => {
-    if (localStorage.getItem("user")) {
-      setUser(JSON.parse(localStorage.getItem("user")));
+    async function getData() {
+      const res = await myAxios.get("/api/user/get_user_data");
+      if (res) {
+        setUser(res.data.user);
+      }
     }
+    getData();
   }, []);
 
   const [isUserSelected, setIsUserSelected] = useState(false);
@@ -22,6 +26,8 @@ export const ChatProvider = ({ children }) => {
   const [fileData, setFileData] = useState();
 
   useEffect(() => {
+    if (socket !== null) return;
+
     if (user) {
       const newSocket = io("http://localhost:3001");
       setSocket(newSocket);
@@ -30,21 +36,24 @@ export const ChatProvider = ({ children }) => {
       };
     }
   }, [user]);
+
   useEffect(() => {
     if (socket === null) return;
     socket && socket.emit("addNewUser", user.id);
   }, [socket]);
 
-  console.log(socket);
-
   //send message
   useEffect(() => {
     if (socket === null) return;
+
+    const currentDate = new Date(); // Get the current date
+
     socket.emit("sendMessage", {
       message: message,
       senderId: user.id,
       recipientId,
       fileData: fileData,
+      created_at: currentDate,
     });
     setMessage("");
     setMessages((prev) => [
@@ -54,6 +63,7 @@ export const ChatProvider = ({ children }) => {
         recipientId,
         senderId: user.id,
         fileData,
+        created_at: currentDate,
       },
     ]);
   }, [isSendMessage]);
@@ -90,7 +100,29 @@ export const ChatProvider = ({ children }) => {
       .catch((error) => console.error("Error:", error));
   }, [recipientId]);
 
-  const [userKlickedData, setUserKlickedData] = useState();
+  const [userKlickedData, setUserKlickedData] = useState(null);
+
+  useEffect(() => {
+    if (userKlickedData === null) {
+      const getData = async () => {
+        const res = await myAxios.get(`/api/chat/getContacts`);
+        const contacts = res.data.contacts;
+        const foundUser = contacts.find((user) => user.id === recipientId);
+
+        if (foundUser) {
+          // The user with the target user ID was found
+          // console.log("User found:", foundUser);
+          setUserKlickedData(foundUser);
+        } else {
+          // // The user with the target user ID was not found
+          // console.log("User not found");
+        }
+      };
+      getData();
+    } else {
+      // console.log("no");
+    }
+  }, [isUserSelected]);
 
   return (
     <ChatContext.Provider

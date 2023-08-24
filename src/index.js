@@ -43,11 +43,11 @@ const MainApp = () => {
     <>
       <ThemeProvider theme={theme}>
         <I18nextProvider i18n={i18n}>
-          <GeneralProvider>
-            <ChatProvider>
+          <ChatProvider>
+            <GeneralProvider>
               <App />
-            </ChatProvider>
-          </GeneralProvider>
+            </GeneralProvider>
+          </ChatProvider>
         </I18nextProvider>
       </ThemeProvider>
     </>
@@ -55,10 +55,6 @@ const MainApp = () => {
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <MainApp />
-  </React.StrictMode>
-);
+root.render(<MainApp />);
 
 reportWebVitals();
