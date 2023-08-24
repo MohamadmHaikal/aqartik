@@ -1,6 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
-import { Visa } from "../../assets";
+// import { Visa } from "../../assets";
+import { Logo } from "../../assets";
 
 const LoaderHome = () => {
   return (
@@ -17,7 +18,7 @@ const LoaderHome = () => {
       }}
     >
       <img
-        src={Visa}
+        src={Logo}
         style={{
           position: "absolute",
           top: "50%",

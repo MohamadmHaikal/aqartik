@@ -689,8 +689,8 @@ const OutGoingOrders = ({ userData, type }) => {
                             }}
                           >
                             <img
-                              src={imageUrl}
-                              alt="My Image"
+                              src={Map}
+                              alt="My "
                               style={{
                                 position: "absolute",
                                 width: "100%",

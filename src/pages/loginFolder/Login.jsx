@@ -77,8 +77,8 @@ const Login = () => {
         // navigate("/userDashbored");
       } else {
         toast.success(res.data.message);
-        navigate("/userDashbored");
         localStorage.setItem("user_token", res.data.access_token);
+        navigate("/userDashbored");
       }
     } catch (err) {
       console.log(err);

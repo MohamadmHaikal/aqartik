@@ -317,7 +317,7 @@ const CatgouryAds = ({
         sx={{
           display: "flex",
           alignItems: "start",
-          justifyContent: "start",
+          justifyContent: "center",
           alignContent: "flex-start",
           gap: "16px",
           flexWrap: "wrap",
