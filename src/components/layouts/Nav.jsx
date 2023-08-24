@@ -353,7 +353,7 @@ export default function Nav({
                       color: "var(--green-color)",
                       borderRadius: "25px",
                       // marginX: {}"0.8rem",
-                      minWidth: { xs: "0", lg: "8rem" },
+                      minWidth: { xs: "0", md: "48px", lg: "8rem" },
                       height: { md: "3rem" },
                       padding: { xs: "5px", md: "6px 8px" },
                     }}
@@ -361,10 +361,10 @@ export default function Nav({
                     <AddIcon
                       sx={{
                         display: { xs: "block" },
-                        marginX: { xs: "0px", md: "5px" },
+                        marginX: { xs: "0px", md: "auto", lg: "5px" },
                         width: "20px",
                         height: "20px",
-                        position: { md: "absolute" },
+                        position: { lg: "absolute" },
                         right: { md: "2px" },
                       }}
                     />
@@ -381,45 +381,8 @@ export default function Nav({
                     </Typography>
                   </Button>
                 </Link>
-                {/* <Button
-                  sx={{
-                    backgroundColor: {
-                      xs: "transparent",
-                      lg: "var( --green-color)",
-                    },
-                    color: { xs: "var(--green-color)", lg: "white" },
-                    border: { xs: "none", lg: "1px solid var( --green-color)" },
-                    minWidth: "0",
-                    borderRadius: "25px",
-                    height: "3rem",
-                    "&:hover": {
-                      backgroundColor: "white",
-                      color: "var( --green-color)",
-                    },
-                  }}
-                  onClick={() => nav("../userdashbored")}
-                >
-                  <AccountCircleIcon
-                    sx={{
-                      width: { xs: "30px", md: "55px", lg: "30px" },
-                      height: { xs: "30px", md: "55px", lg: "30px" },
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      fontSize: { lg: "15px", xl: "1rem" },
-                      fontWeight: "500",
-                      marginX: { lg: "0.3rem", xl: "0.8rem" },
-                      display: {
-                        xs: "none",
-                        lg: "block",
-                      },
-                    }}
-                  >
-                    {lang === "ar" ? "الملف الشخصي" : "my profile"}
-                  </Typography>
-                </Button> */}
-                <LoginButton />
+
+                <LoginButton isLoggedIn={isLoggedIn} />
               </>
             ) : (
               <LoginButton />

@@ -205,7 +205,12 @@
     "time": {
       "one_hour_ago": "1 hour ago",
       "two_hours_ago": "2 hours ago",
-      "hours_ago": "{{count}} hours ago"
+      "hours_ago": "{{count}} hours ago",
+      "minutes_ago": "{{count}} minute ago",
+      "days_ago": " {{count}} days ago",
+
+      "seconds_ago": " {{count}} secound ago",
+      "just_now": "now"
     }
   },
   "user_dashboard": {

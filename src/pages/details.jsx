@@ -43,7 +43,7 @@ const Details = () => {
         const response = await myAxios.get(`/api/ads/details/${id}`);
         const data = response.data;
         if (data) {
-          setAdInfo(data.ads);
+          setAdInfo(data?.ads);
           setIsDataLoading(false);
         }
       } catch (error) {
@@ -80,7 +80,7 @@ const Details = () => {
   useEffect(() => {
     adInfo &&
       get(
-        `/api/ads/get_all_ads?page=${current_page}&category_id=${adInfo.category_aqar.id}`
+        `/api/ads/get_all_ads?page=${current_page}&category_id=${adInfo?.category_aqar.id}`
       );
   }, [adInfo, current_page]);
 
@@ -103,10 +103,13 @@ const Details = () => {
   }, []);
   useEffect(() => {
     if (favData) {
-      setFavAdsArray(favData?.ads.data);
-      setIsInFavorites(FavAdsArray?.some((favAd) => favAd.id === adInfo.id));
+      setFavAdsArray(favData?.ads?.data);
     }
   }, []);
+  console.log(FavAdsArray);
+  useEffect(() => {
+    setIsInFavorites(FavAdsArray?.some((favAd) => favAd?.id === adInfo?.id));
+  }, [FavAdsArray]);
 
   // useEffect(() => {
 
@@ -187,7 +190,7 @@ const Details = () => {
                 fontSize: { xs: "1.5rem", md: "2.25rem" },
               }}
             >
-              {adInfo.title}
+              {adInfo?.title}
             </Typography>
           </Box>
           <Box sx={{ display: "flex", marginY: "1rem" }}>
@@ -204,7 +207,7 @@ const Details = () => {
                 {t("details_page.ad_num")}:
               </Typography>{" "}
               <Typography sx={{ marginX: "0.5rem", fontSize: "12px" }}>
-                {adInfo.ref_number}
+                {adInfo?.ref_number}
               </Typography>
             </Box>
             <Box
@@ -272,7 +275,7 @@ const Details = () => {
                     fomtSize: "1.2rem",
                   }}
                 />
-                {adInfo.city} {adInfo.neighborhood} {adInfo.road}
+                {adInfo?.city} {adInfo?.neighborhood} {adInfo?.road}
               </Typography>
               <Typography
                 sx={{
@@ -289,7 +292,7 @@ const Details = () => {
                     fomtSize: "1.2rem",
                   }}
                 />
-                {t("details_page.unit_area")} {adInfo.space}
+                {t("details_page.unit_area")} {adInfo?.space}
               </Typography>
               {/* <Typography
                 sx={{
@@ -328,7 +331,7 @@ const Details = () => {
                 }}
               >
                 <FavoriteIcons
-                  adInfo={adInfo.id}
+                  adInfo={adInfo?.id}
                   isInFavorites={isInFavorites}
                 ></FavoriteIcons>
                 {t("details_page.fav_button")}
@@ -440,7 +443,7 @@ const Details = () => {
                 {t("details_page.details_title")}
               </Typography>
               <Typography sx={{ fontSize: { xs: "15px", md: "18px" } }}>
-                {adInfo.description}
+                {adInfo?.description}
               </Typography>
               {isNewHome && (
                 <Box

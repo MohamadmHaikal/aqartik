@@ -15,7 +15,7 @@ const UserDashboradSpeacialAds = () => {
 
   useEffect(() => {
     console.log(data);
-    if (data) setMyAds(data.ads.data);
+    if (data) setMyAds(data?.ads?.data);
   }, [data]);
 
   return !isLoading ? (
@@ -32,7 +32,7 @@ const UserDashboradSpeacialAds = () => {
         {lang === "ar" ? "اعلاناتي المفضلة" : "my favourite ads"}
       </Typography>
       <Box sx={{ maxWidth: "90%", margin: "auto" }}>
-        {myAds.map((ad) => (
+        {myAds?.map((ad) => (
           <SpecialAds ad={ad} />
         ))}
       </Box>

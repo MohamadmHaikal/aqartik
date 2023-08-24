@@ -32,7 +32,7 @@ const Mappage = () => {
   const state = useLocation().state;
   useEffect(() => {
     // Define the base API endpoint
-    let apiUrl = "api/ads/get_all_ads?";
+    let apiUrl = `api/ads/get_all_ads?&PerPage=${50}&`;
 
     // Check if state values exist and add them to the API URL if they do
     if (state?.lat) {
@@ -104,15 +104,14 @@ const Mappage = () => {
       queryParams.push(`min_price=${FilterProps.min_price}`);
     }
 
-    // Join the queryParams array into a single string with '&' separators
     const queryString = queryParams.join("&");
 
     // Add the queryString to the URL
-    get(`api/ads/get_all_ads?${queryString}`);
+    get(`api/ads/get_all_ads?${queryString}&PerPage=${50}`);
     setShowFilter(false);
   };
   const deleteFilterinXsDataInXs = () => {
-    get(`api/ads/get_all_ads`);
+    get(`api/ads/get_all_ads?&PerPage=${50}`);
   };
 
   const handleOpenModal = () => {

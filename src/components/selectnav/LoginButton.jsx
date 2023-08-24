@@ -36,6 +36,8 @@ const LoginButton = ({ isLoggedIn }) => {
           color: { xs: "var(--green-color)", lg: "white" },
           border: { xs: "none", lg: "1px solid var( --green-color)" },
           minWidth: "0",
+          marginRight: "auto",
+          // marginLeft: { lang: "ar" ? "auto" : "" },
           borderRadius: "25px",
           height: "3rem",
           "&:hover": {

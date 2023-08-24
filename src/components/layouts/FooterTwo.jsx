@@ -189,6 +189,14 @@ const FooterTwo = () => {
                       {t("footer.first_list.about")}
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      to="/offices"
+                      style={{ textDecoration: "none", color: "gray" }}
+                    >
+                      {t("offices.title")}
+                    </Link>
+                  </li>
                 </ul>
                 <ul className={styles.footer_list}>
                   <li
