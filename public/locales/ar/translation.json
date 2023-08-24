@@ -205,7 +205,11 @@
     "time": {
       "one_hour_ago": "منذ ساعة",
       "two_hours_ago": "منذ ساعتين",
-      "hours_ago": "منذ {{count}} ساعة"
+      "hours_ago": "منذ {{count}} ساعة",
+      "days_ago": "منذ {{count}} يوم",
+      "minutes_ago": "{{count}} منذ دقائق ",
+      "seconds_ago": "منذ {{count}} ثواني",
+      "just_now": "الان"
     }
   },
   "user_dashboard": {

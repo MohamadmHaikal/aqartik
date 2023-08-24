@@ -112,8 +112,8 @@ const FooterTwo = () => {
                 <img
                   src={
                     lang === "ar"
-                      ? `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_ar}`
-                      : `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_en}`
+                      ? `https://www.dashboard.aqartik.com/uploads/settings/${FooterData?.style_logo_ar}`
+                      : `https://www.dashboard.aqartik.com/uploads/settings/${FooterData?.style_logo_en}`
                   }
                   alt="logo"
                   style={{
@@ -187,6 +187,14 @@ const FooterTwo = () => {
                       style={{ textDecoration: "none", color: "gray" }}
                     >
                       {t("footer.first_list.about")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/offices"
+                      style={{ textDecoration: "none", color: "gray" }}
+                    >
+                      {t("offices.title")}
                     </Link>
                   </li>
                 </ul>
@@ -361,8 +369,8 @@ const FooterTwo = () => {
                   <img
                     src={
                       lang === "ar"
-                        ? `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_ar}`
-                        : `https://www.dashboard.aqartik.com/uploads/settings/${FooterData.style_logo_en}`
+                        ? `https://www.dashboard.aqartik.com/uploads/settings/${FooterData?.style_logo_ar}`
+                        : `https://www.dashboard.aqartik.com/uploads/settings/${FooterData?.style_logo_en}`
                     }
                     alt="logo"
                     style={{ width: "140px" }}

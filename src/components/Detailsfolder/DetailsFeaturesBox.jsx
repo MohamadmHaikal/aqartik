@@ -134,15 +134,31 @@ const DetailsFeaturesBox = ({ adInfo }) => {
   const [timeDifference, setTimeDifference] = useState(0);
 
   useEffect(() => {
-    // Calculate the time difference in hours between adInfo.lastUpdate and current time
-    const lastUpdate = new Date(adInfo.lastUpdate);
-    const currentTime = new Date();
-    const timeDiffInMilliseconds = currentTime - lastUpdate;
-    const timeDiffInHours = Math.floor(
-      timeDiffInMilliseconds / (1000 * 60 * 60)
-    );
-    setTimeDifference(timeDiffInHours);
+    // Calculate the time difference between adInfo.lastUpdate and the current time
+    const lastUpdate = new Date(adInfo.lastUpdate).getTime();
+    const currentTime = new Date().getTime();
+    const timeDiffInSeconds = Math.floor((currentTime - lastUpdate) / 1000);
+
+    setTimeDifference(timeDiffInSeconds);
   }, [adInfo.lastUpdate]);
+
+  const formatTime = (seconds) => {
+    if (seconds < 60) {
+      return t("details_page.time.seconds_ago", { count: seconds });
+    } else if (seconds < 3600) {
+      return t("details_page.time.minutes_ago", {
+        count: Math.floor(seconds / 60),
+      });
+    } else if (seconds < 86400) {
+      return t("details_page.time.hours_ago", {
+        count: Math.floor(seconds / 3600),
+      });
+    } else {
+      return t("details_page.time.days_ago", {
+        count: Math.floor(seconds / 86400),
+      });
+    }
+  };
 
   return (
     <Box
@@ -247,11 +263,7 @@ const DetailsFeaturesBox = ({ adInfo }) => {
           :
         </Typography>
         <Typography sx={{ color: "gray", marginX: "5px" }}>
-          {timeDifference === 1
-            ? t("details_page.time.one_hour_ago")
-            : timeDifference === 2
-            ? t("details_page.time.two_hours_ago")
-            : t("details_page.time.hours_ago", { count: timeDifference })}
+          {formatTime(timeDifference)}
         </Typography>
       </Box>
     </Box>

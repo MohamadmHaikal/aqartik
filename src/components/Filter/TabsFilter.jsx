@@ -582,9 +582,9 @@ const TabsFilter = ({
           >
             <NorthIcon />
             <NorthIcon
-              sx={{ transform: "rotate(180deg)", marginRight: "-0.8rem" }}
+              sx={{ transform: "rotate(180deg)", marginRight: "1px" }}
             />
-            ترتيب
+            {lang === "ar" ? "ترتيب" : "order"}
           </Button>
         )}
         {isLoading ? (

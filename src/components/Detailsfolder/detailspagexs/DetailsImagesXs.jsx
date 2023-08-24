@@ -9,13 +9,14 @@ import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
 import "lightgallery/css/lg-thumbnail.css";
 import { Map } from "../../../assets";
+import "lightgallery/css/lg-video.css";
+import lgVideo from "lightgallery/plugins/video";
 // import lgVideo from "https://cdn.skypack.dev/lightgallery@2.3.0-beta.4/plugins/video";
 
 // import { house, boat, abha } from "../../../assets";
 
 SwiperCore.use([Pagination]);
 
-// const images = [
 //   {
 //     src: "/pool.jpg",
 //   },
@@ -80,7 +81,6 @@ const DetailsImagesXs = ({ adInfo }) => {
               <img
                 src={` https://www.dashboard.aqartik.com/assets/images/ads/image/${image.name}`}
                 className={styles.imgSlider}
-                alt={`Image ${index}`}
               />
             </a>
           ))}

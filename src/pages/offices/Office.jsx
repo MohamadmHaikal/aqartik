@@ -46,6 +46,27 @@ const Office = () => {
     set_current_page(new_page);
   };
   console.log(officeDetails);
+  const rawDate = officeDetails?.type?.created_at;
+  const upatedtime = officeDetails?.type?.updated_at;
+
+  // Convert the raw date string to a JavaScript Date object
+  const date = new Date(rawDate);
+  const date2 = new Date(upatedtime);
+
+  // Define options for formatting the date
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    // hour: "numeric",
+    // minute: "numeric",
+    // second: "numeric",
+    // timeZoneName: "short",
+  };
+
+  // Format the date
+  const formattedDate = date.toLocaleDateString("en-US", options);
+  const formattedDateupdate = date2.toLocaleDateString("en-US", options);
   return (
     <>
       <OfficeContainer dir="rtl">
@@ -71,7 +92,7 @@ const Office = () => {
           </div>
           <div>
             <span>
-              تاريخ الانضمام: <span> 22/ 7/ 2022 </span>
+              تاريخ الانضمام: <span> {formattedDate}</span>
             </span>
           </div>
           <div>
@@ -84,7 +105,7 @@ const Office = () => {
           <div className="specialities">
             <span className="speciality">
               <img src={AlamOffice} alt="" className="icon" />
-              <span>قبل ساعة</span>
+              <span>{formattedDateupdate} </span>
             </span>
             <span className="speciality">
               <img src={Verrfird} alt="" className="icon" />

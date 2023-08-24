@@ -6,8 +6,9 @@ import LogInModal from "../selectnav/LogInModal";
 
 const FavoriteIcons = ({ adInfo, isInFavorites }) => {
   const userToken = localStorage.getItem("user_token");
+
   const { data, isLoading, get } = useDataFetcher();
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(isInFavorites);
   const [showLoginModal, setShowLoginModal] = useState(false);
   // console.log(adInfo);
   // useEffect(() => {
@@ -29,7 +30,7 @@ const FavoriteIcons = ({ adInfo, isInFavorites }) => {
       onClick={handleClickFavorite}
       style={{ alignItems: "center", display: "flex" }}
     >
-      {isFavorite || isInFavorites ? (
+      {isFavorite ? (
         <FavoriteIcon sx={{ color: "red" }} />
       ) : (
         <FavoriteBorderIcon sx={{ color: "black", marginLeft: "3px" }} />
