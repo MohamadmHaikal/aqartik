@@ -13,19 +13,8 @@ import { Profile, Favorite, Aqar, Call, Logout } from "../../assets";
 import Avatar from "@mui/material/Avatar";
 import { useTranslation } from "react-i18next";
 import useDataFetcher from "../../api/useDataFetcher ";
-const SmallNavLoginMenu = ({ isLoggedIn }) => {
+const SmallNavLoginMenu = ({ user }) => {
   const { t } = useTranslation();
-
-  const [userInfoData, setUserInfoData] = useState();
-  const { data, isLoading, get } = useDataFetcher();
-  useEffect(() => {
-    get(`/api/user/get_user_data`);
-  }, []);
-  useEffect(() => {
-    if (data) {
-      setUserInfoData(data);
-    }
-  }, [data]);
 
   return (
     <Box sx={{ display: { xs: "block", md: "none" } }}>
@@ -97,15 +86,13 @@ const SmallNavLoginMenu = ({ isLoggedIn }) => {
               }}
             >
               <Avatar sx={{ width: "40px", height: "40px", marginLeft: "5px" }}>
-                {userInfoData?.username?.charAt(0)}
+                {user?.username?.charAt(0)}
               </Avatar>
               <Box sx={{ marginRight: "16px" }}>
                 <Typography sx={{ fontSize: "20px", fontWeight: "700" }}>
-                  {userInfoData?.username}
+                  {user?.username}
                 </Typography>
-                <Typography sx={{ fontSize: "14px" }}>
-                  {userInfoData?.email}
-                </Typography>
+                <Typography sx={{ fontSize: "14px" }}>{user?.email}</Typography>
               </Box>
             </Box>
             <List sx={{ width: "100%", paddingY: "8px" }}>

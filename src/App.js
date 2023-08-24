@@ -35,7 +35,7 @@ import EditOrder from "./components/user_dashbord/OutgoingOrder/EditOrder";
 function App() {
   const { generalData, website_status } = useContext(GeneralContext);
 
-  const isAuthenticated = localStorage.getItem("user_token");
+  const isAuthenticated = localStorage.getItem("user_token") ? true : false;
 
   const isMediumScreen = useMediaQuery("(min-width:900px)");
   const { t, i18n } = useTranslation();

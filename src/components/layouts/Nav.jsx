@@ -381,11 +381,10 @@ export default function Nav({
                     </Typography>
                   </Button>
                 </Link>
-
                 <LoginButton isLoggedIn={isLoggedIn} />
               </>
             ) : (
-              <LoginButton />
+              <LoginButton isLoggedIn={isLoggedIn} />
             )}
 
             <LanguageButton />

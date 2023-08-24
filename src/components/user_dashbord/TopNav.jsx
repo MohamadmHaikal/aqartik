@@ -52,7 +52,6 @@ const TopNav = ({ setShowNotification, showNotification }) => {
 
   const handleSignOut = () => {
     localStorage.removeItem("user_token");
-    localStorage.removeItem("user");
     nav("/login");
   };
 

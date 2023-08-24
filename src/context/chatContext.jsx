@@ -106,8 +106,8 @@ export const ChatProvider = ({ children }) => {
     if (userKlickedData === null) {
       const getData = async () => {
         const res = await myAxios.get(`/api/chat/getContacts`);
-        const contacts = res.data.contacts;
-        const foundUser = contacts.find((user) => user.id === recipientId);
+        const contacts = res?.data?.contacts;
+        const foundUser = contacts?.find((user) => user?.id === recipientId);
 
         if (foundUser) {
           // The user with the target user ID was found
